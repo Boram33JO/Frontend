@@ -36,7 +36,7 @@ function App() {
                         element={<DetailPage />}
                     />
                     <Route
-                        path="/profile/:id"
+                        path="/profile/{userId}"
                         element={<ProfilePage />}
                     />
                     <Route

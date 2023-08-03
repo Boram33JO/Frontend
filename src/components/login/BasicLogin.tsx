@@ -9,9 +9,7 @@ const BasicLogin = () => {
     <>
       <Stbox>
         <H3>로그인</H3>
-
         <Stinput1 type={"text"} placeholder={"이메일을 입력해주세요."} />
-
         <Stinput2 type={"password"} placeholder={"비밀번호를 입력해주세요."} />
         <Stlink1 onClick={() => { navigate('/') }}> 비밀번호를 잊으셨나요?</Stlink1>
         <Stlink2 onClick={() => { navigate('/signup') }}> 회원가입하기</Stlink2>
@@ -23,6 +21,11 @@ const BasicLogin = () => {
 
 export default BasicLogin;
 
+const Stbox = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
@@ -31,11 +34,7 @@ const H3 = styled.h3`
   padding-top: 50px;
 `;
 
-const Stbox = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+
 
 const Stinput1 = styled.input`
   width: 280px;
@@ -70,7 +69,7 @@ const Stbutton = styled.button`
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 10px;
-  margin-top: 80px;
+  margin-top: 40px;
 `;
 
 const Stlink1 = styled.a`

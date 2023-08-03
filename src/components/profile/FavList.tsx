@@ -145,8 +145,13 @@ const Icon2 = styled.div`
 `;
 const BT = styled.button`
 width: 100%;
-height: 45px;
-margin-top: 10px;
-border-radius: 8px;
-background-color: #eeeeee;
+  height: 45px;
+  padding: 10px;
+  background-color: #d9d9d9;
+  color: 22222;
+  border: 1px solid #d9d9d9;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
 `;
