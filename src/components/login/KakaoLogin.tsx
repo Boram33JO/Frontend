@@ -69,14 +69,14 @@ const KakaoLogin: React.FC = () => {
   }, []);
 
   return (
-    <div>
-    <img
-      src={kakao_login_medium_wide}
-      alt="카카오톡 로그인"
-      className="kakaoLoginImage"
-      onClick={handleKakaoLogin}
-    />
-  </div>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' ,cursor: 'pointer'}}>
+      <img
+        src={kakao_login_medium_wide}
+        alt="카카오톡 로그인"
+        className="kakaoLoginImage"
+        onClick={handleKakaoLogin}
+      />
+    </div>
   );
 };
 

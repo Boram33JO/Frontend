@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+import BasicSignUp from "../components/signup/BasicSignUp";
 
 const SignupPage = () => {
   return (
-    <div>MapPage</div>
-  )
-}
+    <>
+      <BasicSignUp />
+     
+    </>
+  );
+};
 
-export default SignupPage;
+export default SignupPage
