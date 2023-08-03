@@ -13,8 +13,8 @@ const BasicLogin = () => {
         <Stinput1 type={"text"} placeholder={"이메일을 입력해주세요."} />
 
         <Stinput2 type={"password"} placeholder={"비밀번호를 입력해주세요."} />
-        
-        <Stlink onClick={() => { navigate('/signup') }}> 회원가입하기</Stlink>
+        <Stlink1 onClick={() => { navigate('/') }}> 비밀번호를 잊으셨나요?</Stlink1>
+        <Stlink2 onClick={() => { navigate('/signup') }}> 회원가입하기</Stlink2>
         <Stbutton>로그인하기</Stbutton>
       </Stbox>
     </>
@@ -70,9 +70,19 @@ const Stbutton = styled.button`
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 10px;
+  margin-top: 80px;
 `;
 
-const Stlink = styled.a`
+const Stlink1 = styled.a`
+text-decoration: underline;
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 200;
+  margin-bottom: 10px;
+  cursor: pointer;
+  color: darkgray; /* 선택 사항: 링크 색상을 변경할 수 있습니다. */
+`;
+const Stlink2 = styled.a`
 text-decoration: underline;
   font-size: 14px;
   line-height: 24px;
