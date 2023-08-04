@@ -1,17 +1,9 @@
 import instance from "./common";
-import axios from "axios";
 
 // 회원가입
 const addUsers = async (newUser) => {
-  const instanceWithoutInterceptors = axios.create({
-    baseURL: process.env.REACT_APP_SERVER_URL,
-  });
-
-  const response = await instanceWithoutInterceptors.post(
-    `http://43.201.22.74/api/user/signup`,
-    newUser
-  );
-  console.log("회원가입", response);
+  const response = await instance.post(`http://43.201.22.74/api/user/signup`, newUser);
+  console.log("회원가입", response)
   return response.data;
 };
 
