@@ -33,7 +33,7 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log("인터셉트 응답 못받았어요...ㅠㅠ");
+    console.log("인터셉트 응답을 받지 못했습니다.");
     if (error.response.status === 400) {
       const token = error.response.headers.authorization;
       localStorage.setItem("token", token);
