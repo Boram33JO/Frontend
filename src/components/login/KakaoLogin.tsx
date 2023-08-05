@@ -69,7 +69,7 @@ const KakaoLogin: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' ,cursor: 'pointer'}}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' ,cursor: 'pointer',marginBottom: '100%'}}>
       <img
         src={kakao_login_medium_wide}
         alt="카카오톡 로그인"

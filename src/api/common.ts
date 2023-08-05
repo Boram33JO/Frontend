@@ -28,15 +28,16 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   function (response) {
-    console.log("인터넵트 응답 받았어요!");
+    console.log("인터셉트 응답 받았어요!");
     console.log("response", response);
     return response;
   },
   function (error) {
-    console.log("인터셉트 응답 못받았어요...ㅠㅠ");
+    console.log(error.response.data);
     if (error.response.status === 400) {
-      const token = error.response.headers.authorization;
-      localStorage.setItem("token", token);
+      // const token = error.response.headers.authorization;
+      // localStorage.setItem("token", token);
+     
     }
     if (error.response.status === 401) {
       localStorage.removeItem("token");

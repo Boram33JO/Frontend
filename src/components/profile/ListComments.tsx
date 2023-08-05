@@ -1,6 +1,7 @@
+
 import { styled } from "styled-components";
 
-const List = () => {
+const ListComments = () => {
 
     const category = [
         {
@@ -20,7 +21,7 @@ const List = () => {
     ]
   return (
     <InnerContainer>
-      <H3>ㅇㅇ님의 포스팅</H3>
+      <H3>ㅇㅇ님이 댓글 단 포스팅</H3>
       <CategoryList>
         {category.map((item) => {
           return (
@@ -66,7 +67,7 @@ const List = () => {
   );
 };
 
-export default List;
+export default ListComments;
 
 const InnerContainer = styled.div`
   display: block;
@@ -161,4 +162,5 @@ width: 100%;
   font-size: 16px;
   cursor: pointer;
   margin-top: 10px;
+  
 `;
