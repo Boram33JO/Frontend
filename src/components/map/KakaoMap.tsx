@@ -8,6 +8,7 @@ declare global {
 
 const Kakao: React.FC = () => {
     const [state, setState] = useState({
+        // 위도(latitude) = y와 경도(longitude) = x
         center: { lat: 37.566826, lng: 126.9786567 },
         isPanto: true,
     });
@@ -17,7 +18,7 @@ const Kakao: React.FC = () => {
         const mapContainer = document.getElementById("map"); // 지도를 표시할 div
         const mapOption = {
             center: new window.kakao.maps.LatLng(state.center.lat, state.center.lng), // 지도의 중심좌표
-            level: 3,
+            level: 4,
         };
 
         const map = new window.kakao.maps.Map(mapContainer, mapOption);
@@ -57,7 +58,7 @@ const Kakao: React.FC = () => {
         const ps = new window.kakao.maps.services.Places(); // 'window.' 추가
         const placesSearchCB = function (data: any, status: any, pagination: any) {
             if (status === window.kakao.maps.services.Status.OK) {
-                const newSearch = data[0];
+                const newSearch = data;
                 console.log(newSearch);
                 setState({
                     center: { lat: newSearch.y, lng: newSearch.x },
@@ -104,7 +105,7 @@ const Kakao: React.FC = () => {
         <>
             <div
                 id="map"
-                style={{ width: "380px", height: "580px" }}
+                style={{ width: "350px", height: "288px" }}
             />
             <input
                 onChange={changeInputHandler}

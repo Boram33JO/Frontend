@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import EditMap from "../components/edit/EditMap";
 
 const EditorPage = () => {
-  return (
-    <div>EditorPage</div>
-  )
-}
+    return (
+        <>
+            <EditMap />
+        </>
+    );
+};
 
-export default EditorPage
+export default EditorPage;
