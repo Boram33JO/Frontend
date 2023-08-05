@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage";
 import LoginPage  from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import EditorPage from "./pages/EditorPage";
+import ListPage from "./pages/ListPage";
 import DetailPage from "./pages/DetailPage";
 import ProfilePage from "./pages/ProfilePage";
 import MapPage from "./pages/MapPage";
@@ -30,6 +31,10 @@ function App() {
                     <Route
                         path="/editor"
                         element={<EditorPage />}
+                    />
+                    <Route
+                        path="/list"
+                        element={<ListPage />}
                     />
                     <Route
                         path="/detail/:id"
