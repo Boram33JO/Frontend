@@ -2,7 +2,7 @@ import React from "react";
 import EditMap from "../components/edit/EditMap";
 import Categories from "../components/edit/Categories";
 
-const EditorPage = () => {
+const EditPage = () => {
     return (
         <>
             <Categories />
@@ -11,4 +11,4 @@ const EditorPage = () => {
     );
 };
 
-export default EditorPage;
+export default EditPage;

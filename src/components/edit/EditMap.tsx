@@ -65,6 +65,14 @@ const EditMap: React.FC = () => {
                 value={searchLocation}
             />
             <button onClick={searchLocationHandler}>검색</button>
+
+            <div>
+                <ul>
+                    <li>
+                        
+                    </li>
+                </ul>
+            </div>
         </>
     );
 };
