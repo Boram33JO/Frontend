@@ -9,7 +9,7 @@ import ProfilePage from './pages/ProfilePage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Layout from './components/common/Layout';
-import ProfileDetailPage from './pages/ProfileDetailPage';
+import FollowPage from './pages/FollowPage';
 
 function App() {
   return (
@@ -21,7 +21,8 @@ function App() {
         <Route path="/editor" element={<EditorPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
-        <Route path="/profile/:userId/id" element={<ProfileDetailPage />} />
+        <Route path="/profile/{userId}/follow" element={<FollowPage />} />
+                <Route path="/profile/{userId}/follow" element={<FollowPage />} />
         <Route path="/map" element={<MapPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Route>

@@ -5,10 +5,10 @@ import Pictures from "../components/profiledetail/Pictures";
 
 
 
-const ProfileDetailPage = () => {
+const FollowPage = () => {
   return (
     <Pictures />
   );
 };
 
-export default ProfileDetailPage
+export default FollowPage

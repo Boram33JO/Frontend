@@ -18,8 +18,9 @@ const Pictures = () => {
           <MyProfile2>
             <Nickname> 닉네임</Nickname>
             <Place> 하고싶은 한줄 멘트 </Place>
-            <Bt>삭제</Bt>
+            
           </MyProfile2>
+          <Bt>삭제</Bt>
         </MyProfile>
 
         <MyProfile>
@@ -31,8 +32,9 @@ const Pictures = () => {
           <MyProfile2>
             <Nickname> 닉네임</Nickname>
             <Place> 하고싶은 한줄 멘트 </Place>
-            <Bt>삭제</Bt>
+            
           </MyProfile2>
+          <Bt>삭제</Bt>
         </MyProfile>
 
         <MyProfile>
@@ -44,9 +46,67 @@ const Pictures = () => {
           <MyProfile2>
             <Nickname> 닉네임</Nickname>
             <Place> 하고싶은 한줄 멘트 </Place>
-            <Bt>삭제</Bt>
+            
           </MyProfile2>
+          <Bt>삭제</Bt>
         </MyProfile>
+
+        <MyProfile>
+          <MyThumb
+            src={
+              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
+            }
+          />
+          <MyProfile2>
+            <Nickname> 닉네임</Nickname>
+            <Place> 하고싶은 한줄 멘트 </Place>
+            
+          </MyProfile2>
+          <Bt>삭제</Bt>
+        </MyProfile>
+
+        <MyProfile>
+          <MyThumb
+            src={
+              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
+            }
+          />
+          <MyProfile2>
+            <Nickname> 닉네임</Nickname>
+            <Place> 하고싶은 한줄 멘트 </Place>
+            
+          </MyProfile2>
+          <Bt>삭제</Bt>
+        </MyProfile>
+
+        <MyProfile>
+          <MyThumb
+            src={
+              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
+            }
+          />
+          <MyProfile2>
+            <Nickname> 닉네임</Nickname>
+            <Place> 하고싶은 한줄 멘트 </Place>
+            
+          </MyProfile2>
+          <Bt>삭제</Bt>
+        </MyProfile>
+
+        <MyProfile>
+          <MyThumb
+            src={
+              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
+            }
+          />
+          <MyProfile2>
+            <Nickname> 닉네임</Nickname>
+            <Place> 하고싶은 한줄 멘트 </Place>
+            
+          </MyProfile2>
+          <Bt>삭제</Bt>
+        </MyProfile>
+        
       </InnerContainer>
     </>
   );
@@ -72,15 +132,15 @@ const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 `;
 const Bt = styled.button`
-  width: 40px;
+  width: 53px;
   height: 30px;
 
   background-color: #d2d2d2;
   border: none;
-  border-radius: 24px;
+  border-radius: 6px;
 
   font-family: "Pretendard";
 
@@ -89,15 +149,17 @@ const Bt = styled.button`
   &:hover {
     background-color: #e2e2e2;
   }
+  margin-left: 120px; // 나중에 간격 수정
+ 
 `;
 const MyProfile = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
   align-items: center;
-  /* margin: 10px; */
+  margin-top: 20px;
 `;
 const MyThumb = styled.img`
-  width: 65px;
-  height: 65px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
 `;
 
