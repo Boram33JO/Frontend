@@ -27,6 +27,10 @@ function App() {
                     element={<SignupPage />}
                 />
                 <Route
+                    path="/list"
+                    element={<ListPage />}
+                />
+                <Route
                     path="/editor"
                     element={<EditorPage />}
                 />

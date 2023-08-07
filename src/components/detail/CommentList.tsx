@@ -1,20 +1,58 @@
 import { styled } from "styled-components"
-import { PostType } from "../../pages/DetailPage"
+import { Comment, Post } from "../../pages/DetailPage"
+import { useMutation, useQueryClient } from "react-query"
+import { deleteComment } from "../../api/comment"
 
 type PostProps = {
-    post: PostType
+    post: Post
 }
 
-const CommentList: React.FC<PostProps> = ({ post }) => {
-    const CommentButtonHandler = () => {}
+interface Comments {
+    comments: Comment[]
+}
+
+const CommentList: React.FC<Comments> = ({ comments }) => {
+    const queryClient = useQueryClient();
+
+    // 작성 시간
+    const displayedAt = (createdAt: string) => {
+        const milliSeconds = new Date().getTime() - new Date(createdAt).getTime();
+        const seconds = milliSeconds / 1000
+        if (seconds < 60) return `방금 전`
+        const minutes = seconds / 60
+        if (minutes < 60) return `${Math.floor(minutes)}분 전`
+        const hours = minutes / 60
+        if (hours < 24) return `${Math.floor(hours)}시간 전`
+        const days = hours / 24
+        if (days < 7) return `${Math.floor(days)}일 전`
+        const weeks = days / 7
+        if (weeks < 5) return `${Math.floor(weeks)}주 전`
+        const months = days / 30
+        if (months < 12) return `${Math.floor(months)}개월 전`
+        const years = days / 365
+        return `${Math.floor(years)}년 전`
+    }
+
+    const deleteMutation = useMutation((commentId: string) => deleteComment(commentId), {
+        onSuccess: (response) => {
+            queryClient.invalidateQueries("posts");
+            console.log(response.data);
+        }
+    });
+
+    const CommentButtonHandler = () => { }
+    const CommentDeleteButtonHandler = (id: string) => {
+        deleteMutation.mutate(id);
+    }
+
     return (
         <CommentListContainer>
             {
-                post.comments.map(item => {
+                comments.map(item => {
                     return (
-                        <CommentListItem>
+                        <CommentListItem key={item.commentId}>
                             <ListItemLeft>
-                                <UserImage src={item.userImage} />
+                                <UserImage src={item.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : item.userImage} />
                             </ListItemLeft>
                             <ListItemMiddle>
                                 <ListItemTop>
@@ -27,14 +65,15 @@ const CommentList: React.FC<PostProps> = ({ post }) => {
                                 </ListItemTop>
                                 <ListItemBottom>
                                     <CommentP $color="#B4B4B4">
-                                        {item.createdAt} 
+                                        {displayedAt(item.createdAt)}
                                     </CommentP>
-                                    <CommentP $color="#B4B4B4" onClick={CommentButtonHandler}>
+                                    {/* <CommentP $color="#B4B4B4" onClick={CommentButtonHandler}>
                                         댓글 달기
-                                    </CommentP>
+                                    </CommentP> */}
                                 </ListItemBottom>
                             </ListItemMiddle>
                             <ListItemRight>
+                                <button onClick={() => CommentDeleteButtonHandler(item.commentId)}>삭제</button>
                             </ListItemRight>
                         </CommentListItem>
                     )
@@ -87,10 +126,11 @@ const ListItemBottom = styled.div`
 `
 
 const ListItemRight = styled.div`
-    flex: 0.1 0 0;
+    flex: 0.2 0 0;
 `
 
 const CommentP = styled.p< { $color: string } >`
     font-size: 16px;
+    line-height: 22px;
     color: ${props => props.$color};
 `
