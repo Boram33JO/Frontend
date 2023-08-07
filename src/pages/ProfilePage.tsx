@@ -1,15 +1,17 @@
 import React from 'react'
-import Followers from '../components/profile/Followers'
 import Mypicture from '../components/profile/MyPicture'
+import FollowersAll from '../components/profiledetail/FollowersAll'
 import List from '../components/profile/List'
 import FavList from '../components/profile/FavList'
 import ListComments from '../components/profile/ListComments'
+
+
 
 const ProfilePage = () => {
   return (
     <>
     <Mypicture />
-    <Followers />
+    <FollowersAll />
     <List />
     <FavList />
     <ListComments />
