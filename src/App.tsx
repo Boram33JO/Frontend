@@ -9,46 +9,27 @@ import ProfilePage from './pages/ProfilePage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Layout from './components/common/Layout';
+import FollowPage from './pages/FollowPage';
 
 function App() {
-    return (
-        <Routes>
-            <Route element={<Layout />}>
-                <Route
-                    path="/"
-                    element={<MainPage />}
-                />
-                <Route
-                    path="/login"
-                    element={<LoginPage />}
-                />
-                <Route
-                    path="/signup"
-                    element={<SignupPage />}
-                />
-                <Route
-                    path="/editor"
-                    element={<EditorPage />}
-                />
-                <Route
-                    path="/detail/:id"
-                    element={<DetailPage />}
-                />
-                <Route
-                    path="/profile/:id"
-                    element={<ProfilePage />}
-                />
-                <Route
-                    path="/map"
-                    element={<MapPage />}
-                />
-                <Route
-                    path="/*"
-                    element={<NotFoundPage />}
-                />
-            </Route>
-        </Routes>
-    );
+
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/editor" element={<EditorPage />} />
+        <Route path="/detail/:id" element={<DetailPage />} />
+        <Route path="/profile/:userId" element={<ProfilePage />} />
+        <Route path="/profile/{userId}/follow" element={<FollowPage />} />
+                <Route path="/profile/{userId}/follow" element={<FollowPage />} />
+        <Route path="/map" element={<MapPage />} />
+        <Route path="/*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  );
+
 }
 
 export default App;
