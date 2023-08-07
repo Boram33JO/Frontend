@@ -1,30 +1,27 @@
 import { styled } from "styled-components"
-import { PostType } from "../../pages/DetailPage"
+import { Post, Song } from "../../pages/DetailPage"
 
-type PostProps = {
-    post: PostType
+interface Songs {
+    songs: Song[]
 }
 
-const Playlist: React.FC<PostProps> = ({ post }) => {
+const Playlist: React.FC<Songs> = ({ songs }) => {
     return (
         <PlaylistContainer>
             {
-                post.tracks.map(item => {
+                songs.map(item => {
                     return (
-                        <PlaylistItem>
+                        <PlaylistItem key={item.id}>
                             <ItemThumbnail src={item.thumbnail} />
                             <ItemInfo>
                                 <MusicInfo>
                                     <ItemP $color="#222222">
                                         {item.title}
                                     </ItemP>
-                                    <ItemP $color="#888888">
-                                        {item.artist}
+                                    <ItemP $color="#222222">
+                                        {item.artistName}
                                     </ItemP>
                                 </MusicInfo>
-                                <ItemP $color="#626262">
-                                    50명이 들었던 음악
-                                </ItemP>
                             </ItemInfo>
                         </PlaylistItem>
                     )
@@ -38,6 +35,7 @@ export default Playlist
 
 const PlaylistContainer = styled.div`
     display: flex;
+    flex-direction: column;
     background-color: #F5F5F5;
     justify-content: center;
     margin-top: 20px;

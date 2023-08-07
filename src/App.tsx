@@ -12,13 +12,13 @@ import Layout from './components/common/Layout';
 import FollowPage from './pages/FollowPage';
 
 function App() {
-
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/list" element={<ListPage />} />
         <Route path="/editor" element={<EditorPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
@@ -29,7 +29,6 @@ function App() {
       </Route>
     </Routes>
   );
-
 }
 
 export default App;

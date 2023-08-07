@@ -1,8 +1,8 @@
 import { styled } from "styled-components"
-import { PostType } from "../../pages/DetailPage"
+import { Post } from "../../pages/DetailPage"
 
 type PostProps = {
-    post: PostType
+    post: Post
 }
 
 const DetailContent: React.FC<PostProps> = ({ post }) => {
@@ -10,7 +10,7 @@ const DetailContent: React.FC<PostProps> = ({ post }) => {
         <DetailContainer>
             <ProfileSection>
                 <ProfileArea>
-                    <ProfileImage src={post.userImage} />
+                    <ProfileImage src={post.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : post.userImage} />
                     <ProfileInfo>
                         <ProfileP $size={"16px"}>{post.nickname}</ProfileP>
                         <ProfileP $size={"14px"}>{post.address}</ProfileP>
