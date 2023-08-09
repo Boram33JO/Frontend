@@ -1,80 +1,53 @@
-import { styled } from "styled-components";
+import { styled } from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 
 const List = () => {
+   
+    const navigate = useNavigate();
 
-    const category = [
-        {
-            id: "1",
-            name: "최신순"
-        },
-        {
-            id: "2",
-            name: "과거순"
-        },
-        {
-            id: "3",
-            name: "좋아요순"
-        },
+    const handleViewAllClick = () => {
+        // Navigate to the desired page when the button is clicked
+        navigate('/profile/{userId}/post');
+    };
 
-       
-    ]
-  return (
-    <InnerContainer>
-      <H3>ㅇㅇ님의 포스팅</H3>
-      <CategoryList>
-        {category.map((item) => {
-          return (
-            <CategoryListItem>
-              <CategoryListItemName>{item.name}</CategoryListItemName>
-            </CategoryListItem>
-          );
-        })}
-      </CategoryList>
-      <MusicList>
-        <MusicListItem>
-          <Date>23.07.31</Date>
-          <Content>
-            운동할 때 항상 이 노래를 들어요. 힘들고 지칠 때 도움이 되거든요!
-          </Content>
-          <Iconbox>
+
+    return (
+        <InnerContainer>
+            <Post>
+          <H3>ㅇㅇ님의 포스팅</H3>
+          <Bt onClick={handleViewAllClick}>전체보기</Bt>
+        </Post>
+
+            <MusicList>
+            <MusicListItem>
+                    <Date>23.07.31</Date>
+                    <Content>운동할 때 듣습니다.</Content>
+                    <Iconbox>
             <Icon1>💜 좋아요수</Icon1>
             <Icon2>✉️ 댓글수</Icon2>
           </Iconbox>
-        </MusicListItem>
-        <MusicListItem>
-          <Date>23.07.31</Date>
-          <Content>
-            운동할 때 항상 이 노래를 들어요. 힘들고 지칠 때 도움이 되거든요!
-          </Content>
-          <Iconbox>
-            <Icon1>💜 좋아요수</Icon1>
-            <Icon2>✉️ 댓글수</Icon2>
-          </Iconbox>
-        </MusicListItem> <MusicListItem>
-          <Date>23.07.31</Date>
-          <Content>
-            운동할 때 항상 이 노래를 들어요. 힘들고 지칠 때 도움이 되거든요!
-          </Content>
-          <Iconbox>
-            <Icon1>💜 좋아요수</Icon1>
-            <Icon2>✉️ 댓글수</Icon2>
-          </Iconbox>
-        </MusicListItem>
-        <BT>전체보기</BT>
-      </MusicList>
-    </InnerContainer>
-  );
-};
+                </MusicListItem>
+              
+            </MusicList>
+        </InnerContainer>
+    )
+}
 
 export default List;
 
 const InnerContainer = styled.div`
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 20px;
-  margin-top: 48px;
-  background-color: #eeeeee;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    margin-top: 48px;
+    background-color: #EEEEEE;
+`
+
+const Post = styled.div`
+  display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
+  /* gap: 20%; // 간격 */
 `;
 
 const H3 = styled.h3`
@@ -83,40 +56,18 @@ const H3 = styled.h3`
   font-weight: 600;
   margin-bottom: 10px;
 `;
+const Bt = styled.div`
+ font-size: 14px;
+  font-family: "Pretendard";
 
-const CategoryList = styled.div`
-  display: flex;
-  gap: 10px;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-`;
-
-const CategoryListItem = styled.div`
-  width: 70px;
-
-  background-color: #d2d2d2;
-
-  border-radius: 30px;
-
-  padding: 10px;
-  text-align: center;
-
-  box-sizing: border-box;
   cursor: pointer;
-
-  &:hover {
-    opacity: 0.7;
-  }
+  margin-left: 175px; // 수정 해야함
 `;
 
-const CategoryListItemName = styled.span`
-  font-size: 14px;
-  line-height: 14px;
-`;
 
 const MusicList = styled.ol`
-  display: block;
-`;
+    display: block;
+`
 
 const MusicListItem = styled.li`
   display: flex;
@@ -129,14 +80,14 @@ const MusicListItem = styled.li`
   padding: 10px 10px;
 `;
 
-const Date = styled.div`
-  font-size: 12px;
-`;
-const Content = styled.div`
-  font-size: 12px;
-  margin-top: 5px;
-`;
 
+const Date = styled.div`
+font-size: 12px;
+`
+const Content = styled.div`
+font-size: 12px;
+margin-top: 5px;
+`
 const Iconbox = styled.div`
   display: flex; /* 요소들을 수평으로 나란히 배치 */
   align-items: center; /* 요소들을 수평 축에서 가운데로 정렬 */
@@ -149,6 +100,8 @@ const Icon1 = styled.div`
 `;
 const Icon2 = styled.div`
   font-size: 12px;
+
+  
 `;
 const BT = styled.button`
 width: 100%;

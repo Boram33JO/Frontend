@@ -1,38 +1,23 @@
 import { styled } from 'styled-components'
+import { useNavigate } from 'react-router-dom';
 
 const FavList = () => {
-    const category = [
-        {
-            id: "1",
-            name: "최신순"
-        },
-        {
-            id: "2",
-            name: "과거순"
-        },
-        {
-            id: "3",
-            name: "좋아요순"
-        },
-    ]
+   
+    const navigate = useNavigate();
+
+    const handleViewAllClick = () => {
+        // Navigate to the desired page when the button is clicked
+        navigate('/profile/{userId}/wishlist');
+    };
+
+
     return (
         <InnerContainer>
-            <H3>
-                ㅇㅇ님이 좋아한 포스팅
-            </H3>
-            <CategoryList>
-                {
-                    category.map(item => {
-                        return (
-                            <CategoryListItem>
-                                <CategoryListItemName>
-                                    {item.name}
-                                </CategoryListItemName>
-                            </CategoryListItem>
-                        )
-                    })
-                }
-            </CategoryList>
+            <Post>
+          <H3>ㅇㅇ님이 좋아한 포스팅</H3>
+          <Bt onClick={handleViewAllClick}>전체보기</Bt>
+        </Post>
+
             <MusicList>
             <MusicListItem>
                     <Date>23.07.31</Date>
@@ -42,16 +27,7 @@ const FavList = () => {
             <Icon2>✉️ 댓글수</Icon2>
           </Iconbox>
                 </MusicListItem>
-                <MusicListItem>
-                <Date>23.07.31</Date>
-                    <Content>운동할 때 듣습니다.</Content>
-                    <Iconbox>
-            <Icon1>💜 좋아요수</Icon1>
-            <Icon2>✉️ 댓글수</Icon2>
-          </Iconbox>
-         
-                </MusicListItem>
-                <BT>전체보기</BT>
+              
             </MusicList>
         </InnerContainer>
     )
@@ -68,42 +44,26 @@ const InnerContainer = styled.div`
     background-color: #EEEEEE;
 `
 
+const Post = styled.div`
+  display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
+  /* gap: 20%; // 간격 */
+`;
+
 const H3 = styled.h3`
-    font-size: 20px;
-    line-height: 24px;
-    font-weight: 600;
-    margin-bottom: 10px;
-`
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
+  margin-bottom: 10px;
+`;
+const Bt = styled.div`
+ font-size: 14px;
+  font-family: "Pretendard";
 
-const CategoryList = styled.div`
-    display: flex;
-    gap: 10px;
-    box-sizing: border-box;
-    margin-bottom: 10px;
-`
+  cursor: pointer;
+  margin-left: 115px; // 수정 해야함.
+`;
 
-const CategoryListItem = styled.div`
-    width: 70px;
-
-    background-color: #D2D2D2;
-    
-    border-radius: 30px;
-
-    padding: 10px;
-    text-align: center;
-
-    box-sizing: border-box;
-    cursor: pointer;
-
-    &:hover{
-        opacity: 0.7;
-    }
-`
-
-const CategoryListItemName = styled.span`
-    font-size: 14px;
-    line-height: 14px;
-`
 
 const MusicList = styled.ol`
     display: block;
