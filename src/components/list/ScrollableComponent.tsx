@@ -33,14 +33,16 @@ const ScrollableComponent: React.FC<ScrollableComponentProps> = ({ children }) =
     };
 
     return (
-        <ScrollContainer
-            ref={containerRef}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
-        >
-            {children}
+        <ScrollContainer>
+            <InnerScrollContainer
+                ref={containerRef}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseLeave}
+            >
+                {children}
+            </InnerScrollContainer>
         </ScrollContainer>
     );
 };
@@ -48,6 +50,11 @@ const ScrollableComponent: React.FC<ScrollableComponentProps> = ({ children }) =
 export default ScrollableComponent;
 
 const ScrollContainer = styled.div`
+    position: relative;
+    background-color: black;
+`
+
+const InnerScrollContainer = styled.div`
     overflow: hidden;
     white-space: nowrap;
 `

@@ -65,8 +65,8 @@ const SortList = styled.div`
 `
 
 const SortListItem = styled.div<{ $active: string }>`
-    background-color: ${(props) => (props.$active === "true" ? "black" : "#D2D2D2")};
-    color: ${(props) => (props.$active === "true"  ? "white" : "black")};
+    background: ${(props) => (props.$active === "true" ? "linear-gradient(135deg, #8084F4,#C48FED)" : "#58468B")};
+    color: ${(props) => (props.$active === "true"  ? "#FAFAFA" : "#9280BA")};
     border-radius: 30px;
 
     padding: 8px 16px;
@@ -76,6 +76,7 @@ const SortListItem = styled.div<{ $active: string }>`
     cursor: pointer;
 
     &:hover{
-        opacity: 0.7;
+        background: linear-gradient(135deg, #8084F4,#C48FED);
+        color: #FAFAFA;
     }
 `

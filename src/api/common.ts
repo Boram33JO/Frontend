@@ -28,8 +28,8 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   function (response) {
-    console.log("인터셉트 응답 받았어요!");
-    console.log("response", response);
+    // console.log("인터셉트 응답 받았어요!");
+    // console.log("response", response);
     return response;
   },
   function (error) {
