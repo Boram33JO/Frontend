@@ -9,6 +9,7 @@ import ProfilePage from './pages/ProfilePage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Layout from './components/common/Layout';
+import EditPages from './pages/EditPages';
 
 function App() {
   return (
@@ -17,7 +18,8 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/edit/:id" element={<EditPage />} />
+        <Route path="/edit" element={<EditPage />} />
+        <Route path="/edit/:id" element={<EditPages />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/map" element={<MapPage />} />
