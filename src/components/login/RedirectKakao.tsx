@@ -38,16 +38,13 @@ const RedirectKakao: React.FC = () => {
     const KAKAO_CODE = location.search.split("=")[1];
 
     const getKakaoToken = (code: string) => {
-      const response = axios.get(`http://43.201.22.74/api/oauth/token?code=${code}`)
-          console.log("llllll");
-          console.log(response);
-        // .then(response => {
-        //   console.log("llllll");
-        //   console.log(response.data);
-        // })
-        // .catch(error => {
-        //   console.error(error);
-        // });
+      const response = axios.post(`http://43.201.22.74/api/oauth/token?code=${code}`)
+      // const kakaotoken = response.headers.authorization;
+      // localStorage.setItem("token", kakaotoken);
+      
+      console.log("llllll");
+      console.log("akakak",response);
+        
     };
 
     if (KAKAO_CODE) {

@@ -5,13 +5,13 @@ import kakao_login_medium_wide from '../../img/kakao_login_medium_wide.png'
 
 const KakaoLogin = () => {
   // const navigate = useNavigate()
-  // const REST_API_KEY = '545665f819304672fe24245d39231f28';
-  // const REDIRECT_URI = `http://localhost:3000/kakao/auth` 
-  const KAKAO_AUTH_URL = `http://43.201.22.74/api/oauth/kakao`;
-  // const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const REST_API_KEY = '545665f819304672fe24245d39231f28';
+  const REDIRECT_URI = `http://localhost:3000/api/oauth/token`; 
+  // const KAKAO_AUTH_URL = `http://43.201.22.74/api/oauth/kakao`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
   
-  // console.log(REST_API_KEY)
-  // console.log(REDIRECT_URI)
+  console.log(REST_API_KEY)
+  console.log(REDIRECT_URI)
   
   const handleKakaoLogin = () => {
       window.location.href = KAKAO_AUTH_URL
