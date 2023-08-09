@@ -5,8 +5,8 @@ const Categories = () => {
     const clickCategoryHandler = (categoryId: any) => {
         console.log("categoryId", categoryId);
     };
-
-    const categories = ["공원", "바다", "물가", "레저", "문화공간", "운동", "식당", "학교", "대중교통", "카페", "도서관", "기타"];
+    
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
     return (
         <>
