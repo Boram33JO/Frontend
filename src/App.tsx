@@ -10,6 +10,7 @@ import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Layout from './components/common/Layout';
 import FollowPage from './pages/FollowPage';
+import RedirectKakao from './components/login/RedirectKakao';
 
 function App() {
 
@@ -23,10 +24,10 @@ function App() {
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/profile/{userId}/follow" element={<FollowPage />} />
-                <Route path="/profile/{userId}/follow" element={<FollowPage />} />
         <Route path="/map" element={<MapPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Route>
+      <Route path="/api/oauth/kakao" element={<RedirectKakao />} />
     </Routes>
   );
 
