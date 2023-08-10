@@ -41,7 +41,6 @@ const StScroll = styled.div`
 
 const StContainer = styled.div`
     display: flex;
-    padding: 20px;
     gap: 20px;
 `;
 

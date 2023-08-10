@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Categories from "../edit/Categories";
 
 declare global {
     interface Window {
@@ -35,9 +36,6 @@ const EditMap: React.FC = () => {
         const ps = new window.kakao.maps.services.Places(); // 'window.' 추가
         const placesSearchCB = function (data: any, status: any, pagination: any) {
             if (status === window.kakao.maps.services.Status.OK) {
-                
-                
-                
                 // const newSearch = data;
                 // console.log(newSearch);
                 // setAddress(newSearch.address_name);
@@ -66,17 +64,22 @@ const EditMap: React.FC = () => {
 
     return (
         <>
-            <div
-                id="map"
-                style={{ width: "350px", height: "288px" }}
-            />
             <form onSubmit={searchLocationHandler}>
+                <img
+                    src="https://img.freepik.com/premium-vector/search-icon-magnifying-glass-symbol-outline-icon_543062-139.jpg?w=2000"
+                    alt="검색"
+                    style={{ width: "24px", height: "24px" }}
+                />
                 <input
                     onChange={changeInputHandler}
                     value={searchLocation}
                 />
-                <button>검색</button>
             </form>
+            <Categories />
+            <div
+                id="map"
+                style={{ width: "350px", height: "288px" }}
+            />
         </>
     );
 };
