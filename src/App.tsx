@@ -2,21 +2,22 @@ import { Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import EditorPage from './pages/EditorPage';
+
+import EditPage from './pages/EditPage';
 import ListPage from "./pages/ListPage";
 import DetailPage from './pages/DetailPage';
 import ProfilePage from './pages/ProfilePage';
 import MapPage from './pages/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import Layout from './components/common/Layout';
+import EditPages from './pages/EditPages';
 import RedirectKakao from './components/login/RedirectKakao';
-
-
 import FollowPage from './pages/FollowPage';
 import MypostPage from './pages/MypostPage';
 import MycommentsPage from './pages/MycommentsPage';
 import WishlistPage from './pages/WishlistPage';
 import PasswordPage from './pages/PasswordPage';
+
 
 function App() {
   return (
@@ -25,8 +26,11 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/edit" element={<EditPage />} />
+        <Route path="/edit/:id" element={<EditPages />} />
         <Route path="/list/:id" element={<ListPage />} />
         <Route path="/editor" element={<EditorPage />} />
+
         <Route path="/detail/:id" element={<DetailPage />} />
 
         <Route path="/profile/{userId}" element={<ProfilePage />} />   
