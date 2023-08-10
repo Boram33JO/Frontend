@@ -1,12 +1,18 @@
 import React, { useRef, useState } from 'react';
 import { styled } from 'styled-components'
-import { postComment } from '../../api/comment';
+import { postComment, updateComment } from '../../api/comment';
 import { useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
 
-const CommentForm = () => {
+interface Comment {
+    setTarget?: any;
+    commentId?: string;
+    comment?: string;
+}
+
+const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     const { id } = useParams();
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState('' || comment);
     const queryClient = useQueryClient();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -29,6 +35,13 @@ const CommentForm = () => {
         }
     });
 
+    const updateMutation = useMutation((commentId: string) => updateComment(commentId, { content: content }), {
+        onSuccess: (response) => {
+            queryClient.invalidateQueries("posts");
+            console.log(response.data);
+        }
+    });
+
     const handlePostButtonClick = async () => {
         if (id) {
             commentMutation.mutate(id);
@@ -36,8 +49,15 @@ const CommentForm = () => {
         }
     }
 
+    const handleUpdateButtonClick = async () => {
+        if (commentId) {
+            updateMutation.mutate(commentId);
+            setTarget("");
+        }
+    }
+
     return (
-        <Container>
+        <Container $edit={Boolean(comment)}>
             <CommentContent>
                 <CommentTextArea
                     ref={textareaRef}
@@ -48,9 +68,14 @@ const CommentForm = () => {
                     rows={1}
                 />
                 <CommentButtonArea>
-                    <CommentButton onClick={handlePostButtonClick}>
-                        입력
-                    </CommentButton>
+                    {(comment)
+                        ? <CommentButton onClick={handleUpdateButtonClick}>
+                            수정
+                        </CommentButton>
+                        : <CommentButton onClick={handlePostButtonClick}>
+                            입력
+                        </CommentButton>
+                    }
                 </CommentButtonArea>
             </CommentContent>
         </Container>
@@ -59,19 +84,18 @@ const CommentForm = () => {
 
 export default CommentForm
 
-const Container = styled.div`
+const Container = styled.div<{ $edit: boolean }>`
     width: inherit;
     box-sizing: border-box;
-    margin-top: 48px;
-    margin-bottom: 20px;
-    padding: 0px 20px;
+    background-color: black;
+    padding: ${props => props.$edit ? "" : "20px"};
 `
 
 const CommentContent = styled.div`
     display: flex;
     width: 100%;
     align-items: flex-start;
-    background-color: #D9D9D9;
+    background-color: #2C2A30;
     border-radius: 8px;
 `
 
@@ -79,6 +103,7 @@ const CommentTextArea = styled.textarea`
     flex: 1 0 0;
     min-height: 20px;
 
+    color: #797582;
     font-family: "Pretendard";
     font-size: 14px;
     line-height: 20px;
@@ -107,6 +132,7 @@ const CommentButton = styled.div`
     border: none;
     background: none transparent;
     
+    color: #797582;
     font-size: 14px;
     line-height: 20px;
     cursor: pointer;
