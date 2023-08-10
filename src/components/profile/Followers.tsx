@@ -32,7 +32,7 @@ const Followers = () => {
     <InnerContainer>
       <Follower1>
         <H3>ㅇㅇ님의 팔로워</H3>
-        <Stbutton>관리</Stbutton>
+        <Bt>관리</Bt>
       </Follower1>
       <FamousList>
         {followers.map((item) => {
@@ -60,8 +60,9 @@ const InnerContainer = styled.div`
 
 const Follower1 = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  justify-content: space-between;
   align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
-  gap: 48%; // 간격
+  
 `;
 const H3 = styled.h3`
   font-size: 20px;
@@ -69,7 +70,7 @@ const H3 = styled.h3`
   font-weight: 600;
   margin-bottom: 10px;
 `;
-const Stbutton = styled.button`
+const Bt = styled.button`
   width: 50px;
   height: 30px;
 
@@ -92,8 +93,8 @@ const FamousList = styled.div`
 `;
 
 const FamousListItem = styled.div`
-  width: 65px;
-  height: 65px;
+  width: 62px;
+  height: 62px;
 
   border-radius: 50%;
   cursor: pointer;
