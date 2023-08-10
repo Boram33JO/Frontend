@@ -1,6 +1,15 @@
 import { styled } from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const FollowersAll = () => {
+
+  const navigate = useNavigate();
+
+  const handleViewAllClick = () => {
+      // Navigate to the desired page when the button is clicked
+      navigate('/profile/{userId}/follow');
+  };
+
   const followers = [
     {
       id: "1",
@@ -26,12 +35,7 @@ const FollowersAll = () => {
         "https://i.scdn.co/image/ab67616100005174c36dd9eb55fb0db4911f25dd",
         nickname : '화성형',
       },
-    {
-      id: "5",
-      thumbnail:
-        "https://i.scdn.co/image/ab676161000051746a224073987b930f99adc706",
-        nickname : '스위프티',
-      },
+   
       // {
       //   id: "6",
       //   thumbnail:
@@ -48,16 +52,17 @@ const FollowersAll = () => {
   return (
     <InnerContainer>
       <Follower1>
-        <H3>ㅇㅇ님의 팔로워</H3>
-        <Stbutton>관리</Stbutton>
+        <H3>ㅇㅇ님의 피플러</H3>
+        <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Follower1>
       <FamousList>
         {followers.map((item) => {
+          
           return (
+
             <FamousListItem key={item.id}>
               <FamousListThumb src={item.thumbnail} />
               <FamousListNickName>{item.nickname}</FamousListNickName>
-
             </FamousListItem>
           );
         })}
@@ -72,37 +77,32 @@ const InnerContainer = styled.div`
   display: block;
   width: 100%;
   box-sizing: border-box;
-  padding: 0px 20px;
-  margin-top: 48px;
-  margin-bottom: 48px;
+  padding: 20px;
+  padding-top: 52px;
+  
 `;
 
 const Follower1 = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  justify-content: space-between;
   align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
-  gap: 48%; // 간격
+  
 `;
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
   font-weight: 600;
+  color: #e7e6f0;
   margin-bottom: 10px;
 `;
-const Stbutton = styled.button`
-  width: 50px;
-  height: 30px;
 
-  background-color: #d2d2d2;
-  border: none;
-  border-radius: 24px;
-
+const Bt = styled.div`
+ font-size: 14px;
+ color: #e7e6f0;
   font-family: "Pretendard";
 
   cursor: pointer;
-
-  &:hover {
-    background-color: #e2e2e2;
-  }
+ 
 `;
 
 const FamousList = styled.div`
@@ -111,11 +111,14 @@ const FamousList = styled.div`
 `;
 
 const FamousListItem = styled.div`
+  margin-top: 16px;
   width: 65px;
   height: 90px; /* 수정: 요소들의 높이를 늘려서 닉네임이 썸네일 밑에 나타나도록 함 */
   display: flex;
   flex-direction: column; /* 수정: 요소들을 세로 방향으로 정렬하기 위해 column으로 설정 */
   align-items: center;
+  justify-content: space-between;
+
   cursor: pointer;
   
   &:hover {
@@ -124,14 +127,16 @@ const FamousListItem = styled.div`
 `;
 
 const FamousListThumb = styled.img`
-  width: 65px;
-  height: 65px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
 `;
 
 const FamousListNickName = styled.div`
-  font-size: 14px;
-  margin-top: 5px; /* 수정: 썸네일 아래에 간격을 두어 닉네임이 적절히 나타나도록 함 */
+  font-size: 14px; // 12
+  font-weight: 500;
+  color: #e7e6f0;
+  margin-top: 10px; /* 수정: 썸네일 아래에 간격을 두어 닉네임이 적절히 나타나도록 함 */
   text-align: center; /* 수정: 텍스트를 가운데 정렬로 설정 */
 `;
 

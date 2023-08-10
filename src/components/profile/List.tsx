@@ -39,29 +39,32 @@ const InnerContainer = styled.div`
     display: block;
     width: 100%;
     box-sizing: border-box;
-    padding: 20px;
-    margin-top: 48px;
-    background-color: #EEEEEE;
+    padding: 0 20px;
+    padding-top: 52px;
+   
+  
 `
 
 const Post = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  justify-content: space-between;
   align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
-  /* gap: 20%; // 간격 */
+ 
 `;
 
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
   font-weight: 600;
+  color: #e7e6f0;
   margin-bottom: 10px;
 `;
 const Bt = styled.div`
  font-size: 14px;
   font-family: "Pretendard";
-
+  color: #e7e6f0;
   cursor: pointer;
-  margin-left: 175px; // 수정 해야함
+ 
 `;
 
 
@@ -76,7 +79,7 @@ const MusicListItem = styled.li`
   height: 50px;
   border-radius: 6px;
   background-color: #d2d2d2;
-  margin-top: 10px;
+  margin-top: 16px;
   padding: 10px 10px;
 `;
 
@@ -102,16 +105,4 @@ const Icon2 = styled.div`
   font-size: 12px;
 
   
-`;
-const BT = styled.button`
-width: 100%;
-  height: 45px;
-  padding: 10px;
-  background-color: #d9d9d9;
-  color: 22222;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
 `;
