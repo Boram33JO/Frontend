@@ -2,7 +2,7 @@ import instance from "./common";
 
 // 회원가입
 const addUsers = async (newUser) => {
-  const response = await instance.post(`http://43.201.22.74/api/user/signup`, newUser);
+  const response = await instance.post(`/api/user/signup`, newUser);
   console.log("회원가입", response)
   return response.data;
 };
@@ -16,10 +16,18 @@ const deleteUsers = async () => {
 
 // 로그인
 const login = async (loginInformation) => {
-  const response = await instance.post(`http://43.201.22.74/api/user/login`, loginInformation);
+  const response = await instance.post(`/api/user/login`, loginInformation);
   console.log("로그인", response);
   const token = response.headers.authorization;
+  const nickname = response.data.nickname;
+  const userImage = response.data.userImage;
+
   localStorage.setItem("token", token);
+  localStorage.setItem("nickname", nickname);
+  localStorage.setItem("userImage", userImage);
+
+  // console.log(response.data.nickname);
+  // console.log(response.data.userImage);
   return response.data;
 };
 

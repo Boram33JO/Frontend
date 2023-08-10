@@ -1,35 +1,34 @@
 import { styled } from "styled-components"
-import { PostType } from "../../pages/DetailPage"
+import { Post, Song } from "../../pages/DetailPage"
+import spotify from '../../assets/images/Spotify_Icon_RGB_Black.png'
 
-type PostProps = {
-    post: PostType
+interface Songs {
+    songs: Song[]
 }
 
-const Playlist: React.FC<PostProps> = ({ post }) => {
+const Playlist: React.FC<Songs> = ({ songs }) => {
     return (
         <PlaylistContainer>
-            {
-                post.tracks.map(item => {
+            <PlaylistSection>
+                {songs.map(song => {
                     return (
-                        <PlaylistItem>
-                            <ItemThumbnail src={item.thumbnail} />
-                            <ItemInfo>
+                        <PlaylistItem key={song.id} onClick={() => window.open(`${song.externalUrl}`)}>
+                            <PlaylistLeft>
+                                <MusicThumbnail src={song.thumbnail} />
                                 <MusicInfo>
-                                    <ItemP $color="#222222">
-                                        {item.title}
-                                    </ItemP>
-                                    <ItemP $color="#888888">
-                                        {item.artist}
-                                    </ItemP>
+                                    <StP $color={"#FAFAFA"} $size={"16px"}>
+                                        {song.songTitle}
+                                    </StP>
+                                    <StP $color={"#A6A3AF"} $size={"14px"}>
+                                        {song.artistName}
+                                    </StP>
                                 </MusicInfo>
-                                <ItemP $color="#626262">
-                                    50명이 들었던 음악
-                                </ItemP>
-                            </ItemInfo>
+                            </PlaylistLeft>
+                            <SpotifyIcon src={spotify} />
                         </PlaylistItem>
                     )
-                })
-            }
+                })}
+            </PlaylistSection>
         </PlaylistContainer>
     )
 }
@@ -38,39 +37,97 @@ export default Playlist
 
 const PlaylistContainer = styled.div`
     display: flex;
-    background-color: #F5F5F5;
+    position: relative;
+    flex-direction: column;
+    background-color: black;
     justify-content: center;
-    margin-top: 20px;
+    box-sizing: border-box;
+    padding: 0px 20px;
+    padding-bottom: 20px;
+`
+
+const PlaylistSection = styled.div`
+    width: 100%;
+    max-height: 176px;
+
+    display: flex;
+    flex-direction: column;
+    background-color: #434047;
+    border-radius: 6px;
+    overflow-y: scroll;
+
+    box-sizing: border-box;
     padding: 20px;
+    gap: 10px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #C6C6C6;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: #75717B;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-button:vertical:start:decrement,
+    &::-webkit-scrollbar-button:vertical:end:decrement {
+        display:block;
+        height: 20px;
+    }
 `
 
 const PlaylistItem = styled.div`
     display: flex;
-    width: 300px;
-    height: 80px;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.5;
+    }
+`
+
+const PlaylistLeft = styled.div`
+    display: inline-flex;
     gap: 10px;
 `
 
-const ItemThumbnail = styled.img`
-    width: 80px;
-    height: 80px;
-    border-radius: 6px;
-`
-
-const ItemInfo = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 5px;
+const MusicThumbnail = styled.img`
+    width: 42px;
+    height: 42px;
 `
 
 const MusicInfo = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    justify-content: center;
 `
 
-const ItemP = styled.p< { $color: string } >`
-    font-size: 16px;
-    color: ${props => props.$color};
+const StP = styled.p<{ $color: string, $size: string }>`
+    font-family: "Pretendard";
+    color: ${(props) => props.$color};
+    font-size: ${(props) => props.$size};
+    font-weight: 600;
+    line-height: calc(100% + 2px);
+    & {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        overflow: hidden;
+    }
+`
+
+const SpotifyIcon = styled.img`
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+`
+
+const SvgIcon = styled.span`
+    display: flex;
+    align-items: center;
+    justify-content: center;
 `
