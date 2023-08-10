@@ -56,7 +56,7 @@ const StBox1 = styled.div<StBoxProps>`
   padding-bottom: 5px;
   margin-bottom: -2px;
   cursor: pointer;
-  color: ${(props) => (props.active ? '#8084f3' : '#5b5b5b')};
+  color: ${(props) => (props.active ? ' #E7E6F0;' : '#5b5b5b')};
   border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
 `;
 
@@ -65,7 +65,7 @@ const StBox2 = styled.div<StBoxProps>`
   padding-bottom: 5px;
   margin-bottom: -2px;
   cursor: pointer;
-  color: ${(props) => (props.active ? '#8084f3' : '#5b5b5b')};
+  color: ${(props) => (props.active ? ' #E7E6F0;' : '#5b5b5b')};
   border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
 `;
 
@@ -74,7 +74,7 @@ const StBox3 = styled.div<StBoxProps>`
   padding-bottom: 5px;
   margin-bottom: -2px;
   cursor: pointer;
-  color: ${(props) => (props.active ? '#8084f3' : '#5b5b5b')};
+  color: ${(props) => (props.active ? ' #E7E6F0;' : '#5b5b5b')};
   border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
 `;
 
