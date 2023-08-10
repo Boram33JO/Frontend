@@ -47,6 +47,7 @@ const StBox = styled.div`
   padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
+  /* border-bottom: 1px solid white; */
 `;
 
 const StBox1 = styled.div<StBoxProps>`
