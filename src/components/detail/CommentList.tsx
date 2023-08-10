@@ -1,11 +1,10 @@
+import { useState } from "react"
 import { styled } from "styled-components"
-import { Comment, Post } from "../../pages/DetailPage"
+import { Comment } from "../../pages/DetailPage"
 import { useMutation, useQueryClient } from "react-query"
 import { deleteComment } from "../../api/comment"
-
-type PostProps = {
-    post: Post
-}
+import CommentForm from "./CommentForm"
+import { displayedAt } from "../utils/displayedAt"
 
 interface Comments {
     comments: Comment[]
@@ -13,25 +12,7 @@ interface Comments {
 
 const CommentList: React.FC<Comments> = ({ comments }) => {
     const queryClient = useQueryClient();
-
-    // 작성 시간
-    const displayedAt = (createdAt: string) => {
-        const milliSeconds = new Date().getTime() - new Date(createdAt).getTime();
-        const seconds = milliSeconds / 1000
-        if (seconds < 60) return `방금 전`
-        const minutes = seconds / 60
-        if (minutes < 60) return `${Math.floor(minutes)}분 전`
-        const hours = minutes / 60
-        if (hours < 24) return `${Math.floor(hours)}시간 전`
-        const days = hours / 24
-        if (days < 7) return `${Math.floor(days)}일 전`
-        const weeks = days / 7
-        if (weeks < 5) return `${Math.floor(weeks)}주 전`
-        const months = days / 30
-        if (months < 12) return `${Math.floor(months)}개월 전`
-        const years = days / 365
-        return `${Math.floor(years)}년 전`
-    }
+    const [updateTarget, setUpdateTarget] = useState("");
 
     const deleteMutation = useMutation((commentId: string) => deleteComment(commentId), {
         onSuccess: (response) => {
@@ -41,40 +22,64 @@ const CommentList: React.FC<Comments> = ({ comments }) => {
     });
 
     const CommentButtonHandler = () => { }
+
+    const CommentUpdateButtonHandler = (id: string) => {
+        setUpdateTarget(id);
+    }
+
     const CommentDeleteButtonHandler = (id: string) => {
         deleteMutation.mutate(id);
     }
 
     return (
         <CommentListContainer>
+            <CommentP $color="#D9D8E2">
+                댓글 {comments?.length}
+            </CommentP>
             {
                 comments.map(item => {
                     return (
                         <CommentListItem key={item.commentId}>
-                            <ListItemLeft>
+                            <ListItemTop>
                                 <UserImage src={item.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : item.userImage} />
-                            </ListItemLeft>
-                            <ListItemMiddle>
-                                <ListItemTop>
-                                    <CommentP $color="#222222">
-                                        {item.nickname}
-                                    </CommentP>
-                                    <CommentP $color="#626262">
-                                        {item.content}
-                                    </CommentP>
-                                </ListItemTop>
-                                <ListItemBottom>
-                                    <CommentP $color="#B4B4B4">
-                                        {displayedAt(item.createdAt)}
-                                    </CommentP>
-                                    {/* <CommentP $color="#B4B4B4" onClick={CommentButtonHandler}>
-                                        댓글 달기
-                                    </CommentP> */}
-                                </ListItemBottom>
-                            </ListItemMiddle>
-                            <ListItemRight>
-                                <button onClick={() => CommentDeleteButtonHandler(item.commentId)}>삭제</button>
-                            </ListItemRight>
+                                <CommentP $color="#FAFAFA">
+                                    {item.nickname}
+                                </CommentP>
+                            </ListItemTop>
+                            {(updateTarget !== item.commentId) ?
+                                <>
+                                    <ListItemMiddle>
+                                        <CommentP $color="#DEDCE7">
+                                            {item.content}
+                                        </CommentP>
+                                    </ListItemMiddle>
+                                    <ListItemBottom>
+                                        <CommentP $color="#A6A3AF">
+                                            {displayedAt(item.createdAt)}
+                                        </CommentP>
+                                        <Divider />
+                                        <CommentButton onClick={CommentButtonHandler}>
+                                            댓글 달기
+                                        </CommentButton>
+                                        {(true) &&
+                                            <>
+                                                <Divider />
+                                                <CommentButton onClick={() => CommentUpdateButtonHandler(item.commentId)}>
+                                                    수정
+                                                </CommentButton>
+                                                <Divider />
+                                                <CommentButton onClick={() => CommentDeleteButtonHandler(item.commentId)}>
+                                                    삭제
+                                                </CommentButton>
+                                            </>
+                                        }
+                                    </ListItemBottom>
+                                </>
+                                :
+                                <>
+                                    <CommentForm setTarget={setUpdateTarget} commentId={item.commentId} comment={item.content} />
+                                </>
+                            }
                         </CommentListItem>
                     )
                 })
@@ -88,49 +93,62 @@ export default CommentList
 const CommentListContainer = styled.div`
     width: inherit;
     box-sizing: border-box;
-    margin-top: 48px;
-    padding: 0px 20px;
+    background-color: black;
+    padding: 20px 20px;
 `
 const CommentListItem = styled.div`
     display: flex;
-    margin-bottom: 20px;
+    flex-direction: column;
+    box-sizing: border-box;
+    margin-top: 20px;
     gap: 10px;
 `
 
-const ListItemLeft = styled.div`
-    flex: 0.1 0 0;
+const UserImage = styled.img`
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
 `
 
-const UserImage = styled.img`
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+const ListItemTop = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 5px;
 `
 
 const ListItemMiddle = styled.div`
     display: flex;
     flex-direction: column;
-    flex: 0.8 0 0;
     gap: 10px;
-`
-
-const ListItemTop = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
 `
 
 const ListItemBottom = styled.div`
     display: flex;
+    align-items: center;
     gap: 10px;
 `
 
-const ListItemRight = styled.div`
-    flex: 0.2 0 0;
-`
-
 const CommentP = styled.p< { $color: string } >`
+    color: ${props => props.$color};
     font-size: 16px;
     line-height: 22px;
-    color: ${props => props.$color};
+`
+
+const CommentButton = styled.p`
+    font-size: 16px;
+    line-height: 22px;
+    color: #A6A3AF;
+    background: none;
+    border: none;
+    padding: none;
+    margin: none;
+
+    cursor: pointer;
+`
+
+const Divider = styled.div`
+    height: 14px;
+    width: 1px;
+    background-color: #A6A3AF;
+    padding: 0;
 `
