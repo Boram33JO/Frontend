@@ -3,7 +3,7 @@ import instance from "./common";
 // 회원가입
 const addUsers = async (newUser) => {
   const response = await instance.post(`/api/user/signup`, newUser);
-  console.log("회원가입", response)
+  //console.log("회원가입", response)
   return response.data;
 };
 

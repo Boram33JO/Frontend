@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
@@ -12,6 +12,18 @@ const BasicSignUp = () => {
   const [password, onChangePasswordHandler] = useInput();
   const [passwordCheck, onChangePasswordCheckHandler] = useInput();
   const [nickname, onChangeNicknameHandler] = useInput();
+
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordCheckError, setPasswordCheckError] = useState("");
+  const [nicknameError, setNicknameError] = useState("");
+
+   // 각 입력 필드에 대한 유효성 검사 결과를 상태 변수로 추가
+  //  const [emailValid, setEmailValid] = useState(true);
+  //  const [passwordValid, setPasswordValid] = useState(true);
+  //  const [passwordCheckValid, setPasswordCheckValid] = useState(true);
+  //  const [nicknameValid, setNicknameValid] = useState(true);
+ 
 
   const addNewUserMutation = useMutation(addUsers, {
     onSuccess: () => {
@@ -33,25 +45,30 @@ const BasicSignUp = () => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
     const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,8}$/; // nickname: 알파벳소문자, 한글 ,숫자로만 이루어지고, 2자 이상 10자 이하
 
-    // body 값이 이메일 형식과 맞지 않을 경우 경고창
-    if (!emailRegex.test(email)) {
-      alert("이메일 형식이 아닙니다.");
-      return;
-    }
-    if (password !== passwordCheck) {
-      alert("비밀번호와 비밀번호 확인이 일치하지 않습니다.");
-      return;
-    } // 비번 확인
-    if (!passwordRegex.test(password)) {
-      alert(
-        "password: 대/소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소를 1개이상 포함해주세요."
-      );
-      return;
-    }
-    if (!nicknameRegex.test(nickname)) {
-      alert("nickname: 알파벳소문자, 한글 ,숫자, 2~8자 이하로 입력해 주세요.");
-      return;
-    }
+      // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리
+      const errors = {};
+      if (!emailRegex.test(email)) {
+        errors.email = "이메일 형식이 아닙니다.";
+      }
+      if (!passwordRegex.test(password)) {
+        errors.password = "password 조건이 충족되지 않았습니다.";
+      }
+      if (password !== passwordCheck) {
+        errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
+      }
+      if (!nicknameRegex.test(nickname)) {
+        errors.nickname = "알파벳소문자, 한글, 숫자, 2~8자 이하로 입력해 주세요.";
+      }
+  
+      // 에러가 있는 경우 처리
+      if (Object.keys(errors).length > 0) {
+        // 에러 메시지 모두 설정
+        setEmailError(errors.email || "");
+        setPasswordError(errors.password || "");
+        setPasswordCheckError(errors.passwordCheck || "");
+        setNicknameError(errors.nickname || "");
+        return;
+      }
 
     const newUser = {
       email: email,
@@ -61,6 +78,7 @@ const BasicSignUp = () => {
     addNewUserMutation.mutate(newUser);
   };
 
+  
   return (
     <>
       <H1>회원가입</H1>
@@ -69,7 +87,8 @@ const BasicSignUp = () => {
           type={"text"}
           placeholder={"이메일을 입력해주세요."}
           value={email}
-          onChange={onChangeEmailHandler}
+          onChange={
+            onChangeEmailHandler}
         />
 
         <Stinput2
@@ -89,6 +108,13 @@ const BasicSignUp = () => {
         />
       </Stbox>
 
+      <ErrorMessageContainer>
+        {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
+        {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+        {passwordCheckError && <ErrorMessage>{passwordCheckError}</ErrorMessage>}
+        
+      </ErrorMessageContainer>
+
       <H3>닉네임</H3>
       <Stbox>
         <Stnickname>
@@ -100,6 +126,7 @@ const BasicSignUp = () => {
             />
             <Stbutton1 onClick={onSignUpClickHandler}>중복체크</Stbutton1>
           </Stname>
+          {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
         </Stnickname>
 
         <Stbutton2 onClick={onSignUpClickHandler}>회원가입하기</Stbutton2>
@@ -109,6 +136,23 @@ const BasicSignUp = () => {
 };
 
 export default BasicSignUp;
+
+const ErrorMessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  padding-left: 48px;
+
+  /* align-items: center; */  
+`;
+
+const ErrorMessage = styled.div`
+   color: #e7e6f0;
+  margin-top: 10px;
+  font-size: 14px;
+
+`;
+
 
 const H1 = styled.h1`
   font-size: 24px;
@@ -213,7 +257,7 @@ const Stinput4 = styled.input`
   outline: none;
 `;
 const Stbutton1 = styled.button`
-  width: 70px;
+  width: 80px;
   height: 38px;
   margin-left: 10px;
   background-color: #d9d9d9;

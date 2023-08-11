@@ -6,15 +6,28 @@ import { useDispatch } from "react-redux";
 import useInput from "../../hooks/useInput";
 import { login } from "../../api/user";
 import { logIn } from "../../redux/modules/loginSlice";
+import { useEffect } from "react";
 
 const BasicLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState(""); // 추가: 에러 메시지 상태
 
+  // 에러 메시지 표시 후 일정 시간이 지나면 초기화
+  useEffect(() => {
+    if (errorMessage) {
+      const timeoutId = setTimeout(() => {
+        setErrorMessage("");
+      }, 5000); // 5초 후에 에러 메시지 초기화
+      return () => clearTimeout(timeoutId); // 컴포넌트 언마운트 시 타임아웃 클리어
+    }
+  }, [errorMessage]);
+
   const [email, onChangeEmailHandler] = useInput();
   const [password, onChangePasswordHandler] = useInput();
 
+
+  
   const loginMutation = useMutation(login, {
     onSuccess: () => {
       alert("로그인 했습니다!");
@@ -28,18 +41,20 @@ const BasicLogin = () => {
 
       if (error.response.status === 401)
         setErrorMessage(
-          "로그인 정보를 찾을 수 없습니다.",
-          `${error?.response?.data}`
+          "로그인 정보를 찾을 수 없습니다."
         );
       else setErrorMessage("찾을 수 없습니다.");
     },
+
+    
   });
 
   const loginClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
-      alert("이메일 형식이 아닙니다.");
+      setErrorMessage(
+        "이메일 형식이 아닙니다.")
       return;
     }
 
@@ -88,6 +103,13 @@ const BasicLogin = () => {
 };
 
 export default BasicLogin;
+
+// 에러
+const ErrorMessage = styled.div`
+  color: #e7e6f0;
+  margin-top: 10px;
+  font-size: 14px;
+`;
 
 const H3 = styled.h3`
   font-size: 24px;
@@ -166,8 +188,4 @@ const Stbutton = styled.button`
   }
 `;
 
-const ErrorMessage = styled.div`
-  color: red;
-  margin-top: 10px;
-  font-size: 14px;
-`;
+
