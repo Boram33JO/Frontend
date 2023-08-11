@@ -55,31 +55,34 @@ const BasicSignUp = () => {
 
   return (
     <>
+    <H1>회원가입</H1>
       <Stbox>
-        <H1>회원가입</H1>
-
+      
         <Stinput1 type={"text"} placeholder={"이메일을 입력해주세요."}value={email} onChange={onChangeEmailHandler}/>
 
         <Stinput2 type={"password"} placeholder={"비밀번호를 입력해주세요."}value={password} onChange={onChangePasswordHandler}/>
         <Stnumber>
-          비밀번호: 대/소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
+          대문자, 소문자, 숫자, 특수문자 각 1개 이상 포함한 8~15자 이내
         </Stnumber>
         <Stinput3
           type={"password"}
           placeholder={"비밀번호를 한번 더 입력해주세요."}
           value={passwordCheck} onChange={onChangePasswordCheckHandler}/>
+</Stbox>
 
+<H3>닉네임</H3>
+<Stbox>
         <Stnickname>
-          <H3>닉네임</H3>
+          
           <Stname>
             <Stinput4 type={"text"} placeholder={"2~8자 입력"} onChange={onChangeNicknameHandler}/>
-            <Stbutton1 onClick={onSignUpClickHandler}>확인</Stbutton1>
+            <Stbutton1 onClick={onSignUpClickHandler}>중복체크</Stbutton1>
           </Stname>
         </Stnickname>
 
         <Stbutton2 onClick={onSignUpClickHandler}>회원가입하기</Stbutton2>
-
-      </Stbox>
+        </Stbox>
+      
     </>
   );
 };
@@ -87,54 +90,73 @@ const BasicSignUp = () => {
 export default BasicSignUp;
 
 const H1 = styled.h1`
-  font-size: 20px;
+  font-size: 24px;
+  color: #E7E6F0 ;
+  font-weight: 700;
+
   line-height: 24px;
-  font-weight: 600;
-  margin-bottom: 10px;
+  padding-left : 46px;
+  margin-bottom: 40px;
   padding-top: 50px;
-  padding-left: 10px;
+  
+  
 `;
 const Stbox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
+
 const Stinput1 = styled.input`
-  width: 280px;
+ width: 280px;
   height: 18px;
   padding: 10px;
+
   font-size: 14px;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
+  color: #85848B;
+
+  background-color: #252628;
+  border: none;
+  border-radius: 6px;
   outline: none;
   margin-bottom: 10px;
 `;
 const Stinput2 = styled.input`
-  width: 280px;
+width: 280px;
   height: 18px;
   padding: 10px;
+
   font-size: 14px;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
+  color: #85848B;
+
+  background-color: #252628;
+  border: none;
+  border-radius: 6px;
   outline: none;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 
 const Stnumber = styled.div`
-  font-size: 14px;
-  line-height: 24px;
+  font-size: 12px;
+  line-height: 16px;
   font-weight: 200;
   /* margin-top: 5px; */
   color: darkgray;
   width: 300px;
+  margin-bottom: 10px;
+  
 `;
 const Stinput3 = styled.input`
-  width: 280px;
+ width: 280px;
   height: 18px;
   padding: 10px;
+
   font-size: 14px;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
+  color: #85848B;
+
+  background-color: #252628;
+  border: none;
+  border-radius: 6px;
   outline: none;
   margin-bottom: 10px;
 `;
@@ -145,47 +167,62 @@ const Stnickname = styled.div`
 `;
 
 const H3 = styled.h3`
-  font-size: 20px;
+  font-size: 18px;
+  color: #E7E6F0 ;
   line-height: 24px;
   font-weight: 600;
   margin-bottom: 10px;
+  padding-left: 46px;
   padding-top: 50px;
-  padding-left: 10px;
+  
 `;
 const Stname = styled.div`
   display: flex; /* 가로 정렬을 위해 추가 */
-  /* justify-content: center; 요소들을 수평 가운데 정렬하기 위해 변경 */
+  justify-content: center; /*요소들을 수평 가운데 정렬하기 위해 변경  */
   align-items: center; /* 세로 중앙 정렬을 위해 추가 */
 `;
 const Stinput4 = styled.input`
   width: 200px;
   height: 18px;
   padding: 10px;
+
   font-size: 14px;
-  border: 1px solid #d9d9d9;
-  border-radius: 8px;
+  color: #85848B;
+
+  background-color: #252628;
+
+
+  border: none;
+  border-radius: 6px;
   outline: none;
 `;
 const Stbutton1 = styled.button`
   width: 70px;
-  height: 40px;
+  height: 38px;
   margin-left: 10px;
   background-color: #d9d9d9;
-  color: 22222;
-  border: 1px solid #d9d9d9;
+  background: linear-gradient(135deg, #8084f4, #c48fed);
+  color: #e7e6f0;
+
+  border: none;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 14px; //16
+ font-weight: 500;
   cursor: pointer;
+
+
 `;
 const Stbutton2 = styled.button`
   width: 300px;
   height: 45px;
   padding: 10px;
-  background-color: #d9d9d9;
-  color: 22222;
-  border: 1px solid #d9d9d9;
+  background: linear-gradient(135deg, #8084f4, #c48fed);
+  color: #e7e6f0;
+  border: none;
   border-radius: 6px;
   font-size: 16px;
+  font-weight: 500;
+
   cursor: pointer;
   margin-top: 60px;
   margin-bottom: 100%;
