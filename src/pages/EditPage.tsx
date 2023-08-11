@@ -8,9 +8,7 @@ import ButtonComponent from "../components/edit/ButtonComponent";
 
 const EditPage = () => {
     const navigate = useNavigate();
-    const handlePrevClick = () => {
-        // 이전 버튼 클릭 시 동작
-    };
+    
     const handleNextClick = () => {
         navigate(`/edit/2`);
     };
@@ -21,7 +19,7 @@ const EditPage = () => {
                 <h1>어디로 설정할까요?</h1>
                 <EditMap />
                 <div>
-                    <ButtonComponent onClick={handlePrevClick}>이전</ButtonComponent>
+                    <ButtonComponent>이전</ButtonComponent>
                     <ButtonComponent onClick={handleNextClick}>다음</ButtonComponent>
                 </div>
             </StContainer>

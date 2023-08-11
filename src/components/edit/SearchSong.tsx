@@ -1,11 +1,6 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-
-// export enum TodoStatus {
-//     ACTIVE = "active",
-//     COMPLETED = "completed"
-// }
 
 export type SongListType = {
     album: string;
@@ -23,7 +18,7 @@ export type ChooseSongListType = {
     artistName: string;
     audioUrl: string;
     externalUrl: string;
-    id: number;
+    // id: number;
     songNum: string;
     songTitle: string;
     thumbnail: string;
@@ -32,10 +27,8 @@ export type ChooseSongListType = {
 const SearchSong: React.FC = () => {
     const [searchSong, setSearchSong] = useState<string>("");
     const [songList, setSongList] = useState<Array<SongListType>>([]);
-    // const [selectedStatus, setSelectedStatus] = useState();
     const [chooseSongList, setChooseSongList] = useState<Array<ChooseSongListType>>([]);
-    // const prev = 0;
-    // const id = prev + 1;
+
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchSong(event.target.value);
     };
@@ -60,8 +53,17 @@ const SearchSong: React.FC = () => {
         setChooseSongList((prevList) => [...prevList, item]);
     };
 
+    const removeFromChooseSongList = (song: ChooseSongListType) => {
+        const updatedList = chooseSongList.filter((item) => item.songNum !== song.songNum);
+        setChooseSongList(updatedList);
+    };
+
     console.log("songlist", songList);
     console.log("chooseSongList", chooseSongList);
+
+    useEffect(() => {
+        localStorage.setItem("songs", JSON.stringify(chooseSongList));
+    }, [chooseSongList]);
 
     return (
         <>
@@ -93,10 +95,10 @@ const SearchSong: React.FC = () => {
             </StContainer>
             <StChooseSongListContainer>
                 {chooseSongList.map((song) => (
-                    <StChooseSongLists>
+                    <StChooseSongLists key={song.songNum}>
                         <h3>{song.songTitle}</h3>
                         <div>{song.artistName}</div>
-                        <button>삭제</button>
+                        <button onClick={() => removeFromChooseSongList(song)}>삭제</button>
                     </StChooseSongLists>
                 ))}
             </StChooseSongListContainer>
@@ -104,12 +106,17 @@ const SearchSong: React.FC = () => {
     );
 };
 
+// 해야될일
+// 중복처리
+// 10개까지만
+// 글자 수 줄이기
+
 export default SearchSong;
 
 const StContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
-    height: 300px;
+    height: 316px;
 `;
 const StSongList = styled.div`
     display: flex;
@@ -133,25 +140,3 @@ const StChooseSongLists = styled.div`
     flex-direction: row;
     justify-content: space-between;
 `;
-
-// const handleImageClick = (imageData) => {
-//     setSelectedImage(imageData);
-//     let selectedStatus = null;
-
-//     if (imageData === "Image 1 Data") {
-//         selectedStatus = isData[0];
-//     } else if (imageData === "Image 2 Data") {
-//         selectedStatus = isData[1];
-//     } else if (imageData === "Image 3 Data") {
-//         selectedStatus = isData[2];
-//     } else if (imageData === "Image 4 Data") {
-//         selectedStatus = isData[3];
-//     }
-//     setClickData(selectedStatus);
-// };
-
-// const chooseSongListHandler = () => {
-//     ;
-
-//     console.log("chooseSongList", chooseSongList[0]);
-// };
