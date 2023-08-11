@@ -18,10 +18,24 @@ export type SongListType = {
     thumbnail: string;
 };
 
+export type ChooseSongListType = {
+    album: string;
+    artistName: string;
+    audioUrl: string;
+    externalUrl: string;
+    id: number;
+    songNum: string;
+    songTitle: string;
+    thumbnail: string;
+};
+
 const SearchSong: React.FC = () => {
     const [searchSong, setSearchSong] = useState<string>("");
     const [songList, setSongList] = useState<Array<SongListType>>([]);
-
+    // const [selectedStatus, setSelectedStatus] = useState();
+    const [chooseSongList, setChooseSongList] = useState<Array<ChooseSongListType>>([]);
+    // const prev = 0;
+    // const id = prev + 1;
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchSong(event.target.value);
     };
@@ -42,7 +56,12 @@ const SearchSong: React.FC = () => {
         }
     };
 
-    console.log(songList);
+    const addToChooseSongList = (item: SongListType) => {
+        setChooseSongList((prevList) => [...prevList, item]);
+    };
+
+    console.log("songlist", songList);
+    console.log("chooseSongList", chooseSongList);
 
     return (
         <>
@@ -55,9 +74,13 @@ const SearchSong: React.FC = () => {
             </form>
             <StContainer>
                 {songList.map((item) => (
-                    <StSongList>
+                    <StSongList
+                        key={item.songNum}
+                        onClick={() => {
+                            addToChooseSongList(item);
+                        }}
+                    >
                         <img
-                            key={item.id}
                             src={item.thumbnail}
                             alt={`Thumbnail for ${item.songTitle}`}
                         />
@@ -68,6 +91,15 @@ const SearchSong: React.FC = () => {
                     </StSongList>
                 ))}
             </StContainer>
+            <StChooseSongListContainer>
+                {chooseSongList.map((song) => (
+                    <StChooseSongLists>
+                        <h3>{song.songTitle}</h3>
+                        <div>{song.artistName}</div>
+                        <button>삭제</button>
+                    </StChooseSongLists>
+                ))}
+            </StChooseSongListContainer>
         </>
     );
 };
@@ -89,3 +121,37 @@ const StSongList = styled.div`
         height: 56px;
     }
 `;
+
+const StChooseSongListContainer = styled.div`
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 200px;
+`;
+
+const StChooseSongLists = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+// const handleImageClick = (imageData) => {
+//     setSelectedImage(imageData);
+//     let selectedStatus = null;
+
+//     if (imageData === "Image 1 Data") {
+//         selectedStatus = isData[0];
+//     } else if (imageData === "Image 2 Data") {
+//         selectedStatus = isData[1];
+//     } else if (imageData === "Image 3 Data") {
+//         selectedStatus = isData[2];
+//     } else if (imageData === "Image 4 Data") {
+//         selectedStatus = isData[3];
+//     }
+//     setClickData(selectedStatus);
+// };
+
+// const chooseSongListHandler = () => {
+//     ;
+
+//     console.log("chooseSongList", chooseSongList[0]);
+// };
