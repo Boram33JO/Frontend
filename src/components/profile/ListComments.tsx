@@ -96,19 +96,3 @@ color: #a6a3af;
 font-weight: 500;
 padding-top: 10px;;
 `;
-
-const Iconbox = styled.div`
-  display: flex; /* 요소들을 수평으로 나란히 배치 */
-  align-items: center; /* 요소들을 수평 축에서 가운데로 정렬 */
-  gap: 10px;
-  margin-top: 10px;
-`;
-
-const Icon1 = styled.div`
-  font-size: 12px;
-`;
-const Icon2 = styled.div`
-  font-size: 12px;
-
-  
-`;
