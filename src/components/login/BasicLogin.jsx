@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
@@ -10,43 +10,54 @@ import { logIn } from "../../redux/modules/loginSlice";
 const BasicLogin = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+  const [errorMessage, setErrorMessage] = useState(""); // 추가: 에러 메시지 상태
+
   const [email, onChangeEmailHandler] = useInput();
   const [password, onChangePasswordHandler] = useInput();
 
   const loginMutation = useMutation(login, {
     onSuccess: () => {
       alert("로그인 했습니다!");
-      dispatch(logIn())
-      navigate('/')
+      dispatch(logIn());
+      navigate('/');
+    },
+    onError: (error) => {
+      // 에러 발생 시 에러 메시지 표시
+      console.log("Error response from server:", error?.response?.data);
+      setErrorMessage("이메일 정보를 찾을 수 없습니다.");
     }
   });
+
   const loginClickHandler = () => {
-    // 이메일 형식 검사를 위한 정규식
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // body 값이 이메일 형식과 맞지 않을 경우 경고창
     if (!emailRegex.test(email)) {
       alert("이메일 형식이 아닙니다.");
       return;
     }
-    
+
     const loginInformation = {
-      email : email,
-      password : password,
+      email: email,
+      password: password,
     }
-    loginMutation.mutate(loginInformation)
+    loginMutation.mutate(loginInformation);
   };
 
   return (
     <>
+      <H3>로그인</H3>
       <Stbox>
-        <H3>로그인</H3>
-        <Stinput1 type={"text"} placeholder={"이메일을 입력해주세요."} value={email} onChange={onChangeEmailHandler}/>
-        <Stinput2 type={"password"} placeholder={"비밀번호를 입력해주세요."}  value={password} onChange={onChangePasswordHandler}/>
-        <Stlink1 onClick={() => { navigate('/') }}> 비밀번호를 잊으셨나요?</Stlink1>
-        <Stlink2 onClick={() => { navigate('/signup') }}> 회원가입하기</Stlink2>
+        <Stinput1 type={"text"} placeholder={"이메일을 입력해주세요."} value={email} onChange={onChangeEmailHandler} />
+        <Stinput2 type={"password"} placeholder={"비밀번호를 입력해주세요."} value={password} onChange={onChangePasswordHandler} />
+      </Stbox>
+
+      <Stbox2>
+        <Stlink1 onClick={() => { navigate('/') }}>로그인 정보를 잊으셨나요?</Stlink1>
+      </Stbox2>
+
+      <Stbox>
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} {/* 추가: 에러 메시지 표시 */}
       </Stbox>
     </>
   );
@@ -54,17 +65,28 @@ const BasicLogin = () => {
 
 export default BasicLogin;
 
+const H3 = styled.h3`
+  font-size: 24px;
+  color: #E7E6F0;
+  font-weight: 700;
+  line-height: 24px;
+  padding-left: 46px;
+  margin-bottom: 40px;
+  padding-top: 50px;
+`;
+
 const Stbox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
-const H3 = styled.h3`
-  font-size: 20px;
-  line-height: 24px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  padding-top: 50px;
+
+const Stbox2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  margin-right: 48px;
 `;
 
 const Stinput1 = styled.input`
@@ -72,7 +94,9 @@ const Stinput1 = styled.input`
   height: 18px;
   padding: 10px;
   font-size: 14px;
-  border: 1px solid #d9d9d9;
+  color: #85848B;
+  background-color: #252628;
+  border: none;
   border-radius: 8px;
   outline: none;
   margin-bottom: 10px;
@@ -83,42 +107,43 @@ const Stinput2 = styled.input`
   height: 18px;
   padding: 10px;
   font-size: 14px;
-  border: 1px solid #d9d9d9;
+  color: #85848B;
+  background-color: #252628;
+  border: none;
   border-radius: 8px;
   outline: none;
+  margin-bottom: 5px;
+`;
+
+const Stlink1 = styled.a`
+  font-size: 12px;
+  line-height: 24px;
+  font-weight: 400;
   margin-bottom: 10px;
+  cursor: pointer;
+  color: #B2B2B2;
 `;
 
 const Stbutton = styled.button`
   width: 300px;
   height: 45px;
   padding: 10px;
-  background-color: #d9d9d9;
-  color: #222222;
-  border: 1px solid #d9d9d9;
+  background: linear-gradient(135deg, #8084f4, #c48fed);
+  color: #e7e6f0;
+  border: none;
   border-radius: 6px;
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 10px;
-  margin-top: 40px;
+  margin-top: 72px;
+  font-weight: 500;
+  &:hover {
+    color: #141414;
+  }
 `;
 
-const Stlink1 = styled.a`
-  text-decoration: underline;
+const ErrorMessage = styled.div`
+  color: red;
+  margin-top: 10px;
   font-size: 14px;
-  line-height: 24px;
-  font-weight: 200;
-  margin-bottom: 10px;
-  cursor: pointer;
-  color: darkgray; /* 선택 사항: 링크 색상을 변경할 수 있습니다. */
-`;
-
-const Stlink2 = styled.a`
-  text-decoration: underline;
-  font-size: 14px;
-  line-height: 24px;
-  font-weight: 200;
-  margin-bottom: 10px;
-  cursor: pointer;
-  color: darkgray; /* 선택 사항: 링크 색상을 변경할 수 있습니다. */
 `;
