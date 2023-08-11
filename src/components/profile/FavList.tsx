@@ -1,5 +1,6 @@
 import { styled } from 'styled-components'
 import { useNavigate } from 'react-router-dom';
+import YourPostList from '../profiledetail/YourPostList';
 
 const FavLis = () => {
    
@@ -12,24 +13,16 @@ const FavLis = () => {
 
 
     return (
+      <>
         <InnerContainer>
             <Post>
           <H3>ㅇㅇ님이 좋아한 포스팅</H3>
           <Bt onClick={handleViewAllClick}>전체보기</Bt>
         </Post>
-
-            <MusicList>
-            <MusicListItem>
-                    <Date>23.07.31</Date>
-                    <Content>운동할 때 듣습니다.</Content>
-                    <Iconbox>
-            <Icon1>💜 좋아요수</Icon1>
-            <Icon2>✉️ 댓글수</Icon2>
-          </Iconbox>
-                </MusicListItem>
-              
-            </MusicList>
         </InnerContainer>
+         <YourPostList />
+         </>
+         
     )
 }
 
