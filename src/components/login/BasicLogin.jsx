@@ -40,39 +40,71 @@ const BasicLogin = () => {
 
   return (
     <>
+    <H3>로그인</H3>
       <Stbox>
-        <H3>로그인</H3>
+        
         <Stinput1 type={"text"} placeholder={"이메일을 입력해주세요."} value={email} onChange={onChangeEmailHandler}/>
         <Stinput2 type={"password"} placeholder={"비밀번호를 입력해주세요."}  value={password} onChange={onChangePasswordHandler}/>
+        </Stbox>
+
+        <Stbox2>
         <Stlink1 onClick={() => { navigate('/') }}> 비밀번호를 잊으셨나요?</Stlink1>
-        <Stlink2 onClick={() => { navigate('/signup') }}> 회원가입하기</Stlink2>
+        </Stbox2>
+
+       
+        
+
+       <Stbox>
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox>
+
+      
     </>
   );
 };
 
 export default BasicLogin;
 
+const H3 = styled.h3`
+  font-size: 24px;
+  color: #E7E6F0 ;
+  font-weight: 700;
+
+  line-height: 24px;
+  padding-left : 46px;
+  margin-bottom: 40px;
+  padding-top: 50px;
+  
+  
+`;
+
+
 const Stbox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 `;
-const H3 = styled.h3`
-  font-size: 20px;
-  line-height: 24px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  padding-top: 50px;
+
+const Stbox2 = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; // 이 부분을 수정
+  align-items: flex-end; // 필요한 경우 오른쪽 정렬을 위해 추가할 수도 있습니다.
+  margin-right: 48px; // 오른쪽 여백 설정
 `;
+
 
 const Stinput1 = styled.input`
   width: 280px;
   height: 18px;
   padding: 10px;
+
   font-size: 14px;
-  border: 1px solid #d9d9d9;
+  color: #85848B;
+
+  background-color: #252628;
+  border: none;
   border-radius: 8px;
   outline: none;
   margin-bottom: 10px;
@@ -82,26 +114,17 @@ const Stinput2 = styled.input`
   width: 280px;
   height: 18px;
   padding: 10px;
+
   font-size: 14px;
-  border: 1px solid #d9d9d9;
+color: #85848B;
+
+  background-color: #252628;
+  border: none;
   border-radius: 8px;
   outline: none;
   margin-bottom: 10px;
 `;
 
-const Stbutton = styled.button`
-  width: 300px;
-  height: 45px;
-  padding: 10px;
-  background-color: #d9d9d9;
-  color: #222222;
-  border: 1px solid #d9d9d9;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  margin-top: 40px;
-`;
 
 const Stlink1 = styled.a`
   text-decoration: underline;
@@ -110,7 +133,7 @@ const Stlink1 = styled.a`
   font-weight: 200;
   margin-bottom: 10px;
   cursor: pointer;
-  color: darkgray; /* 선택 사항: 링크 색상을 변경할 수 있습니다. */
+  color: #B2B2B2; /* 선택 사항: 링크 색상을 변경할 수 있습니다. */
 `;
 
 const Stlink2 = styled.a`
@@ -120,5 +143,24 @@ const Stlink2 = styled.a`
   font-weight: 200;
   margin-bottom: 10px;
   cursor: pointer;
-  color: darkgray; /* 선택 사항: 링크 색상을 변경할 수 있습니다. */
+  color:#B2B2B2; /* 선택 사항: 링크 색상을 변경할 수 있습니다. */
 `;
+
+const Stbutton = styled.button`
+  width: 300px;
+  height: 45px;
+  padding: 10px;
+  background: linear-gradient(135deg, #8084f4, #c48fed);
+  color: #e7e6f0;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-top: 40px;
+font-weight: 500;
+  &:hover {
+    color: #141414;
+  }
+`;
+

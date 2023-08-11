@@ -9,6 +9,7 @@ const LoginPage = () => {
       <GlobalStyle/>
       <BasicLogin />
       <KakaoLogin />
+      
     </>
   );
 };
