@@ -2,8 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 const Categories = () => {
-    const clickCategoryHandler = (categoryId: any) => {
-        console.log("categoryId", categoryId);
+    const clickCategoryHandler = (category: any) => {
+        console.log("category", category);
+        localStorage.setItem("category", category);
     };
 
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
