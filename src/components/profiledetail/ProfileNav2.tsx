@@ -22,17 +22,13 @@ const ProfileNav: React.FC = () => {
   return (
     <StBox>
       <StBox1 active={activeTab === 'post'} onClick={() => handleTabClick('post')}>
-        내 포스팅
+        ㅇㅅㅇ님의 포스팅
       </StBox1>
-      <StBox2 active={activeTab === 'wishlist'} onClick={() => handleTabClick('wishlist')}>
-        피플포스팅
-      </StBox2>
+      
       <StBox3 active={activeTab === 'follow'} onClick={() => handleTabClick('follow')}>
-        피플러
+        ㅇㅅㅇ님의 피플러
       </StBox3>
-      <StBox4 active={activeTab === 'comments'} onClick={() => handleTabClick('comments')}>
-        댓글관리
-      </StBox4>
+    
   
     </StBox>
   );
@@ -43,24 +39,14 @@ const StBox = styled.div`
   font-family: "Pretendard";
   font-size: 16px;
   font-weight: 700;
-  justify-content: space-between;
+  justify-content: space-evenly; /* 아이템 간격 조절 */
+
   padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
   border-bottom: 2px solid #5b5b5b;
   
 `;
 
 const StBox1 = styled.div<StBoxProps>`
-  text-align: center;
-  padding-bottom: 5px;
-  margin-bottom: -2px;
-  cursor: pointer;
-  color: ${(props) => (props.active ? ' #E7E6F0;' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
-`;
-
-const StBox2 = styled.div<StBoxProps>`
   text-align: center;
   padding-bottom: 5px;
   margin-bottom: -2px;
@@ -78,14 +64,6 @@ const StBox3 = styled.div<StBoxProps>`
   border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
 `;
 
-const StBox4 = styled.div<StBoxProps>`
-  text-align: center;
-  padding-bottom: 5px;
-  margin-bottom: -2px;
-  cursor: pointer;
-  color: ${(props) => (props.active ? '#8084f3' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
-`;
 
 
 export default ProfileNav;

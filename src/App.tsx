@@ -29,6 +29,7 @@ function App() {
         <Route path="/edit" element={<EditPage />} />
         <Route path="/edit/:id" element={<EditPages />} />
         <Route path="/list/:id" element={<ListPage />} />
+
         <Route path="/detail/:id" element={<DetailPage />} />
 
         <Route path="/profile/{userId}" element={<ProfilePage />} />   

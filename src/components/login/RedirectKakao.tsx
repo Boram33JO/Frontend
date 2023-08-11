@@ -27,6 +27,8 @@
 // export default RedirectKakao;
 
 
+//api/user/kakao/callback
+
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -38,7 +40,7 @@ const RedirectKakao: React.FC = () => {
     const KAKAO_CODE = location.search.split("=")[1];
 
     const getKakaoToken = (code: string) => {
-      const response = axios.post(`http://43.201.22.74/api/oauth/token?code=${code}`)
+      const response = axios.get(`http://43.201.22.74/api/oauth/token?code=${code}`)
       // const kakaotoken = response.headers.authorization;
       // localStorage.setItem("token", kakaotoken);
       
