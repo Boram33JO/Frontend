@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
-import { useNavigate } from 'react-router-dom';
-import { useMutation } from 'react-query';
-import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
 import useInput from "../../hooks/useInput";
 import { login } from "../../api/user";
 import { logIn } from "../../redux/modules/loginSlice";
@@ -19,13 +19,20 @@ const BasicLogin = () => {
     onSuccess: () => {
       alert("로그인 했습니다!");
       dispatch(logIn());
-      navigate('/');
+      navigate("/");
     },
     onError: (error) => {
       // 에러 발생 시 에러 메시지 표시
-      console.log("Error response from server:", error?.response?.data);
-      setErrorMessage("이메일 정보를 찾을 수 없습니다.");
-    }
+      //console.log("Error response from server:", error?.response?.data);
+      //console.log(error.response);
+
+      if (error.response.status === 401)
+        setErrorMessage(
+          "로그인 정보를 찾을 수 없습니다.",
+          `${error?.response?.data}`
+        );
+      else setErrorMessage("찾을 수 없습니다.");
+    },
   });
 
   const loginClickHandler = () => {
@@ -39,7 +46,7 @@ const BasicLogin = () => {
     const loginInformation = {
       email: email,
       password: password,
-    }
+    };
     loginMutation.mutate(loginInformation);
   };
 
@@ -47,17 +54,34 @@ const BasicLogin = () => {
     <>
       <H3>로그인</H3>
       <Stbox>
-        <Stinput1 type={"text"} placeholder={"이메일을 입력해주세요."} value={email} onChange={onChangeEmailHandler} />
-        <Stinput2 type={"password"} placeholder={"비밀번호를 입력해주세요."} value={password} onChange={onChangePasswordHandler} />
+        <Stinput1
+          type={"text"}
+          placeholder={"이메일을 입력해주세요."}
+          value={email}
+          onChange={onChangeEmailHandler}
+        />
+        <Stinput2
+          type={"password"}
+          placeholder={"비밀번호를 입력해주세요."}
+          value={password}
+          onChange={onChangePasswordHandler}
+        />
       </Stbox>
 
       <Stbox2>
-        <Stlink1 onClick={() => { navigate('/') }}>로그인 정보를 잊으셨나요?</Stlink1>
+        <Stlink1
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          로그인 정보를 잊으셨나요?
+        </Stlink1>
       </Stbox2>
 
       <Stbox>
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}{" "}
+        {/* 추가: 에러 메시지 표시 */}
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>} {/* 추가: 에러 메시지 표시 */}
       </Stbox>
     </>
   );
@@ -67,7 +91,7 @@ export default BasicLogin;
 
 const H3 = styled.h3`
   font-size: 24px;
-  color: #E7E6F0;
+  color: #e7e6f0;
   font-weight: 700;
   line-height: 24px;
   padding-left: 46px;
@@ -94,7 +118,7 @@ const Stinput1 = styled.input`
   height: 18px;
   padding: 10px;
   font-size: 14px;
-  color: #85848B;
+  color: #85848b;
   background-color: #252628;
   border: none;
   border-radius: 8px;
@@ -107,7 +131,7 @@ const Stinput2 = styled.input`
   height: 18px;
   padding: 10px;
   font-size: 14px;
-  color: #85848B;
+  color: #85848b;
   background-color: #252628;
   border: none;
   border-radius: 8px;
@@ -121,7 +145,7 @@ const Stlink1 = styled.a`
   font-weight: 400;
   margin-bottom: 10px;
   cursor: pointer;
-  color: #B2B2B2;
+  color: #b2b2b2;
 `;
 
 const Stbutton = styled.button`
