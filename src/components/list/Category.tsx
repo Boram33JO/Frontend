@@ -1,60 +1,21 @@
 import { styled } from "styled-components"
 import ScrollableComponent from "./ScrollableComponent"
+import { useNavigate } from "react-router-dom";
 
 const Category: React.FC = () => {
-    const categories = [
-        {
-            id: 1,
-            category: "인기"
-        },
-        {
-            id: 2,
-            category: "내주변"
-        },
-        {
-            id: 3,
-            category: "카페"
-        },
-        {
-            id: 4,
-            category: "도서관"
-        },
-        {
-            id: 5,
-            category: "테스트"
-        },
-        {
-            id: 6,
-            category: "테스트"
-        },
-        {
-            id: 7,
-            category: "테스트"
-        },
-        {
-            id: 8,
-            category: "테스트"
-        },
-        {
-            id: 9,
-            category: "테스트"
-        },
-        {
-            id: 10,
-            category: "테스트"
-        },
-    ]
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
+    const navigate = useNavigate();
     return (
         <>
             <ScrollableComponent>
                 <StContainer>
                     {
-                        categories.map(item => {
+                        categories.map((item, index: number) => {
                             return (
-                                <CategoryItem key={item.id}>
+                                <CategoryItem key={index} onClick={() => {navigate(`/list/${index + 1}`)}}>
                                     <CategoryItemTop></CategoryItemTop>
                                     <CategoryItemBottom>
-                                        {item.category}
+                                        {item}
                                     </CategoryItemBottom>
                                 </CategoryItem>
                             )

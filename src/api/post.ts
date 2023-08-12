@@ -24,6 +24,16 @@ export const getPopularPeople = async () => {
     return response;
 }
 
+// 게시글 리스트 카테고리별 조회
+export const getPostLists = async (categoryId: string | undefined) => {
+    const response = await instance.get(`api/posts/category/${categoryId}`,
+        {
+            params: { page: 0, size: 10 }
+        }
+    )
+    return response;
+}
+
 // 게시글 상세 조회
 export const getDetailPost = async (postId: string | undefined) => {
     const response = await instance.get(`api/posts/${postId}`)
