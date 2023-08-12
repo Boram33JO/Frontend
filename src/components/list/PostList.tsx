@@ -1,49 +1,17 @@
 import { styled } from "styled-components";
 import SortButton from "./SortButton";
-import { useEffect, useState } from "react";
-import instance from "../../api/common";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import ListItem from "./ListItem";
-import { Comment } from "../../pages/DetailPage";
-
-type Location = {
-    id: string;
-    address: string;
-    latitude: number;
-    longtitude: number;
-    placeName: string;
-}
-
-type Song = {
-    id: string;
-    album: string;
-    artistName: string;
-    songTitle: string;
-    thumbnail: string;
-    audioUrl: string;
-    externalUrl: string;
-}
-
-export type Post2 = {
-    postId: number;
-    postTitle: string;
-    category: string;
-    content: string;
-    nickname: string;
-    userImage: string;
-    location?: Location;
-    createdAt: string;
-    wishlistCount: number;
-    songs: Song[];
-    comments: Comment[];
-}
+import ListItem from "../common/ListItem";
+import { Post } from "../../models/post";
+import { useQuery } from "react-query";
+import { getPostLists } from "../../api/post";
 
 const PostList: React.FC = () => {
     const { id } = useParams();
-    const [posts, setPosts] = useState<Post2[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const [sortBy, setSortBy] = useState<"Oldest" | "Newest" | "LikeCount">("Newest");
-    const [isLast, setIsLast] = useState("false");
-    const [currentPage, setCurrentPage] = useState(0);
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
     const handleSortByOldest = () => {
         const sortedPosts = [...posts].sort((a, b) => a.createdAt.localeCompare(b.createdAt));
@@ -63,57 +31,27 @@ const PostList: React.FC = () => {
         setSortBy("LikeCount");
     }
 
-    useEffect(() => {
-        const data = async () => {
-            try {
-                const response = await instance.get(`api/posts/category/${id}`,
-                    {
-                        params: {
-                            page: 0,
-                            size: 3
-                        }
-                    }
-                )
-                setPosts(response.data.content);
-                setIsLast(response.data.last);
-                console.log(response);
-            } catch (error) {
-                console.log(error);
-            }
-        };
-        data();
-    }, [id]);
-
-    const handleScroll = () => {
-        if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.scrollHeight) {
-            instance.get(`/api/posts/category/${id}`,
-                {
-                    params: {
-                        page: currentPage + 1,
-                        size: 3
-                    }
-                }).then((response) => {
-                    console.log(response);
-                    setPosts((prevPosts) => [...prevPosts, ...response.data.content]);
-
-                    setCurrentPage((prevPage) => prevPage + 1);
-                }).catch((error) => {
-                    console.error("Error fetching data:", error);
-                });
+    const { data, isLoading, isError } = useQuery(["lists", id],
+        async () => {
+            const response = await getPostLists(id);
+            // console.log(response);
+            setPosts(response.data.content);
+            return response.data.content;
         }
+    )
+
+    if (isLoading) {
+        return <div>Loading...</div>
     }
 
-    useEffect(() => {
-        window.addEventListener("scroll", handleScroll);
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        }
-    }, []);
+    if (isError) {
+        return <div>Error...</div>
+    }
 
     return (
         <InnerContainer>
             <H3>
-                category 포스팅
+                {categories[Number(id) - 1]} 포스팅
             </H3>
             <SortButton
                 handleSortByOldest={handleSortByOldest}
@@ -121,7 +59,7 @@ const PostList: React.FC = () => {
                 handleSortByLikeCount={handleSortByLikeCount}
                 activeSort={sortBy}
             />
-            {posts.map((post: Post2) => {
+            {posts.map((post: Post) => {
                 return (
                     <ListItem key={post.postId} post={post} />
                 )
@@ -133,18 +71,19 @@ const PostList: React.FC = () => {
 export default PostList
 
 const InnerContainer = styled.div`
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
 
     background-color: black;
     color: white;
+    gap: 20px;
 `
 
 const H3 = styled.h3`
     font-size: 20px;
     line-height: 24px;
     font-weight: 600;
-    margin-bottom: 10px;
 `
