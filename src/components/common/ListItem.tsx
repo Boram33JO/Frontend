@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { styled } from "styled-components"
 import { ReactComponent as Expand } from '../../assets/images/expand.svg'
+import { ReactComponent as Contract } from '../../assets/images/contract.svg'
 import { ReactComponent as Headphone } from '../../assets/images/headphone.svg'
 import spotify from '../../assets/images/Spotify_Icon_RGB_Black.png'
 import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
+import { displayedAt } from '../../utils/common'
 
 interface Props {
     post: Post;
@@ -16,25 +18,6 @@ const ListItem = ({ post }: Props) => {
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
-    }
-
-    // 작성 시간
-    const displayedAt = (createdAt: string) => {
-        const milliSeconds = new Date().getTime() - new Date(createdAt).getTime();
-        const seconds = milliSeconds / 1000
-        if (seconds < 60) return `방금 전`
-        const minutes = seconds / 60
-        if (minutes < 60) return `${Math.floor(minutes)}분 전`
-        const hours = minutes / 60
-        if (hours < 24) return `${Math.floor(hours)}시간 전`
-        const days = hours / 24
-        if (days < 7) return `${Math.floor(days)}일 전`
-        const weeks = days / 7
-        if (weeks < 5) return `${Math.floor(weeks)}주 전`
-        const months = days / 30
-        if (months < 12) return `${Math.floor(months)}개월 전`
-        const years = days / 365
-        return `${Math.floor(years)}년 전`
     }
 
     return (
@@ -76,7 +59,9 @@ const ListItem = ({ post }: Props) => {
                         </StP>
                     </SvgIcon>
                     <SvgIcon>
-                        <Expand />
+                        {
+                            (!isOpen) ? <Expand /> : <Contract />
+                        }
                     </SvgIcon>
                 </PlaylistRight>
                 {isOpen && (

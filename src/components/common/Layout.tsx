@@ -1,15 +1,20 @@
-import React from 'react'
 import Header from './Header'
 import Footer from './Footer'
 import { Outlet } from 'react-router-dom'
 import { styled } from 'styled-components'
+import { useState } from 'react'
+import Side from './Side'
 
 const Layout = () => {
+    const [sideOpen, setSideOpen] = useState<boolean>(false);
     return (
         <Container>
-            <Header />
+            <Header setSideOpen={setSideOpen} />
             <Outlet />
             <Footer />
+            <Test $open={sideOpen} >
+                <Side sideOpen={sideOpen} setSideOpen={setSideOpen} />
+            </Test>
         </Container>
     )
 }
@@ -17,7 +22,20 @@ const Layout = () => {
 export default Layout
 
 const Container = styled.div`
+    position: relative;
     width: 390px;
     margin: 0 auto;
-    border: 1px solid black;
+    background-color: #141414;
+`
+
+const Test = styled.div<{ $open: boolean }>`
+    position: fixed;
+    width: inherit;
+    height: 100%;
+    min-height: 100%;
+    
+    overflow: hidden;
+    top: 0;
+    z-index: 3;
+    visibility: ${(props) => (props.$open ? "visible" : "hidden")};
 `
