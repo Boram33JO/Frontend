@@ -87,7 +87,7 @@ export default CommentForm
 const Container = styled.div<{ $edit: boolean }>`
     width: inherit;
     box-sizing: border-box;
-    background-color: black;
+    background-color: #141414;
     padding: ${props => props.$edit ? "" : "20px"};
 `
 

@@ -5,13 +5,13 @@ import { ReactComponent as Place } from '../../assets/images/place.svg'
 import { useMutation, useQueryClient } from "react-query"
 import { followUser, likePost } from "../../api/post"
 import { useParams } from "react-router-dom"
-import { displayedAt } from "../utils/displayedAt"
+import { displayedAt } from "../../utils/common"
 
 type PostProps = {
     post: Post
 }
 
-const category = ["인기", "카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
+const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
 const DetailContent: React.FC<PostProps> = ({ post }) => {
     const { id } = useParams();
@@ -67,9 +67,11 @@ const DetailContent: React.FC<PostProps> = ({ post }) => {
                             <StLike $yours={post.wishlist} />
                         </SvgIcon>
                     </LikeButton>
-                    <StP $size={"16px"} $color={"#FAFAFA"}>
-                        {post.wishlistCount}
-                    </StP>
+                    <LikeCount>
+                        <StP $size={"16px"} $color={"#FAFAFA"}>
+                            {post.wishlistCount}
+                        </StP>
+                    </LikeCount>
                 </TitleSectionRight>
             </TitleSection>
             <ContentSection>
@@ -87,7 +89,7 @@ const DetailContent: React.FC<PostProps> = ({ post }) => {
                     </StP>
                 </LocationInfo>
                 <LocationCategory>
-                    {category[Number(post.category)]}
+                    {categories[Number(post.category) - 1]}
                 </LocationCategory>
             </LocationSection>
         </DetailContainer>
@@ -103,7 +105,7 @@ const DetailContainer = styled.div`
     margin-top: 48px;
     padding: 10px 20px;
     box-sizing: border-box;
-    background-color: black;
+    background-color: #141414;
     color: #FAFAFA;
     gap: 10px;
 `
@@ -146,7 +148,7 @@ const StP = styled.p< { $size: string, $color: string } >`
 `
 
 const FollowBtn = styled.button < { $yours: boolean } >`
-    width: 65px;
+    width: 74px;
     height: 30px;
     background: ${props => props.$yours ? "#434047" : "linear-gradient(135deg, #8084F4, #C48FED)"};
 
@@ -156,7 +158,7 @@ const FollowBtn = styled.button < { $yours: boolean } >`
     font-weight: 600;
 
     box-sizing: border-box;
-    border-radius: 6px;
+    border-radius: 30px;
     border: none;
     outline: none;
     cursor: pointer;
@@ -175,18 +177,18 @@ const TitleSection = styled.div`
 `
 
 const TitleSectionLeft = styled.div`
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     gap: 10px;
 `
 
 const TitleSectionRight = styled.div`
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 `
 
-const LikeButton = styled.button`
+const LikeButton = styled.div`
     background: none;
     border: none;
     outline: none;
@@ -196,7 +198,16 @@ const LikeButton = styled.button`
     cursor: pointer;
 `
 
+const LikeCount = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+`
+
 const StLike = styled(Like) <{ $yours: boolean }>`
+    width: 26px;
+    height: 26px;
     path{
         fill: ${({ $yours }) => $yours ? "#FAFAFA" : ""};
     }
