@@ -4,7 +4,7 @@ import { Comment } from "../../pages/DetailPage"
 import { useMutation, useQueryClient } from "react-query"
 import { deleteComment } from "../../api/comment"
 import CommentForm from "./CommentForm"
-import { displayedAt } from "../utils/displayedAt"
+import { displayedAt } from "../../utils/common"
 
 interface Comments {
     comments: Comment[]
@@ -13,6 +13,7 @@ interface Comments {
 const CommentList: React.FC<Comments> = ({ comments }) => {
     const queryClient = useQueryClient();
     const [updateTarget, setUpdateTarget] = useState("");
+    const nickname = localStorage.getItem("nickname");
 
     const deleteMutation = useMutation((commentId: string) => deleteComment(commentId), {
         onSuccess: (response) => {
@@ -61,7 +62,7 @@ const CommentList: React.FC<Comments> = ({ comments }) => {
                                         <CommentButton onClick={CommentButtonHandler}>
                                             댓글 달기
                                         </CommentButton>
-                                        {(true) &&
+                                        {(nickname === item.nickname) &&
                                             <>
                                                 <Divider />
                                                 <CommentButton onClick={() => CommentUpdateButtonHandler(item.commentId)}>
@@ -93,7 +94,7 @@ export default CommentList
 const CommentListContainer = styled.div`
     width: inherit;
     box-sizing: border-box;
-    background-color: black;
+    background-color: #141414;
     padding: 20px 20px;
 `
 const CommentListItem = styled.div`

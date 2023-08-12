@@ -1,6 +1,6 @@
 import { styled } from "styled-components"
 import { Post, Song } from "../../pages/DetailPage"
-import spotify from '../../assets/images/Spotify_Icon_RGB_Black.png'
+import spotify from '../../assets/images/Spotify_Icon_RGB_White.png'
 
 interface Songs {
     songs: Song[]
@@ -39,7 +39,7 @@ const PlaylistContainer = styled.div`
     display: flex;
     position: relative;
     flex-direction: column;
-    background-color: black;
+    background-color: #141414;
     justify-content: center;
     box-sizing: border-box;
     padding: 0px 20px;
@@ -48,7 +48,7 @@ const PlaylistContainer = styled.div`
 
 const PlaylistSection = styled.div`
     width: 100%;
-    max-height: 176px;
+    max-height: 182px;
 
     display: flex;
     flex-direction: column;
@@ -57,8 +57,8 @@ const PlaylistSection = styled.div`
     overflow-y: scroll;
 
     box-sizing: border-box;
-    padding: 20px;
-    gap: 10px;
+    padding: 14px 20px;
+    gap: 14px;
 
     &::-webkit-scrollbar {
         width: 6px;
