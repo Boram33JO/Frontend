@@ -17,6 +17,7 @@ import MypostPage from './pages/MypostPage';
 import MycommentsPage from './pages/MycommentsPage';
 import WishlistPage from './pages/WishlistPage';
 import PasswordPage from './pages/PasswordPage';
+import ProfileEditPage from './pages/ProfileEditPage ';
 
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
         <Route path="/list/:id" element={<ListPage />} />
 
         <Route path="/detail/:id" element={<DetailPage />} />
+
+        <Route path="/profile/{userId}" element={<ProfileEditPage />} />  
 
         <Route path="/profile/{userId}" element={<ProfilePage />} />   
         {/* 프로필 전체 보기, 내 정보 수정하기 */}

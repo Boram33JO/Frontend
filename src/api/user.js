@@ -38,4 +38,10 @@ const logout = async () => {
   return response.data;
 };
 
-export { addUsers, deleteUsers, login, logout };
+// 수정
+const profileEdit = async (userId) => {
+  const response = await instance.post(`api/profile/${userId}`)
+  return response;
+}
+
+export { addUsers, deleteUsers, login, logout, profileEdit };
