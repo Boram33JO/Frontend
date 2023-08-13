@@ -1,16 +1,19 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
+import { ReactComponent as CheckBox } from "../../assets/images/check_slc.svg";
+import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg";
 
 export type SongListType = {
     album: string;
     artistName: string;
     audioUrl: string;
     externalUrl: string;
-    id: number;
+    // id: number;
     songNum: string;
     songTitle: string;
     thumbnail: string;
+    checked: boolean;
 };
 
 export type ChooseSongListType = {
@@ -50,7 +53,15 @@ const SearchSong: React.FC = () => {
     };
 
     const addToChooseSongList = (item: SongListType) => {
-        setChooseSongList((prevList) => [...prevList, item]);
+        const isAlreadyAdded = chooseSongList.some((addedItem) => addedItem.songNum === item.songNum);
+
+        if (isAlreadyAdded) {
+            removeFromChooseSongList(item);
+        } else if (chooseSongList.length >= 10) {
+            return alert("한 번에 추가 할 수 있는 곡의 수는 10개 입니다.");
+        } else {
+            setChooseSongList((prevList) => [...prevList, item]);
+        }
     };
 
     const removeFromChooseSongList = (song: ChooseSongListType) => {
@@ -60,10 +71,6 @@ const SearchSong: React.FC = () => {
 
     console.log("songlist", songList);
     console.log("chooseSongList", chooseSongList);
-
-    useEffect(() => {
-        localStorage.setItem("songs", JSON.stringify(chooseSongList));
-    }, [chooseSongList]);
 
     return (
         <>
@@ -90,6 +97,7 @@ const SearchSong: React.FC = () => {
                             <h3>{item.songTitle}</h3>
                             <p>{item.artistName}</p>
                         </div>
+                        {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
                     </StSongList>
                 ))}
             </StContainer>
@@ -107,8 +115,6 @@ const SearchSong: React.FC = () => {
 };
 
 // 해야될일
-// 중복처리
-// 10개까지만
 // 글자 수 줄이기
 
 export default SearchSong;
@@ -116,23 +122,33 @@ export default SearchSong;
 const StContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
+    width: 350px;
     height: 316px;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid #524d58;
+    background: #434047;
 `;
 const StSongList = styled.div`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+    div {
+        display: flex;
+        flex-direction: column;
+    }
 
     img {
         width: 56px;
         height: 56px;
+        background: var(--iu-1, url(<path-to-image>), lightgray 50% / cover no-repeat);
     }
 `;
 
 const StChooseSongListContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
-    height: 200px;
+    height: 104px;
+    width: 350px;
+    border-radius: 0 0 6px 6px;
+    border: 1px solid #524d58;
+    background: #434047;
 `;
 
 const StChooseSongLists = styled.div`
