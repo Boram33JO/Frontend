@@ -1,23 +1,38 @@
 import React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 
+
+// 로컬 스토리지가 아니라 userId로 받아온걸로. 
 const Mypicture = () => {
+  const nickname = localStorage.getItem("nickname");//수정
+  const userImage = localStorage.getItem("userImage");//수정
+
+  const navigate = useNavigate();
+  const { userId } = useParams();
+
+  const EditMyProfileHandler = () => {
+        // 타인의 프로필 페이지로 이동
+        navigate(`/profile/edit/${userId}`);
+    
+};
+  
   return (
     <>
       <InnerContainer>
         <MyPic>{/* <H3>나의 프로필</H3> */}</MyPic>
         <MyProfile>
-          <MyThumb
-            src={
-              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
-            }
+        <MyThumb
+            src={userImage || ''} // userImage가 null인 경우에 빈 문자열로 설정
+            alt="기본이미지" // alt 속성 추가
           />
           <MyProfile1>
             <MyProfile2>
-              <Nickname>닉네임</Nickname>
-              <Produce>하고싶은 한줄 멘트</Produce>
+              <Nickname>{nickname}</Nickname>
+              <Produce>하고싶은 한줄 멘트 {/* {introduce} */}</Produce> 
+            
             </MyProfile2>
-            <Bt>프로필 수정</Bt>
+            <Bt onClick = {EditMyProfileHandler}>프로필 수정</Bt>
           </MyProfile1>
         </MyProfile>
       </InnerContainer>

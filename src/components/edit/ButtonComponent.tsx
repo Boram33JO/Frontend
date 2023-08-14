@@ -17,4 +17,5 @@ const StButton = styled.button`
     height: 44px;
     border-radius: 6px;
     border: none;
+    cursor: pointer;
 `;
