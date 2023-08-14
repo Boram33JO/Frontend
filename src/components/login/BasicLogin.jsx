@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import useInput from "../../hooks/useInput";
-import { login } from "../../api/user";
+import { login } from "../../api/user2";
 import { logIn } from "../../redux/modules/loginSlice";
 import { useEffect } from "react";
+import { setUserInfo } from "../../redux/modules/userSlice";
 
 const BasicLogin = () => {
   const navigate = useNavigate();
@@ -26,12 +27,12 @@ const BasicLogin = () => {
   const [email, onChangeEmailHandler] = useInput();
   const [password, onChangePasswordHandler] = useInput();
 
-
-  
   const loginMutation = useMutation(login, {
-    onSuccess: () => {
+    onSuccess: (response) => {
+      console.log(response);
       alert("로그인 했습니다!");
       dispatch(logIn());
+      dispatch(setUserInfo(response.data));
       navigate("/");
     },
     onError: (error) => {
@@ -46,7 +47,7 @@ const BasicLogin = () => {
       else setErrorMessage("찾을 수 없습니다.");
     },
 
-    
+
   });
 
   const loginClickHandler = () => {

@@ -1,11 +1,15 @@
 import React from 'react'
-import { css, keyframes, styled } from 'styled-components'
+import { css, styled } from 'styled-components'
 import { ReactComponent as Close } from '../../assets/images/menu_close.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
 import { ReactComponent as MenuMap } from '../../assets/images/menu_map.svg'
 import { ReactComponent as MenuPost } from '../../assets/images/menu_post.svg'
 import { ReactComponent as MenuPP } from '../../assets/images/menu_pp.svg'
+import { ReactComponent as MenuArrow } from '../../assets/images/menu_arrow.svg'
 import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/config/configStore'
+import { getProfileImage } from '../../utils/common'
 
 interface Props {
     sideOpen: boolean;
@@ -14,9 +18,7 @@ interface Props {
 
 const Side = ({ sideOpen, setSideOpen }: Props) => {
     const navigate = useNavigate();
-    const nickname = localStorage.getItem("nickname");
-    const userImageString = localStorage.getItem("userImage");
-    const userImage = userImageString !== null ? JSON.parse(userImageString) : undefined;
+    const userInfo = useSelector((state: RootState) => state.user);
     const menuList = [
         { id: 1, name: "피플 맵핑", icon: MenuMap, path: "/map" },
         { id: 2, name: "피플 포스팅", icon: MenuPost, path: "/list/1" },
@@ -39,10 +41,10 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                         <P $size={"48px"} $weight={"700"} onClick={() => menuClickHandler("/")}>P.Ple</P>
                     </LogoSection>
                     {
-                        (nickname) ? (
-                            <ProfileSection onClick={() => menuClickHandler("/profile/1")}>
-                                <ProfileImage src={userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : userImage} />
-                                <P $size={"18px"} $weight={"600"}>{nickname}</P>
+                        (userInfo.userId) ? (
+                            <ProfileSection onClick={() => menuClickHandler(`/profile/${userInfo.userId}`)}>
+                                <ProfileImage src={getProfileImage(userInfo.userImage)} />
+                                <P $size={"18px"} $weight={"600"}>{userInfo.nickname}</P>
                             </ProfileSection>
                         ) : (
                             <ProfileSection onClick={() => menuClickHandler("/login")}>
@@ -60,6 +62,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                                         <menu.icon />
                                         <P $size={"18px"} $weight={"600"}>{menu.name}</P>
                                     </MenuItemName>
+                                    <MenuArrow />
                                 </MenuItem>
                             )
                         })

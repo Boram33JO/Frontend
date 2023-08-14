@@ -12,9 +12,9 @@ const Layout = () => {
             <Header setSideOpen={setSideOpen} />
             <Outlet />
             <Footer />
-            <Test $open={sideOpen} >
+            <Inner $open={sideOpen} >
                 <Side sideOpen={sideOpen} setSideOpen={setSideOpen} />
-            </Test>
+            </Inner>
         </Container>
     )
 }
@@ -28,7 +28,7 @@ const Container = styled.div`
     background-color: #141414;
 `
 
-const Test = styled.div<{ $open: boolean }>`
+const Inner = styled.div<{ $open: boolean }>`
     position: fixed;
     width: inherit;
     height: 100%;

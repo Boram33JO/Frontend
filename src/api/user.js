@@ -19,14 +19,14 @@ const login = async (loginInformation) => {
   const response = await instance.post(`/api/user/login`, loginInformation);
   console.log("로그인", response);
   const token = response.headers.authorization;
-  const nickname = response.data.nickname;
-  const userImage = response.data.userImage;
+  const nickname = response.data.data.nickname;
+  const userImage = response.data.data.userImage;
 
   localStorage.setItem("token", token);
   localStorage.setItem("nickname", nickname);
   localStorage.setItem("userImage", userImage);
 
-  // console.log(response.data.nickname);
+  console.log(response);
   // console.log(response.data.userImage);
   return response.data;
 };

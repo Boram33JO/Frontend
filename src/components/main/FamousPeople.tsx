@@ -1,34 +1,16 @@
 import { useQuery } from 'react-query';
 import { styled } from 'styled-components'
 import { getPopularPeople } from '../../api/post';
+import { User } from '../../models/user';
+import { getProfileImage } from '../../utils/common';
+import { useNavigate } from 'react-router-dom';
 
 const FamousPeople = () => {
-    const famousPeople = [
-        {
-            id: "1",
-            thumbnail: "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34",
-            nickname: "IU"
-        },
-        {
-            id: "2",
-            thumbnail: "https://i.scdn.co/image/ab676161000051745da361915b1fa48895d4f23f",
-            nickname: "New Jeans"
-        },
-        {
-            id: "3",
-            thumbnail: "https://i.scdn.co/image/ab67616100005174d642648235ebf3460d2d1f6a",
-            nickname: "BTS"
-        },
-        {
-            id: "4",
-            thumbnail: "https://i.scdn.co/image/ab67616100005174c36dd9eb55fb0db4911f25dd",
-            nickname: "브루노마스여덟글"
-        }
-    ]
-    const { data, isLoading, isError } = useQuery(["celeb"],
+    const navigate = useNavigate();
+    const { data, isLoading, isError } = useQuery(["famous"],
         async () => {
             const response = await getPopularPeople();
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
         }
     )
@@ -48,10 +30,10 @@ const FamousPeople = () => {
             </H3>
             <FamousList>
                 {
-                    famousPeople.map(item => {
+                    data.map((item: User) => {
                         return (
-                            <FamousListItem key={item.id}>
-                                <FamousListItemThumb src={item.thumbnail} />
+                            <FamousListItem key={item.id} onClick={() => navigate(`/profile/${item.id}`)}>
+                                <FamousListItemThumb src={getProfileImage(item.userImage)} />
                                 <FamousListItemNickname>{item.nickname}</FamousListItemNickname>
                             </FamousListItem>
                         )
@@ -65,17 +47,18 @@ const FamousPeople = () => {
 export default FamousPeople
 
 const InnerContainer = styled.div`
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
+    gap: 20px;
 `
 
 const H3 = styled.h3`
     font-size: 20px;
     line-height: 24px;
     font-weight: 600;
-    margin-bottom: 20px;
 `
 
 const FamousList = styled.div`

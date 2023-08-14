@@ -1,13 +1,15 @@
+import { styled } from 'styled-components'
+import SlideBanner from '../components/main/SlideBanner'
 import LookAround from '../components/main/LookAround'
 import PopularPosts from '../components/main/PopularPosts'
 import Recommend from '../components/main/Recommend'
 import FamousPeople from '../components/main/FamousPeople'
 import PostList from '../components/main/PostList'
-import { styled } from 'styled-components'
 
 const MainPage = () => {
     return (
         <Container>
+            <SlideBanner />
             <LookAround />
             <PopularPosts />
             <Recommend />
