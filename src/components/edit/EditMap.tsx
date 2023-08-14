@@ -1,94 +1,106 @@
-// import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-// declare global {
-//     interface Window {
-//         kakao: any;
-//     }
-// }
-
-// interface EditPageProps {
-//     address: string;
-//     placeName: string;
-//     latitude: string;
-//     longitude: string;
-//     setAddress: (address: string) => void;
-//     setPlaceName: (placeName: string) => void;
-//     setLatitude: (latitude: string) => void;
-//     setLongitude: (longitude: string) => void;
-//     slideIndex: number;
-// }
-
-// const EditMap: React.FC<EditPageProps> = ({
-//     address,
-//     placeName,
-//     latitude,
-//     longitude,
-//     setAddress,
-//     setPlaceName,
-//     setLatitude,
-//     setLongitude,
-//     slideIndex,
-// }) => {
-//     // const [state, setState] = useState({
-//     // center: { latitude: 37.566826, longitude: 126.9786567 },
-//     // isPanto: true,
-//     // });
-//     // const [searchLocation, setSearchLocation] = useState<string>("");
-
-//     return (
-//         <>
-//             <form
-//             // onSubmit={searchLocationHandler}
-//             >
-//                 <img
-//                     src="https://img.freepik.com/premium-vector/search-icon-magnifying-glass-symbol-outline-icon_543062-139.jpg?w=2000"
-//                     alt="검색"
-//                     style={{ width: "24px", height: "24px" }}
-//                 />
-//                 <input
-//                 // onChange={changeInputHandler}
-//                 // value={searchLocation}
-//                 />
-//             </form>
-//             <div
-//                 id="map"
-//                 style={{ width: "350px", height: "288px" }}
-//             />
-//         </>
-//     );
-// };
-
-// export default EditMap;
-
-import React from "react";
-import ButtonComponent from "./ButtonComponent";
 import styled from "styled-components";
+import { ReactComponent as Search } from "../../assets/images/search.svg";
+import Category from "../common/Category";
 
-// interface EditPageProps {
-//     // slideIndex: number;
-//     // onClickNextButtonHandler: any;
-//     // onClickBeforeButtonHandler: any;
-// }
-// interface props {
-//     slideIndex: number;
-// }
+declare global {
+    interface Window {
+        kakao: any;
+    }
+}
 
-const EditMap: React.FC = () => {
+interface EditMapProps {
+    address: string;
+    placeName: string;
+    latitude: string;
+    longitude: string;
+    categoryNum: number;
+
+    setAddress: (address: string) => void;
+    setPlaceName: (placeName: string) => void;
+    setLatitude: (latitude: string) => void;
+    setLongitude: (longitude: string) => void;
+    setCategoryNum: React.Dispatch<React.SetStateAction<number>>; // Update the type here
+}
+
+const EditMap: React.FC<EditMapProps> = ({
+    address,
+    placeName,
+    latitude,
+    longitude,
+    categoryNum,
+    setAddress,
+    setPlaceName,
+    setLatitude,
+    setLongitude,
+    setCategoryNum,
+}) => {
+    const [searchLocation, setSearchLocation] = useState<string>("");
+    // const [state, setState] = useState({
+    // center: { latitude: 37.566826, longitude: 126.9786567 },
+    // isPanto: true,
+    // });
+    // const [searchLocation, setSearchLocation] = useState<string>("");
+    const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchLocation(event.target.value);
+    };
+
+    const searchLocationHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        // searchLocation("");
+        console.log("wow");
+    };
     return (
-        <div style={{ color: "white" }}>
-            {/* <StButtons>
-                <ButtonComponent onClick={onClickBeforeButtonHandler}>이전</ButtonComponent>
-                <ButtonComponent onClick={onClickNextButtonHandler}>다음</ButtonComponent>
-            </StButtons> */}
-            이ㅡ니ㅡ치느잎츠밍
-        </div>
+        <>
+            <StSearchForm onSubmit={searchLocationHandler}>
+                <div>
+                    <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
+                </div>
+                <input
+                    placeholder="장소를 입력해보세요"
+                    onChange={changeInputHandler}
+                    value={searchLocation}
+                />
+            </StSearchForm>
+            <StCategory>
+                <Category
+                    categoryNum={categoryNum}
+                    setCategoryNum={setCategoryNum}
+                />
+            </StCategory>
+            <div
+                id="map"
+                style={{ width: "350px", height: "288px" }}
+            />
+        </>
     );
 };
 
 export default EditMap;
 
-const StButtons = styled.div`
+const StSearchForm = styled.form`
+    width: 346px;
+    height: 40px;
+    border: 1px solid #434047;
+    background-color: #434047;
+    border-radius: 999px;
+
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    align-items: center;
+
+    input {
+        width: 270px;
+        height: 16px;
+        border: 1px solid #434047;
+        background-color: #434047;
+    }
+    input:focus {
+        outline: none;
+    }
+`;
+
+const StCategory = styled.div`
+    margin: 16px 0 22px 0;
 `;
