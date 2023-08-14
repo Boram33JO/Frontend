@@ -37,7 +37,8 @@ const ProfilePage = () => {
       {isMyProfile && <Mypicture />}
       {/* 프로필 수정과 소개 컴포넌트 */}
 
-      <List />
+      {/* <List /> */}
+      <List userIdFromUrl={userIdFromUrl} /> {/* userIdFromUrl을 프롭으로 전달 */}
       {/* 본인이 쓴 최신수 게시물 4개*/}
       <FollowersAll />
       {/* 팔로워 최신순 4명 */}
