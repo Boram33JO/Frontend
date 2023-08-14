@@ -44,7 +44,7 @@ axios.post(`http://43.201.22.74/api/oauth/token?code=${KAKAO_CODE}`).then((respo
 console.log("ssss", response);
 localStorage.setItem("token", response.headers.authorization);
 localStorage.setItem("email", response.data.email);
-localStorage.setItem("id", response.data.id);
+localStorage.setItem("userId", response.data.id);
 localStorage.setItem("nickname", response.data.nickname);
 localStorage.setItem("userImage", response.data.userImage);
 alert("로그인되었습니다.");
