@@ -4,23 +4,20 @@ import instance from "./common"
 
 // 전체 프로필 조회
 export const getProfileLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}`,
-        // {
-        //     params: { page: 0, size: 10 }
-        // }
-    )
-    return response;
-}
-
+    try {
+        const response = await instance.get(`/api/profile/${userId}`);
+        console.log('Response:', response);
+        return response;
+    } catch (error) {
+        console.error('요청 실패:', error);
+        throw error;
+    }
+};
 
 // 마이페이지 하위 페이지들
 // 내가 쓴 포스팅 조회
-export const getPostLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/posts`,
-        // {
-        //     params: { page: 0, size: 10 }
-        // }
-    )
+export const getMyPostLists = async (userId: string | undefined) => {
+    const response = await instance.get(`/api/profile/${userId}/posts`)
     return response;
 }
 

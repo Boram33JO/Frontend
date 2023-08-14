@@ -9,7 +9,9 @@ export const displayedAt = (createdAt: string) => {
     if (hours < 24) return `${Math.floor(hours)}시간 전`
     const days = hours / 24
     if (days < 7) return `${Math.floor(days)}일 전`
+
     return getDateNotation(createdAt);
+
     // const weeks = days / 7
     // if (weeks < 5) return `${Math.floor(weeks)}주 전`
     // const months = days / 30
@@ -24,6 +26,7 @@ export const getDateNotation = (input?: string) => {
     const year = date.getFullYear().toString().slice(-2);
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
+
     return `${year}.${month}.${day}`;
 }
 
