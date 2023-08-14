@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 interface StBoxProps {
   active: boolean;
@@ -13,10 +13,11 @@ const ProfileNav: React.FC = () => {
   );
 
   const navigate = useNavigate();
+  const { userId } = useParams();
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-    navigate(`/profile/{userId}/${tab}`);
+    navigate(`/profile/${userId}/${tab}`);
   };
 
   return (
