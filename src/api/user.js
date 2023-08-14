@@ -29,7 +29,7 @@ const login = async (loginInformation) => {
   localStorage.setItem("userId", userId);
 
 
-  // console.log(response.data.nickname);
+  console.log(response);
   // console.log(response.data.userImage);
   return response.data;
 };

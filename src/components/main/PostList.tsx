@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import {    useState } from "react";
+import { useState } from "react";
 import ListItem from "../common/ListItem";
 import { Post } from "../../models/post";
 import Category from "../common/Category";

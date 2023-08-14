@@ -3,6 +3,9 @@ import { ReactComponent as Menu } from '../../assets/images/menu.svg'
 import { ReactComponent as Search } from '../../assets/images/search.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/config/configStore";
+import { getProfileImage } from '../../utils/common'
 
 interface Props {
     setSideOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -10,9 +13,8 @@ interface Props {
 
 const Header = ({ setSideOpen }: Props) => {
     const navigate = useNavigate();
-    const nickname = localStorage.getItem("nickname");
-    const userImageString = localStorage.getItem("userImage");
-    const userImage = userImageString !== null ? JSON.parse(userImageString) : undefined;
+    const userInfo = useSelector((state: RootState) => state.user);
+
     return (
         <HeaderContainer>
             <HeaderLeft onClick={() => setSideOpen(true)}>
@@ -24,10 +26,10 @@ const Header = ({ setSideOpen }: Props) => {
             <HeaderRight>
                 <StSearch />
                 {
-                    (nickname) ? (
+                    (userInfo.userId) ? (
                         <ProfileImage
-                            onClick={() => navigate('/profile/1')}
-                            src={userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : userImage}
+                            onClick={() => navigate(`/profile/${userInfo.userId}`)}
+                            src={getProfileImage(userInfo.userImage)}
                         />
                     ) : (
                         <StLogin onClick={() => navigate('/login')} />

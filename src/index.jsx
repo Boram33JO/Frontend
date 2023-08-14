@@ -7,6 +7,9 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import store from "./redux/config/configStore";
+import { persistStore } from "redux-persist"
+import { PersistGate } from "redux-persist/integration/react";
+export const persistor = persistStore(store);
 
 const queryClient = new QueryClient();
 
@@ -15,9 +18,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <QueryClientProvider client={queryClient}>
         <Provider store={store}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
+            <PersistGate loading={null} persistor={persistor}>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </PersistGate>
         </Provider>
     </QueryClientProvider>
 );
