@@ -3,19 +3,28 @@ import styled from "styled-components";
 
 interface Props {
     children: string;
-    onClick?: () => void; // onClick 프로퍼티 타입 설정
+    onClick?: () => void;
+    style?: React.CSSProperties; // 스타일 속성 추가
 }
 
-const ButtonComponent: React.FC<Props> = ({ children, onClick }) => {
-    return <StButton onClick={onClick}>{children}</StButton>;
+const ButtonComponent: React.FC<Props> = ({ children, onClick, style }) => {
+    return (
+        <StButton
+            onClick={onClick}
+            style={style}
+        >
+            {children}
+        </StButton>
+    );
 };
 
 export default ButtonComponent;
 
 const StButton = styled.button`
     width: 168px;
-    height: 44px;
+    height: 56px;
     border-radius: 6px;
     border: none;
+    font-size: 16px;
     cursor: pointer;
 `;
