@@ -32,7 +32,7 @@ const BasicLogin = () => {
     onSuccess: () => {
       alert("로그인 했습니다!");
       dispatch(logIn());
-      navigate("/");
+      //navigate("/");
     },
     onError: (error) => {
       // 에러 발생 시 에러 메시지 표시
