@@ -1,29 +1,50 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
+import { ReactComponent as Place } from '../../assets/images/place.svg'
+import { RootState } from '../../redux/config/configStore';
+import { useSelector } from 'react-redux';
 
 const LookAround = () => {
-    const [nickname, setNickname] = useState<string>("관리자");
+    const userInfo = useSelector((state: RootState) => state.user);
     const navigate = useNavigate();
     return (
         <Container>
             <InnerContainer>
                 <Wrapper>
-                    <SectionLeft>
-                        <H3>
-                            {nickname}님, 오늘은
-                            <br />
-                            어디서 음악을 탐색할까요?
-                        </H3>
-                        <P>
-                            나만의 장소에서 음악을 탐색해 보세요!
-                        </P>
-                    </SectionLeft>
-                    <SectionRight>
-                        <MapImage onClick={() => navigate(`/map`)}>
-
-                        </MapImage>
-                    </SectionRight>
+                    <LeftSection>
+                        {(userInfo.userId) ? (
+                            <>
+                                <H3>
+                                    {userInfo.nickname}님,
+                                    <br />
+                                    오늘은 어디서 피플할까요?
+                                </H3>
+                                <P>
+                                    나만의 장소에서 음악을 탐색해 보세요!
+                                </P>
+                            </>
+                        ) : (
+                            <>
+                                <H3>
+                                    오늘 피플러들은
+                                    <br />
+                                    어디서 피플하고 있을까요?
+                                </H3>
+                                <P>
+                                    다양한 장소에서 음악을 탐색해 보세요!
+                                </P>
+                            </>
+                        )
+                        }
+                    </LeftSection>
+                    <RightSection>
+                        <MapButton onClick={() => navigate(`/map`)}>
+                            <MapImage src="https://map.daumcdn.net/map_k3f_prod/bakery/image_map_png/PNG01/v20_ppxmp/5/500/222.png" />
+                            <IconContainer>
+                                <StPlace />
+                            </IconContainer>
+                        </MapButton>
+                    </RightSection>
                 </Wrapper>
             </InnerContainer>
         </Container>
@@ -33,60 +54,84 @@ const LookAround = () => {
 export default LookAround
 
 const Container = styled.div`
-    display: flex;
-    align-items: flex-end;
-    background-image: url("https://i.namu.wiki/i/VdxdfJ7KGdvadOFs-E2oy6y9Liql296v-uARq8O-Lwr-p8Y2Ic9v6MT-ktUR_CPcCciD8Y7unjAUrT2X87v3kgC27IONUmVvu2Rnw90nMbcyvcVmaYLfbrx45vn3laTOLKPU9HrNHDt5MUx5vuIDrQ.webp");
-    
+    display: flex;    
     width: 100%;
-    height: 345px;
     box-sizing: border-box;
-    margin-top: 20px;
+    padding: 0px 20px;
 `
 
 const InnerContainer = styled.div`
     display: flex;
-    align-items: flex-end;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, #151515 95%);
-    
     width: 100%;
-    height: 345px;
+    background: linear-gradient(135deg, #8084F4, #C48FED);
+    border-radius: 10px;
     box-sizing: border-box;
-    padding: 20px;
-    margin-top: 20px;
+    padding: 25px 15px;
 `
 
 const Wrapper = styled.div`
     display: flex;
     width: 100%;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
 `
 
-const SectionLeft = styled.div`
-    display: block;
+const LeftSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 `
 
-const SectionRight = styled.div`
+const RightSection = styled.div`
     display: block;
 `
 
 const H3 = styled.h3`
-    font-size: 22px;
-    line-height: 28px;
+    font-size: 18px;
+    line-height: 24px;
     font-weight: 600;
 `
 
 const P = styled.p`
     font-size: 14px;
+    line-height: calc(100% + 2px);
     font-weight: 500;
-    margin-top: 14px;
 `
 
-const MapImage = styled.div`
-    width: 65px;
-    height: 65px;
+const MapButton = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 62px;
+    height: 62px;
     border-radius: 6px;
-    background-color: gray;
-
+    
     cursor: pointer;
+`
+
+const MapImage = styled.img`
+    width: 100%;
+    height: 100%;
+    border-radius: 6px;
+`
+
+const IconContainer = styled.div`
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(213, 188, 242, 0.58);
+`
+
+const StPlace = styled(Place)`
+    width: 20px;
+    height: 20px;
+    path {
+        fill: #5C4A83;
+    }
 `

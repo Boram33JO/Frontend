@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import { displayedAt } from '../../utils/common'
+import { displayedAt, getProfileImage } from '../../utils/common'
 import { useQuery } from 'react-query'
 import { getPopularPosts } from '../../api/post'
 import { ReactComponent as Like } from '../../assets/images/like.svg'
@@ -65,7 +65,7 @@ const PopularPosts = () => {
                                 <PostInfo>
                                     <InfoTop>
                                         <InfoLeft>
-                                            <ProfileThumnail src={post.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : post.userImage} />
+                                            <ProfileThumnail src={getProfileImage(post.userImage)} />
                                             <ProfileInfo>
                                                 <StP $color={"#FAFAFA"} $size={"14px"}>
                                                     {post.nickname}
@@ -100,10 +100,12 @@ const PopularPosts = () => {
 export default PopularPosts
 
 const InnerContainer = styled.div`
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
+    gap: 20px;
 `
 
 const TitleSection = styled.div`
@@ -111,7 +113,6 @@ const TitleSection = styled.div`
     width: 100%;
     align-items: flex-end;
     justify-content: space-between;
-    margin-bottom: 10px;
 `
 
 const H3 = styled.h3`

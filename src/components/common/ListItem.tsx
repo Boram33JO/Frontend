@@ -6,7 +6,7 @@ import { ReactComponent as Headphone } from '../../assets/images/headphone.svg'
 import spotify from '../../assets/images/Spotify_Icon_RGB_Black.png'
 import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
-import { displayedAt } from '../../utils/common'
+import { displayedAt, getProfileImage } from '../../utils/common'
 
 interface Props {
     post: Post;
@@ -24,7 +24,7 @@ const ListItem = ({ post }: Props) => {
         <ListItemContainer>
             <ListItemTop onClick={() => navigate(`/detail/${post.postId}`)}>
                 <ProfileArea>
-                    <ProfileThumnail src={post.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : post.userImage} />
+                    <ProfileThumnail src={getProfileImage(post.userImage)} />
                     <ProfileInfo>
                         <StP $color="#FAFAFA" $size={"14px"}>
                             {post.nickname}

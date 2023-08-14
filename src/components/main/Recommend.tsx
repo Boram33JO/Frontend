@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { styled } from 'styled-components'
-import { getToday } from '../../utils/common'
+import { getDateNotation } from '../../utils/common'
 import spotify from '../../assets/images/Spotify_Icon_RGB_White.png'
 import { useQuery } from 'react-query'
 import { getPopularSongs } from '../../api/post'
@@ -12,6 +12,7 @@ const Recommend = () => {
     const { data, isLoading, isError } = useQuery(["recommend"],
         async () => {
             const response = await getPopularSongs();
+            console.log(response.data);
             return response.data;
         }
     )
@@ -28,17 +29,15 @@ const Recommend = () => {
         <Container>
             <InnerContainer>
                 <TitleSection>
-                    <TitleSectionLeft>
-                        <H3>
-                            어디서든 피플 추천 플리
-                        </H3>
-                    </TitleSectionLeft>
-                    <TitleSectionRight>
+                    <H3>
+                        어디서든 피플 추천 플리
+                    </H3>
+                    <TitleSectionSub>
                         <Balloon>
                             음악 선택 시 스포티파이로 이동합니다.
                         </Balloon>
                         피플의 플리
-                    </TitleSectionRight>
+                    </TitleSectionSub>
                 </TitleSection>
                 <Category categoryNum={categoryNum} setCategoryNum={setCategoryNum} />
                 <Playlist>
@@ -72,7 +71,7 @@ const Recommend = () => {
                 </Playlist>
             </InnerContainer>
             <TodayArea>
-                {getToday()} 기준 업데이트
+                {getDateNotation()} 기준 업데이트
             </TodayArea>
         </Container>
     )
@@ -102,11 +101,7 @@ const TitleSection = styled.div`
     justify-content: space-between;
 `
 
-const TitleSectionLeft = styled.div`
-    
-`
-
-const TitleSectionRight = styled.div`
+const TitleSectionSub = styled.div`
     position: relative;
     color: #E7E6F0;
     font-size: 14px;

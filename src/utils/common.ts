@@ -9,7 +9,9 @@ export const displayedAt = (createdAt: string) => {
     if (hours < 24) return `${Math.floor(hours)}시간 전`
     const days = hours / 24
     if (days < 7) return `${Math.floor(days)}일 전`
-    return getToday(createdAt);
+
+    return getDateNotation(createdAt);
+
     // const weeks = days / 7
     // if (weeks < 5) return `${Math.floor(weeks)}주 전`
     // const months = days / 30
@@ -18,11 +20,17 @@ export const displayedAt = (createdAt: string) => {
     // return `${Math.floor(years)}년 전`
 }
 
-// 오늘 날짜 (YY.MM.DD)
-export const getToday = (date?: string) => {
-    const today = (date) ? new Date(date) : new Date();
-    const year = today.getFullYear().toString().slice(-2);
-    const month = (today.getMonth() + 1).toString().padStart(2, '0');
-    const day = today.getDate().toString().padStart(2, '0');
+// 날짜 표기 (YY.MM.DD)
+export const getDateNotation = (input?: string) => {
+    const date = input ? new Date(input) : new Date();
+    const year = date.getFullYear().toString().slice(-2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+
     return `${year}.${month}.${day}`;
+}
+
+// 기본 이미지
+export const getProfileImage = (image?: string) => {
+    return (image) ? image : "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1"
 }
