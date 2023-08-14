@@ -1,16 +1,18 @@
 import { styled } from "styled-components";
-import {    useState } from "react";
-import Nav2 from "./Nav2"
+import { useState } from "react";
 import { Post } from "../../models/post";
 import Category from "../common/Category";
-import { getNewestPosts } from "../../api/post";
+import { getFavLists } from "../../api/profile";
 import { useQuery } from "react-query";
-
+import ListItem from "../common/ListItem";
+import { useParams } from "react-router-dom";
 const YourPostList = () => {
+    const { userId } = useParams();
     const [categoryNum, setCategoryNum] = useState<number>(0);
-    const { data, isLoading, isError } = useQuery(["newest"],
+    const { data, isLoading, isError } = useQuery(["favorite"],
         async () => {
-            const response = await getNewestPosts();
+            const response = await getFavLists(userId);
+            console.log(response);
             return response.data;
         }
     )
@@ -25,13 +27,12 @@ const YourPostList = () => {
 
     return (
         <InnerContainer>
-        
             <Category categoryNum={categoryNum} setCategoryNum={setCategoryNum} />
-            {data[categoryNum].postByCategoryResponseDtoList.map((post: Post) => {
+            {/* {data[categoryNum].postByCategoryResponseDtoList.map((post: Post) => {
                 return (
-                    <Nav2 key={post.postId} post={post} />
+                    <ListItem key={post.postId} post={post} />
                 )
-            })}
+            })} */}
         </InnerContainer>
     )
 }

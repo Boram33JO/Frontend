@@ -16,7 +16,6 @@ const MyPostList = ({userId}: Props) => {
     const { data, isLoading, isError } = useQuery(["myPost"],
         async () => {
             const response = await getMyPostLists(userId);
-            console.log("내 게시글", response);
             return response.data;
         }
     )

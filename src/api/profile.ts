@@ -33,7 +33,7 @@ export const getFavLists = async (userId: string | undefined) => {
 
 
 // 팔로워 조회
-export const follow = async (userId: string | undefined) => {
+export const getFollowLists = async (userId: string | undefined) => {
     const response = await instance.get(`/api/profile/${userId}/follow`)
     return response;
 }

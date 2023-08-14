@@ -1,48 +1,42 @@
-import { styled } from 'styled-components'
-import { useNavigate } from 'react-router-dom';
-import YourPostList from '../profiledetail/YourPostList';
+import { styled } from "styled-components";
+import { useNavigate } from "react-router-dom";
+import YourPostList from "../profiledetail/YourPostList";
 
 const FavLis = () => {
-   
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const handleViewAllClick = () => {
-        // Navigate to the desired page when the button is clicked
-        navigate('/profile/{userId}/wishlist');
-    };
+  const handleViewAllClick = () => {
+    // Navigate to the desired page when the button is clicked
+    navigate("/profile/{userId}/wishlist");
+  };
 
-
-    return (
-      <>
-        <InnerContainer>
-            <Post>
+  return (
+    <>
+      <InnerContainer>
+        <Post>
           <H3>ㅇㅇ님이 좋아한 포스팅</H3>
           <Bt onClick={handleViewAllClick}>전체보기</Bt>
         </Post>
-        </InnerContainer>
-         <YourPostList />
-         </>
-         
-    )
-}
+      </InnerContainer>
+      <YourPostList />
+    </>
+  );
+};
 
 export default FavLis;
 
 const InnerContainer = styled.div`
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0 20px;
-    padding-top: 52px;
-   
-  
-`
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  padding-top: 52px;
+`;
 
 const Post = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
   justify-content: space-between;
   align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
- 
 `;
 
 const H3 = styled.h3`
@@ -53,17 +47,15 @@ const H3 = styled.h3`
   margin-bottom: 10px;
 `;
 const Bt = styled.div`
- font-size: 14px;
+  font-size: 14px;
   font-family: "Pretendard";
   color: #e7e6f0;
   cursor: pointer;
- 
 `;
 
-
 const MusicList = styled.ol`
-    display: block;
-`
+  display: block;
+`;
 
 const MusicListItem = styled.li`
   display: flex;
@@ -76,14 +68,13 @@ const MusicListItem = styled.li`
   padding: 10px 10px;
 `;
 
-
 const Date = styled.div`
-font-size: 12px;
-`
+  font-size: 12px;
+`;
 const Content = styled.div`
-font-size: 12px;
-margin-top: 5px;
-`
+  font-size: 12px;
+  margin-top: 5px;
+`;
 const Iconbox = styled.div`
   display: flex; /* 요소들을 수평으로 나란히 배치 */
   align-items: center; /* 요소들을 수평 축에서 가운데로 정렬 */
@@ -96,6 +87,4 @@ const Icon1 = styled.div`
 `;
 const Icon2 = styled.div`
   font-size: 12px;
-
-  
 `;
