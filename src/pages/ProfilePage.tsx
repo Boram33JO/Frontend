@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import Mypicture from "../components/profile/MyPicture";
 import FollowersAll from "../components/profile/FollowersAll";
 import List from "../components/profile/List";
@@ -43,10 +42,10 @@ const ProfilePage = () => {
       <GlobalStyle />
       <Mypicture />
       <List userIdFromUrl={userId} />
-      <FollowersAll />
+      <FollowersAll userIdFromUrl={userId}/>
       {isMyProfile ? (
         <>
-          <FavList />
+          <FavList userIdFromUrl={userId} />
           <ListComments />
         </>
       ) : ("")}

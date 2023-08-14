@@ -21,13 +21,9 @@ export const getMyPostLists = async (userId: string | undefined) => {
     return response;
 }
 
-// 내가 좋아요한 단 포스팅 조회
+// 내가 좋아요한 포스팅 조회
 export const getFavLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/wishlist`,
-        // {
-        //     params: { page: 0, size: 10 }
-        // }
-    )
+    const response = await instance.get(`/api/profile/${userId}/wishlist`)
     return response;
 }
 

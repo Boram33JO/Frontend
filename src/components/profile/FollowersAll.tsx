@@ -1,17 +1,42 @@
-import { styled } from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
-import { getFollowLists } from "../../api/profile";
-import { useQuery } from "react-query";
-const FollowersAll = () => {
+import React, { useState, useEffect } from 'react';
+import { styled } from 'styled-components';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getFollowLists, getProfileLists } from '../../api/profile';
+import { useQuery } from 'react-query';
+
+interface FollowersAllProps {
+  userIdFromUrl: string | undefined;
+}
+
+const FollowersAll: React.FC<FollowersAllProps> = ({ userIdFromUrl }) => {
   const navigate = useNavigate();
   const { userId } = useParams();
+  const [nickname, setNickname] = useState('');
+
+  // Fetch the nickname using userIdFromUrl
+  const fetchNickname = async () => {
+    try {
+      const response = await getProfileLists(userIdFromUrl);
+      if (response && response.data && response.data.nickname) {
+        setNickname(response.data.nickname);
+      }
+    } catch (error) {
+      console.error('닉네임을 가져오는 중 에러 발생:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (userIdFromUrl) {
+      fetchNickname();
+    }
+  }, [userIdFromUrl]);
+
   const handleViewAllClick = () => {
-    // Navigate to the desired page when the button is clicked
-    navigate("/profile/{userId}/follow");
+    navigate(`/profile/${userIdFromUrl}/follow`);
   };
 
   const { data, isLoading, isError } = useQuery(
-    ["follow", userId],
+    ['follow', userId],
     async () => {
       const response = await getFollowLists(userId);
       return response.data;
@@ -29,21 +54,19 @@ const FollowersAll = () => {
   return (
     <InnerContainer>
       <Follower1>
-        <H3>ㅇㅇ님의 피플러</H3>
+        <H3>{`${nickname}님의 피플러`}</H3>
         <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Follower1>
       <FamousList>
-        {data.map((item: any) => {
-          return (
-            <FamousListItem
-              key={item.userId}
-              onClick={() => navigate(`/profile/${item.userId}`)}
-            >
-              <FamousListThumb src={item.userImage} />
-              <FamousListNickName>{item.nickname}</FamousListNickName>
-            </FamousListItem>
-          );
-        })}
+        {data.map((item: any) => (
+          <FamousListItem
+            key={item.userId}
+            onClick={() => navigate(`/profile/${item.userId}`)}
+          >
+            <FamousListThumb src={item.userImage} />
+            <FamousListNickName>{item.nickname}</FamousListNickName>
+          </FamousListItem>
+        ))}
       </FamousList>
     </InnerContainer>
   );
@@ -60,10 +83,11 @@ const InnerContainer = styled.div`
 `;
 
 const Follower1 = styled.div`
-  display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  display: flex;
   justify-content: space-between;
-  align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
+  align-items: center;
 `;
+
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
@@ -74,9 +98,8 @@ const H3 = styled.h3`
 
 const Bt = styled.div`
   font-size: 14px;
+  font-family: 'Pretendard';
   color: #e7e6f0;
-  font-family: "Pretendard";
-
   cursor: pointer;
 `;
 
@@ -88,12 +111,11 @@ const FamousList = styled.div`
 const FamousListItem = styled.div`
   margin-top: 16px;
   width: 65px;
-  height: 90px; /* 수정: 요소들의 높이를 늘려서 닉네임이 썸네일 밑에 나타나도록 함 */
+  height: 90px;
   display: flex;
-  flex-direction: column; /* 수정: 요소들을 세로 방향으로 정렬하기 위해 column으로 설정 */
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
-
   cursor: pointer;
 
   &:hover {
@@ -108,9 +130,9 @@ const FamousListThumb = styled.img`
 `;
 
 const FamousListNickName = styled.div`
-  font-size: 14px; // 12
+  font-size: 14px;
   font-weight: 500;
   color: #e7e6f0;
-  margin-top: 10px; /* 수정: 썸네일 아래에 간격을 두어 닉네임이 적절히 나타나도록 함 */
-  text-align: center; /* 수정: 텍스트를 가운데 정렬로 설정 */
+  margin-top: 10px;
+  text-align: center;
 `;

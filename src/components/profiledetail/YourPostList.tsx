@@ -1,14 +1,19 @@
 import { styled } from "styled-components";
 import { useState } from "react";
+import Nav2 from "./Nav2";
 import { Post } from "../../models/post";
-import Category from "../common/Category";
 import { getFavLists } from "../../api/profile";
 import { useQuery } from "react-query";
 import ListItem from "../common/ListItem";
 import { useParams } from "react-router-dom";
-const YourPostList = () => {
-    const { userId } = useParams();
-    const [categoryNum, setCategoryNum] = useState<number>(0);
+
+interface FavListProps {
+    userId?: string;
+}
+
+
+const YourPostList = ({userId}: FavListProps) => {
+
     const { data, isLoading, isError } = useQuery(["favorite"],
         async () => {
             const response = await getFavLists(userId);
@@ -27,10 +32,9 @@ const YourPostList = () => {
 
     return (
         <InnerContainer>
-            <Category categoryNum={categoryNum} setCategoryNum={setCategoryNum} />
-            {/* {data[categoryNum].postByCategoryResponseDtoList.map((post: Post) => {
+              {/* {data.map((post: Post) => {
                 return (
-                    <ListItem key={post.postId} post={post} />
+                    <Nav2 key={post.postId} post={post} />
                 )
             })} */}
         </InnerContainer>

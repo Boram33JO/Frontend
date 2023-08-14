@@ -2,7 +2,6 @@ import { styled } from "styled-components";
 import {    useState } from "react";
 import Nav2 from "./Nav2";
 import { Post } from "../../models/post";
-import Category from "../common/Category";
 import { getMyPostLists } from "../../api/profile";
 import { useQuery } from "react-query";
 
@@ -27,6 +26,8 @@ const MyPostList = ({userId}: Props) => {
     if (isError) {
         return <div>Error...</div>
     }
+
+
 
     return (
         <InnerContainer>
