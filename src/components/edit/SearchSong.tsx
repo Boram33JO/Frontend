@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { ReactComponent as CheckBox } from "../../assets/images/check_slc.svg";
 import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg";
+import ButtonComponent from "./ButtonComponent";
 
 export type SongListType = {
     album: string;
@@ -26,6 +27,12 @@ export type ChooseSongListType = {
     songTitle: string;
     thumbnail: string;
 };
+
+// interface searchSong {
+//     // slideIndex: number;
+//     // onClickNextButtonHandler: any;
+//     // onClickBeforeButtonHandler: any;
+// }
 
 const SearchSong: React.FC = () => {
     const [searchSong, setSearchSong] = useState<string>("");
@@ -60,7 +67,11 @@ const SearchSong: React.FC = () => {
         } else if (chooseSongList.length >= 10) {
             return alert("한 번에 추가 할 수 있는 곡의 수는 10개 입니다.");
         } else {
-            setChooseSongList((prevList) => [...prevList, item]);
+            setChooseSongList((prevList) => {
+                const newList = [...prevList, item];
+                localStorage.setItem("songs", JSON.stringify(newList));
+                return newList;
+            });
         }
     };
 
@@ -69,9 +80,19 @@ const SearchSong: React.FC = () => {
         setChooseSongList(updatedList);
     };
 
+    // const choosedSongList = () => {
+
+    // }
+    // const choosedList = JSON.parse(localStorage.getItem("songs") || "[]");
+    // console.log("sdsdds", choosedList);
+
+    // useEffect(() => {
+    //     setChooseSongList(JSON.parse(localStorage.getItem("songs") || "[]"));
+    //     console.log("sdsdds", setChooseSongList);
+    // }, []);
+
     console.log("songlist", songList);
     console.log("chooseSongList", chooseSongList);
-
     return (
         <>
             <form onSubmit={searchSongHandler}>
@@ -101,15 +122,17 @@ const SearchSong: React.FC = () => {
                     </StSongList>
                 ))}
             </StContainer>
-            <StChooseSongListContainer>
-                {chooseSongList.map((song) => (
-                    <StChooseSongLists key={song.songNum}>
-                        <h3>{song.songTitle}</h3>
-                        <div>{song.artistName}</div>
-                        <button onClick={() => removeFromChooseSongList(song)}>삭제</button>
-                    </StChooseSongLists>
-                ))}
-            </StChooseSongListContainer>
+            {chooseSongList.length !== 0 ? (
+                <StChooseSongListContainer>
+                    {chooseSongList.map((song) => (
+                        <StChooseSongLists key={song.songNum}>
+                            <h3>{song.songTitle}</h3>
+                            <div>{song.artistName}</div>
+                            <button onClick={() => removeFromChooseSongList(song)}>삭제</button>
+                        </StChooseSongLists>
+                    ))}
+                </StChooseSongListContainer>
+            ) : null}
         </>
     );
 };
@@ -152,6 +175,12 @@ const StChooseSongListContainer = styled.div`
 `;
 
 const StChooseSongLists = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+`;
+
+const StButtons = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
