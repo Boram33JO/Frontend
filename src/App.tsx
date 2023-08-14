@@ -95,35 +95,33 @@ return (
 <Route path="/edit" element={<EditPage />} />
 <Route path="/list/:id" element={<ListPage />} />
 
+        <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />  
+        {/* 내 정보 수정하기 */}
 
-<Route path="/detail/:id" element={<DetailPage />} />
+        <Route path="/profile/:userId" element={<ProfilePage />} />   
+        {/* 프로필 전체 보기 */}
 
-<Route path="/profile/:userId" element={<ProfileEditPage />} />
+        <Route path="/profile/:userId/follow" element={<FollowPage />} />
+        {/* 팔로워 보기 */}
 
-<Route path="/profile/{userId}" element={<ProfilePage />} />
-{/* 프로필 전체 보기, 내 정보 수정하기 */}
+        <Route path="/profile/:userId/post" element={<MypostPage />} />
+        {/* 내가쓴 게시물만 보기 */}
 
-<Route path="/profile/{userId}/follow" element={<FollowPage />} />
-{/* 팔로워 보기 */}
+        <Route path="/profile/:userId/comments" element={<MycommentsPage />} />
+        {/* 내가 댓글 단 게시물만 보기 */}
 
-<Route path="/profile/{userId}/post" element={<MypostPage />} />
-{/* 내가쓴 게시물만 보기 */}
+        <Route path="/profile/:userId/wishlist" element={<WishlistPage />} />
+        {/* 내가 좋아요한 게시물만 보기 */}
 
-<Route path="/profile/{userId}/comments" element={<MycommentsPage />} />
-{/* 내가 댓글 단 게시물만 보기 */}
-
-<Route path="/profile/{userId}/wishlist" element={<WishlistPage />} />
-{/* 내가 좋아요한 게시물만 보기 */}
-
-<Route path="/profile/{userId}/password" element={<PasswordPage />} />
-{/* 비번찾기 페이지 */}
-
-<Route path="/map" element={<MapPage />} />
-<Route path="/*" element={<NotFoundPage />} />
-</Route>
-<Route path="/api/oauth/token" element={<RedirectKakao />} />
-</Routes>
-);
+        <Route path="/profile/:userId/password" element={<PasswordPage />} />
+       {/* 비번찾기 페이지 */}
+       
+        <Route path="/map" element={<MapPage />} />
+        <Route path="/*" element={<NotFoundPage />} />
+      </Route>
+      <Route path="/api/oauth/token" element={<RedirectKakao />} />
+    </Routes>
+  );
 }
 
 export default App;
