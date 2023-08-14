@@ -36,18 +36,6 @@ const FollowersAll = () => {
         nickname : '화성형',
       },
    
-      // {
-      //   id: "6",
-      //   thumbnail:
-      //     "https://i.scdn.co/image/ab676161000051746a224073987b930f99adc706",
-      //     nickname : '스위프티',
-      //   },
-      //   {
-      //     id: "7",
-      //     thumbnail:
-      //       "https://i.scdn.co/image/ab676161000051746a224073987b930f99adc706",
-      //       nickname : '스위프티',
-      //     },
   ];
   return (
     <InnerContainer>

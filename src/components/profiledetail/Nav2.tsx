@@ -5,6 +5,7 @@ import { ReactComponent as Headphone } from '../../assets/images/headphone.svg'
 import spotify from '../../assets/images/Spotify_Icon_RGB_Black.png'
 import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
+import { displayedAt } from '../../utils/common'
 
 interface Props {
     post: Post;
@@ -18,34 +19,11 @@ const ListItem = ({ post }: Props) => {
         setIsOpen(!isOpen);
     }
 
-    // 작성 시간
-    const displayedAt = (createdAt: string) => {
-        const milliSeconds = new Date().getTime() - new Date(createdAt).getTime();
-        const seconds = milliSeconds / 1000
-        if (seconds < 60) return `방금 전`
-        const minutes = seconds / 60
-        if (minutes < 60) return `${Math.floor(minutes)}분 전`
-        const hours = minutes / 60
-        if (hours < 24) return `${Math.floor(hours)}시간 전`
-        const days = hours / 24
-        if (days < 7) return `${Math.floor(days)}일 전`
-        const weeks = days / 7
-        if (weeks < 5) return `${Math.floor(weeks)}주 전`
-        const months = days / 30
-        if (months < 12) return `${Math.floor(months)}개월 전`
-        const years = days / 365
-        return `${Math.floor(years)}년 전`
-    }
-
     return (
         <ListItemContainer>
             <ListItemTop onClick={() => navigate(`/detail/${post.postId}`)}>
                 <ProfileArea>
-                    <ProfileThumnail src={post.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : post.userImage} />
                     <ProfileInfo>
-                        <StP $color="#FAFAFA" $size={"14px"}>
-                            {post.nickname}
-                        </StP>
                         <StP $color="#C7C7C7" $size={"14px"}>
                             {displayedAt(post.createdAt)}
                         </StP>

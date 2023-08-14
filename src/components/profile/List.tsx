@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import MyPostList from '../profiledetail/MyPostList';
-import { getProfileLists } from '../../api/profile'; // 실제 API 함수의 경로로 업데이트해야 함
+import { getProfileLists } from '../../api/profile'; // List 컴포넌트의 프롭에 대한 타입 인터페이스 정의
 
-// List 컴포넌트의 프롭에 대한 타입 인터페이스 정의
+
 interface ListProps {
   userIdFromUrl: string | undefined; // userIdFromUrl의 타입을 명시
 }
@@ -48,7 +48,7 @@ const List: React.FC<ListProps> = ({ userIdFromUrl }) => {
         <Bt onClick={handleViewAllClick}>{`${nickname}님의 포스팅 전체보기`}</Bt>
         </Post>
       </InnerContainer>
-      {/* <MyPostList /> */}
+      <MyPostList userId={userId}/>
     </>
   );
 };

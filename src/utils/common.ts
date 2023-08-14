@@ -9,17 +9,18 @@ export const displayedAt = (createdAt: string) => {
     if (hours < 24) return `${Math.floor(hours)}시간 전`
     const days = hours / 24
     if (days < 7) return `${Math.floor(days)}일 전`
-    const weeks = days / 7
-    if (weeks < 5) return `${Math.floor(weeks)}주 전`
-    const months = days / 30
-    if (months < 12) return `${Math.floor(months)}개월 전`
-    const years = days / 365
-    return `${Math.floor(years)}년 전`
+    return getToday(createdAt);
+    // const weeks = days / 7
+    // if (weeks < 5) return `${Math.floor(weeks)}주 전`
+    // const months = days / 30
+    // if (months < 12) return `${Math.floor(months)}개월 전`
+    // const years = days / 365
+    // return `${Math.floor(years)}년 전`
 }
 
 // 오늘 날짜 (YY.MM.DD)
-export const getToday = () => {
-    const today = new Date();
+export const getToday = (date?: string) => {
+    const today = (date) ? new Date(date) : new Date();
     const year = today.getFullYear().toString().slice(-2);
     const month = (today.getMonth() + 1).toString().padStart(2, '0');
     const day = today.getDate().toString().padStart(2, '0');
