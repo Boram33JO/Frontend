@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import useInput from "../../hooks/useInput";
 import { ReactComponent as CameraIcon } from "../../assets/images/profile_camera.svg"; // 프로필 카메라 SVG 아이콘 추가
 
-
+// 서버에서 받아와야 함.(혹은 로컬)
 
 const EditProfile = () => {
   const [email, onChangeEmailHandler] = useInput();
@@ -22,26 +22,30 @@ const EditProfile = () => {
     <>
       <H1>프로필 수정</H1>
       <Stbox>
-        <ImageUpload >
-          <ImagePreview>
-            {profileImage ? (
-              <img src={profileImage} alt="미리보기" />
-            ) : (
-              <DefaultImage>
-                <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
-          <CameraIconWrapper >
-                  <CameraIcon />
-                </CameraIconWrapper>
-              </DefaultImage>
-            )}
-          </ImagePreview>
-          
-        </ImageUpload>
-      </Stbox>
+      <ImageUpload>
+        <ImagePreview
+          // 이미지를 클릭하면 input 영역을 클릭한 것과 같은 효과를 내도록 설정
+          onClick={(event) => {
+            event.preventDefault(); // 기본 클릭 동작 방지
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.click(); // 파일 선택 창 열기
+            input.addEventListener('change', handleImageChange);
+          }}
+        >
+          {profileImage ? (
+            <img src={profileImage} alt="미리보기" />
+          ) : (
+            <DefaultImage>
+              <CameraIconWrapper>
+                <CameraIcon />
+              </CameraIconWrapper>
+            </DefaultImage>
+          )}
+        </ImagePreview>
+      </ImageUpload>
+    </Stbox>
 
       <H3>닉네임</H3>
       <Stbox>
@@ -49,7 +53,7 @@ const EditProfile = () => {
           <Stname>
             <Stinput4
               type={"text"}
-              placeholder={"2~8자 입력"}
+              placeholder={"2~8자 입력"} // 이 부분도 로컬스토리지나 서버에서 받아와서 기본 값이 담겨 있어야함. 
               // value={nickname} // Display nickname value
               // onChange={onChangeNicknameHandler}
             />
@@ -261,3 +265,4 @@ const Stbutton2 = styled.button`
   margin-top: 20px;
   margin-bottom: 100%;
 `;
+
