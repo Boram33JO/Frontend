@@ -87,26 +87,29 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                     value={searchSong}
                 />
             </StSearchForm>
-            <StContainer>
-                {songList.map((item) => (
-                    <StSongList
-                        key={item.songNum}
-                        onClick={() => {
-                            addToChooseSongList(item);
-                        }}
-                    >
-                        <img
-                            src={item.thumbnail}
-                            alt={`Thumbnail for ${item.songTitle}`}
-                        />
-                        <div>
-                            <h3>{item.songTitle}</h3>
-                            <p>{item.artistName}</p>
-                        </div>
-                        {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
-                    </StSongList>
-                ))}
-            </StContainer>
+            {songList.length !== 0 ? (
+                <StContainer>
+                    {songList.map((item) => (
+                        <StSongList
+                            key={item.songNum}
+                            onClick={() => {
+                                addToChooseSongList(item);
+                            }}
+                        >
+                            <img
+                                src={item.thumbnail}
+                                alt={`Thumbnail for ${item.songTitle}`}
+                            />
+                            <div>
+                                <h3>{item.songTitle}</h3>
+                                <p>{item.artistName}</p>
+                            </div>
+                            {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
+                        </StSongList>
+                    ))}
+                </StContainer>
+            ) : null}
+
             {chooseSongList.length !== 0 && (
                 <StChooseSongListContainer>
                     {chooseSongList.map((song) => (
@@ -150,7 +153,7 @@ const StContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
     width: 348px;
-    height: 316px;
+    height: 297px;
     border-radius: 6px 6px 0 0;
     border: 1px solid #524d58;
     background: #434047;

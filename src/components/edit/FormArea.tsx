@@ -143,14 +143,47 @@ const StChooseSongListContainer = styled.div`
     overflow-x: hidden;
     height: 104px;
     width: 348px;
-    border-radius: 6px;
+    border-radius: 0 0 6px 6px;
     border: 1px solid #524d58;
     background: #434047;
     margin-top: 12px;
+
+    display: flex;
+    flex-direction: column;
 `;
 
 const StChooseSongLists = styled.div`
+    width: 309px;
+    margin: 7px 16px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
+    h3 {
+        width: 113px;
+        margin-right: 35px;
+        color: #f1f1f1;
+        font-size: 14px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+    }
+    div {
+        width: 90px;
+        color: #a6a3af;
+        font-size: 14px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+    }
+    button {
+        border: none;
+        color: #a6a3af;
+        background-color: #434047;
+        cursor: pointer;
+    }
 `;
