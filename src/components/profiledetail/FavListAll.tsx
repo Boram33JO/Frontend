@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { styled } from "styled-components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Post } from "../../models/post";
 import MyListItem from "../common/MyListItem";
 import { useQuery } from "react-query";
-import { getMyPostLists } from "../../api/profile";
+import { getFavLists} from "../../api/profile";
+import FavList from "../profile/FavList";
 
-
-const YourPostList = () => {
+const FavListAll = () => {
   const { userId } = useParams();
 
   // const handleViewAllClick = () => {
@@ -15,11 +15,12 @@ const YourPostList = () => {
   //   navigate(`/profile/${userId}/post`);
   // };
 
-  const { data, isLoading, isError } = useQuery(["posts"], async () => {
-    const response = await getMyPostLists(userId);
-    console.log(" 내가쓴 포스팅 response:", response); // response를 console에 출력
+  const { data, isLoading, isError } = useQuery(["favposts"], async () => {
+    const response = await getFavLists(userId);
+    console.log("좋아요함 response:", response); // response를 console에 출력
     // console.log("포스트 response:", response.data.nickname);
-    return response.data.postList;
+    console.log("좋아요함 data:", response.data); // 확인용 로그
+    return response.data;
   });
 
   if (isLoading) {
@@ -29,22 +30,22 @@ const YourPostList = () => {
   if (isError) {
     return <div>Error...</div>;
   }
-  
+
   return (
     <>
       <InnerContainer>
         <TitleSection>
-          <H3>{data.nickname}포스팅</H3>
+          <H3>{data.nickname}님의 포스팅</H3>
         </TitleSection>
         {data.map((post: Post) => {
-          return <MyListItem key={data.postId} post={post}></MyListItem>;
+          return <MyListItem key={post.postId} post={post}></MyListItem>;
         })}
       </InnerContainer>
     </>
   );
 };
 
-export default YourPostList;
+export default FavListAll;
 
 const InnerContainer = styled.div`
   display: flex;
@@ -69,4 +70,3 @@ const H3 = styled.h3`
   font-weight: 600;
   color: #e7e6f0;
 `;
-
