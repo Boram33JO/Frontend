@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { styled } from 'styled-components'
 import { getPopularPeople } from '../../api/post';
-import { User } from '../../models/user';
+import { User2 } from '../../models/user';
 import { getProfileImage } from '../../utils/common';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ const FamousPeople = () => {
     const { data, isLoading, isError } = useQuery(["famous"],
         async () => {
             const response = await getPopularPeople();
-            // console.log(response.data);
+            console.log(response.data);
             return response.data;
         }
     )
@@ -30,7 +30,7 @@ const FamousPeople = () => {
             </H3>
             <FamousList>
                 {
-                    data.map((item: User) => {
+                    data.map((item: User2) => {
                         return (
                             <FamousListItem key={item.id} onClick={() => navigate(`/profile/${item.id}`)}>
                                 <FamousListItemThumb src={getProfileImage(item.userImage)} />

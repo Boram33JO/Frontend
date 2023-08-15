@@ -31,6 +31,6 @@ export const getDateNotation = (input?: string) => {
 }
 
 // 기본 이미지
-export const getProfileImage = (image?: string) => {
+export const getProfileImage = (image?: string | null) => {
     return (image) ? image : "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1"
 }

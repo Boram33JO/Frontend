@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
 import ProfileNav from "../components/profiledetail/ProfileNav";
 import GlobalStyle from "../components/common/GlobalStyle";
-import MyPostList from "../components/profiledetail/MyPostList";
 import ProfileNav2 from "../components/profiledetail/ProfileNav2";
 import { useParams } from "react-router-dom";
 
@@ -23,7 +21,6 @@ const MypostPage = () => {
     <>
       <GlobalStyle />
       {storedUserId === userId ? <ProfileNav /> : <ProfileNav2 />}
-      <MyPostList />
     </>
   );
 };

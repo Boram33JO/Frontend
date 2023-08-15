@@ -1,14 +1,20 @@
 export type User = {
+    userId?: number;
+    nickname?: string;
+    userImage?: string;
+}
+
+export type User2 = {
     id?: number;
     nickname?: string;
     userImage?: string;
 }
 
 export type UserInfo = {
-    userId?: number;
-    nickname?: string;
-    userImage?: string;
-    introduce?: string;
+    userId: number;
+    nickname: string;
+    userImage: string | null;
+    introduce: string | null;
 }
 
 export type SignupFormat = {

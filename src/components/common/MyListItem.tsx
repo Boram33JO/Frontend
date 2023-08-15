@@ -11,7 +11,7 @@ interface Props {
     post: Post;
 }
 
-const ListItem = ({ post }: Props) => {
+const MyListItem = ({ post }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -84,7 +84,7 @@ const ListItem = ({ post }: Props) => {
     )
 }
 
-export default ListItem
+export default MyListItem
 
 const ListItemContainer = styled.div`
     display: flex;
@@ -121,12 +121,6 @@ const TitleArea = styled.div`
     display: inline-flex;
     flex: 0.54 0 0;
     justify-content: flex-end;
-`
-
-const ProfileThumnail = styled.img`
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
 `
 
 const ProfileInfo = styled.div`

@@ -47,3 +47,11 @@ export const getCommentsLists = async (userId: string | undefined) => {
 //     const response = await instance.post(`api/profile/${userId}/follow`)
 //     return response;
 // }
+
+
+// 프로필 수정
+export const updateProfile = async (userId: string | undefined, formData: FormData) => {
+    const response = await instance.put(`/api/profile/${userId}`, formData);
+    console.log(response);
+    return response;
+}
