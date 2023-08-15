@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/config/configStore";
 import { UserInfo } from "../../models/user";
@@ -25,9 +25,8 @@ const Mypicture = ({ follow, userInfo }: Props) => {
   };
 
   const FollowMutation = useMutation(followUser, {
-    onSuccess: (response) => {
-      queryClient.invalidateQueries(["posts"]);
-      console.log(response);
+    onSuccess: () => {
+      queryClient.invalidateQueries(["Profile", userId]);
     }
   })
 
@@ -51,7 +50,7 @@ const Mypicture = ({ follow, userInfo }: Props) => {
             </MyProfile2>
             {isMyProfile
               ? (<Bt onClick={EditMyProfileHandler}>프로필 수정</Bt>)
-              : (<Bt onClick={() => followButtonHandler(userInfo.userId)}>
+              : (<Bt $follow={follow} onClick={() => followButtonHandler(userInfo.userId)}>
                 {follow ? "언팔로우" : "팔로우"}
               </Bt>)
             }
@@ -86,7 +85,7 @@ const MyPic = styled.div`
 
 // `;
 
-const Bt = styled.button`
+const Bt = styled.button<{ $follow?: boolean }>`
   width: 92px;
   height: 33px;
   border: none;
@@ -106,6 +105,12 @@ const Bt = styled.button`
   &:hover {
     color: #141414;
   }
+
+  ${(props) =>
+    props.$follow &&
+    css`
+      background: #434047;
+      `}
 `;
 const MyProfile = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
@@ -115,6 +120,7 @@ const MyProfile = styled.div`
 const MyThumb = styled.img`
   width: 66px;
   height: 66px;
+  background-color: #ECECEC;
   border-radius: 50%;
 `;
 
@@ -124,6 +130,7 @@ const MyProfile1 = styled.div`
   justify-content: space-between;
   width: 100%; /* 자식 요소들이 가로로 나란히 정렬되도록 전체 너비 설정 */
 `;
+
 const MyProfile2 = styled.div`
   padding-left: 12px;
 `;

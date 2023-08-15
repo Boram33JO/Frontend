@@ -12,7 +12,6 @@ const Recommend = () => {
     const { data, isLoading, isError } = useQuery(["recommend"],
         async () => {
             const response = await getPopularSongs();
-            console.log(response.data);
             return response.data;
         }
     )

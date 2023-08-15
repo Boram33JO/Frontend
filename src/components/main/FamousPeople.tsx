@@ -10,7 +10,6 @@ const FamousPeople = () => {
     const { data, isLoading, isError } = useQuery(["famous"],
         async () => {
             const response = await getPopularPeople();
-            console.log(response.data);
             return response.data;
         }
     )
@@ -85,7 +84,7 @@ const FamousListItem = styled.div`
 const FamousListItemThumb = styled.img`
     width: 75px;
     height: 75px;
-
+    background-color: #ECECEC;
     border-radius: 50%;
 `
 
