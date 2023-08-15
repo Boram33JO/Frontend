@@ -1,18 +1,22 @@
 import React from "react";
-import styled from "styled-components";
 import ProfileNav from "../components/profiledetail/ProfileNav";
-import GlobalStyle from "../components/common/GlobalStyle";
-import YourPostList from "../components/profiledetail/YourPostList";
-
-
+import ProfileNav2 from "../components/profiledetail/ProfileNav2";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 
 const WishlistPage = () => {
+  const {userId} = useParams();
+  const LoginUser = useSelector((state: RootState) => state.user);
+
+
+  const userIdNumber = Number(userId);
+  const loginUserNumber = Number(LoginUser.userId);
   return (
     <>
-    <GlobalStyle/>
-    <ProfileNav />
-  < YourPostList />
+      {userIdNumber === loginUserNumber ? <ProfileNav /> : <ProfileNav2 />}
+  {/* < YourPostList /> */}
     <div>좋아한</div>
     </>
   );

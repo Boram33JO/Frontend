@@ -3,7 +3,6 @@ import FollowersAll from "../components/profile/FollowersAll";
 import List from "../components/profile/List";
 import FavList from "../components/profile/FavList";
 import ListComments from "../components/profile/ListComments";
-import GlobalStyle from "../components/common/GlobalStyle";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/config/configStore";
