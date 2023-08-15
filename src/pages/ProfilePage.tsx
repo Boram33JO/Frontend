@@ -33,10 +33,9 @@ const ProfilePage = () => {
 
   return (
     <>
-      {/* <GlobalStyle /> */}
       <Mypicture userInfo={data.userInfo} follow={data.follow}/>
       <List userInfo={data.userInfo} postList={data.postList} />
-      <FollowersAll followList={data.followList} />
+      <FollowersAll userInfo={data.userInfo} followList={data.followList} />
       {isMyProfile && (
         <>
           <FavList userInfo={data.userInfo} wishList={data.wishList} />

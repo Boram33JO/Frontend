@@ -3,60 +3,28 @@ import { styled } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getFollowLists, getProfileLists } from '../../api/profile';
 import { useQuery } from 'react-query';
-import { User } from '../../models/user';
+import { User, UserInfo } from '../../models/user';
 import { getProfileImage } from '../../utils/common';
 
 interface Props {
+  userInfo: UserInfo,
   followList: User[]
 }
 
-const FollowersAll = ({ followList }: Props) => {
+const FollowersAll = ({ userInfo, followList }: Props) => {
   const navigate = useNavigate();
   const { userId } = useParams();
-  const [nickname, setNickname] = useState('');
-
-  // Fetch the nickname using userIdFromUrl
-  // const fetchNickname = async () => {
-  //   try {
-  //     const response = await getProfileLists(userIdFromUrl);
-  //     if (response && response.data && response.data.nickname) {
-  //       setNickname(response.data.nickname);
-  //     }
-  //   } catch (error) {
-  //     console.error('닉네임을 가져오는 중 에러 발생:', error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   if (userIdFromUrl) {
-  //     fetchNickname();
-  //   }
-  // }, [userIdFromUrl]);
+  
 
   const handleViewAllClick = () => {
     navigate(`/profile/${userId}/follow`);
   };
 
-  // const { data, isLoading, isError } = useQuery(
-  //   ['follow', userId],
-  //   async () => {
-  //     const response = await getFollowLists(userId);
-  //     return response.data;
-  //   }
-  // );
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-
-  // if (isError) {
-  //   return <div>Error...</div>;
-  // }
-
+  
   return (
     <InnerContainer>
       <Follower1>
-        <H3>{`${nickname}님의 피플러`}</H3>
+        <H3>{`${userInfo.nickname}님의 피플러`}</H3>
         <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Follower1>
       <FamousList>
