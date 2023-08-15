@@ -12,22 +12,30 @@ type myComment = {
   id: number;
   content: string;
   createdAt: string;
+  postId: number;
 }
 
 const ListComments = ({ commentList }: Props) => {
-  const { userId } = useParams();
+  const {userId} = useParams();
   const navigate = useNavigate();
 
   const handleViewAllClick = () => {
     // Navigate to the desired page when the button is clicked
-    navigate("/profile/{userId}/comments");
+    navigate(`/profile/${userId}/comments`);
   };
+
+  const handleCommentClick = (postId: number) => {
+  // 댓글을 클릭했을 때 해당 댓글의 상세 페이지로 이동
+  navigate(`/detail/${postId}`);
+};
+
 
   const { data, isLoading, isError } = useQuery(["comments"], async () => {
     const response = await getCommentsLists(userId);
-    // console.log('댓글', response);
+    console.log('댓글 response:', response); // response를 console에 출력
     return response.data;
   });
+  
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -46,7 +54,7 @@ const ListComments = ({ commentList }: Props) => {
       {
         commentList.map((item) => {
           return (
-            <CommentList key={item.id}>
+            <CommentList key={item.id} onClick={() => handleCommentClick(item.postId)}>
               <CommentListItem>
                 <Content>{item.content}</Content>
                 <Date>{getDateNotation(item.createdAt)}</Date>
@@ -93,6 +101,7 @@ const Bt = styled.div`
 
 const CommentList = styled.ol`
   display: block;
+  cursor: pointer;
 `;
 
 const CommentListItem = styled.li`

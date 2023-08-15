@@ -56,7 +56,9 @@ const DetailPage = () => {
     }, [pathname]);
 
     const { data, isLoading, isError } = useQuery(
+
         ["post", id],
+
         async () => {
             const response = await getDetailPost(id);
             return response.data;

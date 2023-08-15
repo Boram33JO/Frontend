@@ -1,26 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ProfileNav from "../components/profiledetail/ProfileNav";
-import GlobalStyle from "../components/common/GlobalStyle";
 import ProfileNav2 from "../components/profiledetail/ProfileNav2";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
+import YourPostList from "../components/profiledetail/YourPostList";
+
 
 // 작성자가 쓴 포스팅 전체
 const MypostPage = () => {
-  const { userId } = useParams();
-  const [storedUserId, setStoredUserId] = useState('');
+  const {userId} = useParams();
+  const LoginUser = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    // 로컬 스토리지에서 userId를 가져옵니다.
-    const storedUserId = localStorage.getItem("userId");
-    if (storedUserId) {
-      setStoredUserId(storedUserId);
-    }
-  }, []); // 빈 의존성 배열을 사용하여 컴포넌트가 처음 마운트될 때만 실행되도록 합니다.
 
+  const userIdNumber = Number(userId);
+  const loginUserNumber = Number(LoginUser.userId);
   return (
     <>
-      <GlobalStyle />
-      {storedUserId === userId ? <ProfileNav /> : <ProfileNav2 />}
+      {userIdNumber === loginUserNumber ? <ProfileNav /> : <ProfileNav2 />}
+    <YourPostList />
     </>
   );
 };
