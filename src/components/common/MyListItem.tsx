@@ -10,7 +10,11 @@ import { displayedAt } from '../../utils/common'
 interface Props {
     post: Post;
 }
+  // postList: [{postId: 0, }, {postId: 1, }] ;
 
+  // post: {postId: 0, postTitle: , userId: }
+
+// const MyListItem:React.FC<Props> = ({ post }) => {
 const MyListItem = ({ post }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();

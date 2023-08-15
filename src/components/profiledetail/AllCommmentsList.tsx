@@ -17,10 +17,6 @@ const AllCommentsList = () => {
 
   console.log("qqqq", userId);
 
-  const handleViewAllClick = () => {
-    // Navigate to the desired page when the button is clicked
-    navigate("/profile/{userId}/comments");
-  };
 
   const handleCommentClick = (postId: number) => {
   // 댓글을 클릭했을 때 해당 댓글의 상세 페이지로 이동
@@ -46,7 +42,6 @@ const AllCommentsList = () => {
     <InnerContainer>
       <Post>
         <H3>나의 댓글 모아보기</H3>
-        <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Post>
       {
         data.map((item: myComment) => {
@@ -88,12 +83,6 @@ const H3 = styled.h3`
   line-height: 24px;
   font-weight: 600;
   color: #e7e6f0;
-`;
-const Bt = styled.div`
-  font-size: 14px;
-  font-family: "Pretendard";
-  color: #e7e6f0;
-  cursor: pointer;
 `;
 
 const CommentList = styled.ol`

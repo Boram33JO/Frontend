@@ -53,7 +53,7 @@ export type Post = {
 const DetailPage = () => {
     const { id } = useParams();
     const { data, isLoading, isError } = useQuery(
-        ["posts"],
+        ["posts", id],
         async () => {
             const response = await getDetailPost(id);
             // console.log(response.data);

@@ -4,6 +4,7 @@ import ProfileNav2 from "../components/profiledetail/ProfileNav2";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/config/configStore";
+import YourPostList from "../components/profiledetail/YourPostList";
 
 
 // 작성자가 쓴 포스팅 전체
@@ -17,7 +18,7 @@ const MypostPage = () => {
   return (
     <>
       {userIdNumber === loginUserNumber ? <ProfileNav /> : <ProfileNav2 />}
-    <div>내가쓴</div>
+    <YourPostList />
     </>
   );
 };
