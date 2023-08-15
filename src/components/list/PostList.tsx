@@ -77,7 +77,6 @@ const InnerContainer = styled.div`
     box-sizing: border-box;
     padding: 20px;
 
-    background-color: black;
     color: white;
     gap: 20px;
 `

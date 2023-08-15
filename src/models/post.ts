@@ -17,6 +17,7 @@ export type Song = {
 }
 
 export type Post = {
+    userId: number;
     postId: number;
     postTitle: string;
     category: string;
@@ -25,6 +26,8 @@ export type Post = {
     userImage: string;
     location?: Location;
     createdAt: string;
+    follow: boolean;
+    wishlist: boolean;
     wishlistCount: number;
     songs: Song[];
     comments?: Comment[];

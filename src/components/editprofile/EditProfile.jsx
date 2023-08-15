@@ -329,7 +329,6 @@ const Stbutton1 = styled.button`
       color: #141414 ;
       pointer-events: none;
       `}
-
 `;
 const Stbutton2 = styled.button`
   width: 350px;

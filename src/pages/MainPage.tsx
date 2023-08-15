@@ -5,8 +5,16 @@ import PopularPosts from '../components/main/PopularPosts'
 import Recommend from '../components/main/Recommend'
 import FamousPeople from '../components/main/FamousPeople'
 import PostList from '../components/main/PostList'
+import { useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 
 const MainPage = () => {
+    const pathname = useLocation();
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
     return (
         <Container>
             <SlideBanner />

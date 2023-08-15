@@ -1,11 +1,13 @@
 import { styled } from "styled-components"
-import { Post } from "../../pages/DetailPage"
 import { ReactComponent as Like } from '../../assets/images/like.svg'
 import { ReactComponent as Place } from '../../assets/images/place.svg'
 import { useMutation, useQueryClient } from "react-query"
 import { followUser, likePost } from "../../api/post"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { displayedAt } from "../../utils/common"
+import { Post } from "../../models/post"
+import { useSelector } from "react-redux"
+import { RootState } from "../../redux/config/configStore"
 
 type PostProps = {
     post: Post
@@ -13,14 +15,15 @@ type PostProps = {
 
 const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
-const DetailContent: React.FC<PostProps> = ({ post }) => {
+const DetailContent = ({ post }: PostProps) => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const userInfo = useSelector((state: RootState) => state.user);
 
     const LikeMutation = useMutation(likePost, {
-        onSuccess: (response) => {
-            queryClient.invalidateQueries(["posts"]);
-            console.log(response);
+        onSuccess: () => {
+            queryClient.invalidateQueries(["post"]);
         }
     })
 
@@ -29,9 +32,8 @@ const DetailContent: React.FC<PostProps> = ({ post }) => {
     }
 
     const FollowMutation = useMutation(followUser, {
-        onSuccess: (response) => {
-            queryClient.invalidateQueries(["posts"]);
-            console.log(response);
+        onSuccess: () => {
+            queryClient.invalidateQueries(["post"]);
         }
     })
 
@@ -42,15 +44,19 @@ const DetailContent: React.FC<PostProps> = ({ post }) => {
     return (
         <DetailContainer>
             <ProfileSection>
-                <ProfileArea>
+                <ProfileArea onClick={() => { navigate(`/profile/${post.userId}`) }}>
                     <ProfileImage src={post.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : post.userImage} />
                     <ProfileInfo>
                         <StP $size={"16px"} $color={"#FAFAFA"}>{post.nickname}</StP>
                     </ProfileInfo>
                 </ProfileArea>
-                <FollowBtn $yours={post.follow} onClick={() => followButtonHandler(post.userId)}>
-                    {(post.follow) ? "언팔로우" : "팔로우"}
-                </FollowBtn>
+                {
+                    (userInfo.nickname !== post.nickname) && (
+                        <FollowBtn $yours={post.follow} onClick={() => followButtonHandler(post.userId)}>
+                            {(post.follow) ? "언팔로우" : "팔로우"}
+                        </FollowBtn>
+                    )
+                }
             </ProfileSection>
             <TitleSection>
                 <TitleSectionLeft>
@@ -102,7 +108,7 @@ const DetailContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: inherit;
-    margin-top: 48px;
+    margin-top: 26px;
     padding: 10px 20px;
     box-sizing: border-box;
     background-color: #141414;
@@ -124,6 +130,7 @@ const ProfileArea = styled.div`
     align-items: center;
     height: inherit;
     gap: 10px;
+    cursor: pointer;
 `
 
 const ProfileImage = styled.img`
