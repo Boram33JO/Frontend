@@ -1,5 +1,5 @@
 import { styled } from "styled-components"
-import { Post, Song } from "../../pages/DetailPage"
+import { Song } from "../../pages/DetailPage"
 import spotify from '../../assets/images/Spotify_Icon_RGB_White.png'
 
 interface Songs {
@@ -43,7 +43,6 @@ const PlaylistContainer = styled.div`
     justify-content: center;
     box-sizing: border-box;
     padding: 0px 20px;
-    padding-bottom: 20px;
 `
 
 const PlaylistSection = styled.div`

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components'
 import { postComment, updateComment } from '../../api/comment';
 import { useParams } from 'react-router-dom';
@@ -29,16 +29,14 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     };
 
     const commentMutation = useMutation((postId: string) => postComment(postId, { content: content }), {
-        onSuccess: (response) => {
-            queryClient.invalidateQueries("posts");
-            console.log(response.data);
+        onSuccess: () => {
+            queryClient.invalidateQueries("post");
         }
     });
 
     const updateMutation = useMutation((commentId: string) => updateComment(commentId, { content: content }), {
-        onSuccess: (response) => {
-            queryClient.invalidateQueries("posts");
-            console.log(response.data);
+        onSuccess: () => {
+            queryClient.invalidateQueries("post");
         }
     });
 
@@ -46,6 +44,9 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
         if (id) {
             commentMutation.mutate(id);
             setContent("");
+        }
+        if (textareaRef.current) {
+            textareaRef.current.style.height = "auto";
         }
     }
 
@@ -55,6 +56,10 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
             setTarget("");
         }
     }
+
+    useEffect(() => {
+        handleResizeHeight();
+    }, [])
 
     return (
         <Container $edit={Boolean(comment)}>
@@ -89,6 +94,7 @@ const Container = styled.div<{ $edit: boolean }>`
     box-sizing: border-box;
     background-color: #141414;
     padding: ${props => props.$edit ? "" : "20px"};
+    padding-top: 0px;
 `
 
 const CommentContent = styled.div`
@@ -107,6 +113,7 @@ const CommentTextArea = styled.textarea`
     font-family: "Pretendard";
     font-size: 14px;
     line-height: 20px;
+    letter-spacing: -0.1px;
 
     border: none;
     background: none;
@@ -117,6 +124,10 @@ const CommentTextArea = styled.textarea`
 
     box-sizing: border-box;
     padding: 20px;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `
 
 const CommentButtonArea = styled.div`
@@ -124,7 +135,6 @@ const CommentButtonArea = styled.div`
     display: flex;
     padding: 20px;
     padding-left: 0px;
-    
 `
 
 const CommentButton = styled.div`

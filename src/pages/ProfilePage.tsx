@@ -3,21 +3,26 @@ import FollowersAll from "../components/profile/FollowersAll";
 import List from "../components/profile/List";
 import FavList from "../components/profile/FavList";
 import ListComments from "../components/profile/ListComments";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/config/configStore";
 import { getProfileLists } from "../api/profile";
 import { useQuery } from "react-query";
+import { useEffect } from "react";
 
 const ProfilePage = () => {
   const { userId } = useParams();
   const LoginUser = useSelector((state: RootState) => state.user);
   const isMyProfile = Number(userId) === LoginUser.userId;
+  const pathname = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
   const { data, isLoading, isError } = useQuery(["Profile", userId],
     async () => {
       const response = await getProfileLists(userId);
-      console.log("프로필", response);
       return response.data;
     }
   )
@@ -32,7 +37,9 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Mypicture userInfo={data.userInfo} follow={data.follow}/>
+
+      <Mypicture userInfo={data.userInfo} follow={data.follow} />
+
       <List userInfo={data.userInfo} postList={data.postList} />
       <FollowersAll userInfo={data.userInfo} followList={data.followList} />
       {isMyProfile && (

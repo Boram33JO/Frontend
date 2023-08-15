@@ -91,6 +91,7 @@ const HeaderRight = styled.div`
 const ProfileImage = styled.img`
     width: 24px;
     height: 24px;
+    background-color: #ECECEC;
     border-radius: 50%;
     cursor: pointer;
 `

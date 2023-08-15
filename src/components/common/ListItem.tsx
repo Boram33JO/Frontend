@@ -133,6 +133,7 @@ const TitleArea = styled.div`
 const ProfileThumnail = styled.img`
     width: 30px;
     height: 30px;
+    background-color: #ECECEC;
     border-radius: 50%;
 `
 

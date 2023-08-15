@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { styled } from 'styled-components';
-import { ReactComponent as Left } from '../../assets/images/banner_left.svg'
-import { ReactComponent as Right } from '../../assets/images/banner_right.svg'
-import { ReactComponent as Play } from '../../assets/images/banner_play.svg'
-import { ReactComponent as Pause } from '../../assets/images/banner_pause.svg'
+import { ReactComponent as Left } from '../../assets/images/onboard/onboard_left.svg'
+import { ReactComponent as Right } from '../../assets/images/onboard/onboard_right.svg'
+import { ReactComponent as Play } from '../../assets/images/onboard/onboard_play.svg'
+import { ReactComponent as Pause } from '../../assets/images/onboard/onboard_pause.svg'
+import onboard1 from '../../assets/images/onboard/onboard_1.svg'
+import onboard2 from '../../assets/images/onboard/onboard_2.svg'
+import onboard3 from '../../assets/images/onboard/onboard_3.svg'
 
 interface BannerItem {
     id: number;
@@ -19,17 +22,17 @@ const SlideBanner = () => {
     const banners: BannerItem[] = [
         {
             id: 0,
-            image: "https://c4.wallpaperflare.com/wallpaper/559/697/150/windows-10-windows-10x-windows-11-minimalism-material-minimal-hd-wallpaper-preview.jpg",
+            image: onboard1,
             comment: "피플은 장소 기반의\n음악 공유 플랫폼 이에요!"
         },
         {
             id: 1,
-            image: "https://c4.wallpaperflare.com/wallpaper/302/487/746/windows-10-windows-10x-windows-11-minimalism-material-minimal-hd-wallpaper-preview.jpg",
+            image: onboard2,
             comment: "장소를 탐색하고, 피플러들의\n포스팅을 구경하세요!"
         },
         {
             id: 2,
-            image: "https://c4.wallpaperflare.com/wallpaper/203/636/834/minimalism-landscape-digital-windows-11-hd-wallpaper-preview.jpg",
+            image: onboard3,
             comment: "피플의 음악 검색으로\n빠르게 플리를 공유해 보세요!"
         },
     ]

@@ -1,11 +1,11 @@
 import React from 'react'
 import { css, styled } from 'styled-components'
-import { ReactComponent as Close } from '../../assets/images/menu_close.svg'
+import { ReactComponent as Close } from '../../assets/images/side/menu_close.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
-import { ReactComponent as MenuMap } from '../../assets/images/menu_map.svg'
-import { ReactComponent as MenuPost } from '../../assets/images/menu_post.svg'
-import { ReactComponent as MenuPP } from '../../assets/images/menu_pp.svg'
-import { ReactComponent as MenuArrow } from '../../assets/images/menu_arrow.svg'
+import { ReactComponent as MenuMap } from '../../assets/images/side/menu_map.svg'
+import { ReactComponent as MenuPost } from '../../assets/images/side/menu_post.svg'
+import { ReactComponent as MenuPP } from '../../assets/images/side/menu_pp.svg'
+import { ReactComponent as MenuArrow } from '../../assets/images/side/menu_arrow.svg'
 import { useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/config/configStore'
@@ -122,6 +122,7 @@ const SideHeader = styled.div`
 
     &:hover path{
         fill: #8084F4;
+        stroke: #8084F4;
     }
 `
 
@@ -156,6 +157,7 @@ const ProfileImage = styled.img`
     width: 30px;
     height: 30px;
     border: none;
+    background-color: #ECECEC;
     border-radius: 50%;
 `
 

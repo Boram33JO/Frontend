@@ -5,19 +5,19 @@ import { styled } from "styled-components";
 
 
 const KakaoLogin = () => {
-const REST_API_KEY = "545665f819304672fe24245d39231f28";
-const REDIRECT_URI = `http://localhost:3000/api/oauth/token`;
-const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
+  const REST_API_KEY = "545665f819304672fe24245d39231f28";
+  const REDIRECT_URI = `http://localhost:3000/api/oauth/token`;
+  const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-console.log(REST_API_KEY);
-console.log(REDIRECT_URI);
+  console.log(REST_API_KEY);
+  console.log(REDIRECT_URI);
 
-const handleKakaoLogin = () => {
-window.location.href = KAKAO_AUTH_URL;
-// navigate(`/kakao/auth`)
-};
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+    // navigate(`/kakao/auth`)
+  };
 
   return (
     <div
@@ -35,11 +35,11 @@ window.location.href = KAKAO_AUTH_URL;
         className="kakaoLoginImage"
         onClick={handleKakaoLogin}
       />
-    <DOV>
-  <div>아직 피플의 회원이 아니신가요?</div>
-  &nbsp;
-  <Stlink2 onClick={() => { navigate('/signup') }}>회원가입</Stlink2>
-</DOV>
+      <DOV>
+        <div>아직 피플의 회원이 아니신가요?</div>
+        &nbsp;
+        <Stlink2 onClick={() => { navigate('/signup') }}>회원가입</Stlink2>
+      </DOV>
 
     </div>
   );
