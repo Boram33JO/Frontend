@@ -11,11 +11,13 @@ export const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     // 로컬 스토리지에서 토큰 값 가져오기
-    const token = localStorage.getItem("token");
+    const accessToken = localStorage.getItem("AccessToken");
+    const refreshToken = localStorage.getItem("RefreshToken");
 
     // 토큰이 존재하면 헤더에 담아서 요청 보내기
-    if (token) {
-      config.headers.Authorization = `${token}`;
+    if (accessToken) {
+      config.headers.AccessToken = `${accessToken}`;
+      config.headers.RefreshToken = `${refreshToken}`;
     }
 
     return config;

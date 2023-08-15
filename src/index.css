@@ -20,6 +20,9 @@ time, mark, audio, video {
 	vertical-align: baseline;
     background: transparent;
 }
+body {
+	background-color: #141414;
+}
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {

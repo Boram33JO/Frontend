@@ -1,51 +1,92 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import useInput from "../../hooks/useInput";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { ReactComponent as CameraIcon } from "../../assets/images/profile_camera.svg"; // 프로필 카메라 SVG 아이콘 추가
+import { useSelector } from "react-redux";
+import { updateProfile } from "../../api/profile";
+import { setUserInfo } from "../../redux/modules/userSlice";
 
 // 서버에서 받아와야 함.(혹은 로컬)
 
 const EditProfile = () => {
-  const [email, onChangeEmailHandler] = useInput();
-  const [nickname, onChangeNicknameHandler] = useInput();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [nickname, setNickname] = useState("");
+  const [introduce, setIntroduce] = useState("");
   const [profileImage, setProfileImage] = useState(null);
-
+  const userInfo = useSelector(state => state.user);
+  const formData = new FormData();
   // 이미지 선택 시 처리
   const handleImageChange = (event) => {
-    const selectedImage = event.target.files[0];
-    setProfileImage(URL.createObjectURL(selectedImage));
+    const selectedImage = event.target.files?.[0];
+    console.log(selectedImage);
+    // formData.set("formData", { "userImage": selectedImage });
+    if (selectedImage) {
+      setProfileImage(URL.createObjectURL(selectedImage));
+      console.log(profileImage);
+    }
   };
 
+  useEffect(() => {
+    setNickname(userInfo.nickname);
+    if (userInfo.introduce) {
+      setIntroduce(userInfo.introduce);
+    }
+    setProfileImage(userInfo.userImage);
+  }, []);
 
+  const handleNicknameChange = (e) => {
+    setNickname(e.target.value);
+  }
+
+  const handleIntroduceChange = (e) => {
+    setIntroduce(e.target.value);
+  }
+
+  const handleSubmitButton = async () => {
+    formData.set("requestDto", JSON.stringify({ nickname, introduce }));
+    try {
+      const response = await updateProfile(userInfo.userId, formData);
+      if (response.status <= 300) {
+        console.log(formData);
+        console.log("업데이트 성공", response);
+        // dispatch(setUserInfo({ nickname: }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
       <H1>프로필 수정</H1>
       <Stbox>
-      <ImageUpload>
-        <ImagePreview
-          // 이미지를 클릭하면 input 영역을 클릭한 것과 같은 효과를 내도록 설정
-          onClick={(event) => {
-            event.preventDefault(); // 기본 클릭 동작 방지
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'image/*';
-            input.click(); // 파일 선택 창 열기
-            input.addEventListener('change', handleImageChange);
-          }}
-        >
-          {profileImage ? (
-            <img src={profileImage} alt="미리보기" />
-          ) : (
-            <DefaultImage>
-              <CameraIconWrapper>
-                <CameraIcon />
-              </CameraIconWrapper>
-            </DefaultImage>
-          )}
-        </ImagePreview>
-      </ImageUpload>
-    </Stbox>
+        <ImageUpload>
+          <ImagePreview
+            // 이미지를 클릭하면 input 영역을 클릭한 것과 같은 효과를 내도록 설정
+            onClick={(event) => {
+              event.preventDefault(); // 기본 클릭 동작 방지
+              const input = document.createElement('input');
+              input.type = 'file';
+              input.accept = 'image/*';
+              input.click(); // 파일 선택 창 열기
+              input.addEventListener('change', handleImageChange);
+            }}
+          >
+            {profileImage ? (
+              <img src={profileImage} alt="미리보기" />
+            ) : (
+              <DefaultImage>
+                <CameraIconWrapper>
+                  <CameraIcon />
+                </CameraIconWrapper>
+              </DefaultImage>
+            )}
+          </ImagePreview>
+        </ImageUpload>
+      </Stbox>
 
       <H3>닉네임</H3>
       <Stbox>
@@ -54,10 +95,10 @@ const EditProfile = () => {
             <Stinput4
               type={"text"}
               placeholder={"2~8자 입력"} // 이 부분도 로컬스토리지나 서버에서 받아와서 기본 값이 담겨 있어야함. 
-              // value={nickname} // Display nickname value
-              // onChange={onChangeNicknameHandler}
+              value={nickname} // Display nickname value
+              onChange={handleNicknameChange}
             />
-            <Stbutton1>중복체크</Stbutton1> 
+            <Stbutton1>중복체크</Stbutton1>
           </Stname>
         </Stnickname>
       </Stbox>
@@ -67,13 +108,13 @@ const EditProfile = () => {
         <Stinput1
           type={"text"}
           placeholder={"자기소개를 입력해주세요."}
-          // value={email} // Display email value
-          // onChange={onChangeEmailHandler}
+          value={introduce} // Display email value
+          onChange={handleIntroduceChange}
         />
       </Stbox>
 
       <Stbox>
-      <Stbutton2>변경하기</Stbutton2>
+        <Stbutton2 onClick={handleSubmitButton}>변경하기</Stbutton2>
       </Stbox>
     </>
   );

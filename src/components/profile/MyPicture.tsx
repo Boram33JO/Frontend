@@ -3,40 +3,57 @@ import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/config/configStore";
+import { UserInfo } from "../../models/user";
+import { getProfileImage } from "../../utils/common";
+import { useMutation, useQueryClient } from "react-query";
+import { followUser } from "../../api/post";
 
-// 로컬 스토리지가 아니라 userId로 받아온걸로. 
-const Mypicture = () => {
-  const nickname = localStorage.getItem("nickname");//수정
-  const userImage = localStorage.getItem("userImage");//수정
+interface Props {
+  follow: boolean;
+  userInfo: UserInfo;
+}
 
-
+const Mypicture = ({ follow, userInfo }: Props) => {
   const navigate = useNavigate();
   const { userId } = useParams();
-  const userInfo = useSelector((state: RootState) => state.user);
-  const isMyProfile = Number(userId) === userInfo.userId;
+  const queryClient = useQueryClient();
+  const LoginUser = useSelector((state: RootState) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
 
   const EditMyProfileHandler = () => {
-        // 타인의 프로필 페이지로 이동
-        navigate(`/profile/edit/${userId}`);
-    
-};
-  
+    navigate(`/profile/edit/${userId}`);
+  };
+
+  const FollowMutation = useMutation(followUser, {
+    onSuccess: (response) => {
+      queryClient.invalidateQueries(["posts"]);
+      console.log(response);
+    }
+  })
+
+  const followButtonHandler = (userId: number) => {
+    FollowMutation.mutate(userId);
+  }
+
   return (
     <>
       <InnerContainer>
         <MyPic>{/* <H3>나의 프로필</H3> */}</MyPic>
         <MyProfile>
-        <MyThumb
-            src={userImage || ''} // userImage가 null인 경우에 빈 문자열로 설정
+          <MyThumb
+            src={getProfileImage(userInfo.userImage)}
             alt="기본이미지" // alt 속성 추가
           />
           <MyProfile1>
             <MyProfile2>
-              <Nickname>{nickname}</Nickname>
-              <Produce>하고싶은 한줄 멘트 {/* {introduce} */}</Produce> 
+              <Nickname>{userInfo.nickname}</Nickname>
+              <Produce>{userInfo.introduce}</Produce>
             </MyProfile2>
-            { isMyProfile ?  
-               (<Bt onClick = {EditMyProfileHandler}>프로필 수정</Bt>) : ("")
+            {isMyProfile
+              ? (<Bt onClick={EditMyProfileHandler}>프로필 수정</Bt>)
+              : (<Bt onClick={() => followButtonHandler(userInfo.userId)}>
+                {follow ? "언팔로우" : "팔로우"}
+              </Bt>)
             }
           </MyProfile1>
         </MyProfile>

@@ -3,53 +3,55 @@ import { styled } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getFollowLists, getProfileLists } from '../../api/profile';
 import { useQuery } from 'react-query';
+import { User } from '../../models/user';
+import { getProfileImage } from '../../utils/common';
 
-interface FollowersAllProps {
-  userIdFromUrl: string | undefined;
+interface Props {
+  followList: User[]
 }
 
-const FollowersAll: React.FC<FollowersAllProps> = ({ userIdFromUrl }) => {
+const FollowersAll = ({ followList }: Props) => {
   const navigate = useNavigate();
   const { userId } = useParams();
   const [nickname, setNickname] = useState('');
 
   // Fetch the nickname using userIdFromUrl
-  const fetchNickname = async () => {
-    try {
-      const response = await getProfileLists(userIdFromUrl);
-      if (response && response.data && response.data.nickname) {
-        setNickname(response.data.nickname);
-      }
-    } catch (error) {
-      console.error('닉네임을 가져오는 중 에러 발생:', error);
-    }
-  };
+  // const fetchNickname = async () => {
+  //   try {
+  //     const response = await getProfileLists(userIdFromUrl);
+  //     if (response && response.data && response.data.nickname) {
+  //       setNickname(response.data.nickname);
+  //     }
+  //   } catch (error) {
+  //     console.error('닉네임을 가져오는 중 에러 발생:', error);
+  //   }
+  // };
 
-  useEffect(() => {
-    if (userIdFromUrl) {
-      fetchNickname();
-    }
-  }, [userIdFromUrl]);
+  // useEffect(() => {
+  //   if (userIdFromUrl) {
+  //     fetchNickname();
+  //   }
+  // }, [userIdFromUrl]);
 
   const handleViewAllClick = () => {
-    navigate(`/profile/${userIdFromUrl}/follow`);
+    navigate(`/profile/${userId}/follow`);
   };
 
-  const { data, isLoading, isError } = useQuery(
-    ['follow', userId],
-    async () => {
-      const response = await getFollowLists(userId);
-      return response.data;
-    }
-  );
+  // const { data, isLoading, isError } = useQuery(
+  //   ['follow', userId],
+  //   async () => {
+  //     const response = await getFollowLists(userId);
+  //     return response.data;
+  //   }
+  // );
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
-  if (isError) {
-    return <div>Error...</div>;
-  }
+  // if (isError) {
+  //   return <div>Error...</div>;
+  // }
 
   return (
     <InnerContainer>
@@ -58,12 +60,12 @@ const FollowersAll: React.FC<FollowersAllProps> = ({ userIdFromUrl }) => {
         <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Follower1>
       <FamousList>
-        {data.map((item: any) => (
+        {followList.map((item) => (
           <FamousListItem
             key={item.userId}
             onClick={() => navigate(`/profile/${item.userId}`)}
           >
-            <FamousListThumb src={item.userImage} />
+            <FamousListThumb src={getProfileImage(item.userImage)} />
             <FamousListNickName>{item.nickname}</FamousListNickName>
           </FamousListItem>
         ))}
