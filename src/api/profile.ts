@@ -6,7 +6,7 @@ import instance from "./common"
 export const getProfileLists = async (userId: string | undefined) => {
     try {
         const response = await instance.get(`/api/profile/${userId}`);
-        console.log('Response:', response);
+        // console.log('Response:', response);
         return response;
     } catch (error) {
         console.error('요청 실패:', error);
@@ -21,19 +21,15 @@ export const getMyPostLists = async (userId: string | undefined) => {
     return response;
 }
 
-// 내가 좋아요한 단 포스팅 조회
+// 내가 좋아요한 포스팅 조회
 export const getFavLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/wishlist`,
-        // {
-        //     params: { page: 0, size: 10 }
-        // }
-    )
+    const response = await instance.get(`/api/profile/${userId}/wishlist`)
     return response;
 }
 
 
 // 팔로워 조회
-export const follow = async (userId: string | undefined) => {
+export const getFollowLists = async (userId: string | undefined) => {
     const response = await instance.get(`/api/profile/${userId}/follow`)
     return response;
 }
@@ -41,17 +37,13 @@ export const follow = async (userId: string | undefined) => {
 
 // 내가 댓글 단 포스팅 조회
 export const getCommentsLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/comments`,
-        // {
-        //     params: { page: 0, size: 10 }
-        // }
-    )
+    const response = await instance.get(`/api/profile/${userId}/comments`)
     return response;
 }
 
 
-// 유저 팔로우
-export const followUser = async (userId: number | undefined) => {
-    const response = await instance.post(`api/profile/${userId}/follow`)
-    return response;
-}
+// 유저 팔로우 
+// export const followUser = async (userId: number | undefined) => {
+//     const response = await instance.post(`api/profile/${userId}/follow`)
+//     return response;
+// }

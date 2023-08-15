@@ -1,48 +1,69 @@
-import { styled } from 'styled-components'
-import { useNavigate } from 'react-router-dom';
-import YourPostList from '../profiledetail/YourPostList';
+import { styled } from "styled-components";
+import { useNavigate, useParams } from "react-router-dom";
+import YourPostList from "../profiledetail/YourPostList";
+import { useEffect, useState } from "react";
+import { getProfileLists } from "../../api/profile";
 
-const FavLis = () => {
-   
-    const navigate = useNavigate();
-
-    const handleViewAllClick = () => {
-        // Navigate to the desired page when the button is clicked
-        navigate('/profile/{userId}/wishlist');
-    };
-
-
-    return (
-      <>
-        <InnerContainer>
-            <Post>
-          <H3>ㅇㅇ님이 좋아한 포스팅</H3>
-          <Bt onClick={handleViewAllClick}>전체보기</Bt>
-        </Post>
-        </InnerContainer>
-         <YourPostList />
-         </>
-         
-    )
+interface FavListProps {
+  userIdFromUrl: string | undefined; // userIdFromUrl의 타입을 명시
 }
 
-export default FavLis;
+const FavList: React.FC<FavListProps> = ({ userIdFromUrl }) => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  const [nickname, setNickname] = useState('');
+
+  useEffect(() => {
+    // userIdFromUrl을 기반으로 nickname 정보를 가져옵니다.
+    const fetchNickname = async () => {
+      try {
+        const response = await getProfileLists(userIdFromUrl);
+        if (response && response.data && response.data.nickname) {
+          setNickname(response.data.nickname);
+        }
+      } catch (error) {
+        // 에러 처리
+        console.error('닉네임을 가져오는 중 에러 발생:', error);
+      }
+    };
+
+    if (userIdFromUrl) {
+      fetchNickname();
+    }
+  }, [userIdFromUrl]);
+
+  const handleViewAllClick = () => {
+    // Navigate to the desired page when the button is clicked
+    navigate(`/profile/${userIdFromUrl}/wishlist`);
+  };
+
+  return (
+    <>
+      <InnerContainer>
+        <Post>
+          <H3>{`${nickname}님이 좋아한 포스팅`}</H3>
+          <Bt onClick={handleViewAllClick}>전체보기</Bt>
+        </Post>
+      </InnerContainer>
+      <YourPostList userId={userId}/>
+    </>
+  );
+};
+
+export default FavList;
 
 const InnerContainer = styled.div`
-    display: block;
-    width: 100%;
-    box-sizing: border-box;
-    padding: 0 20px;
-    padding-top: 52px;
-   
-  
-`
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  padding-top: 52px;
+`;
 
 const Post = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
   justify-content: space-between;
   align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
- 
 `;
 
 const H3 = styled.h3`
@@ -53,49 +74,9 @@ const H3 = styled.h3`
   margin-bottom: 10px;
 `;
 const Bt = styled.div`
- font-size: 14px;
+  font-size: 14px;
   font-family: "Pretendard";
   color: #e7e6f0;
   cursor: pointer;
- 
 `;
 
-
-const MusicList = styled.ol`
-    display: block;
-`
-
-const MusicListItem = styled.li`
-  display: flex;
-  flex-direction: column; /* 요소들을 수직으로 배치 */
-  align-items: flex-start; /* 요소들을 수직 축에서 왼쪽으로 정렬 */
-  height: 50px;
-  border-radius: 6px;
-  background-color: #d2d2d2;
-  margin-top: 16px;
-  padding: 10px 10px;
-`;
-
-
-const Date = styled.div`
-font-size: 12px;
-`
-const Content = styled.div`
-font-size: 12px;
-margin-top: 5px;
-`
-const Iconbox = styled.div`
-  display: flex; /* 요소들을 수평으로 나란히 배치 */
-  align-items: center; /* 요소들을 수평 축에서 가운데로 정렬 */
-  gap: 10px;
-  margin-top: 10px;
-`;
-
-const Icon1 = styled.div`
-  font-size: 12px;
-`;
-const Icon2 = styled.div`
-  font-size: 12px;
-
-  
-`;

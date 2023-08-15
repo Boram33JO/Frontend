@@ -1,8 +1,7 @@
 import { styled } from "styled-components";
-import {    useState } from "react";
+import { useState } from "react";
 import Nav2 from "./Nav2";
 import { Post } from "../../models/post";
-import Category from "../common/Category";
 import { getMyPostLists } from "../../api/profile";
 import { useQuery } from "react-query";
 
@@ -16,7 +15,6 @@ const MyPostList = ({userId}: Props) => {
     const { data, isLoading, isError } = useQuery(["myPost"],
         async () => {
             const response = await getMyPostLists(userId);
-            console.log("내 게시글", response);
             return response.data;
         }
     )
@@ -28,6 +26,8 @@ const MyPostList = ({userId}: Props) => {
     if (isError) {
         return <div>Error...</div>
     }
+
+
 
     return (
         <InnerContainer>
