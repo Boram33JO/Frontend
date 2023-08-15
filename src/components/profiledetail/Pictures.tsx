@@ -56,8 +56,8 @@ const handleDelete = (followerId: number) => {
       
       {/* 팔로워 정보를 map 함수로 렌더링 */}
       {followerData.followList.map((follower: any) => (
-        <MyProfile key={follower.userId} onClick={() => navigate(`/profile/${follower.userId}`)}>
-          <MyThumb src={getProfileImage(follower.userImage)} />
+        <MyProfile key={follower.userId} >
+          <MyThumb src={getProfileImage(follower.userImage)} onClick={() => navigate(`/profile/${follower.userId}`)} />
           <MyProfile1>
             <MyProfile2>
               <Nickname>{follower.nickname}</Nickname>
