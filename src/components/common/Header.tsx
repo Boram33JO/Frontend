@@ -65,9 +65,9 @@ const HeaderLeft = styled.div`
     margin-left: 20px;
 
     cursor: pointer;
-
     &:hover path{
         fill: #8084F4;
+        stroke: #8084F4;
     }
 `
 
@@ -99,6 +99,7 @@ const StSearch = styled(Search)`
     cursor: pointer;
     &:hover path{
         fill: #8084F4;
+        stroke: #8084F4;
     }
 `
 
@@ -106,5 +107,6 @@ const StLogin = styled(Login)`
     cursor: pointer;
     &:hover path{
         fill: #8084F4;
+        stroke: #8084F4;
     }
 `

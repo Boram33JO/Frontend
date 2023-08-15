@@ -69,9 +69,9 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                     }
                 </SideMiddle>
             </SideTop>
-            <SideBottom>
-                로그아웃
-            </SideBottom>
+            {
+                userInfo.userId && <SideBottom>로그아웃</SideBottom>
+            }
             <Label onClick={() => setSideOpen(false)} />
         </SideMenu >
     )
