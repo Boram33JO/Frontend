@@ -40,6 +40,12 @@ export const getDetailPost = async (postId: string | undefined) => {
     return response;
 }
 
+// 게시글 삭제
+export const deletePost = async (postId: string | undefined) => {
+    const response = await instance.delete(`api/posts/${postId}`)
+    return response;
+}
+
 // 게시글 좋아요
 export const likePost = async (postId: string | undefined) => {
     const response = await instance.post(`api/posts/${postId}/wishlist`)
