@@ -16,12 +16,12 @@ type myComment = {
 }
 
 const ListComments = ({ commentList }: Props) => {
-  const { userId } = useParams();
+  const {userId} = useParams();
   const navigate = useNavigate();
 
   const handleViewAllClick = () => {
     // Navigate to the desired page when the button is clicked
-    navigate("/profile/{userId}/comments");
+    navigate(`/profile/${userId}/comments`);
   };
 
   const handleCommentClick = (postId: number) => {
@@ -101,6 +101,7 @@ const Bt = styled.div`
 
 const CommentList = styled.ol`
   display: block;
+  cursor: pointer;
 `;
 
 const CommentListItem = styled.li`
