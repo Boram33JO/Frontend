@@ -20,7 +20,9 @@ const MypostPage = () => {
   return (
     <>
       <GlobalStyle />
-      {storedUserId === userId ? <ProfileNav /> : <ProfileNav2 />}
+      <ProfileNav />
+      {/* {storedUserId === userId ? <ProfileNav /> : <ProfileNav2 />} */}
+    <div>내가쓴</div>
     </>
   );
 };

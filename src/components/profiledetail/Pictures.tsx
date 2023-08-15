@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { getFollowLists } from '../../api/profile';
 import { followUser } from '../../api/post';
+import { getProfileImage } from '../../utils/common';
 
 const Pictures = () => {
+  const navigate = useNavigate();
   const { userId } = useParams();
   const queryClient = useQueryClient();
 
@@ -54,8 +56,8 @@ const handleDelete = (followerId: number) => {
       
       {/* 팔로워 정보를 map 함수로 렌더링 */}
       {followerData.followList.map((follower: any) => (
-        <MyProfile key={follower.userId}>
-          <MyThumb src={follower.userImage} />
+        <MyProfile key={follower.userId} onClick={() => navigate(`/profile/${follower.userId}`)}>
+          <MyThumb src={getProfileImage(follower.userImage)} />
           <MyProfile1>
             <MyProfile2>
               <Nickname>{follower.nickname}</Nickname>
