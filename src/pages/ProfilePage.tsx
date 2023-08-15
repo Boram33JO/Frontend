@@ -18,7 +18,6 @@ const ProfilePage = () => {
   const { data, isLoading, isError } = useQuery(["Profile", userId],
     async () => {
       const response = await getProfileLists(userId);
-      console.log("프로필", response);
       return response.data;
     }
   )

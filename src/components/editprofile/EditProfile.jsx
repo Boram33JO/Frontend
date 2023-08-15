@@ -1,31 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 import useInput from "../../hooks/useInput";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ReactComponent as CameraIcon } from "../../assets/images/profile_camera.svg"; // 프로필 카메라 SVG 아이콘 추가
 import { useSelector } from "react-redux";
-import { updateProfile } from "../../api/profile";
+import { nicknameCheck, updateProfile } from "../../api/profile";
 import { setUserInfo } from "../../redux/modules/userSlice";
-
-// 서버에서 받아와야 함.(혹은 로컬)
 
 const EditProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [nickname, setNickname] = useState("");
   const [introduce, setIntroduce] = useState("");
+  const [uploadImage, setUploadimage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
+  const [isCheck, setIsCheck] = useState(true);
   const userInfo = useSelector(state => state.user);
   const formData = new FormData();
+
   // 이미지 선택 시 처리
   const handleImageChange = (event) => {
     const selectedImage = event.target.files?.[0];
-    console.log(selectedImage);
-    // formData.set("formData", { "userImage": selectedImage });
+    const imgSize = event.target.files?.[0].size;
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (imgSize > maxSize) {
+      alert("이미지 용량은 5MB 이내로 등록 가능합니다.");
+      return
+    }
     if (selectedImage) {
       setProfileImage(URL.createObjectURL(selectedImage));
-      console.log(profileImage);
+      setUploadimage(selectedImage);
     }
   };
 
@@ -37,25 +42,57 @@ const EditProfile = () => {
     setProfileImage(userInfo.userImage);
   }, []);
 
+  useEffect(() => {
+    if (nickname === userInfo.nickname) {
+      setIsCheck(true);
+    }
+  }, [nickname]);
+
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
+    setIsCheck(false);
   }
 
   const handleIntroduceChange = (e) => {
     setIntroduce(e.target.value);
   }
 
-  const handleSubmitButton = async () => {
-    formData.set("requestDto", JSON.stringify({ nickname, introduce }));
+  const handleCheckButton = async () => {
     try {
-      const response = await updateProfile(userInfo.userId, formData);
-      if (response.status <= 300) {
-        console.log(formData);
-        console.log("업데이트 성공", response);
-        // dispatch(setUserInfo({ nickname: }));
+      const response = await nicknameCheck(nickname);
+      console.log(response);
+      if (response.data.statusCode < 300) {
+        alert("사용가능한 닉네임입니다");
+        setIsCheck(true);
+      } else if (response.data.statusCode >= 300 && response.data.statusCode < 400) {
+        alert("이미 사용중인 닉네임입니다");
+        setIsCheck(false);
+      } else {
+        alert(`닉네임은 한글, 영어 또는 숫자로\n2~10글자 사이만 가능합니다`);
+        setIsCheck(false);
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  const handleSubmitButton = async () => {
+    if (isCheck) {
+      formData.set("userImage", uploadImage);
+      formData.set("requestDto", new Blob([JSON.stringify({ nickname, introduce })], { type: "application/json" }));
+      try {
+        const response = await updateProfile(userInfo.userId, formData);
+        if (response.status <= 300) {
+          alert("업데이트 성공");
+          dispatch(setUserInfo({ nickname, introduce, userImage: response.data.data }));
+          navigate(-1);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      alert("먼저 닉네임 중복체크를 해주세요");
+      return
     }
   }
 
@@ -98,7 +135,7 @@ const EditProfile = () => {
               value={nickname} // Display nickname value
               onChange={handleNicknameChange}
             />
-            <Stbutton1>중복체크</Stbutton1>
+            <Stbutton1 $isCheck={isCheck} onClick={handleCheckButton}>중복체크</Stbutton1>
           </Stname>
         </Stnickname>
       </Stbox>
@@ -139,7 +176,6 @@ const ErrorMessage = styled.div`
   font-size: 14px;
 
 `;
-
 
 // 이미지
 const ImageUpload = styled.div`
@@ -272,8 +308,8 @@ const Stbutton1 = styled.button`
   width: 80px;
   height: 38px;
   margin-left: 10px;
-  background-color: #45424E;
- 
+  background: linear-gradient(135deg, #8084f4, #c48fed);
+  
   color: #D9D8DF;
 
   &:hover {
@@ -285,6 +321,15 @@ const Stbutton1 = styled.button`
   font-size: 14px; //16
   font-weight: 500;
   cursor: pointer;
+
+  ${(props) =>
+    props.$isCheck &&
+    css`
+      background: #45424E;
+      color: #141414 ;
+      pointer-events: none;
+      `}
+
 `;
 const Stbutton2 = styled.button`
   width: 350px;

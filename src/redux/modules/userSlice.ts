@@ -13,7 +13,6 @@ const userSlice = createSlice({
     initialState,
     reducers: {
         setUserInfo: (state, action) => {
-            console.log(action.payload);
             return { ...state, ...action.payload };
         },
         nicknameUpdate: (state, action) => {

@@ -52,6 +52,11 @@ export const getCommentsLists = async (userId: string | undefined) => {
 // 프로필 수정
 export const updateProfile = async (userId: string | undefined, formData: FormData) => {
     const response = await instance.put(`/api/profile/${userId}`, formData);
-    console.log(response);
+    return response;
+}
+
+// 닉네임 중복체크
+export const nicknameCheck = async (nickname: string) => {
+    const response = await instance.post(`/api/profile/check`, { nickname });
     return response;
 }
