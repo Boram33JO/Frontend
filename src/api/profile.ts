@@ -29,10 +29,16 @@ export const getFavLists = async (userId: string | undefined) => {
 
 
 // 팔로워 조회
-export const getFollowLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/follow`)
-    return response;
-}
+export const getFollowLists = async (userId: string): Promise<any> => {
+  try {
+    const response = await instance.get(`/api/profile/${userId}/follow`);
+    return response.data;
+  } catch (error) {
+    console.error("팔로워 조회 중 오류 발생:", error);
+    throw error;
+  }
+};
+
 
 
 // 내가 댓글 단 포스팅 조회

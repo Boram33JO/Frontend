@@ -1,82 +1,72 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { getFollowLists } from '../../api/profile';
+import { followUser } from '../../api/post';
 
 const Pictures = () => {
+  const { userId } = useParams();
+  const queryClient = useQueryClient();
+
+  // Check if userId is available before using it in the query
+  const { data: followerData, isLoading, isError } = useQuery(
+    ['Follow', userId],
+    () => userId ? getFollowLists(userId) : Promise.resolve([]), // If userId is undefined, return an empty array
+    { enabled: !!userId }
+  );
+  console.log(followerData); // 이 줄을 추가하여 데이터 구조를 확인
+
+
+// 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
+const mutation = useMutation(followUser, {
+  onSuccess: () => {
+    // 삭제 후 데이터를 다시 불러오기 위해 팔로워 정보 캐시를 무효화합니다.
+    queryClient.invalidateQueries(['Follow', userId]);
+  }
+});
+
+// "삭제" 버튼을 클릭했을 때 호출되는 함수입니다.
+const handleDelete = (followerId: number) => {
+  const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
+  if (confirmDelete) {
+    // 팔로워 삭제 API 호출을 수행합니다.
+    mutation.mutate(followerId);
+  }
+};
+
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (isError) {
+    return <div>Error...</div>;
+  }
+
+  // followerData를 활용하여 팔로워 정보 렌더링
   return (
-    <>
-      <InnerContainer>
-        <Follower1>
-          <H3>닉네임님의 피플러</H3>
-          <Nums>n명</Nums>
-        </Follower1>
-
-        <MyProfile>
-          <MyThumb
-            src={
-              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
-            }
-          />
-          <MyProfile1>
-          <MyProfile2>
-            <Nickname> 닉네임</Nickname>
-            <Produce> 하고싶은 한줄 멘트 </Produce>
-            
-          </MyProfile2>
-          <Bt>삭제</Bt>
-          </MyProfile1>
-        </MyProfile>
-
-        <MyProfile>
-          <MyThumb
-            src={
-              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
-            }
-          />
-          <MyProfile1>
-          <MyProfile2>
-            <Nickname> 닉네임</Nickname>
-            <Produce> 하고싶은 한줄 멘트 </Produce>
-            
-          </MyProfile2>
-          <Bt>삭제</Bt>
-          </MyProfile1>
-        </MyProfile>
-
-        <MyProfile>
-          <MyThumb
-            src={
-              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
-            }
-          />
-          <MyProfile1>
-          <MyProfile2>
-            <Nickname> 닉네임</Nickname>
-            <Produce> 하고싶은 한줄 멘트 </Produce>
-            
-          </MyProfile2>
-          <Bt>삭제</Bt>
-          </MyProfile1>
-        </MyProfile>
-
-        <MyProfile>
-          <MyThumb
-            src={
-              "https://i.scdn.co/image/ab67616100005174006ff3c0136a71bfb9928d34"
-            }
-          />
-          <MyProfile1>
-          <MyProfile2>
-            <Nickname> 닉네임</Nickname>
-            <Produce> 하고싶은 한줄 멘트 </Produce>
-            
-          </MyProfile2>
-          <Bt>삭제</Bt>
-          </MyProfile1>
-        </MyProfile>
+    <InnerContainer>
+      <Follower1>
+        <H3>{`${followerData.nickname}님의 피플러`}</H3>
+        <Nums>{`${followerData.followList.length}명`}</Nums>
+      </Follower1>
       
-     
-      </InnerContainer>
-    </>
+      {/* 팔로워 정보를 map 함수로 렌더링 */}
+      {followerData.followList.map((follower: any) => (
+        <MyProfile key={follower.userId}>
+          <MyThumb src={follower.userImage} />
+          <MyProfile1>
+            <MyProfile2>
+              <Nickname>{follower.nickname}</Nickname>
+              <Produce>{follower.introduce}</Produce>
+            </MyProfile2>
+           {/* "삭제" 버튼을 누를 때 팔로워 삭제 함수를 호출합니다. */}
+           <Bt onClick={() => handleDelete(follower.userId)}>삭제</Bt>
+          </MyProfile1>
+        </MyProfile>
+      ))}
+    </InnerContainer>
   );
 };
 
@@ -170,4 +160,3 @@ const Produce = styled.div`
   font-weight: 500; //미디엄
  
 `;
-

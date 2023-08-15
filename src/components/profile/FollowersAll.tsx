@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getFollowLists, getProfileLists } from '../../api/profile';
 import { useQuery } from 'react-query';
 import { User, UserInfo } from '../../models/user';
 import { getProfileImage } from '../../utils/common';
