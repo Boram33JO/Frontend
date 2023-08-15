@@ -1,48 +1,43 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react"; // useEffect는 사용하지 않아서 제거
 import { styled } from "styled-components";
 import { ReactComponent as CheckBox } from "../../assets/images/check_slc.svg";
 import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg";
-import ButtonComponent from "./ButtonComponent";
+import { ReactComponent as Search } from "../../assets/images/search.svg";
 
-export type SongListType = {
+interface SongListType {
     album: string;
     artistName: string;
     audioUrl: string;
     externalUrl: string;
-    // id: number;
     songNum: string;
     songTitle: string;
     thumbnail: string;
     checked: boolean;
-};
+}
 
-export type ChooseSongListType = {
+interface ChooseSongListType {
     album: string;
     artistName: string;
     audioUrl: string;
     externalUrl: string;
-    // id: number;
     songNum: string;
     songTitle: string;
     thumbnail: string;
-};
+}
 
-// interface searchSong {
-//     // slideIndex: number;
-//     // onClickNextButtonHandler: any;
-//     // onClickBeforeButtonHandler: any;
-// }
+interface SearchSongProps {
+    chooseSongList: ChooseSongListType[]; // Props 타입 수정
+    setChooseSongList: React.Dispatch<React.SetStateAction<ChooseSongListType[]>>;
+}
 
-const SearchSong: React.FC = () => {
+const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongList }) => {
     const [searchSong, setSearchSong] = useState<string>("");
     const [songList, setSongList] = useState<Array<SongListType>>([]);
-    const [chooseSongList, setChooseSongList] = useState<Array<ChooseSongListType>>([]);
 
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchSong(event.target.value);
     };
-    console.log("searchSong", searchSong);
 
     const searchSongHandler = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -80,49 +75,42 @@ const SearchSong: React.FC = () => {
         setChooseSongList(updatedList);
     };
 
-    // const choosedSongList = () => {
-
-    // }
-    // const choosedList = JSON.parse(localStorage.getItem("songs") || "[]");
-    // console.log("sdsdds", choosedList);
-
-    // useEffect(() => {
-    //     setChooseSongList(JSON.parse(localStorage.getItem("songs") || "[]"));
-    //     console.log("sdsdds", setChooseSongList);
-    // }, []);
-
-    console.log("songlist", songList);
-    console.log("chooseSongList", chooseSongList);
     return (
         <>
-            <form onSubmit={searchSongHandler}>
+            <StSearchForm onSubmit={searchSongHandler}>
+                <div>
+                    <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
+                </div>
                 <input
+                    placeholder="음악을 입력해보세요"
                     onChange={changeInputHandler}
                     value={searchSong}
                 />
-                <button>검색</button>
-            </form>
-            <StContainer>
-                {songList.map((item) => (
-                    <StSongList
-                        key={item.songNum}
-                        onClick={() => {
-                            addToChooseSongList(item);
-                        }}
-                    >
-                        <img
-                            src={item.thumbnail}
-                            alt={`Thumbnail for ${item.songTitle}`}
-                        />
-                        <div>
-                            <h3>{item.songTitle}</h3>
-                            <p>{item.artistName}</p>
-                        </div>
-                        {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
-                    </StSongList>
-                ))}
-            </StContainer>
-            {chooseSongList.length !== 0 ? (
+            </StSearchForm>
+            {songList.length !== 0 ? (
+                <StContainer>
+                    {songList.map((item) => (
+                        <StSongList
+                            key={item.songNum}
+                            onClick={() => {
+                                addToChooseSongList(item);
+                            }}
+                        >
+                            <img
+                                src={item.thumbnail}
+                                alt={`Thumbnail for ${item.songTitle}`}
+                            />
+                            <div>
+                                <h3>{item.songTitle}</h3>
+                                <p>{item.artistName}</p>
+                            </div>
+                            {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
+                        </StSongList>
+                    ))}
+                </StContainer>
+            ) : null}
+
+            {chooseSongList.length !== 0 && (
                 <StChooseSongListContainer>
                     {chooseSongList.map((song) => (
                         <StChooseSongLists key={song.songNum}>
@@ -132,29 +120,57 @@ const SearchSong: React.FC = () => {
                         </StChooseSongLists>
                     ))}
                 </StChooseSongListContainer>
-            ) : null}
+            )}
         </>
     );
 };
 
-// 해야될일
-// 글자 수 줄이기
-
 export default SearchSong;
+
+const StSearchForm = styled.form`
+    width: 348px;
+    height: 40px;
+    border: 1px solid #434047;
+    background-color: #434047;
+    border-radius: 999px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    input {
+        width: 270px;
+        height: 16px;
+        border: 1px solid #434047;
+        background-color: #434047;
+    }
+    input:focus {
+        outline: none;
+    }
+`;
 
 const StContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 350px;
-    height: 316px;
+    width: 348px;
+    height: 297px;
     border-radius: 6px 6px 0 0;
     border: 1px solid #524d58;
     background: #434047;
+
+    margin-top: 12px;
+    padding-top: 19px;
 `;
+
 const StSongList = styled.div`
+    display: inline-flex;
+    align-items: center;
+    gap: 18px;
+    margin: 7px 16px;
     div {
         display: flex;
         flex-direction: column;
+        width: 193px;
     }
 
     img {
@@ -168,20 +184,47 @@ const StChooseSongListContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
     height: 104px;
-    width: 350px;
+    width: 348px;
     border-radius: 0 0 6px 6px;
     border: 1px solid #524d58;
     background: #434047;
+
+    display: flex;
+    flex-direction: column;
 `;
 
 const StChooseSongLists = styled.div`
+    width: 309px;
+    margin: 7px 16px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-`;
 
-const StButtons = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    h3 {
+        width: 113px;
+        margin-right: 35px;
+        color: #f1f1f1;
+        font-size: 14px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+    }
+    div {
+        width: 90px;
+        color: #a6a3af;
+        font-size: 14px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+    }
+    button {
+        border: none;
+        color: #a6a3af;
+        background-color: #434047;
+        cursor: pointer;
+    }
 `;
