@@ -1,36 +1,13 @@
-import { styled } from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { getCommentsLists } from "../../api/profile";
+import React from "react";
+import styled from "styled-components";
 
-const ListComments = () => {
-  const { userId } = useParams();
-  const navigate = useNavigate();
-
-  const handleViewAllClick = () => {
-    // Navigate to the desired page when the button is clicked
-    navigate("/profile/{userId}/comments");
-  };
-
-  const { data, isLoading, isError } = useQuery(["comments"], async () => {
-    const response = await getCommentsLists(userId);
-    console.log('댓글', response);
-    return response.data;
-  });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error...</div>;
-  }
-
+const AllCommentsList = () => {
+ 
+ 
   return (
     <InnerContainer>
       <Post>
         <H3>나의 댓글 모아보기</H3>
-        <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Post>
 
       <MusicList>
@@ -43,7 +20,7 @@ const ListComments = () => {
   );
 };
 
-export default ListComments;
+export default AllCommentsList;
 
 const InnerContainer = styled.div`
   display: block;
@@ -54,9 +31,9 @@ const InnerContainer = styled.div`
 `;
 
 const Post = styled.div`
-  display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  display: flex;
   justify-content: space-between;
-  align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
+  align-items: center;
 `;
 
 const H3 = styled.h3`
@@ -66,6 +43,7 @@ const H3 = styled.h3`
   color: #e7e6f0;
   margin-bottom: 10px;
 `;
+
 const Bt = styled.div`
   font-size: 14px;
   font-family: "Pretendard";
@@ -79,8 +57,8 @@ const MusicList = styled.ol`
 
 const MusicListItem = styled.li`
   display: flex;
-  flex-direction: column; /* 요소들을 수직으로 배치 */
-  align-items: flex-start; /* 요소들을 수직 축에서 왼쪽으로 정렬 */
+  flex-direction: column;
+  align-items: flex-start;
   height: 76px;
   width: 256px;
   border-radius: 6px;

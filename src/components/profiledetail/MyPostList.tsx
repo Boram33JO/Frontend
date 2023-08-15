@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import {    useState } from "react";
+import { useState } from "react";
 import Nav2 from "./Nav2";
 import { Post } from "../../models/post";
 import { getMyPostLists } from "../../api/profile";

@@ -17,7 +17,7 @@ const YourPostList = ({userId}: FavListProps) => {
     const { data, isLoading, isError } = useQuery(["favorite"],
         async () => {
             const response = await getFavLists(userId);
-            console.log(response);
+            // console.log(response);
             return response.data;
         }
     )

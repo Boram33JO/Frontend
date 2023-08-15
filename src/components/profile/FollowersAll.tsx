@@ -105,7 +105,7 @@ const Bt = styled.div`
 
 const FamousList = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 16px;
 `;
 
 const FamousListItem = styled.div`
@@ -124,8 +124,8 @@ const FamousListItem = styled.div`
 `;
 
 const FamousListThumb = styled.img`
-  width: 76px;
-  height: 76px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
 `;
 

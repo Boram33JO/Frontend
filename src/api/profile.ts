@@ -6,7 +6,7 @@ import instance from "./common"
 export const getProfileLists = async (userId: string | undefined) => {
     try {
         const response = await instance.get(`/api/profile/${userId}`);
-        console.log('Response:', response);
+        // console.log('Response:', response);
         return response;
     } catch (error) {
         console.error('요청 실패:', error);
@@ -37,17 +37,13 @@ export const getFollowLists = async (userId: string | undefined) => {
 
 // 내가 댓글 단 포스팅 조회
 export const getCommentsLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/comments`,
-        // {
-        //     params: { page: 0, size: 10 }
-        // }
-    )
+    const response = await instance.get(`/api/profile/${userId}/comments`)
     return response;
 }
 
 
-// 유저 팔로우
-export const followUser = async (userId: number | undefined) => {
-    const response = await instance.post(`api/profile/${userId}/follow`)
-    return response;
-}
+// 유저 팔로우 
+// export const followUser = async (userId: number | undefined) => {
+//     const response = await instance.post(`api/profile/${userId}/follow`)
+//     return response;
+// }
