@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { useMutation } from "react-query";
 import { addUsers } from "../../api/user";
+import { nicknameCheck } from "../../api/profile";
 
 const BasicSignUp = () => {
   const navigate = useNavigate();
@@ -13,17 +14,12 @@ const BasicSignUp = () => {
   const [passwordCheck, onChangePasswordCheckHandler] = useInput();
   const [nickname, onChangeNicknameHandler] = useInput();
 
+  // 에러 
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordCheckError, setPasswordCheckError] = useState("");
   const [nicknameError, setNicknameError] = useState("");
 
-   // 각 입력 필드에 대한 유효성 검사 결과를 상태 변수로 추가
-  //  const [emailValid, setEmailValid] = useState(true);
-  //  const [passwordValid, setPasswordValid] = useState(true);
-  //  const [passwordCheckValid, setPasswordCheckValid] = useState(true);
-  //  const [nicknameValid, setNicknameValid] = useState(true);
- 
 
   const addNewUserMutation = useMutation(addUsers, {
     onSuccess: () => {
@@ -39,11 +35,11 @@ const BasicSignUp = () => {
       }
     },
   });
+  
   const onSignUpClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
-    const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,8}$/; // nickname: 알파벳소문자, 한글 ,숫자로만 이루어지고, 2자 이상 10자 이하
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
 
       // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리
       const errors = {};
@@ -57,7 +53,7 @@ const BasicSignUp = () => {
         errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
       }
       if (!nicknameRegex.test(nickname)) {
-        errors.nickname = "알파벳소문자, 한글, 숫자, 2~8자 이하로 입력해 주세요.";
+        errors.nickname = "알파벳소문자,대문자, 한글, 숫자, 2~12자 이하로 입력해 주세요.";
       }
   
       // 에러가 있는 경우 처리
@@ -78,7 +74,21 @@ const BasicSignUp = () => {
     addNewUserMutation.mutate(newUser);
   };
 
+  const handleCheckButton = async () => {
+
+      const response = await nicknameCheck(nickname);
+      console.log(response);
+     
+     if (response.data.message){
+        alert(response.data.message);
+     }
+     else {  
+     alert(response.data.error);
+     }
+      
   
+  }
+
   return (
     <>
       <H1>회원가입</H1>
@@ -124,13 +134,19 @@ const BasicSignUp = () => {
               placeholder={"2~8자 입력"}
               onChange={onChangeNicknameHandler}
             />
-            <Stbutton1 onClick={onSignUpClickHandler}>중복체크</Stbutton1>
+            <Stbutton1 onClick={handleCheckButton}>중복체크</Stbutton1>
           </Stname>
           {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
         </Stnickname>
 
         <Stbutton2 onClick={onSignUpClickHandler}>회원가입하기</Stbutton2>
+        <SignUp>
+        <div>이미 회원이신가요?</div>
+        &nbsp;
+        <Stlink2 onClick={() => { navigate('/login') }}>로그인</Stlink2>
+      </SignUp>
       </Stbox>
+     
     </>
   );
 };
@@ -155,12 +171,12 @@ const ErrorMessage = styled.div`
 
 
 const H1 = styled.h1`
-  font-size: 24px;
+  font-size: 28px;
   color: #e7e6f0;
   font-weight: 700;
 
   line-height: 24px;
-  padding-left: 46px;
+  padding-left: 20px;
   margin-bottom: 40px;
   padding-top: 50px;
 `;
@@ -171,11 +187,12 @@ const Stbox = styled.div`
 `;
 
 const Stinput1 = styled.input`
-  width: 280px;
-  height: 18px;
+  width: 330px;
+  height: 25px;
   padding: 10px;
 
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   color: #85848b;
 
   background-color: #252628;
@@ -185,11 +202,12 @@ const Stinput1 = styled.input`
   margin-bottom: 10px;
 `;
 const Stinput2 = styled.input`
-  width: 280px;
-  height: 18px;
+  width: 330px;
+  height: 25px;
   padding: 10px;
 
-  font-size: 14px;
+ font-size: 16px;
+ font-weight: 500;
   color: #85848b;
 
   background-color: #252628;
@@ -202,18 +220,19 @@ const Stinput2 = styled.input`
 const Stnumber = styled.div`
   font-size: 12px;
   line-height: 16px;
-  font-weight: 200;
+  font-weight: 500;
   /* margin-top: 5px; */
   color: darkgray;
   width: 300px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `;
 const Stinput3 = styled.input`
-  width: 280px;
-  height: 18px;
+  width: 330px;
+  height: 25px;
   padding: 10px;
 
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   color: #85848b;
 
   background-color: #252628;
@@ -234,8 +253,8 @@ const H3 = styled.h3`
   line-height: 24px;
   font-weight: 600;
   margin-bottom: 10px;
-  padding-left: 46px;
-  padding-top: 50px;
+  padding-left: 20px;
+  padding-top: 44px;
 `;
 const Stname = styled.div`
   display: flex; /* 가로 정렬을 위해 추가 */
@@ -243,11 +262,12 @@ const Stname = styled.div`
   align-items: center; /* 세로 중앙 정렬을 위해 추가 */
 `;
 const Stinput4 = styled.input`
-  width: 200px;
-  height: 18px;
+  width: 230px;
+  height: 25px;
   padding: 10px;
 
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   color: #85848b;
 
   background-color: #252628;
@@ -257,11 +277,11 @@ const Stinput4 = styled.input`
   outline: none;
 `;
 const Stbutton1 = styled.button`
-  width: 80px;
-  height: 38px;
+  width: 90px;
+  height: 45px;
   margin-left: 10px;
   background-color: #d9d9d9;
-  background: linear-gradient(135deg, #8084f4, #c48fed);
+  background: #45424E;
   color: #e7e6f0;
 
   &:hover {
@@ -270,12 +290,12 @@ const Stbutton1 = styled.button`
 
   border: none;
   border-radius: 6px;
-  font-size: 14px; //16
+  font-size: 16px; 
   font-weight: 500;
   cursor: pointer;
 `;
 const Stbutton2 = styled.button`
-  width: 300px;
+  width: 350px;
   height: 45px;
   padding: 10px;
   background: linear-gradient(135deg, #8084f4, #c48fed);
@@ -286,11 +306,29 @@ const Stbutton2 = styled.button`
 
   border: none;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 500;
 
   cursor: pointer;
-
   margin-top: 60px;
-  margin-bottom: 100%;
+`;
+const SignUp = styled.div`
+  color: #b2b2b2;
+  font-weight: 600;
+  display: flex;
+  align-items: center; /* 요소들을 수직으로 가운데 정렬 */
+  justify-content: center; /* 요소들을 수평으로 가운데 정렬 */
+  flex-direction: row; /* 요소들을 가로로 배치 */
+  margin-top: 40px;
+  font-size: 16px;
+  margin-bottom:100%;
+`;
+
+const Stlink2 = styled.a`
+  text-decoration: underline;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #b2b2b2; 
 `;

@@ -37,7 +37,7 @@ const YourPostList = () => {
           <H3>{data.nickname}포스팅</H3>
         </TitleSection>
         {data.map((post: Post) => {
-          return <MyListItem key={data.postId} post={post}></MyListItem>;
+          return <MyListItem key={post.postId} post={post}></MyListItem>;
         })}
       </InnerContainer>
     </>

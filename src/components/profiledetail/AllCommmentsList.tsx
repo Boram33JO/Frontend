@@ -1,9 +1,11 @@
 import { styled } from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "react-query";
 import { getCommentsLists } from "../../api/profile";
 import { getDateNotation } from "../../utils/common";
-import { useState } from "react";
+import { ReactComponent as IconComDel } from "../../assets/images/login_signup/icon_com_del.svg"; 
+import { deleteComment } from "../../api/comment";
+
 
 type myComment = {
   id: number;
@@ -16,13 +18,10 @@ type myComment = {
 const AllCommentsList = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
-  // const [sortByLatest, setSortByLatest] = useState(true); // 최신순 여부 상태
+  const queryClient = useQueryClient();
+ 
 
-  // const toggleSort = () => {
-  //   setSortByLatest((prevState) => !prevState); // 상태 변경 함수
-  // };
-
-  console.log("qqqq", userId);
+  //console.log("qqqq", userId);
 
 
   const handleCommentClick = (postId: number) => {
@@ -30,23 +29,31 @@ const AllCommentsList = () => {
   navigate(`/detail/${postId}`);
 };
 
+const { data, isLoading, isError } = useQuery(["comments"], async () => {
+  const response = await getCommentsLists(userId);
+  return response.data;
+});
 
-  const { data, isLoading, isError } = useQuery(["comments"], async () => {
-    const response = await getCommentsLists(userId);
-    console.log('댓글 response:', response); // response를 console에 출력
-    return response.data;
-  });
+const commentMutation = useMutation(deleteComment, {
+  onSuccess: () => {
+    queryClient.invalidateQueries(["comments"]);
+  },
+});
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+const handleCommentDelete = (postId: number) => {
+  commentMutation.mutate(postId.toString()); // postId를 문자열로 변환하여 전달
+};
 
-  if (isError) {
-    return <div>Error...</div>;
-  }
+if (isLoading) {
+  return <div>Loading...</div>;
+}
+
+if (isError) {
+  return <div>Error...</div>;
+}
 
 
-  
+// 
   return (
     <InnerContainer>
       <Post>
@@ -55,11 +62,18 @@ const AllCommentsList = () => {
       {
         data.map((item: myComment) => {
           return (
-            <CommentList key={item.id} onClick={() => handleCommentClick(item.postId)}>
+            <CommentList key={item.id} onClick={() => handleCommentClick(item.postId)}
+            >
               <CommentListItem>
+                <Delete>
                 <Content>{item.content}</Content>
+                <IconWrapper onClick={() => handleCommentDelete(item.id)}>
+                <IconComDel key={item.id} />
+                </IconWrapper>
+                </Delete>
                 <Date>{getDateNotation(item.createdAt)}</Date>
-                <PostTitle>{item.postTitle}</PostTitle>
+                <PostTitle >{`${item.postTitle}`}</PostTitle>
+               
               </CommentListItem>
             </CommentList>
           )
@@ -76,9 +90,8 @@ const InnerContainer = styled.div`
   flex-direction: column;
   width: 100%;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 20px;
   padding-top: 40px;
-
   gap: 14px;
 `;
 
@@ -115,11 +128,34 @@ const CommentListItem = styled.li`
   padding-left: 14px;
 `;
 
+
+
+
+const Delete = styled.div`
+width: 326px;
+  display: flex;
+  justify-content: space-between; /* 내부 요소들을 양쪽으로 정렬 */
+  align-items: center; /* 내부 요소들을 수직 가운데로 정렬 */
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  svg {
+  }
+  z-index: 3;
+`;
+
+
+
 const Content = styled.div`
   font-size: 16px;
   font-weight: 500;
   color: #FAFAFA;
+
 `;
+
 
 const Date = styled.div`
   font-size: 14px;

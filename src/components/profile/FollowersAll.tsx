@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { styled } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
@@ -23,15 +22,14 @@ const FollowersAll = ({ userInfo, followList }: Props) => {
   return (
     <InnerContainer>
       <Follower1>
-        <H3>{`${userInfo.nickname}님의 피플러`}</H3>
+        <H3>{`${userInfo.nickname}님의 피플러`}</H3> 
         <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Follower1>
       <FamousList>
         {followList.map((item) => (
           <FamousListItem
             key={item.userId}
-            onClick={() => navigate(`/profile/${item.userId}`)}
-          >
+            onClick={() => navigate(`/profile/${item.userId}`)}>
             <FamousListThumb src={getProfileImage(item.userImage)} />
             <FamousListNickName>{item.nickname}</FamousListNickName>
           </FamousListItem>
