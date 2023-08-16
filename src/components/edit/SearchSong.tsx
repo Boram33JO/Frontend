@@ -1,11 +1,22 @@
 import axios from "axios";
-import React, { useState } from "react"; // useEffect는 사용하지 않아서 제거
+import React, { useEffect, useState } from "react"; // useEffect는 사용하지 않아서 제거
 import { styled } from "styled-components";
 import { ReactComponent as CheckBox } from "../../assets/images/check_slc.svg";
 import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg";
 import { ReactComponent as Search } from "../../assets/images/search.svg";
 
 interface SongListType {
+    album: string;
+    artistName: string;
+    audioUrl: string;
+    externalUrl: string;
+    songNum: string;
+    songTitle: string;
+    thumbnail: string;
+    checked: boolean;
+}
+
+interface PopularSongListType {
     album: string;
     artistName: string;
     audioUrl: string;
@@ -34,17 +45,42 @@ interface SearchSongProps {
 const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongList }) => {
     const [searchSong, setSearchSong] = useState<string>("");
     const [songList, setSongList] = useState<Array<SongListType>>([]);
+    const [popularSongList, setPopularSongList] = useState<Array<PopularSongListType>>([]);
 
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchSong(event.target.value);
     };
 
-    const searchSongHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    useEffect(() => {
+        const getPopularSongs = async () => {
+            try {
+                const response = await axios.get(`http://43.201.22.74/api/AllMostSong`, {
+                    headers: {
+                        AccessToken:
+                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzNEB0ZXN0LmNvbSIsImV4cCI6MTY5MjE4MDU2MSwiaWF0IjoxNjkyMTc2OTYxfQ.htY2esUsedsiG7xG4ym1AAc0YwsBUUQ1_vSaxGmXNaw",
+                        RefreshToken:
+                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIxNzY5NjEsInN1YiI6InRlc3QxMjM0QHRlc3QuY29tIiwiZXhwIjoxNjkzMzg2NTYxfQ.R1IJcfLOZp3UhMMT4NJrDvpIwvVJSitAshgUjUIkwVE",
+                    },
+                });
+                console.log("성공", response);
+                setPopularSongList(response.data);
+                console.log("quququ", popularSongList);
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        getPopularSongs();
+    }, []);
+
+    const getSearchSongHandler = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
             const response = await axios.get(`http://43.201.22.74/api/search?keyword=${searchSong}`, {
                 headers: {
-                    Authorization: localStorage.getItem("token"),
+                    AccessToken:
+                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzNEB0ZXN0LmNvbSIsImV4cCI6MTY5MjE4MDU2MSwiaWF0IjoxNjkyMTc2OTYxfQ.htY2esUsedsiG7xG4ym1AAc0YwsBUUQ1_vSaxGmXNaw",
+                    RefreshToken:
+                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIxNzY5NjEsInN1YiI6InRlc3QxMjM0QHRlc3QuY29tIiwiZXhwIjoxNjkzMzg2NTYxfQ.R1IJcfLOZp3UhMMT4NJrDvpIwvVJSitAshgUjUIkwVE",
                 },
             });
             console.log("성공", response);
@@ -64,7 +100,6 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         } else {
             setChooseSongList((prevList) => {
                 const newList = [...prevList, item];
-                localStorage.setItem("songs", JSON.stringify(newList));
                 return newList;
             });
         }
@@ -77,7 +112,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
 
     return (
         <>
-            <StSearchForm onSubmit={searchSongHandler}>
+            <StSearchForm onSubmit={getSearchSongHandler}>
                 <div>
                     <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
                 </div>
@@ -87,7 +122,29 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                     value={searchSong}
                 />
             </StSearchForm>
-            {songList.length !== 0 ? (
+            {songList.length === 0 ? (
+                <StPopularContainer>
+                    <h2>이 노래는 어때요?</h2>
+                    {popularSongList.map((item) => (
+                        <StSongList
+                            key={item.songNum}
+                            onClick={() => {
+                                addToChooseSongList(item);
+                            }}
+                        >
+                            <img
+                                src={item.thumbnail}
+                                alt={`Thumbnail for ${item.songTitle}`}
+                            />
+                            <div>
+                                <h3>{item.songTitle}</h3>
+                                <p>{item.artistName}</p>
+                            </div>
+                            {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
+                        </StSongList>
+                    ))}
+                </StPopularContainer>
+            ) : (
                 <StContainer>
                     {songList.map((item) => (
                         <StSongList
@@ -108,7 +165,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                         </StSongList>
                     ))}
                 </StContainer>
-            ) : null}
+            )}
 
             {chooseSongList.length !== 0 && (
                 <StChooseSongListContainer>
@@ -146,6 +203,21 @@ const StSearchForm = styled.form`
     }
     input:focus {
         outline: none;
+    }
+`;
+
+const StPopularContainer = styled.div`
+    color: #fafafa;
+    h2 {
+        font-size: 18px;
+        margin: 28px 0 24px 0;
+    }
+    h3 {
+        font-size: 16px;
+    }
+    p {
+        color: #a6a3af;
+        font-size: 14px;
     }
 `;
 

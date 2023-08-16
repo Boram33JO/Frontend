@@ -22,31 +22,32 @@ interface FormProps {
     setInputForm: React.Dispatch<React.SetStateAction<InputForm>>;
     chooseSongList: ChooseSongListType[]; // Props 타입 수정
     setChooseSongList: React.Dispatch<React.SetStateAction<ChooseSongListType[]>>;
+    categoryNum: number;
+    placeName: string;
 }
 
-const FormArea: React.FC<FormProps> = ({ inputForm, setInputForm, chooseSongList, setChooseSongList }) => {
+const FormArea: React.FC<FormProps> = ({ inputForm, setInputForm, chooseSongList, setChooseSongList, categoryNum, placeName }) => {
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
         setInputForm((prevInputForm) => {
             const updatedInputForm: InputForm = { ...prevInputForm, [name]: value };
-            localStorage.setItem("postTitle", updatedInputForm.postTitle);
-            localStorage.setItem("content", updatedInputForm.content);
             return updatedInputForm;
         });
     };
 
     useEffect(() => {
-        const postTitle = localStorage.getItem("postTitle") || "";
-        const content = localStorage.getItem("content") || "";
-        setInputForm({ postTitle, content });
+        setInputForm({
+            postTitle: inputForm.postTitle || "", // 기존의 값 유지 또는 빈 문자열
+            content: inputForm.content || "", // 기존의 값 유지 또는 빈 문자열
+        });
     }, []);
 
     const removeFromChooseSongList = (song: ChooseSongListType) => {
         const updatedList = chooseSongList.filter((item) => item.songNum !== song.songNum);
         setChooseSongList(updatedList);
     };
-
-    console.log("sss", chooseSongList);
 
     return (
         <>
@@ -71,7 +72,10 @@ const FormArea: React.FC<FormProps> = ({ inputForm, setInputForm, chooseSongList
                 </div>
             </StFormArea>
 
-            <StLocation>placeName</StLocation>
+            <StLocation>
+                <div>{placeName}</div>
+                <button>{categories[categoryNum]}</button>
+            </StLocation>
             {chooseSongList.length !== 0 && (
                 <StChooseSongListContainer>
                     {chooseSongList.map((song) => (
@@ -136,6 +140,21 @@ const StLocation = styled.div`
     margin-top: 12px;
     color: #f1f1f1;
     padding: 16px 13px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+        height: 26px;
+        background: linear-gradient(135deg, #8084f4, #c48fed);
+        color: #fafafa;
+        display: flex;
+        border-radius: 999px;
+        padding: 6px 16px;
+        justify-content: center;
+        align-items: center;
+    }
 `;
 
 const StChooseSongListContainer = styled.div`

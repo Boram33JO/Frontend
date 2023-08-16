@@ -51,10 +51,6 @@ const RedirectKakao: React.FC = () => {
                 nickname: response.data.nickname,
                 userImage: response.data.userImage
             }));
-            // localStorage.setItem("email", response.data.email);
-            // localStorage.setItem("userId", response.data.id);
-            // localStorage.setItem("nickname", response.data.nickname);
-            // localStorage.setItem("userImage", response.data.userImage);
             alert("로그인되었습니다.");
             navigate(`/`);
         });
