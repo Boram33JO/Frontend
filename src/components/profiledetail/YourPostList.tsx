@@ -52,7 +52,7 @@ const InnerContainer = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0 20px;
-  padding-top: 52px;
+  padding-top: 40px;
 
   gap: 20px;
 `;
@@ -66,7 +66,7 @@ const TitleSection = styled.div`
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
-  font-weight: 600;
+  font-weight: 700;
   color: #e7e6f0;
 `;
 

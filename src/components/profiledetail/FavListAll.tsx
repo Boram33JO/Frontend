@@ -1,11 +1,9 @@
-import React, { useState } from "react";
 import { styled } from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Post } from "../../models/post";
-import MyListItem from "../common/MyListItem";
 import { useQuery } from "react-query";
 import { getFavLists} from "../../api/profile";
-import FavList from "../profile/FavList";
+import ListItem from "../common/ListItem";
 
 const FavListAll = () => {
   const { userId } = useParams();
@@ -15,7 +13,7 @@ const FavListAll = () => {
   //   navigate(`/profile/${userId}/post`);
   // };
 
-  const { data, isLoading, isError } = useQuery(["favposts"], async () => {
+  const { data, isLoading, isError } = useQuery(["wishList"], async () => {
     const response = await getFavLists(userId);
     console.log("좋아요함 response:", response); // response를 console에 출력
     // console.log("포스트 response:", response.data.nickname);
@@ -35,10 +33,10 @@ const FavListAll = () => {
     <>
       <InnerContainer>
         <TitleSection>
-          <H3>{data.nickname}님의 포스팅</H3>
+          <H3>{data.nickname}피플포스팅</H3>
         </TitleSection>
         {data.map((post: Post) => {
-          return <MyListItem key={post.postId} post={post}></MyListItem>;
+          return <ListItem key={post.postId} post={post}></ListItem>;
         })}
       </InnerContainer>
     </>
@@ -53,8 +51,7 @@ const InnerContainer = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0 20px;
-  padding-top: 52px;
-
+  padding-top: 40px;
   gap: 20px;
 `;
 
@@ -67,6 +64,6 @@ const TitleSection = styled.div`
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
-  font-weight: 600;
+  font-weight: 700;
   color: #e7e6f0;
 `;

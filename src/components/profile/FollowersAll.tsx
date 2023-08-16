@@ -60,7 +60,7 @@ const Follower1 = styled.div`
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
-  font-weight: 600;
+  font-weight: 700;
   color: #e7e6f0;
   margin-bottom: 10px;
 `;
