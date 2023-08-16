@@ -3,17 +3,24 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getCommentsLists } from "../../api/profile";
 import { getDateNotation } from "../../utils/common";
+import { useState } from "react";
 
 type myComment = {
   id: number;
   content: string;
   createdAt: string;
   postId: number;
+  postTitle: string;
 }
 
 const AllCommentsList = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
+  // const [sortByLatest, setSortByLatest] = useState(true); // 최신순 여부 상태
+
+  // const toggleSort = () => {
+  //   setSortByLatest((prevState) => !prevState); // 상태 변경 함수
+  // };
 
   console.log("qqqq", userId);
 
@@ -38,6 +45,8 @@ const AllCommentsList = () => {
     return <div>Error...</div>;
   }
 
+
+  
   return (
     <InnerContainer>
       <Post>
@@ -50,6 +59,7 @@ const AllCommentsList = () => {
               <CommentListItem>
                 <Content>{item.content}</Content>
                 <Date>{getDateNotation(item.createdAt)}</Date>
+                <PostTitle>{item.postTitle}</PostTitle>
               </CommentListItem>
             </CommentList>
           )
@@ -67,9 +77,9 @@ const InnerContainer = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0 20px;
-  padding-top: 52px;
+  padding-top: 40px;
 
-  gap: 20px;
+  gap: 14px;
 `;
 
 const Post = styled.div`
@@ -81,32 +91,34 @@ const Post = styled.div`
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
-  font-weight: 600;
+  font-weight: 700;
   color: #e7e6f0;
+  padding-bottom: 6px;
 `;
 
 const CommentList = styled.ol`
   display: block;
   cursor: pointer;
+  
 `;
 
 const CommentListItem = styled.li`
   display: flex;
   flex-direction: column; /* 요소들을 수직으로 배치 */
   align-items: flex-start; /* 요소들을 수직 축에서 왼쪽으로 정렬 */
-  height: 76px;
-  width: 256px;
+  height: 140px;
+  width: 340px;
   border-radius: 6px;
   border: 1px solid #524d58;
   background-color: #434047;
-  padding-top: 20px;
-  padding-left: 12px;
+  padding-top: 18px;
+  padding-left: 14px;
 `;
 
 const Content = styled.div`
   font-size: 16px;
-  font-weight: 600;
-  color: #d9d8df;
+  font-weight: 500;
+  color: #FAFAFA;
 `;
 
 const Date = styled.div`
@@ -114,4 +126,11 @@ const Date = styled.div`
   color: #a6a3af;
   font-weight: 500;
   padding-top: 10px;
+`;
+
+const PostTitle = styled.div`
+  font-size: 14px;
+  color: #a6a3af;
+  font-weight: 500;
+  margin-top: 60px;
 `;
