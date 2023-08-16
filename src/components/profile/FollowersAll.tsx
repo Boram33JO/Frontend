@@ -23,7 +23,8 @@ const FollowersAll = ({ userInfo, followList }: Props) => {
   return (
     <InnerContainer>
       <Follower1>
-        <H3>{`${userInfo.nickname}님의 피플러`}</H3>
+        <H3>{`${userInfo.nickname}님의 피플러`}</H3> 
+        {/* 이거 왜 안찍히지 */}
         <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Follower1>
       <FamousList>

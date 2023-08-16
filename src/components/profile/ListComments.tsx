@@ -89,7 +89,7 @@ const Post = styled.div`
 const H3 = styled.h3`
   font-size: 20px;
   line-height: 24px;
-  font-weight: 600;
+  font-weight: 700;
   color: #e7e6f0;
 `;
 const Bt = styled.div`

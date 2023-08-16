@@ -113,11 +113,11 @@ const ErrorMessage = styled.div`
 `;
 
 const H3 = styled.h3`
-  font-size: 24px;
+  font-size: 28px;
   color: #e7e6f0;
   font-weight: 700;
   line-height: 24px;
-  padding-left: 46px;
+  padding-left: 20px;
   margin-bottom: 40px;
   padding-top: 50px;
 `;
@@ -133,15 +133,17 @@ const Stbox2 = styled.div`
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  margin-right: 48px;
+  margin-right: 23px;
 `;
 
 const Stinput1 = styled.input`
-  width: 280px;
-  height: 18px;
+  width: 330px;
+  height: 25px;
   padding: 10px;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   color: #85848b;
+  
   background-color: #252628;
   border: none;
   border-radius: 8px;
@@ -150,40 +152,41 @@ const Stinput1 = styled.input`
 `;
 
 const Stinput2 = styled.input`
-  width: 280px;
-  height: 18px;
+  width: 330px;
+  height: 25px;
   padding: 10px;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
   color: #85848b;
   background-color: #252628;
   border: none;
   border-radius: 8px;
   outline: none;
-  margin-bottom: 5px;
+  
 `;
 
 const Stlink1 = styled.a`
-  font-size: 12px;
+margin-top: 4px;
+  font-size: 14px;
   line-height: 24px;
-  font-weight: 400;
-  margin-bottom: 10px;
+  font-weight: 500;
   cursor: pointer;
   color: #b2b2b2;
 `;
 
 const Stbutton = styled.button`
-  width: 300px;
+  width: 350px;
   height: 45px;
   padding: 10px;
   background: linear-gradient(135deg, #8084f4, #c48fed);
   color: #e7e6f0;
   border: none;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 17px;
   cursor: pointer;
   margin-bottom: 10px;
-  margin-top: 72px;
-  font-weight: 500;
+  margin-top: 68px;
+  font-weight: 600;
   &:hover {
     color: #141414;
   }
