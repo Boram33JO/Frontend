@@ -75,22 +75,18 @@ const BasicSignUp = () => {
   };
 
   const handleCheckButton = async () => {
-    try {
+
       const response = await nicknameCheck(nickname);
       console.log(response);
-      if (response.data.statusCode < 300) {
-        alert("사용가능한 닉네임입니다");
-       
-      } else if (response.data.statusCode >= 300 && response.data.statusCode < 400){
-        alert("이미 사용중인 닉네임입니다");
-       
-      } else {
-        alert(`닉네임은 한글, 영어 또는 숫자로\n2~8글자 사이만 가능합니다`);
-       
-      }
-    } catch (error) {
-      console.log(error);
-    }
+     
+     if (response.data.message){
+        alert(response.data.message);
+     }
+     else {  
+     alert(response.data.error);
+     }
+      
+  
   }
 
   return (
