@@ -32,30 +32,55 @@ const EditPage = () => {
     const [placeName, setPlaceName] = useState("");
     const [latitude, setLatitude] = useState("");
     const [longitude, setLongitude] = useState("");
-    const [categoryNum, setCategoryNum] = useState<number>(0);
+    const [categoryNum, setCategoryNum] = useState<number>(1);
+    const category = categoryNum + 1;
 
-    console.log("inputForm11", inputForm);
-    console.log("chooseSongList11", chooseSongList);
-    console.log("categoryNum11", categoryNum);
+    const data = {
+        latitude,
+        longitude,
+        address,
+        songs: chooseSongList,
+        category: category,
+        content: inputForm.content,
+        postTitle: inputForm.postTitle,
+        placeName,
+    };
 
     // 클릭 시 슬라이드 번호 이동
-    const onClickNextButtonHandler = () => {
+    const NextButtonHandler = () => {
         if (slideIndex === 0) {
             goToSlide(slideIndex + 1);
         } else if (slideIndex === 2) {
             // 업로드
-            return alert("마지막");
+            // return alert("마지막");
+            onClickPost();
         }
         goToSlide(slideIndex + 1);
     };
 
-    const onClickBeforeButtonHandler = () => {
+    const BeforeButtonHandler = () => {
         if (slideIndex === 0) {
             return;
         } else if (slideIndex === 2) {
             goToSlide(slideIndex - 1);
         }
         goToSlide(slideIndex - 1);
+    };
+
+    const onClickPost = async () => {
+        try {
+            const response = await axios.post(`http://43.201.22.74/api/posts`, data, {
+                headers: {
+                    AccessToken:
+                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzNEB0ZXN0LmNvbSIsImV4cCI6MTY5MjIwMTI1NiwiaWF0IjoxNjkyMTk3NjU2fQ.RLLqO8hHPa5EuroSqU1-3m_ph_WJDX7H4KZYMXUqIFg",
+                    RefreshToken:
+                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIxOTc2NTYsInN1YiI6InRlc3QxMjM0QHRlc3QuY29tIiwiZXhwIjoxNjkzNDA3MjU2fQ.mm8Wmhq84PAlAaYVVgzqqmYHiguAhW8M_yXO1D8GifQ",
+                },
+            });
+            console.log("성공", response);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     // 슬라이드 이동
@@ -99,6 +124,8 @@ const EditPage = () => {
                             setInputForm={setInputForm}
                             chooseSongList={chooseSongList}
                             setChooseSongList={setChooseSongList}
+                            categoryNum={categoryNum}
+                            placeName={placeName}
                         />
                     </StSlide>
                 </StSlides>
@@ -109,20 +136,32 @@ const EditPage = () => {
                         color: "#7D778A",
                         background: "#45424E",
                     }}
-                    onClick={onClickBeforeButtonHandler}
+                    onClick={BeforeButtonHandler}
                     // disabled={slideIndex === 0}
                 >
                     이전
                 </ButtonComponent>
-                <ButtonComponent
-                    style={{
-                        color: "#FAFAFA",
-                        background: "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)",
-                    }}
-                    onClick={onClickNextButtonHandler}
-                >
-                    {slideIndex === 2 ? "완료" : "다음"}
-                </ButtonComponent>
+                {slideIndex === 2 ? (
+                    <ButtonComponent
+                        style={{
+                            color: "#FAFAFA",
+                            background: "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)",
+                        }}
+                        onClick={onClickPost}
+                    >
+                        {slideIndex === 2 ? "완료" : "다음"}
+                    </ButtonComponent>
+                ) : (
+                    <ButtonComponent
+                        style={{
+                            color: "#FAFAFA",
+                            background: "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)",
+                        }}
+                        onClick={NextButtonHandler}
+                    >
+                        {slideIndex === 2 ? "완료" : "다음"}
+                    </ButtonComponent>
+                )}
             </StButtons>
         </>
     );
