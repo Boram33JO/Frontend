@@ -113,14 +113,14 @@ const CommentListItem = styled.li`
   border-radius: 6px;
   border: 1px solid #524d58;
   background-color: #434047;
-  padding-top: 20px;
-  padding-left: 12px;
+  padding-top: 18px;
+  padding-left: 14px;
 `;
 
 const Content = styled.div`
   font-size: 16px;
   font-weight: 600;
-  color: #d9d8df;
+  color: #FAFAFA;
 `;
 
 const Date = styled.div`
