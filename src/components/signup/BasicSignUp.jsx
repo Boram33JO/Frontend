@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { useMutation } from "react-query";
 import { addUsers } from "../../api/user";
+import { nicknameCheck } from "../../api/profile";
 
 const BasicSignUp = () => {
   const navigate = useNavigate();
@@ -34,11 +35,11 @@ const BasicSignUp = () => {
       }
     },
   });
+  
   const onSignUpClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
-    const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,8}$/; // nickname: 알파벳소문자, 한글 ,숫자로만 이루어지고, 2자 이상 10자 이하
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
+    const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
 
       // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리
       const errors = {};
@@ -52,7 +53,7 @@ const BasicSignUp = () => {
         errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
       }
       if (!nicknameRegex.test(nickname)) {
-        errors.nickname = "알파벳소문자, 한글, 숫자, 2~8자 이하로 입력해 주세요.";
+        errors.nickname = "알파벳소문자,대문자, 한글, 숫자, 2~12자 이하로 입력해 주세요.";
       }
   
       // 에러가 있는 경우 처리
@@ -73,7 +74,25 @@ const BasicSignUp = () => {
     addNewUserMutation.mutate(newUser);
   };
 
-  
+  const handleCheckButton = async () => {
+    try {
+      const response = await nicknameCheck(nickname);
+      console.log(response);
+      if (response.data.statusCode < 300) {
+        alert("사용가능한 닉네임입니다");
+       
+      } else if (response.data.statusCode >= 300 && response.data.statusCode < 400){
+        alert("이미 사용중인 닉네임입니다");
+       
+      } else {
+        alert(`닉네임은 한글, 영어 또는 숫자로\n2~8글자 사이만 가능합니다`);
+       
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <>
       <H1>회원가입</H1>
@@ -119,7 +138,7 @@ const BasicSignUp = () => {
               placeholder={"2~8자 입력"}
               onChange={onChangeNicknameHandler}
             />
-            <Stbutton1 onClick={onSignUpClickHandler}>중복체크</Stbutton1>
+            <Stbutton1 onClick={handleCheckButton}>중복체크</Stbutton1>
           </Stname>
           {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
         </Stnickname>
