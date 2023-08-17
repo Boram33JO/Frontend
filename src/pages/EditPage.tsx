@@ -10,7 +10,6 @@ import FormArea from "../components/edit/FormArea";
 
 import { postData } from "../api/edit";
 import { getDetailPost } from "../api/post";
-import axios from "axios";
 
 interface InputForm {
     postTitle: string;
