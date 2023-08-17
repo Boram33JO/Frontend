@@ -26,13 +26,13 @@ const List = ({ userInfo, postList }: Props) => {
           <H3>{`${userInfo.nickname}님의 포스팅`}</H3>
           <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
         </TitleSection>
-        {
-          postList.map((post) => {
-            return (
-              <MyListItem key={post.postId} post={post}></MyListItem>
-            )
-          })
-        }
+        {postList.length === 0 ? (
+          <NoDataMessage>데이터가 없습니다!</NoDataMessage>
+        ) : (
+          postList.map((post) => (
+            <MyListItem key={post.postId} post={post} />
+          ))
+        )}
       </InnerContainer>
     </>
   );
@@ -40,7 +40,10 @@ const List = ({ userInfo, postList }: Props) => {
 
 export default List;
 
-
+const NoDataMessage = styled.p`
+  font-size: 16px;
+  color: #e7e6f0;
+`;
 
 
 const InnerContainer = styled.div`

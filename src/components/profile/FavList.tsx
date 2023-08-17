@@ -14,7 +14,7 @@ const FavList = ({ userInfo, wishList }: Props) => {
   const { userId } = useParams();
 
   const handleViewAllClick = () => {
-    // Navigate to the desired page when the button is clicked
+    // 버튼 클릭 시 원하는 페이지로 이동
     navigate(`/profile/${userId}/wishlist`);
   };
 
@@ -25,19 +25,22 @@ const FavList = ({ userInfo, wishList }: Props) => {
           <H3>{`${userInfo.nickname}님이 좋아한 포스팅`}</H3>
           <Bt onClick={handleViewAllClick}>전체보기</Bt>
         </TitleSection>
-        {
-          wishList.map((post) => {
-            return (
-              <ListItem key={post.postId} post={post} />
-            )
-          })
-        }
+        {wishList.length === 0 ? (
+          <NoDataMessage>데이터가 없습니다!</NoDataMessage>
+        ) : (
+          wishList.map((post) => (
+            <ListItem key={post.postId} post={post} />
+          ))
+        )}
       </InnerContainer>
     </>
   );
 };
 
-export default FavList;
+const NoDataMessage = styled.p`
+  font-size: 16px;
+  color: #e7e6f0;
+`;
 
 const InnerContainer = styled.div`
   display: flex;
@@ -50,9 +53,9 @@ const InnerContainer = styled.div`
 `;
 
 const TitleSection = styled.div`
-  display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  display: flex;
   justify-content: space-between;
-  align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
+  align-items: center;
 `;
 
 const H3 = styled.h3`
@@ -69,3 +72,4 @@ const Bt = styled.div`
   cursor: pointer;
 `;
 
+export default FavList;
