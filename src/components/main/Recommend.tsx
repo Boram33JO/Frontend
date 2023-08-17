@@ -6,9 +6,16 @@ import { useQuery } from 'react-query'
 import { getPopularSongs } from '../../api/post'
 import { Song } from '../../models/post'
 import Category from '../common/Category'
+import Preview from '../common/Preview'
 
 const Recommend = () => {
     const [categoryNum, setCategoryNum] = useState<number>(0);
+    const [songIndex, setSongIndex] = useState(0);
+    const [preview, setPreview] = useState(false);
+    const handleClickListItem = (index: number) => {
+        setSongIndex(index);
+        setPreview(true);
+    }
     const { data, isLoading, isError } = useQuery(["recommend"],
         async () => {
             const response = await getPopularSongs();
@@ -33,7 +40,7 @@ const Recommend = () => {
                     </H3>
                     <TitleSectionSub>
                         <Balloon>
-                            음악 선택 시 스포티파이로 이동합니다.
+                            음악 선택 시 스포티파이 미리듣기가 제공됩니다.
                         </Balloon>
                         피플의 플리
                     </TitleSectionSub>
@@ -43,7 +50,7 @@ const Recommend = () => {
                     {
                         data[categoryNum].songResponseDtos.map((song: Song, index: number) => {
                             return (
-                                <PlaylistItem key={song.id} onClick={() => window.open(`${song.audioUrl}`)}>
+                                <PlaylistItem key={song.id} onClick={() => { handleClickListItem(index) }}>
                                     <PlaylistItemLeft>
                                         <MusicThumbnail src={song.thumbnail} alt="albumArt" />
                                         <MusicRanking>
@@ -67,6 +74,7 @@ const Recommend = () => {
                             )
                         })
                     }
+                    {preview && <Preview url={data[categoryNum].songResponseDtos[songIndex].audioUrl} song={data[categoryNum].songResponseDtos[songIndex]} setPreview={setPreview} />}
                 </Playlist>
             </InnerContainer>
             <TodayArea>
@@ -109,7 +117,7 @@ const TitleSectionSub = styled.div`
 
 const Balloon = styled.div`
     position: absolute;
-    width: 150px;
+    width: 140px;
     height: 44px;
     background-color: #342E3C;
     border: 1px solid #7B7190;

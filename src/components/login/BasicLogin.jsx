@@ -66,8 +66,7 @@ const BasicLogin = () => {
   };
 
   return (
-    <>
-      <H3>로그인</H3>
+    <InnerContainer>
       <Stbox>
         <Stinput1
           type={"text"}
@@ -83,7 +82,7 @@ const BasicLogin = () => {
         />
       </Stbox>
 
-      <Stbox2>
+      {/* <Stbox2>
         <Stlink1
           onClick={() => {
             navigate("/");
@@ -91,34 +90,28 @@ const BasicLogin = () => {
         >
           로그인 정보를 잊으셨나요?
         </Stlink1>
-      </Stbox2>
+      </Stbox2> */}
 
       <Stbox>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}{" "}
         {/* 추가: 에러 메시지 표시 */}
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox>
-    </>
+    </InnerContainer>
   );
 };
 
 export default BasicLogin;
+
+const InnerContainer = styled.div`
+  width:100%;
+`
 
 // 에러
 const ErrorMessage = styled.div`
   color: #e7e6f0;
   margin-top: 10px;
   font-size: 14px;
-`;
-
-const H3 = styled.h3`
-  font-size: 28px;
-  color: #e7e6f0;
-  font-weight: 700;
-  line-height: 24px;
-  padding-left: 20px;
-  margin-bottom: 40px;
-  padding-top: 50px;
 `;
 
 const Stbox = styled.div`

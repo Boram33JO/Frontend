@@ -6,19 +6,25 @@ import spotify from '../../assets/images/Spotify_Icon_RGB_Black.png'
 import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
 import { displayedAt } from '../../utils/common'
+import Preview from './Preview'
 
 interface Props {
     post: Post;
 }
-  // postList: [{postId: 0, }, {postId: 1, }] ;
+// postList: [{postId: 0, }, {postId: 1, }] ;
 
-  // post: {postId: 0, postTitle: , userId: }
+// post: {postId: 0, postTitle: , userId: }
 
 // const MyListItem:React.FC<Props> = ({ post }) => {
 const MyListItem = ({ post }: Props) => {
-    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
-
+    const [isOpen, setIsOpen] = useState(false);
+    const [songIndex, setSongIndex] = useState(0);
+    const [preview, setPreview] = useState(false);
+    const handleClickListItem = (index: number) => {
+        setSongIndex(index);
+        setPreview(true);
+    }
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     }
@@ -63,9 +69,9 @@ const MyListItem = ({ post }: Props) => {
                 </PlaylistRight>
                 {isOpen && (
                     <DropdownList>
-                        {post.songs.map(song => {
+                        {post.songs.map((song, index) => {
                             return (
-                                <DropdownItem key={song.id} onClick={() => window.open(`${song.externalUrl}`)}>
+                                <DropdownItem key={song.id} onClick={() => { handleClickListItem(index) }}>
                                     <PlaylistLeft>
                                         <MusicThumbnail src={song.thumbnail} />
                                         <MusicInfo>
@@ -84,6 +90,7 @@ const MyListItem = ({ post }: Props) => {
                     </DropdownList>
                 )}
             </DropdownToggle>
+            {preview && <Preview url={post.songs[songIndex].audioUrl} song={post.songs[songIndex]} setPreview={setPreview} />}
         </ListItemContainer>
     )
 }

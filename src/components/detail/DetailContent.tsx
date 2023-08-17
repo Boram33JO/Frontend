@@ -19,6 +19,7 @@ const DetailContent = ({ post }: PostProps) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const isLogin = useSelector((state: RootState) => state.isLogin);
     const userInfo = useSelector((state: RootState) => state.user);
 
     const LikeMutation = useMutation(likePost, {
@@ -28,7 +29,15 @@ const DetailContent = ({ post }: PostProps) => {
     })
 
     const likeButtonHandler = () => {
-        LikeMutation.mutate(id);
+        if (isLogin.isLogin) {
+            LikeMutation.mutate(id);
+        } else {
+            if (window.confirm(`로그인 후 좋아요 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
+                navigate(`/login`);
+            } else {
+                return;
+            }
+        }
     }
 
     const FollowMutation = useMutation(followUser, {
@@ -38,7 +47,15 @@ const DetailContent = ({ post }: PostProps) => {
     })
 
     const followButtonHandler = (userId: number) => {
-        FollowMutation.mutate(userId);
+        if (isLogin.isLogin) {
+            FollowMutation.mutate(userId);
+        } else {
+            if (window.confirm(`로그인 후 팔로우 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
+                navigate(`/login`);
+            } else {
+                return;
+            }
+        }
     }
 
     return (
