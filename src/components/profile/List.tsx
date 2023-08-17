@@ -27,7 +27,7 @@ const List = ({ userInfo, postList }: Props) => {
           <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
         </TitleSection>
         {postList.length === 0 ? (
-          <NoDataMessage>데이터가 없습니다!</NoDataMessage>
+          <NoDataMessage>아직 포스팅이 없습니다.</NoDataMessage>
         ) : (
           postList.map((post) => (
             <MyListItem key={post.postId} post={post} />

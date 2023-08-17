@@ -17,7 +17,7 @@ const Pictures = () => {
     () => userId ? getFollowLists(userId) : Promise.resolve([]), // If userId is undefined, return an empty array
     { enabled: !!userId }
   );
-  console.log(followerData); // 이 줄을 추가하여 데이터 구조를 확인
+  //console.log(followerData); // 이 줄을 추가하여 데이터 구조를 확인
 
 
 // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.

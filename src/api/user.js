@@ -17,7 +17,7 @@ const deleteUsers = async () => {
 // 로그인
 const login = async (loginInformation) => {
   const response = await instance.post(`/api/user/login`, loginInformation);
-  console.log("로그인", response);
+  //console.log("로그인", response);
   const token = response.headers.accesstoken;
   const nickname = response.data.data.nickname;
   const userImage = response.data.data.userImage;
