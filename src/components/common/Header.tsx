@@ -31,7 +31,7 @@ const Header = ({ setSideOpen }: Props) => {
                 P.Ple
             </HeaderCenter>
             <HeaderRight>
-                <StSearch />
+                {/* <StSearch /> */}
                 {
                     (isLogin.isLogin) ? (
                         <ProfileImage
