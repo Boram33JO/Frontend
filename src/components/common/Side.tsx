@@ -1,15 +1,17 @@
 import React from 'react'
 import { css, styled } from 'styled-components'
-import { ReactComponent as Close } from '../../assets/images/side/menu_close.svg'
+import { ReactComponent as Close } from '../../assets/images/side/01_close.svg'
+import { ReactComponent as Arrow } from '../../assets/images/side/02_arrow.svg'
+import { ReactComponent as Map } from '../../assets/images/side/03_map.svg'
+import { ReactComponent as Post } from '../../assets/images/side/04_post.svg'
+import { ReactComponent as PP } from '../../assets/images/side/05_pp.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
-import { ReactComponent as MenuMap } from '../../assets/images/side/menu_map.svg'
-import { ReactComponent as MenuPost } from '../../assets/images/side/menu_post.svg'
-import { ReactComponent as MenuPP } from '../../assets/images/side/menu_pp.svg'
-import { ReactComponent as MenuArrow } from '../../assets/images/side/menu_arrow.svg'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/config/configStore'
 import { getProfileImage } from '../../utils/common'
+import { logOut } from '../../redux/modules/loginSlice'
+import { logout, setUserInfo } from '../../redux/modules/userSlice'
 
 interface Props {
     sideOpen: boolean;
@@ -18,16 +20,24 @@ interface Props {
 
 const Side = ({ sideOpen, setSideOpen }: Props) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const userInfo = useSelector((state: RootState) => state.user);
     const menuList = [
-        { id: 1, name: "피플 맵핑", icon: MenuMap, path: "/map" },
-        { id: 2, name: "피플 포스팅", icon: MenuPost, path: "/list/1" },
-        { id: 3, name: "피플러", icon: MenuPP, path: "/" },
+        { id: 1, name: "피플 맵핑", icon: Map, path: "/map" },
+        { id: 2, name: "피플 포스팅", icon: Post, path: "/list/1" },
+        { id: 3, name: "피플러", icon: PP, path: "/" },
     ]
 
-    const menuClickHandler = (path: string) => {
+    const handleMenuClick = (path: string) => {
         setSideOpen(false);
         navigate(path);
+    }
+
+    const handleLogout = () => {
+        setSideOpen(false);
+        dispatch(logOut(null));
+        dispatch(logout());
+        // window.location.reload();
     }
 
     return (
@@ -38,16 +48,16 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                 </SideHeader>
                 <SideMiddle>
                     <LogoSection>
-                        <P $size={"48px"} $weight={"700"} onClick={() => menuClickHandler("/")}>P.Ple</P>
+                        <P $size={"48px"} $weight={"700"} onClick={() => handleMenuClick("/")}>P.Ple</P>
                     </LogoSection>
                     {
                         (userInfo.userId) ? (
-                            <ProfileSection onClick={() => menuClickHandler(`/profile/${userInfo.userId}`)}>
-                                <ProfileImage src={getProfileImage(userInfo.userImage)} />
+                            <ProfileSection onClick={() => handleMenuClick(`/profile/${userInfo.userId}`)}>
+                                <ProfileImage src={getProfileImage(userInfo.userImage)} alt="userImage" />
                                 <P $size={"18px"} $weight={"600"}>{userInfo.nickname}</P>
                             </ProfileSection>
                         ) : (
-                            <ProfileSection onClick={() => menuClickHandler("/login")}>
+                            <ProfileSection onClick={() => handleMenuClick("/login")}>
                                 <StLogin />
                                 <P $size={"18px"} $weight={"600"}>로그인 / 회원가입</P>
                             </ProfileSection>
@@ -57,21 +67,23 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                     {
                         menuList.map(menu => {
                             return (
-                                <MenuItem key={menu.id} onClick={() => menuClickHandler(menu.path)}>
+                                <MenuItem key={menu.id} onClick={() => handleMenuClick(menu.path)}>
                                     <MenuItemName>
                                         <menu.icon />
                                         <P $size={"18px"} $weight={"600"}>{menu.name}</P>
                                     </MenuItemName>
-                                    <MenuArrow />
+                                    <Arrow />
                                 </MenuItem>
                             )
                         })
                     }
                 </SideMiddle>
             </SideTop>
-            {
-                userInfo.userId && <SideBottom>로그아웃</SideBottom>
-            }
+            <SideBottom>
+                {
+                    (userInfo.userId !== 0) && <P $color={"#A6A3AF"} $size={"16px"} $weight={"500"} onClick={handleLogout}>로그아웃</P>
+                }
+            </SideBottom>
             <Label onClick={() => setSideOpen(false)} />
         </SideMenu >
     )
@@ -206,8 +218,8 @@ const Label = styled.label`
     top: 0;
 `
 
-const P = styled.p<{ $size: string, $weight: string }>`
-    color: #FAFAFA;
+const P = styled.p<{ $size: string, $weight: string, $color?: string }>`
+    color: ${(props) => props.$color || "#FAFAFA"};
     font-size: ${(props) => props.$size};
     font-weight: ${(props) => props.$weight};
 `

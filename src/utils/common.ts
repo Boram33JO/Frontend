@@ -34,3 +34,23 @@ export const getDateNotation = (input?: string) => {
 export const getProfileImage = (image?: string | null) => {
     return (image) ? image : "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1"
 }
+
+// Throttle
+export const throttle = (handler: (...args: any[]) => void, timeout = 500) => {
+    let invokedTime: number
+    let timer: number
+    return function (this: any, ...args: any[]) {
+        if (!invokedTime) {
+            handler.apply(this, args)
+            invokedTime = Date.now()
+        } else {
+            clearTimeout(timer)
+            timer = window.setTimeout(() => {
+                if (Date.now() - invokedTime >= timeout) {
+                    handler.apply(this, args)
+                    invokedTime = Date.now()
+                }
+            }, Math.max(timeout - (Date.now() - invokedTime), 0))
+        }
+    }
+}

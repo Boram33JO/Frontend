@@ -32,7 +32,7 @@ const FamousPeople = () => {
                     data.map((item: User2) => {
                         return (
                             <FamousListItem key={item.id} onClick={() => navigate(`/profile/${item.id}`)}>
-                                <FamousListItemThumb src={getProfileImage(item.userImage)} />
+                                <FamousListItemThumb src={getProfileImage(item.userImage)} alt="userImage" />
                                 <FamousListItemNickname>{item.nickname}</FamousListItemNickname>
                             </FamousListItem>
                         )

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { styled } from 'styled-components'
 import { getDateNotation } from '../../utils/common'
-import spotify from '../../assets/images/Spotify_Icon_RGB_White.png'
+import spotify from '../../assets/images/spotify/Spotify_Icon_RGB_White.svg'
 import { useQuery } from 'react-query'
 import { getPopularSongs } from '../../api/post'
 import { Song } from '../../models/post'
@@ -43,9 +43,9 @@ const Recommend = () => {
                     {
                         data[categoryNum].songResponseDtos.map((song: Song, index: number) => {
                             return (
-                                <PlaylistItem key={song.id} onClick={() => window.open(`${song.externalUrl}`)}>
+                                <PlaylistItem key={song.id} onClick={() => window.open(`${song.audioUrl}`)}>
                                     <PlaylistItemLeft>
-                                        <MusicThumbnail src={song.thumbnail} />
+                                        <MusicThumbnail src={song.thumbnail} alt="albumArt" />
                                         <MusicRanking>
                                             <StP $color={"#FFFFFF"} $size={"16px"}>
                                                 {index + 1}
@@ -61,7 +61,7 @@ const Recommend = () => {
                                         </MusicInfo>
                                     </PlaylistItemLeft>
                                     <PlaylistItemRight>
-                                        <SpotifyIcon src={spotify} />
+                                        <SpotifyIcon src={spotify} alt="spotify" />
                                     </PlaylistItemRight>
                                 </PlaylistItem>
                             )

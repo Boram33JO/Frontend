@@ -19,11 +19,10 @@ const Mypicture = ({ follow, userInfo }: Props) => {
   const queryClient = useQueryClient();
   const LoginUser = useSelector((state: RootState) => state.user);
   const isMyProfile = Number(userId) === LoginUser.userId;
-
+  // console.log(LoginUser)
   const EditMyProfileHandler = () => {
     navigate(`/profile/edit/${userId}`);
   };
-
   const FollowMutation = useMutation(followUser, {
     onSuccess: () => {
       queryClient.invalidateQueries(["Profile", userId]);
@@ -33,11 +32,11 @@ const Mypicture = ({ follow, userInfo }: Props) => {
   const followButtonHandler = (userId: number) => {
     FollowMutation.mutate(userId);
   }
-
+  // console.log(userInfo.userImage);
   return (
     <>
       <InnerContainer>
-        <MyPic>{/* <H3>나의 프로필</H3> */}</MyPic>
+        {/* <MyPic><H3>나의 프로필</H3></MyPic> */}
         <MyProfile>
           <MyThumb
             src={getProfileImage(userInfo.userImage)}
@@ -78,12 +77,12 @@ const MyPic = styled.div`
   align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
 `;
 
-// const H3 = styled.h3`
-//   font-size: 20px;
-//   line-height: 24px;
-//   font-weight: 600;
+const H3 = styled.h3`
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 600;
 
-// `;
+`;
 
 const Bt = styled.button<{ $follow?: boolean }>`
   width: 92px;

@@ -20,7 +20,7 @@ export type Post = {
     userId: number;
     postId: number;
     postTitle: string;
-    category: string;
+    category: number;
     content: string;
     nickname: string;
     userImage: string;

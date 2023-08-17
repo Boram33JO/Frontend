@@ -16,7 +16,8 @@ const isLoginSlice = createSlice({
     },
     logOut: (state, action) => {
         state.isLogin = false;
-        localStorage.removeItem("token"); // 토큰 삭제
+        localStorage.removeItem("AccessToken"); // 토큰 삭제
+        localStorage.removeItem("RefreshToken"); // 토큰 삭제
     },
   },
 });

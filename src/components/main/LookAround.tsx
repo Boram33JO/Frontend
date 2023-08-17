@@ -39,7 +39,7 @@ const LookAround = () => {
                     </LeftSection>
                     <RightSection>
                         <MapButton onClick={() => navigate(`/map`)}>
-                            <MapImage src="https://map.daumcdn.net/map_k3f_prod/bakery/image_map_png/PNG01/v20_ppxmp/5/500/222.png" />
+                            <MapImage src="https://map.daumcdn.net/map_k3f_prod/bakery/image_map_png/PNG01/v20_ppxmp/5/500/222.png" alt="map" />
                             <IconContainer>
                                 <StPlace />
                             </IconContainer>

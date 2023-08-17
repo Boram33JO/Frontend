@@ -1,18 +1,21 @@
 import { useState } from 'react'
-import { styled } from "styled-components"
+import { css, styled } from "styled-components"
 import { ReactComponent as Expand } from '../../assets/images/expand.svg'
 import { ReactComponent as Contract } from '../../assets/images/contract.svg'
 import { ReactComponent as Headphone } from '../../assets/images/headphone.svg'
-import spotify from '../../assets/images/Spotify_Icon_RGB_Black.png'
+import { ReactComponent as Like } from '../../assets/images/like.svg'
+import spotify from '../../assets/images/spotify/Spotify_Icon_RGB_Black.svg'
 import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
 import { displayedAt, getProfileImage } from '../../utils/common'
+import { cardBackground } from '../../utils/cardBackground'
 
 interface Props {
     post: Post;
 }
 
 const ListItem = ({ post }: Props) => {
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -21,10 +24,10 @@ const ListItem = ({ post }: Props) => {
     }
 
     return (
-        <ListItemContainer>
+        <ListItemContainer $src={cardBackground(post.category, post.postId)}>
             <ListItemTop onClick={() => navigate(`/detail/${post.postId}`)}>
                 <ProfileArea>
-                    <ProfileThumnail src={getProfileImage(post.userImage)} />
+                    <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" />
                     <ProfileInfo>
                         <StP $color="#FAFAFA" $size={"14px"}>
                             {post.nickname}
@@ -38,6 +41,18 @@ const ListItem = ({ post }: Props) => {
                     <StP $color="#FAFAFA" $size={"16px"}>
                         {post.postTitle}
                     </StP>
+                    <TitleSubArea>
+                        <SvgIcon style={{ marginRight: "4px" }}>
+                            <StLike />
+                        </SvgIcon>
+                        <StP $color="#FAFAFA" $size={"14px"}>
+                            {post.wishlistCount}
+                        </StP>
+                        <Divider />
+                        <StP $color="#FAFAFA" $size={"14px"} $weight={"500"}>
+                            {categories[Number(post.category) - 1]}
+                        </StP>
+                    </TitleSubArea>
                 </TitleArea>
             </ListItemTop>
             <DropdownToggle onClick={toggleDropdown}>
@@ -87,13 +102,13 @@ const ListItem = ({ post }: Props) => {
                     </DropdownList>
                 )}
             </DropdownToggle>
-        </ListItemContainer>
+        </ListItemContainer >
     )
 }
 
 export default ListItem
 
-const ListItemContainer = styled.div`
+const ListItemContainer = styled.div<{ $src?: string }>`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -101,7 +116,7 @@ const ListItemContainer = styled.div`
     width: 100%;
     height: 250px;
     
-    background-color: #322D2A;
+    background: ${(props) => props.$src || "#322D2A"};
     color: white;
 
     border-radius: 8px;
@@ -111,7 +126,7 @@ const ListItemContainer = styled.div`
 
 const ListItemTop = styled.div`
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 5px;
     cursor: pointer;
@@ -126,8 +141,26 @@ const ProfileArea = styled.div`
 
 const TitleArea = styled.div`
     display: inline-flex;
+    flex-direction: column;
     flex: 0.54 0 0;
+    align-items: flex-end;
+    gap: 4px;
+`
+
+const TitleSubArea = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     justify-content: flex-end;
+`
+
+const StLike = styled(Like)`
+    width: 14px;
+    height: 14px;
+    path{
+        fill: #FAFAFA;
+        stroke: #FAFAFA
+    }
 `
 
 const ProfileThumnail = styled.img`
@@ -262,4 +295,13 @@ const DropdownItem = styled.div`
     &:hover {
         opacity: 0.5;
     }
+`
+
+const Divider = styled.div`
+    height: 10px;
+    width: 1.5px;
+    border-radius: 1.5px;
+    background-color: #FAFAFA;
+    padding: 0;
+    margin: 0px 8px;
 `

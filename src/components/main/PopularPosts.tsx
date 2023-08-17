@@ -59,13 +59,13 @@ const PopularPosts = () => {
                         return (
                             <CardListItem key={post.postId} onClick={() => navigate(`/detail/${post.postId}`)}>
                                 <Card>
-                                    <CardBackground src={post.songs[0].thumbnail} />
+                                    <CardBackground src={post.songs[0].thumbnail} alt="postImage" />
                                     <ItemCategory>{categories[Number(post.category) - 1]}</ItemCategory>
                                 </Card>
                                 <PostInfo>
                                     <InfoTop>
                                         <InfoLeft>
-                                            <ProfileThumnail src={getProfileImage(post.userImage)} />
+                                            <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" />
                                             <ProfileInfo>
                                                 <StP $color={"#FAFAFA"} $size={"14px"}>
                                                     {post.nickname}
@@ -231,6 +231,7 @@ const ProfileThumnail = styled.img`
     width: 38px;
     height: 38px;
     border-radius: 50%;
+    background-color: #ECECEC;
 `
 
 const ProfileInfo = styled.div`

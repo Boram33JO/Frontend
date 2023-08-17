@@ -37,9 +37,7 @@ const ProfilePage = () => {
 
   return (
     <>
-
       <Mypicture userInfo={data.userInfo} follow={data.follow} />
-
       <List userInfo={data.userInfo} postList={data.postList} />
       <FollowersAll userInfo={data.userInfo} followList={data.followList} />
       {isMyProfile && (

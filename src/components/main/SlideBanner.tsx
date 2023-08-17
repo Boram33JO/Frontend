@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { styled } from 'styled-components';
-import { ReactComponent as Left } from '../../assets/images/onboard/onboard_left.svg'
-import { ReactComponent as Right } from '../../assets/images/onboard/onboard_right.svg'
-import { ReactComponent as Play } from '../../assets/images/onboard/onboard_play.svg'
-import { ReactComponent as Pause } from '../../assets/images/onboard/onboard_pause.svg'
-import onboard1 from '../../assets/images/onboard/onboard_1.svg'
-import onboard2 from '../../assets/images/onboard/onboard_2.svg'
-import onboard3 from '../../assets/images/onboard/onboard_3.svg'
+import { ReactComponent as Play } from '../../assets/images/onboard/01_play.svg'
+import { ReactComponent as Pause } from '../../assets/images/onboard/02_pause.svg'
+import { ReactComponent as Left } from '../../assets/images/onboard/03_left.svg'
+import { ReactComponent as Right } from '../../assets/images/onboard/04_right.svg'
+import onboard1 from '../../assets/images/onboard/05_onboard_01.svg'
+import onboard2 from '../../assets/images/onboard/06_onboard_02.svg'
+import onboard3 from '../../assets/images/onboard/07_onboard_03.svg'
 
 interface BannerItem {
     id: number;
@@ -87,10 +87,10 @@ const SlideBanner = () => {
                 }
             </SlideContainer>
             <Navigation>
-                <NavigationButton onClick={handlePrevSlideButton}>
+                <NavigationButton onClick={handlePrevSlideButton} type="button" aria-label="slideLeft">
                     <Left />
                 </NavigationButton>
-                <NavigationButton onClick={handleNextSlideButton}>
+                <NavigationButton onClick={handleNextSlideButton} type="button" aria-label="slideRight">
                     <Right />
                 </NavigationButton>
             </Navigation>
