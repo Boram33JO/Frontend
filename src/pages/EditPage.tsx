@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import styled from "styled-components";
 
 import SearchSong from "../components/edit/SearchSong";
 import EditMap from "../components/edit/EditMap";
 import ButtonComponent from "../components/edit/ButtonComponent";
-
-import axios from "axios";
 import FormArea from "../components/edit/FormArea";
+
+import { postData } from "../api/edit";
+import { getDetailPost } from "../api/post";
+import axios from "axios";
 
 interface InputForm {
     postTitle: string;
@@ -24,7 +27,29 @@ interface ChooseSongListType {
     thumbnail: string;
 }
 
+interface Song {
+    songNum: string;
+    artistName: string;
+    songTitle: string;
+    album: string;
+    thumbnail: string;
+    externalUrl: string;
+    audioUrl: string;
+}
+
+interface IsData {
+    latitude: number;
+    longitude: number;
+    address: string;
+    songs: Song[];
+    category: number;
+    content: string;
+    postTitle: string;
+    placeName: string;
+}
+
 const EditPage = () => {
+    // const { postId } = useParams<{ postId: number }>();
     const [slideIndex, setSlideIndex] = useState<number>(0);
     const [inputForm, setInputForm] = useState<InputForm>({ postTitle: "", content: "" });
     const [chooseSongList, setChooseSongList] = useState<Array<ChooseSongListType>>([]);
@@ -33,6 +58,11 @@ const EditPage = () => {
     const [latitude, setLatitude] = useState("");
     const [longitude, setLongitude] = useState("");
     const [categoryNum, setCategoryNum] = useState<number>(1);
+    const { postId } = useParams<{ postId: string }>();
+
+    const [isData, setIsData] = useState<IsData | null>(null);
+    const [editedData, setEditedData] = useState<string>("");
+
     const category = categoryNum + 1;
 
     const data = {
@@ -45,6 +75,22 @@ const EditPage = () => {
         postTitle: inputForm.postTitle,
         placeName,
     };
+
+    useEffect(() => {
+        const fixPostData = async () => {
+            try {
+                const response = await getDetailPost(postId);
+                setIsData(response.data);
+                console.log("dididi", isData); // 업데이트 된 상태를 찍어보기
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        if (postId) {
+            fixPostData();
+        }
+    }, [postId]);
 
     // 클릭 시 슬라이드 번호 이동
     const NextButtonHandler = () => {
@@ -69,17 +115,11 @@ const EditPage = () => {
 
     const onClickPost = async () => {
         try {
-            const response = await axios.post(`http://43.201.22.74/api/posts`, data, {
-                headers: {
-                    AccessToken:
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzNEB0ZXN0LmNvbSIsImV4cCI6MTY5MjIwMTI1NiwiaWF0IjoxNjkyMTk3NjU2fQ.RLLqO8hHPa5EuroSqU1-3m_ph_WJDX7H4KZYMXUqIFg",
-                    RefreshToken:
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIxOTc2NTYsInN1YiI6InRlc3QxMjM0QHRlc3QuY29tIiwiZXhwIjoxNjkzNDA3MjU2fQ.mm8Wmhq84PAlAaYVVgzqqmYHiguAhW8M_yXO1D8GifQ",
-                },
-            });
-            console.log("성공", response);
+            await postData(data);
+            alert("success");
         } catch (error) {
             console.log(error);
+            alert("failed");
         }
     };
 
@@ -100,12 +140,14 @@ const EditPage = () => {
                             placeName={placeName}
                             latitude={latitude}
                             longitude={longitude}
-                            categoryNum={categoryNum} // Pass categoryNum prop
+                            categoryNum={categoryNum}
+                            isData={isData}
                             setAddress={setAddress}
                             setPlaceName={setPlaceName}
                             setLatitude={setLatitude}
                             setLongitude={setLongitude}
-                            setCategoryNum={setCategoryNum} // Pass setCategoryNum prop
+                            setCategoryNum={setCategoryNum}
+                            setIsData={setIsData}
                         />
                     </StSlide>
                     {/* 2 */}
@@ -114,6 +156,8 @@ const EditPage = () => {
                         <SearchSong
                             chooseSongList={chooseSongList}
                             setChooseSongList={setChooseSongList}
+                            isData={isData}
+                            setIsData={setIsData}
                         />
                     </StSlide>
                     {/* 3 */}
@@ -126,6 +170,8 @@ const EditPage = () => {
                             setChooseSongList={setChooseSongList}
                             categoryNum={categoryNum}
                             placeName={placeName}
+                            isData={isData}
+                            setIsData={setIsData}
                         />
                     </StSlide>
                 </StSlides>

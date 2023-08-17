@@ -22,12 +22,14 @@ interface EditMapProps {
     latitude: string;
     longitude: string;
     categoryNum: number;
+    isData: any;
 
     setAddress: (address: string) => void;
     setPlaceName: (placeName: string) => void;
     setLatitude: (latitude: string) => void;
     setLongitude: (longitude: string) => void;
     setCategoryNum: React.Dispatch<React.SetStateAction<number>>;
+    setIsData: any;
 }
 
 const EditMap: React.FC<EditMapProps> = ({
@@ -36,11 +38,13 @@ const EditMap: React.FC<EditMapProps> = ({
     latitude,
     longitude,
     categoryNum,
+    isData,
     setAddress,
     setPlaceName,
     setLatitude,
     setLongitude,
     setCategoryNum,
+    setIsData,
 }) => {
     const [state, setState] = useState({
         center: { latitude: 37.566826, longitude: 126.9786567 },
@@ -97,7 +101,16 @@ const EditMap: React.FC<EditMapProps> = ({
         setSearchLocation("");
         searchMap();
     };
+    console.log(isData);
+    if (isData) {
+        setAddress(isData.location.address);
+        setPlaceName(isData.location.placeName);
+        setLatitude(isData.location.latitude);
+        setLongitude(isData.location.longitude);
+        setCategoryNum(isData.location.category);
+    }
 
+    
     return (
         <StMapContainer>
             <StSearchForm onSubmit={searchLocationHandler}>

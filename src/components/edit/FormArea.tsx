@@ -24,9 +24,20 @@ interface FormProps {
     setChooseSongList: React.Dispatch<React.SetStateAction<ChooseSongListType[]>>;
     categoryNum: number;
     placeName: string;
+    isData: any;
+    setIsData: any;
 }
 
-const FormArea: React.FC<FormProps> = ({ inputForm, setInputForm, chooseSongList, setChooseSongList, categoryNum, placeName }) => {
+const FormArea: React.FC<FormProps> = ({
+    inputForm,
+    setInputForm,
+    chooseSongList,
+    setChooseSongList,
+    categoryNum,
+    placeName,
+    isData,
+    setIsData,
+}) => {
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
