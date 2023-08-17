@@ -45,7 +45,7 @@ const RedirectKakao: React.FC = () => {
         const KAKAO_CODE = location.search.split("=")[1];
 
         axios.post(`http://43.201.22.74/api/oauth/token?code=${KAKAO_CODE}`).then((response) => {
-            console.log("kakao", response);
+            // console.log("kakao", response);
             // localStorage.setItem("token", response.headers.authorization);
             localStorage.setItem("AccessToken", response.headers.accesstoken);
             localStorage.setItem("RefreshToken", response.headers.refreshtoken);

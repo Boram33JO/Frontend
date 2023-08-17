@@ -11,7 +11,7 @@ const Layout = () => {
         <Container>
             <Header setSideOpen={setSideOpen} />
             <Outlet />
-            <Footer />
+            {/* <Footer /> */}
             <Inner $open={sideOpen} >
                 <Side sideOpen={sideOpen} setSideOpen={setSideOpen} />
             </Inner>

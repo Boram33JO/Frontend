@@ -49,7 +49,7 @@ const PostList = () => {
             params: { page, size: 5 },
         })
         setPosts(posts.concat(data.content))
-        console.log(data);
+        // console.log(data);
         setPage(data.number + 1)
         setNextPage(!data.last)
         setFetching(false)

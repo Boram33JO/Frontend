@@ -29,7 +29,7 @@ const BasicLogin = () => {
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
-      console.log(response);
+      // console.log(response);
       alert("로그인 했습니다!");
       dispatch(logIn());
       dispatch(setUserInfo(response.data));

@@ -60,7 +60,7 @@ const EditProfile = () => {
   const handleCheckButton = async () => {
     try {
       const response = await nicknameCheck(nickname);
-      console.log(response);
+      // console.log(response);
       if (response.data.statusCode < 300) {
         alert("사용가능한 닉네임입니다");
         setIsCheck(true);
@@ -84,10 +84,10 @@ const EditProfile = () => {
         const response = await updateProfile(userInfo.userId, formData);
         if (response.status <= 300) {
           alert("업데이트 성공");
-          console.log("Profile Update:", response);
+          // console.log("Profile Update:", response);
           const accessToken = response.headers.accesstoken;
           const refreshToken = response.headers.refreshtoken;
-          console.log("accessToken:", accessToken);
+          // console.log("accessToken:", accessToken);
           if (accessToken) { // 닉네임 변경 후 토큰 최신화
             localStorage.setItem("AccessToken", accessToken);
             localStorage.setItem("RefreshToken", refreshToken);

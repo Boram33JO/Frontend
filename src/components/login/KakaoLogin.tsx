@@ -8,8 +8,8 @@ const KakaoLogin = () => {
   const REDIRECT_URI = `http://localhost:3000/api/oauth/token`;
   const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
-  console.log(REST_API_KEY);
-  console.log(REDIRECT_URI);
+  // console.log(REST_API_KEY);
+  // console.log(REDIRECT_URI);
 
   const handleKakaoLogin = () => {
     window.location.href = KAKAO_AUTH_URL;

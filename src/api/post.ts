@@ -49,7 +49,6 @@ export const deletePost = async (postId: string | undefined) => {
 // 게시글 좋아요
 export const likePost = async (postId: string | undefined) => {
     const response = await instance.post(`api/posts/${postId}/wishlist`)
-    console.log(response);
     return response;
 }
 
