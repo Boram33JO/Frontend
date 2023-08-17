@@ -32,7 +32,7 @@ const ListComments = ({ commentList }: Props) => {
 
   const { data, isLoading, isError } = useQuery(["comments"], async () => {
     const response = await getCommentsLists(userId);
-    console.log('댓글 response:', response); // response를 console에 출력
+    // console.log('댓글 response:', response); 
     return response.data;
   });
   

@@ -41,8 +41,11 @@ const commentMutation = useMutation(deleteComment, {
 });
 
 const handleCommentDelete = (postId: number) => {
-  commentMutation.mutate(postId.toString()); // postId를 문자열로 변환하여 전달
-};
+  const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
+    if (confirmDelete) {
+      commentMutation.mutate(postId.toString()); // postId를 문자열로 변환하여 전달
+    }
+  };
 
 if (isLoading) {
   return <div>Loading...</div>;
@@ -60,21 +63,21 @@ if (isError) {
         <H3>나의 댓글 모아보기</H3>
       </Post>
       {
-         data.length === 0 ? (<NoDataMessage>작성한 댓글이 없습니다.</NoDataMessage>
+         data.length === 0 ? (<NoDataMessage>아직 작성한 댓글이 없습니다.</NoDataMessage>
          ) : (
         data.map((item: myComment) => {
           return (
-            <CommentList key={item.id} onClick={() => handleCommentClick(item.postId)}
+            <CommentList key={item.id} 
             >
               <CommentListItem>
                 <Delete>
-                <Content>{item.content}</Content>
+                <Content onClick={() => handleCommentClick(item.postId)}>{item.content}</Content>
                 <IconWrapper onClick={() => handleCommentDelete(item.id)}>
                 <IconComDel key={item.id} />
                 </IconWrapper>
                 </Delete>
-                <Date>{getDateNotation(item.createdAt)}</Date>
-                <PostTitle >{`${item.postTitle}`}</PostTitle>
+                <Date onClick={() => handleCommentClick(item.postId)} >{getDateNotation(item.createdAt)}</Date>
+                <PostTitle onClick={() => handleCommentClick(item.postId)} >{`Title : ${item.postTitle}` }</PostTitle>
                
               </CommentListItem>
             </CommentList>
@@ -120,7 +123,6 @@ const H3 = styled.h3`
 
 const CommentList = styled.ol`
   display: block;
-  cursor: pointer;
   
 `;
 
@@ -145,12 +147,14 @@ width: 326px;
   display: flex;
   justify-content: space-between; /* 내부 요소들을 양쪽으로 정렬 */
   align-items: center; /* 내부 요소들을 수직 가운데로 정렬 */
+  
 `;
 
 const IconWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  cursor: pointer;
   svg {
   }
   z-index: 3;
@@ -162,7 +166,7 @@ const Content = styled.div`
   font-size: 16px;
   font-weight: 500;
   color: #FAFAFA;
-
+  cursor: pointer;
 `;
 
 
@@ -171,6 +175,7 @@ const Date = styled.div`
   color: #a6a3af;
   font-weight: 500;
   padding-top: 10px;
+  cursor: pointer;
 `;
 
 const PostTitle = styled.div`
@@ -178,4 +183,5 @@ const PostTitle = styled.div`
   color: #a6a3af;
   font-weight: 500;
   margin-top: 60px;
+  cursor: pointer;
 `;

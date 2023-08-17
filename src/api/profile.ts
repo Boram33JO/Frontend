@@ -9,7 +9,7 @@ export const getProfileLists = async (userId: string | undefined) => {
         // console.log('Response:', response);
         return response;
     } catch (error) {
-        console.error('요청 실패:', error);
+     //   console.error('요청 실패:', error);
         throw error;
     }
 };

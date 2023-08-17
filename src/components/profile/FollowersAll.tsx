@@ -25,21 +25,31 @@ const FollowersAll = ({ userInfo, followList }: Props) => {
         <H3>{`${userInfo.nickname}님의 피플러`}</H3> 
         <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Follower1>
-      <FamousList>
-        {followList.map((item) => (
-          <FamousListItem
-            key={item.userId}
-            onClick={() => navigate(`/profile/${item.userId}`)}>
-            <FamousListThumb src={getProfileImage(item.userImage)} />
-            <FamousListNickName>{item.nickname}</FamousListNickName>
-          </FamousListItem>
-        ))}
-      </FamousList>
+      {followList.length === 0 ? (
+        <NoDataMessage>아직 피플러가 없습니다.</NoDataMessage>
+      ) : (
+        <FamousList>
+          {followList.map((item) => (
+            <FamousListItem
+              key={item.userId}
+              onClick={() => navigate(`/profile/${item.userId}`)}>
+              <FamousListThumb src={getProfileImage(item.userImage)} />
+              <FamousListNickName>{item.nickname}</FamousListNickName>
+            </FamousListItem>
+          ))}
+        </FamousList>
+      )}
     </InnerContainer>
   );
 };
 
 export default FollowersAll;
+
+const NoDataMessage = styled.p`
+  font-size: 16px;
+  color: #e7e6f0;
+`;
+
 
 const InnerContainer = styled.div`
   display: block;

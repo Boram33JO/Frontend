@@ -26,7 +26,7 @@ const FavList = ({ userInfo, wishList }: Props) => {
           <Bt onClick={handleViewAllClick}>전체보기</Bt>
         </TitleSection>
         {wishList.length === 0 ? (
-          <NoDataMessage>데이터가 없습니다!</NoDataMessage>
+          <NoDataMessage>아직 좋아요한 포스팅이 없습니다.</NoDataMessage>
         ) : (
           wishList.map((post) => (
             <ListItem key={post.postId} post={post} />
