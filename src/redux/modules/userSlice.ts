@@ -32,3 +32,21 @@ const userSlice = createSlice({
 
 export const { setUserInfo, nicknameUpdate, userImageUpdate, introduceUpdate, logout } = userSlice.actions;
 export default userSlice.reducer;
+
+// const initialState = {};
+
+// const userSlice = createSlice({
+//     name: "user",
+//     initialState,
+//     reducers: {
+//         setUserInfo: (state, action) => {
+//             return { ...state, ...action.payload };
+//         },
+//         logout: () => {
+//             return { ...initialState }
+//         }
+//     },
+// });
+
+// export const { setUserInfo, logout } = userSlice.actions;
+// export default userSlice.reducer;

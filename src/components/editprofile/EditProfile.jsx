@@ -84,7 +84,14 @@ const EditProfile = () => {
         const response = await updateProfile(userInfo.userId, formData);
         if (response.status <= 300) {
           alert("업데이트 성공");
-          console.log(response);
+          console.log("Profile Update:", response);
+          const accessToken = response.headers.accesstoken;
+          const refreshToken = response.headers.refreshtoken;
+          console.log("accessToken:", accessToken);
+          if (accessToken) { // 닉네임 변경 후 토큰 최신화
+            localStorage.setItem("AccessToken", accessToken);
+            localStorage.setItem("RefreshToken", refreshToken);
+          }
           dispatch(setUserInfo({ nickname, introduce, userImage: response.data.data }));
           navigate(-1);
         }

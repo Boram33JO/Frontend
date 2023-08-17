@@ -35,36 +35,36 @@ const BasicSignUp = () => {
       }
     },
   });
-  
+
   const onSignUpClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
     const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
 
-      // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리
-      const errors = {};
-      if (!emailRegex.test(email)) {
-        errors.email = "이메일 형식이 아닙니다.";
-      }
-      if (!passwordRegex.test(password)) {
-        errors.password = "password 조건이 충족되지 않았습니다.";
-      }
-      if (password !== passwordCheck) {
-        errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
-      }
-      if (!nicknameRegex.test(nickname)) {
-        errors.nickname = "알파벳소문자,대문자, 한글, 숫자, 2~12자 이하로 입력해 주세요.";
-      }
-  
-      // 에러가 있는 경우 처리
-      if (Object.keys(errors).length > 0) {
-        // 에러 메시지 모두 설정
-        setEmailError(errors.email || "");
-        setPasswordError(errors.password || "");
-        setPasswordCheckError(errors.passwordCheck || "");
-        setNicknameError(errors.nickname || "");
-        return;
-      }
+    // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리
+    const errors = {};
+    if (!emailRegex.test(email)) {
+      errors.email = "이메일 형식이 아닙니다.";
+    }
+    if (!passwordRegex.test(password)) {
+      errors.password = "password 조건이 충족되지 않았습니다.";
+    }
+    if (password !== passwordCheck) {
+      errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
+    }
+    if (!nicknameRegex.test(nickname)) {
+      errors.nickname = "알파벳소문자,대문자, 한글, 숫자, 2~12자 이하로 입력해 주세요.";
+    }
+
+    // 에러가 있는 경우 처리
+    if (Object.keys(errors).length > 0) {
+      // 에러 메시지 모두 설정
+      setEmailError(errors.email || "");
+      setPasswordError(errors.password || "");
+      setPasswordCheckError(errors.passwordCheck || "");
+      setNicknameError(errors.nickname || "");
+      return;
+    }
 
     const newUser = {
       email: email,
@@ -76,22 +76,21 @@ const BasicSignUp = () => {
 
   const handleCheckButton = async () => {
 
-      const response = await nicknameCheck(nickname);
-      console.log(response);
-     
-     if (response.data.message){
-        alert(response.data.message);
-     }
-     else {  
-     alert(response.data.error);
-     }
-      
-  
+    const response = await nicknameCheck(nickname);
+    console.log(response);
+
+    if (response.data.message) {
+      alert(response.data.message);
+    }
+    else {
+      alert(response.data.error);
+    }
+
+
   }
 
   return (
-    <>
-      <H1>회원가입</H1>
+    <InnerContainer>
       <Stbox>
         <Stinput1
           type={"text"}
@@ -122,7 +121,7 @@ const BasicSignUp = () => {
         {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
         {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
         {passwordCheckError && <ErrorMessage>{passwordCheckError}</ErrorMessage>}
-        
+
       </ErrorMessageContainer>
 
       <H3>닉네임</H3>
@@ -140,18 +139,17 @@ const BasicSignUp = () => {
         </Stnickname>
 
         <Stbutton2 onClick={onSignUpClickHandler}>회원가입하기</Stbutton2>
-        <SignUp>
-        <div>이미 회원이신가요?</div>
-        &nbsp;
-        <Stlink2 onClick={() => { navigate('/login') }}>로그인</Stlink2>
-      </SignUp>
+
       </Stbox>
-     
-    </>
+    </InnerContainer>
   );
 };
 
 export default BasicSignUp;
+
+const InnerContainer = styled.div`
+  width: 100%;
+`
 
 const ErrorMessageContainer = styled.div`
   display: flex;
@@ -170,16 +168,6 @@ const ErrorMessage = styled.div`
 `;
 
 
-const H1 = styled.h1`
-  font-size: 28px;
-  color: #e7e6f0;
-  font-weight: 700;
-
-  line-height: 24px;
-  padding-left: 20px;
-  margin-bottom: 40px;
-  padding-top: 50px;
-`;
 const Stbox = styled.div`
   display: flex;
   flex-direction: column;
@@ -311,24 +299,4 @@ const Stbutton2 = styled.button`
 
   cursor: pointer;
   margin-top: 60px;
-`;
-const SignUp = styled.div`
-  color: #b2b2b2;
-  font-weight: 600;
-  display: flex;
-  align-items: center; /* 요소들을 수직으로 가운데 정렬 */
-  justify-content: center; /* 요소들을 수평으로 가운데 정렬 */
-  flex-direction: row; /* 요소들을 가로로 배치 */
-  margin-top: 40px;
-  font-size: 16px;
-  margin-bottom:100%;
-`;
-
-const Stlink2 = styled.a`
-  text-decoration: underline;
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 500;
-  cursor: pointer;
-  color: #b2b2b2; 
 `;

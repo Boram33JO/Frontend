@@ -45,19 +45,14 @@ const RedirectKakao: React.FC = () => {
         const KAKAO_CODE = location.search.split("=")[1];
 
         axios.post(`http://43.201.22.74/api/oauth/token?code=${KAKAO_CODE}`).then((response) => {
-            // console.log("ssss", response);
+            console.log("kakao", response);
             // localStorage.setItem("token", response.headers.authorization);
             localStorage.setItem("AccessToken", response.headers.accesstoken);
             localStorage.setItem("RefreshToken", response.headers.refreshtoken);
             dispatch(logIn(null));
-            dispatch(setUserInfo({
-                userId: response.data.userId,
-                nickname: response.data.nickname,
-                userImage: response.data.userImage,
-                introduce: response.data.introduce
-            }));
+            dispatch(setUserInfo({ ...response.data }));
             alert("로그인되었습니다.");
-            navigate(`/`);
+            navigate("/");
         });
     });
 
