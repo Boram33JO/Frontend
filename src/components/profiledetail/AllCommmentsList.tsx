@@ -53,13 +53,15 @@ if (isError) {
 }
 
 
-// 
+
   return (
     <InnerContainer>
       <Post>
         <H3>나의 댓글 모아보기</H3>
       </Post>
       {
+         data.length === 0 ? (<NoDataMessage>작성한 댓글이 없습니다.</NoDataMessage>
+         ) : (
         data.map((item: myComment) => {
           return (
             <CommentList key={item.id} onClick={() => handleCommentClick(item.postId)}
@@ -78,12 +80,19 @@ if (isError) {
             </CommentList>
           )
         })
-      }
+      )}
     </InnerContainer>
   );
 };
 
 export default AllCommentsList;
+
+
+const NoDataMessage = styled.p`
+  font-size: 16px;
+  color: #e7e6f0;
+`;
+
 
 const InnerContainer = styled.div`
   display: flex;

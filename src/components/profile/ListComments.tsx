@@ -52,6 +52,8 @@ const ListComments = ({ commentList }: Props) => {
         <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Post>
       {
+        commentList.length === 0 ? (<NoDataMessage>작성한 댓글이 없습니다.</NoDataMessage>
+        ) : (
         commentList.map((item) => {
           return (
             <CommentList key={item.id} onClick={() => handleCommentClick(item.postId)}>
@@ -62,12 +64,17 @@ const ListComments = ({ commentList }: Props) => {
             </CommentList>
           )
         })
-      }
+      )}
     </InnerContainer>
   );
 };
 
 export default ListComments;
+
+const NoDataMessage = styled.p`
+  font-size: 16px;
+  color: #e7e6f0;
+`;
 
 const InnerContainer = styled.div`
   display: flex;
