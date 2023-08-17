@@ -6,9 +6,7 @@ import KakaoMap from "../components/map/KakaoMap";
 const MapPage = () => {
     return (
         <MapContainer>
-            <h1>지도</h1>
-            <KakaoMap />
-            
+            <KakaoMap /> 
         </MapContainer>
     );
 };
