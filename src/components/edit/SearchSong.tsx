@@ -1,9 +1,9 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react"; // useEffect는 사용하지 않아서 제거
 import { styled } from "styled-components";
 import { ReactComponent as CheckBox } from "../../assets/images/check_slc.svg";
 import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg";
 import { ReactComponent as Search } from "../../assets/images/search.svg";
+import { getPopularSongsList, getSearchSongs } from "../../api/edit";
 
 interface SongListType {
     album: string;
@@ -40,9 +40,11 @@ interface ChooseSongListType {
 interface SearchSongProps {
     chooseSongList: ChooseSongListType[]; // Props 타입 수정
     setChooseSongList: React.Dispatch<React.SetStateAction<ChooseSongListType[]>>;
+    isData: any;
+    setIsData: any;
 }
 
-const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongList }) => {
+const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongList, isData, setIsData }) => {
     const [searchSong, setSearchSong] = useState<string>("");
     const [songList, setSongList] = useState<Array<SongListType>>([]);
     const [popularSongList, setPopularSongList] = useState<Array<PopularSongListType>>([]);
@@ -54,17 +56,12 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
     useEffect(() => {
         const getPopularSongs = async () => {
             try {
-                const response = await axios.get(`http://43.201.22.74/api/AllMostSong`, {
-                    headers: {
-                        AccessToken:
-                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzNEB0ZXN0LmNvbSIsImV4cCI6MTY5MjE4MDU2MSwiaWF0IjoxNjkyMTc2OTYxfQ.htY2esUsedsiG7xG4ym1AAc0YwsBUUQ1_vSaxGmXNaw",
-                        RefreshToken:
-                            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIxNzY5NjEsInN1YiI6InRlc3QxMjM0QHRlc3QuY29tIiwiZXhwIjoxNjkzMzg2NTYxfQ.R1IJcfLOZp3UhMMT4NJrDvpIwvVJSitAshgUjUIkwVE",
-                    },
-                });
-                console.log("성공", response);
-                setPopularSongList(response.data);
-                console.log("quququ", popularSongList);
+                const response = await getPopularSongsList();
+                if (response) {
+                    setPopularSongList(response);
+                } else {
+                    console.log("검색 결과 없음");
+                }
             } catch (error) {
                 console.log(error);
             }
@@ -75,16 +72,12 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
     const getSearchSongHandler = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         try {
-            const response = await axios.get(`http://43.201.22.74/api/search?keyword=${searchSong}`, {
-                headers: {
-                    AccessToken:
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MTIzNEB0ZXN0LmNvbSIsImV4cCI6MTY5MjE4MDU2MSwiaWF0IjoxNjkyMTc2OTYxfQ.htY2esUsedsiG7xG4ym1AAc0YwsBUUQ1_vSaxGmXNaw",
-                    RefreshToken:
-                        "Bearer eyJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTIxNzY5NjEsInN1YiI6InRlc3QxMjM0QHRlc3QuY29tIiwiZXhwIjoxNjkzMzg2NTYxfQ.R1IJcfLOZp3UhMMT4NJrDvpIwvVJSitAshgUjUIkwVE",
-                },
-            });
-            console.log("성공", response);
-            setSongList(response.data);
+            const response = await getSearchSongs(searchSong);
+            if (response) {
+                setSongList(response.data);
+            } else {
+                console.log("검색 결과 없음");
+            }
         } catch (error) {
             console.log(error);
         }

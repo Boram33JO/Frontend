@@ -89,8 +89,8 @@ function App() {
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        {/* <Route path="/edit" element={<EditPage />} /> */}
         <Route path="/edit" element={<EditPage />} />
+        <Route path="/edit/:postId" element={<EditPage />} />
         <Route path="/list/:id" element={<ListPage />} />
         <Route path="/detail/:id" element={<DetailPage />} />
         <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
