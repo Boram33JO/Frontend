@@ -74,7 +74,7 @@ const EditMap: React.FC<EditMapProps> = ({
         const placesSearchCB = function (data: any, status: any, pagination: any) {
             if (status === window.kakao.maps.services.Status.OK) {
                 const newSearch = data[0];
-                console.log("newSearch", newSearch);
+                // console.log("newSearch", newSearch);
                 setAddress(newSearch.address_name);
                 setPlaceName(newSearch.place_name);
                 setLatitude(newSearch.y);
@@ -86,7 +86,7 @@ const EditMap: React.FC<EditMapProps> = ({
             }
         };
         ps.keywordSearch(searchLocation, placesSearchCB);
-        console.log("state before setState", state);
+        // console.log("state before setState", state);
     };
 
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +101,7 @@ const EditMap: React.FC<EditMapProps> = ({
         setSearchLocation("");
         searchMap();
     };
-    console.log(isData);
+    // console.log(isData);
     if (isData) {
         setAddress(isData.location.address);
         setPlaceName(isData.location.placeName);
