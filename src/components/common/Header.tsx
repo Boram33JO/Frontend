@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/config/configStore";
 import { getProfileImage } from '../../utils/common'
+import { useEffect } from "react";
 
 interface Props {
     setSideOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,7 +14,13 @@ interface Props {
 
 const Header = ({ setSideOpen }: Props) => {
     const navigate = useNavigate();
+    const isLogin = useSelector((state: RootState) => state.isLogin);
     const userInfo = useSelector((state: RootState) => state.user);
+    const persist = localStorage.getItem("persist:root");
+    
+    useEffect(() => {
+
+    }, [persist])
 
     return (
         <HeaderContainer>
@@ -26,10 +33,11 @@ const Header = ({ setSideOpen }: Props) => {
             <HeaderRight>
                 <StSearch />
                 {
-                    (userInfo.userId) ? (
+                    (isLogin.isLogin) ? (
                         <ProfileImage
                             onClick={() => navigate(`/profile/${userInfo.userId}`)}
                             src={getProfileImage(userInfo.userImage)}
+                            alt="userImage"
                         />
                     ) : (
                         <StLogin onClick={() => navigate('/login')} />

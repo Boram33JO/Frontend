@@ -24,8 +24,11 @@ const userSlice = createSlice({
         introduceUpdate: (state, action) => {
             state.introduce = action.payload;
         },
+        logout: () => {
+            return { ...initialState }
+        }
     },
 });
 
-export const { setUserInfo, nicknameUpdate, userImageUpdate, introduceUpdate } = userSlice.actions;
+export const { setUserInfo, nicknameUpdate, userImageUpdate, introduceUpdate, logout } = userSlice.actions;
 export default userSlice.reducer;

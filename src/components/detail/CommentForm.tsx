@@ -41,7 +41,7 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     });
 
     const handlePostButtonClick = async () => {
-        if (id) {
+        if (id && content) {
             commentMutation.mutate(id);
             setContent("");
         }
@@ -51,7 +51,7 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     }
 
     const handleUpdateButtonClick = async () => {
-        if (commentId) {
+        if (commentId && content) {
             updateMutation.mutate(commentId);
             setTarget("");
         }

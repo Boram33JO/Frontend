@@ -1,18 +1,26 @@
 import { styled } from "styled-components"
 import { Song } from "../../pages/DetailPage"
 import spotify from '../../assets/images/Spotify_Icon_RGB_White.png'
+import Preview from "../common/Preview"
+import { useState } from "react"
 
 interface Songs {
     songs: Song[]
 }
 
 const Playlist: React.FC<Songs> = ({ songs }) => {
+    const [songIndex, setSongIndex] = useState(0);
+    const [preview, setPreview] = useState(false);
+    const handleClickListItem = (index: number) => {
+        setSongIndex(index);
+        setPreview(true);
+    }
     return (
         <PlaylistContainer>
             <PlaylistSection>
-                {songs.map(song => {
+                {songs.map((song, index) => {
                     return (
-                        <PlaylistItem key={song.id} onClick={() => window.open(`${song.externalUrl}`)}>
+                        <PlaylistItem key={song.id} onClick={() => { handleClickListItem(index) }}>
                             <PlaylistLeft>
                                 <MusicThumbnail src={song.thumbnail} />
                                 <MusicInfo>
@@ -28,6 +36,7 @@ const Playlist: React.FC<Songs> = ({ songs }) => {
                         </PlaylistItem>
                     )
                 })}
+                {preview && <Preview url={songs[songIndex].audioUrl} song={songs[songIndex]} setPreview={setPreview} />}
             </PlaylistSection>
         </PlaylistContainer>
     )
@@ -83,7 +92,6 @@ const PlaylistItem = styled.div`
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-
     &:hover {
         opacity: 0.5;
     }

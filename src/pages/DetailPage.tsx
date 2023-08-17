@@ -55,12 +55,10 @@ const DetailPage = () => {
         window.scrollTo(0, 0);
     }, [pathname]);
 
-    const { data, isLoading, isError } = useQuery(
-
-        ["post", id],
-
+    const { data, isLoading, isError } = useQuery(["post", id],
         async () => {
             const response = await getDetailPost(id);
+            // console.log(response.data)
             return response.data;
         }
     )

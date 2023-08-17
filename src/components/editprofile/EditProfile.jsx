@@ -84,6 +84,7 @@ const EditProfile = () => {
         const response = await updateProfile(userInfo.userId, formData);
         if (response.status <= 300) {
           alert("업데이트 성공");
+          console.log(response);
           dispatch(setUserInfo({ nickname, introduce, userImage: response.data.data }));
           navigate(-1);
         }

@@ -26,7 +26,7 @@ const CommentList: React.FC<Comments> = ({ comments }) => {
         }
     });
 
-    const CommentButtonHandler = () => { }
+    // const CommentButtonHandler = () => { }
 
     const CommentUpdateButtonHandler = (id: string) => {
         setUpdateTarget(id);
@@ -68,10 +68,10 @@ const CommentList: React.FC<Comments> = ({ comments }) => {
                                             <P $size="14px" $color="#A6A3AF">
                                                 {displayedAt(item.createdAt)}
                                             </P>
-                                            <Divider />
+                                            {/* <Divider />
                                             <CommentP onClick={CommentButtonHandler}>
                                                 댓글 달기
-                                            </CommentP>
+                                            </CommentP> */}
                                             {(userInfo.nickname === item.nickname) &&
                                                 <>
                                                     <Divider />
@@ -125,7 +125,6 @@ export default CommentList
 const CommentListContainer = styled.div`
     width: inherit;
     box-sizing: border-box;
-    background-color: #141414;
     padding: 20px 20px;
 `
 

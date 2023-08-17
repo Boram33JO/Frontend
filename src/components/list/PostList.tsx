@@ -1,15 +1,28 @@
 import { styled } from "styled-components";
 import SortButton from "./SortButton";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ListItem from "../common/ListItem";
 import { Post } from "../../models/post";
-import { useQuery } from "react-query";
-import { getPostLists } from "../../api/post";
+import instance from "../../api/common";
+import LoadingSkeleton from "./LoadingSkeleton";
 
-const PostList: React.FC = () => {
+export interface PaginationResponse<T> {
+    content: T[];
+    number: number;
+    pageSize: number;
+    totalPages: number;
+    totalCount: number;
+    last: boolean;
+    first: boolean;
+}
+
+const PostList = () => {
     const { id } = useParams();
+    const [page, setPage] = useState(0);
     const [posts, setPosts] = useState<Post[]>([]);
+    const [isFetching, setFetching] = useState(false);
+    const [hasNextPage, setNextPage] = useState(true);
     const [sortBy, setSortBy] = useState<"Oldest" | "Newest" | "LikeCount">("Newest");
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
@@ -31,22 +44,41 @@ const PostList: React.FC = () => {
         setSortBy("LikeCount");
     }
 
-    const { data, isLoading, isError } = useQuery(["lists", id],
-        async () => {
-            const response = await getPostLists(id);
-            // console.log(response);
-            setPosts(response.data.content);
-            return response.data.content;
+    const fetchPosts = useCallback(async () => {
+        const { data } = await instance.get<PaginationResponse<Post>>(`api/posts/category/${id}`, {
+            params: { page, size: 5 },
+        })
+        setPosts(posts.concat(data.content))
+        console.log(data);
+        setPage(data.number + 1)
+        setNextPage(!data.last)
+        setFetching(false)
+    }, [page])
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const { scrollTop, offsetHeight } = document.documentElement
+            if (window.innerHeight + scrollTop >= offsetHeight) {
+                setFetching(true)
+            }
         }
-    )
+        setFetching(true)
+        window.addEventListener('scroll', handleScroll)
+        return () => window.removeEventListener('scroll', handleScroll)
+    }, [])
 
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
+    useEffect(() => {
+        if (isFetching && hasNextPage) fetchPosts()
+        else if (!hasNextPage) setFetching(false)
+    }, [isFetching])
 
-    if (isError) {
-        return <div>Error...</div>
-    }
+    useEffect(() => {
+        setFetching(true);
+        setNextPage(true);
+        setPosts([]);
+        setPage(0);
+        setSortBy("Newest");
+    }, [id])
 
     return (
         <InnerContainer>
@@ -64,6 +96,7 @@ const PostList: React.FC = () => {
                     <ListItem key={post.postId} post={post} />
                 )
             })}
+            {isFetching && <LoadingSkeleton />}
         </InnerContainer>
     )
 }
