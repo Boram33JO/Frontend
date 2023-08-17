@@ -131,6 +131,18 @@ const StFormArea = styled.div`
         padding: 16px 13px;
         background: #434047;
         color: #d9d8df;
+        &::-webkit-scrollbar {
+            width: 4px;
+            border-radius: 10px;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: #dddddd;
+            border-radius: 10px;
+        }
+        &::-webkit-scrollbar-track {
+            background-color: #3a3a3a;
+            border-radius: 10px;
+        }
     }
     textarea:focus {
         outline: none;
