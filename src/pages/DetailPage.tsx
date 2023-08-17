@@ -78,7 +78,7 @@ const DetailPage = () => {
             {
                 (userInfo.nickname === data.nickname) && (
                     <UpdateSection>
-                        <StButton>수정</StButton>
+                        <StButton onClick={() => navigate(`/edit/${id}`)}>수정</StButton>
                         <Divider />
                         <StButton onClick={handleDeleteToggle}>삭제</StButton>
                     </UpdateSection>

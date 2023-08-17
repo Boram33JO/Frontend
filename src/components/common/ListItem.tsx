@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
 import { displayedAt, getProfileImage } from '../../utils/common'
 import { cardBackground } from '../../utils/cardBackground'
+import Preview from './Preview'
 
 interface Props {
     post: Post;
@@ -16,9 +17,14 @@ interface Props {
 
 const ListItem = ({ post }: Props) => {
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
-    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
-
+    const [isOpen, setIsOpen] = useState(false);
+    const [songIndex, setSongIndex] = useState(0);
+    const [preview, setPreview] = useState(false);
+    const handleClickListItem = (index: number) => {
+        setSongIndex(index);
+        setPreview(true);
+    }
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
     }
@@ -81,9 +87,9 @@ const ListItem = ({ post }: Props) => {
                 </PlaylistRight>
                 {isOpen && (
                     <DropdownList>
-                        {post.songs.map(song => {
+                        {post.songs.map((song, index) => {
                             return (
-                                <DropdownItem key={song.id} onClick={() => window.open(`${song.externalUrl}`)}>
+                                <DropdownItem key={song.id} onClick={() => { handleClickListItem(index) }}>
                                     <PlaylistLeft>
                                         <MusicThumbnail src={song.thumbnail} />
                                         <MusicInfo>
@@ -102,6 +108,7 @@ const ListItem = ({ post }: Props) => {
                     </DropdownList>
                 )}
             </DropdownToggle>
+            {preview && <Preview url={post.songs[songIndex].audioUrl} song={post.songs[songIndex]} setPreview={setPreview} />}
         </ListItemContainer >
     )
 }

@@ -5,6 +5,7 @@ import { ReactComponent as Arrow } from '../../assets/images/side/02_arrow.svg'
 import { ReactComponent as Map } from '../../assets/images/side/03_map.svg'
 import { ReactComponent as Post } from '../../assets/images/side/04_post.svg'
 import { ReactComponent as PP } from '../../assets/images/side/05_pp.svg'
+import { ReactComponent as Edit } from '../../assets/images/side/edit.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -21,7 +22,8 @@ interface Props {
 const Side = ({ sideOpen, setSideOpen }: Props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const userInfo = useSelector((state: RootState) => state.user);
+    const isLogin = useSelector((state: RootState) => state.isLogin);
+    const LoginUser = useSelector((state: RootState) => state.user);
     const menuList = [
         { id: 1, name: "피플 맵핑", icon: Map, path: "/map" },
         { id: 2, name: "피플 포스팅", icon: Post, path: "/list/1" },
@@ -37,7 +39,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
         setSideOpen(false);
         dispatch(logOut(null));
         dispatch(logout());
-        // window.location.reload();
+        alert("로그아웃 되었습니다.");
     }
 
     return (
@@ -51,10 +53,10 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                         <P $size={"48px"} $weight={"700"} onClick={() => handleMenuClick("/")}>P.Ple</P>
                     </LogoSection>
                     {
-                        (userInfo.userId) ? (
-                            <ProfileSection onClick={() => handleMenuClick(`/profile/${userInfo.userId}`)}>
-                                <ProfileImage src={getProfileImage(userInfo.userImage)} alt="userImage" />
-                                <P $size={"18px"} $weight={"600"}>{userInfo.nickname}</P>
+                        (LoginUser.userId) ? (
+                            <ProfileSection onClick={() => handleMenuClick(`/profile/${LoginUser.userId}`)}>
+                                <ProfileImage src={getProfileImage(LoginUser.userImage)} alt="userImage" />
+                                <P $size={"18px"} $weight={"600"}>{LoginUser.nickname}</P>
                             </ProfileSection>
                         ) : (
                             <ProfileSection onClick={() => handleMenuClick("/login")}>
@@ -77,11 +79,27 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                             )
                         })
                     }
+
+                    {
+                        (isLogin.isLogin) && (
+                            <>
+                                <Hr />
+                                <MenuItem onClick={() => handleMenuClick("/edit")}>
+                                    <MenuItemName>
+                                        <Edit />
+                                        <P $size={"18px"} $weight={"600"}>작성하기</P>
+                                    </MenuItemName>
+                                    <Arrow />
+                                </MenuItem>
+                            </>
+                        )
+                    }
+
                 </SideMiddle>
             </SideTop>
             <SideBottom>
                 {
-                    (userInfo.userId !== 0) && <P $color={"#A6A3AF"} $size={"16px"} $weight={"500"} onClick={handleLogout}>로그아웃</P>
+                    (LoginUser.userId !== 0) && <P $color={"#A6A3AF"} $size={"16px"} $weight={"500"} onClick={handleLogout}>로그아웃</P>
                 }
             </SideBottom>
             <Label onClick={() => setSideOpen(false)} />
@@ -203,9 +221,7 @@ const MenuItemName = styled.div`
 `
 
 const SideBottom = styled.div`
-    color: #A6A3AF;
-    font-size: 16px;
-    line-height: calc(100% + 2px);
+    width: auto;
     cursor: pointer;
     margin-bottom: 40px;
 `
