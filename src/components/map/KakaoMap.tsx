@@ -28,8 +28,8 @@ const Kakao: React.FC = () => {
             navigator.geolocation.getCurrentPosition(function (position) {
                 const lat = position.coords.latitude; // 위도
                 const lon = position.coords.longitude; // 경도
-                console.log("lat", lat);
-                console.log("lon", lon);
+                // console.log("lat", lat);
+                // console.log("lon", lon);
 
                 const locPosition = new window.kakao.maps.LatLng(lat, lon); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
                 const message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
@@ -58,7 +58,7 @@ const Kakao: React.FC = () => {
         const placesSearchCB = function (data: any, status: any, pagination: any) {
             if (status === window.kakao.maps.services.Status.OK) {
                 const newSearch = data[0];
-                console.log(newSearch);
+                // console.log(newSearch);
                 setState({
                     center: { lat: newSearch.y, lng: newSearch.x },
                     isPanto: true,

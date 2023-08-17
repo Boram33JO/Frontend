@@ -77,7 +77,7 @@ const BasicSignUp = () => {
   const handleCheckButton = async () => {
 
     const response = await nicknameCheck(nickname);
-    console.log(response);
+    // console.log(response);
 
     if (response.data.message) {
       alert(response.data.message);

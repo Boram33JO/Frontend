@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const Categories = () => {
     const clickCategoryHandler = (category: any) => {
-        console.log("category", category);
+        // console.log("category", category);
         localStorage.setItem("category", category);
     };
 

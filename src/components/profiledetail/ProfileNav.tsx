@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 
 interface StBoxProps {
-  active: boolean;
+  $active: boolean;
 }
 
 const ProfileNav: React.FC = () => {
@@ -22,16 +22,16 @@ const ProfileNav: React.FC = () => {
 
   return (
     <StBox>
-      <StBox1 active={activeTab === 'post'} onClick={() => handleTabClick('post')}>
+      <StBox1 $active={activeTab === 'post'} onClick={() => handleTabClick('post')}>
         내 포스팅
       </StBox1>
-      <StBox2 active={activeTab === 'wishlist'} onClick={() => handleTabClick('wishlist')}>
+      <StBox2 $active={activeTab === 'wishlist'} onClick={() => handleTabClick('wishlist')}>
         피플포스팅
       </StBox2>
-      <StBox3 active={activeTab === 'follow'} onClick={() => handleTabClick('follow')}>
+      <StBox3 $active={activeTab === 'follow'} onClick={() => handleTabClick('follow')}>
         피플러
       </StBox3>
-      <StBox4 active={activeTab === 'comments'} onClick={() => handleTabClick('comments')}>
+      <StBox4 $active={activeTab === 'comments'} onClick={() => handleTabClick('comments')}>
         댓글관리
       </StBox4>
   
@@ -57,8 +57,8 @@ const StBox1 = styled.div<StBoxProps>`
   padding-bottom: 5px;
   margin-bottom: -2px;
   cursor: pointer;
-  color: ${(props) => (props.active ? ' #E7E6F0;' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
+  color: ${(props) => (props.$active ? ' #E7E6F0;' : '#5b5b5b')};
+  border-bottom: ${(props) => (props.$active ? '2px solid #8084f3' : 'none')};
 `;
 
 const StBox2 = styled.div<StBoxProps>`
@@ -66,8 +66,8 @@ const StBox2 = styled.div<StBoxProps>`
   padding-bottom: 5px;
   margin-bottom: -2px;
   cursor: pointer;
-  color: ${(props) => (props.active ? ' #E7E6F0;' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
+  color: ${(props) => (props.$active ? ' #E7E6F0;' : '#5b5b5b')};
+  border-bottom: ${(props) => (props.$active ? '2px solid #8084f3' : 'none')};
 `;
 
 const StBox3 = styled.div<StBoxProps>`
@@ -75,8 +75,8 @@ const StBox3 = styled.div<StBoxProps>`
   padding-bottom: 5px;
   margin-bottom: -2px;
   cursor: pointer;
-  color: ${(props) => (props.active ? ' #E7E6F0;' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
+  color: ${(props) => (props.$active ? ' #E7E6F0;' : '#5b5b5b')};
+  border-bottom: ${(props) => (props.$active ? '2px solid #8084f3' : 'none')};
 `;
 
 const StBox4 = styled.div<StBoxProps>`
@@ -84,8 +84,8 @@ const StBox4 = styled.div<StBoxProps>`
   padding-bottom: 5px;
   margin-bottom: -2px;
   cursor: pointer;
-  color: ${(props) => (props.active ? '#E7E6F0;' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.active ? '2px solid #8084f3' : 'none')};
+  color: ${(props) => (props.$active ? '#E7E6F0;' : '#5b5b5b')};
+  border-bottom: ${(props) => (props.$active ? '2px solid #8084f3' : 'none')};
 `;
 
 

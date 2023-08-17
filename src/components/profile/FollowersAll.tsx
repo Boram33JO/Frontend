@@ -87,7 +87,7 @@ const FamousList = styled.div`
 
 const FamousListItem = styled.div`
   margin-top: 16px;
-  width: 65px;
+  width: 75px;
   height: 90px;
   display: flex;
   flex-direction: column;
@@ -101,8 +101,8 @@ const FamousListItem = styled.div`
 `;
 
 const FamousListThumb = styled.img`
-  width: 65px;
-  height: 65px;
+  width: 75px;
+  height: 75px;
   border-radius: 50%;
 `;
 

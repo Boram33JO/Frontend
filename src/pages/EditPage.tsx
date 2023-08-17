@@ -81,7 +81,7 @@ const EditPage = () => {
             try {
                 const response = await getDetailPost(postId);
                 setIsData(response.data);
-                console.log("dididi", isData); // 업데이트 된 상태를 찍어보기
+                // console.log("dididi", isData); // 업데이트 된 상태를 찍어보기
             } catch (error) {
                 console.error(error);
             }
