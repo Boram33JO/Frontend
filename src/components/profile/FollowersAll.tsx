@@ -48,6 +48,7 @@ export default FollowersAll;
 const NoDataMessage = styled.p`
   font-size: 16px;
   color: #e7e6f0;
+  padding-top: 10px;
 `;
 
 
