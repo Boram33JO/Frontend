@@ -1,8 +1,8 @@
 import { styled } from "styled-components"
-import { Song } from "../../pages/DetailPage"
 import spotify from '../../assets/images/Spotify_Icon_RGB_White.png'
 import Preview from "../common/Preview"
 import { useState } from "react"
+import { Song } from "../../models/post"
 
 interface Songs {
     songs: Song[]

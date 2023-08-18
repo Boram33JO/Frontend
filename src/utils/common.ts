@@ -1,4 +1,4 @@
-// 작성 시간
+// 작성 시간 (6일 전까지만 표시, 7일 전 부터는 YY.MM.DD로 표시)
 export const displayedAt = (createdAt: string) => {
     const milliSeconds = new Date().getTime() - new Date(createdAt).getTime();
     const seconds = milliSeconds / 1000
@@ -11,13 +11,6 @@ export const displayedAt = (createdAt: string) => {
     if (days < 7) return `${Math.floor(days)}일 전`
 
     return getDateNotation(createdAt);
-
-    // const weeks = days / 7
-    // if (weeks < 5) return `${Math.floor(weeks)}주 전`
-    // const months = days / 30
-    // if (months < 12) return `${Math.floor(months)}개월 전`
-    // const years = days / 365
-    // return `${Math.floor(years)}년 전`
 }
 
 // 날짜 표기 (YY.MM.DD)
@@ -33,24 +26,4 @@ export const getDateNotation = (input?: string) => {
 // 기본 이미지
 export const getProfileImage = (image?: string | null) => {
     return (image) ? image : "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1"
-}
-
-// Throttle
-export const throttle = (handler: (...args: any[]) => void, timeout = 500) => {
-    let invokedTime: number
-    let timer: number
-    return function (this: any, ...args: any[]) {
-        if (!invokedTime) {
-            handler.apply(this, args)
-            invokedTime = Date.now()
-        } else {
-            clearTimeout(timer)
-            timer = window.setTimeout(() => {
-                if (Date.now() - invokedTime >= timeout) {
-                    handler.apply(this, args)
-                    invokedTime = Date.now()
-                }
-            }, Math.max(timeout - (Date.now() - invokedTime), 0))
-        }
-    }
 }

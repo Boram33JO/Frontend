@@ -70,13 +70,13 @@ const BasicLogin = () => {
       <Stbox>
         <Stinput1
           type={"text"}
-          placeholder={"이메일을 입력해주세요."}
+          placeholder={"이메일 계정"}
           value={email}
           onChange={onChangeEmailHandler}
         />
         <Stinput2
           type={"password"}
-          placeholder={"비밀번호를 입력해주세요."}
+          placeholder={"비밀번호 입력"}
           value={password}
           onChange={onChangePasswordHandler}
         />

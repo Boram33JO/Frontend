@@ -38,7 +38,7 @@ const throttle = (handler: (...args: any[]) => void, timeout = 300) => {
     }
 }
 
-const useInfiniteScroll = <T>({ initialData, fetchUrl, id, pageSize }: InfiniteScrollOptions<T>) => {
+const useInfiniteScroll2 = <T>({ initialData, fetchUrl, id, pageSize }: InfiniteScrollOptions<T>) => {
     const [page, setPage] = useState(0);
     const [data, setData] = useState<T[]>(initialData);
     const [isFetching, setFetching] = useState(false);
@@ -81,4 +81,4 @@ const useInfiniteScroll = <T>({ initialData, fetchUrl, id, pageSize }: InfiniteS
     return { data, isFetching }
 }
 
-export default useInfiniteScroll
+export default useInfiniteScroll2

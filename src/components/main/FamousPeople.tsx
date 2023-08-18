@@ -10,6 +10,7 @@ const FamousPeople = () => {
     const { data, isLoading, isError } = useQuery(["famous"],
         async () => {
             const response = await getPopularPeople();
+            // console.log("인기 피플러 요청", response.data);
             return response.data;
         }
     )
