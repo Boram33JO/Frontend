@@ -4,7 +4,7 @@ import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
 import styled from "styled-components";
 import Category from "../common/Category";
 // import ListItem from "../common/ListItem";
-// import axios from "axios";
+import axios from "axios";
 
 declare global {
     interface Window {
@@ -21,49 +21,55 @@ const Kakao: React.FC = () => {
     const [longitude, setLongitude] = useState<number>();
     const [searchLocation, setSearchLocation] = useState<string>("");
     const [categoryNum, setCategoryNum] = useState<number>(0);
-
     useEffect(() => {
-        const mapContainer = document.getElementById("map"); // 지도를 표시할 div
-        const mapOption = {
-            center: new window.kakao.maps.LatLng(state.center.lat, state.center.lng), // 지도의 중심좌표
-            level: 3,
-        };
+        const script = document.createElement("script");
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_REST_API_KEY}&libraries=services&autoload=false`;
+        document.head.appendChild(script);
 
-        const map = new window.kakao.maps.Map(mapContainer, mapOption);
+        script.onload = () => {
+            window.kakao.maps.load(function () {
+                const mapContainer = document.getElementById("map"); // 지도를 표시할 div
+                const mapOption = {
+                    center: new window.kakao.maps.LatLng(state.center.lat, state.center.lng), // 지도의 중심좌표
+                    level: 3,
+                };
 
-        // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
-        if (navigator.geolocation) {
-            // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-            navigator.geolocation.getCurrentPosition(function (position) {
-                const lat = position.coords.latitude; // 위도
-                const lng = position.coords.longitude; // 경도
-                // console.log("lat", lat);
-                // console.log("lng", lng);
+                const map = new window.kakao.maps.Map(mapContainer, mapOption);
+                // HTML5의 geolocation으로 사용할 수 있는지 확인합니다
+                if (navigator.geolocation) {
+                    // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+                    navigator.geolocation.getCurrentPosition(function (position) {
+                        const lat = position.coords.latitude; // 위도
+                        const lng = position.coords.longitude; // 경도
+                        console.log("lat", lat);
+                        console.log("lng", lng);
 
-                const locPosition = new window.kakao.maps.LatLng(lat, lng); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
-                const message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
+                        const locPosition = new window.kakao.maps.LatLng(lat, lng); // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
+                        const message = '<div style="padding:5px;">여기에 계신가요?!</div>'; // 인포윈도우에 표시될 내용입니다
 
-                // 마커와 인포윈도우를 표시합니다
-                displayMarker(locPosition, message, map);
-                setLatitude(lat);
-                setLongitude(lng);
-                // console.log("lat", latitude);
-                // console.log("lng", longitude);
+                        // 마커와 인포윈도우를 표시합니다
+                        displayMarker(locPosition, message, map);
+                        setLatitude(lat);
+                        setLongitude(lng);
+                        // console.log("lat", latitude);
+                        // console.log("lng", longitude);
+                    });
+                } else {
+                    // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
+                    const locPosition = new window.kakao.maps.LatLng(33.450701, 126.570667);
+                    const message = "geolocation을 사용할수 없어요..";
+
+                    // 마커와 인포윈도우를 표시합니다
+                    displayMarker(locPosition, message, map);
+                }
+
+                if (state.isPanto) {
+                    map.panTo(new window.kakao.maps.LatLng(state.center.lat, state.center.lng));
+                } else {
+                    map.setCenter(new window.kakao.maps.LatLng(state.center.lat, state.center.lng));
+                }
             });
-        } else {
-            // HTML5의 GeoLocation을 사용할 수 없을때 마커 표시 위치와 인포윈도우 내용을 설정합니다
-            const locPosition = new window.kakao.maps.LatLng(33.450701, 126.570667);
-            const message = "geolocation을 사용할수 없어요..";
-
-            // 마커와 인포윈도우를 표시합니다
-            displayMarker(locPosition, message, map);
-        }
-
-        if (state.isPanto) {
-            map.panTo(new window.kakao.maps.LatLng(state.center.lat, state.center.lng));
-        } else {
-            map.setCenter(new window.kakao.maps.LatLng(state.center.lat, state.center.lng));
-        }
+        };
     }, []);
 
     const searchMap = () => {
@@ -115,27 +121,23 @@ const Kakao: React.FC = () => {
     const category = categoryNum + 1;
     // console.log(category);
 
+    // const searchLocation = async () => {
+    //     try {
+    //         const data = { latitude, longitude }; // Define your latitude and longitude values
+
+    //         const response = await axios.post(`/api/posts/area`, data);
+
+    //         console.log("Response:", response.data); // Print the response data
+    //     } catch (error) {
+    //         console.log("Error:", error);
+    //     }
+    // };
+
+    // searchLocation();
+
+    // // Call the async function immediately
     // useEffect(() => {
-    //     const searchLocation = async () => {
-    //         try {
-    //             const data = { latitude, longitude }; // Define your latitude and longitude values
-
-    //             const response = await axios.post(`/api/posts/area`, data, {
-    //                 headers: {
-    //                     AccessToken:
-    //                         "Bearer",
-    //                     RefreshToken:
-    //                         "Bearer",
-    //                 },
-    //             });
-
-    //             console.log("Response:", response.data); // Print the response data
-    //         } catch (error) {
-    //             console.log("Error:", error);
-    //         }
-    //     };
-
-    //     searchLocation(); // Call the async function immediately
+    //     searchLocation();
     // }, []);
 
     return (

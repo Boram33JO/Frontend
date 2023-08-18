@@ -26,7 +26,8 @@ export const getSearchSongs = async (searchSong: string) => {
 export const postData = async (data: any) => {
     try {
         const response = await instance.post(`/api/posts`, data);
-        // console.log("성공", response);
+        console.log("성공", response);
+        return response;
     } catch (error) {
         console.log(error);
     }
