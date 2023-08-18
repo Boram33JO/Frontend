@@ -23,7 +23,7 @@ const BasicSignUp = () => {
 
   const addNewUserMutation = useMutation(addUsers, {
     onSuccess: () => {
-      alert("회원가입 했습니다!");
+      alert("회원가입 되었습니다!");
       navigate("/login");
     },
 
@@ -94,7 +94,7 @@ const BasicSignUp = () => {
       <Stbox>
         <Stinput1
           type={"text"}
-          placeholder={"이메일을 입력해주세요."}
+          placeholder={"이메일 계정"}
           value={email}
           onChange={
             onChangeEmailHandler}
@@ -102,7 +102,7 @@ const BasicSignUp = () => {
 
         <Stinput2
           type={"password"}
-          placeholder={"비밀번호를 입력해주세요."}
+          placeholder={"비밀번호 입력"}
           value={password}
           onChange={onChangePasswordHandler}
         />
@@ -111,7 +111,7 @@ const BasicSignUp = () => {
         </Stnumber>
         <Stinput3
           type={"password"}
-          placeholder={"비밀번호를 한번 더 입력해주세요."}
+          placeholder={"비밀번호 확인"}
           value={passwordCheck}
           onChange={onChangePasswordCheckHandler}
         />
@@ -130,7 +130,7 @@ const BasicSignUp = () => {
           <Stname>
             <Stinput4
               type={"text"}
-              placeholder={"2~8자 입력"}
+              placeholder={"2~12자 입력"}
               onChange={onChangeNicknameHandler}
             />
             <Stbutton1 onClick={handleCheckButton}>중복체크</Stbutton1>

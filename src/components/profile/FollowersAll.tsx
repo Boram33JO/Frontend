@@ -26,7 +26,7 @@ const FollowersAll = ({ userInfo, followList }: Props) => {
         <Bt onClick={handleViewAllClick}>전체보기</Bt>
       </Follower1>
       {followList.length === 0 ? (
-        <NoDataMessage>아직 피플러가 없습니다.</NoDataMessage>
+        <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
       ) : (
         <FamousList>
           {followList.map((item) => (

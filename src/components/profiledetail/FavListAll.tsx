@@ -33,7 +33,7 @@ const FavListAll = () => {
     <>
       <InnerContainer>
         <TitleSection>
-          <H3>{data.nickname}피플포스팅</H3>
+          <H3>{data.nickname}포스팅</H3>
         </TitleSection>
         {data.map((post: Post) => {
           return <ListItem key={post.postId} post={post}></ListItem>;
