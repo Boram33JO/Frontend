@@ -137,8 +137,8 @@ const CommentListItem = styled.li`
   background-color: #434047;
   padding-top: 18px;
   padding-left: 14px;
+  position: relative; /* 부모 컨테이너에 대한 상대적인 위치 설정 */
 `;
-
 
 
 
@@ -165,7 +165,16 @@ const IconWrapper = styled.div`
 const Content = styled.div`
   font-size: 16px;
   font-weight: 500;
-  color: #FAFAFA;
+  color: #fafafa;
+  overflow: hidden; /* 넘치는 내용 가리기 */
+  text-overflow: ellipsis; /* 텍스트가 컨테이너를 벗어날 때 '...' 표시 */
+  /* white-space: nowrap;  */
+  /* 줄바꿈 방지 */
+  max-height: 40px; /* 최대 3줄 표시 */
+  line-height: 20px; /* 줄 간격 조절 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 최대 3줄 표시 */
+  -webkit-box-orient: vertical;
   cursor: pointer;
 `;
 
@@ -182,6 +191,9 @@ const PostTitle = styled.div`
   font-size: 14px;
   color: #a6a3af;
   font-weight: 500;
-  margin-top: 60px;
+  padding-bottom: 20px; /* 항상 밑에 위치하도록 설정 */
+  position: absolute; /* 절대적인 위치 설정 */
+  bottom: 0; /* 아래쪽에 위치 */
+  left: 14px; /* 왼쪽 여백 설정 */
   cursor: pointer;
 `;
