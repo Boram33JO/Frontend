@@ -51,14 +51,11 @@ const handleCommentDelete = async (postId: number) => {
     }
   });
 
-  // const handleTouchStart = (event: React.TouchEvent) => {
-  //   event.preventDefault();
-  // };
   
 
-  // if (confirmDelete) {
-  //   commentMutation.mutate(postId.toString());
-  // }
+  if (confirmDelete) {
+    commentMutation.mutate(postId.toString());
+  }
 };
 
 
@@ -78,7 +75,7 @@ if (isError) {
         <H3>나의 댓글 모아보기</H3>
       </Post>
       {
-         data.length === 0 ? (<NoDataMessage>아직 작성한 댓글이 없습니다.</NoDataMessage>
+         data.length === 0 ? (<NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
          ) : (
         data.map((item: myComment) => {
           return (
@@ -116,6 +113,7 @@ export default AllCommentsList;
 const NoDataMessage = styled.p`
   font-size: 16px;
   color: #e7e6f0;
+  padding-top: 6px;
 `;
 
 

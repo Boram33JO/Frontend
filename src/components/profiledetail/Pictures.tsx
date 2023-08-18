@@ -54,25 +54,34 @@ const handleDelete = (followerId: number) => {
         <Nums>{`${followerData.followList.length}명`}</Nums>
       </Follower1>
       
-      {/* 팔로워 정보를 map 함수로 렌더링 */}
-      {followerData.followList.map((follower: any) => (
-        <MyProfile key={follower.userId} >
-          <MyThumb src={getProfileImage(follower.userImage)} onClick={() => navigate(`/profile/${follower.userId}`)} />
-          <MyProfile1>
-            <MyProfile2>
-              <Nickname>{follower.nickname}</Nickname>
-              <Produce>{follower.introduce}</Produce>
-            </MyProfile2>
-           {/* "삭제" 버튼을 누를 때 팔로워 삭제 함수를 호출합니다. */}
-           <Bt onClick={() => handleDelete(follower.userId)}>삭제</Bt>
-          </MyProfile1>
-        </MyProfile>
-      ))}
+      {followerData.followList.length === 0 ? (
+        <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
+      ) : (
+        followerData.followList.map((follower: any) => (
+          <MyProfile key={follower.userId} >
+            <MyThumb src={getProfileImage(follower.userImage)} onClick={() => navigate(`/profile/${follower.userId}`)} />
+            <MyProfile1>
+              <MyProfile2>
+                <Nickname>{follower.nickname}</Nickname>
+                <Produce>{follower.introduce}</Produce>
+              </MyProfile2>
+              <Bt onClick={() => handleDelete(follower.userId)}>삭제</Bt>
+            </MyProfile1>
+          </MyProfile>
+        ))
+      )}
     </InnerContainer>
   );
-};
 
+        }
 export default Pictures;
+
+const NoDataMessage = styled.p`
+  font-size: 16px;
+  color: #e7e6f0;
+  padding-top: 20px;;
+`;
+
 
 const InnerContainer = styled.div`
   display: block;
