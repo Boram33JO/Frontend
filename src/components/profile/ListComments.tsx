@@ -51,7 +51,7 @@ const ListComments = ({ commentList }: Props) => {
       </Post>
       <CommentList>
         {commentList.length === 0 ? (
-          <NoDataMessage>작성한 댓글이 없습니다.</NoDataMessage>
+          <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
         ) : (
           <CardList>
             {commentList.map((item) => (

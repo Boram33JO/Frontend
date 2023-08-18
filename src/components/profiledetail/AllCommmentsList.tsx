@@ -41,12 +41,26 @@ const commentMutation = useMutation(deleteComment, {
   },
 });
 
-const handleCommentDelete = (postId: number) => {
-  const confirmDelete = window.confirm('정말로 삭제하시겠습니까?');
-    if (confirmDelete) {
-      commentMutation.mutate(postId.toString()); // postId를 문자열로 변환하여 전달
+const handleCommentDelete = async (postId: number) => {
+  // 사용자의 응답을 받기 위해 await 사용
+  const confirmDelete = await new Promise<boolean>((resolve) => {
+    if (window.confirm('정말로 삭제하시겠습니까?')) {
+      resolve(true);
+    } else {
+      resolve(false);
     }
-  };
+  });
+
+  // const handleTouchStart = (event: React.TouchEvent) => {
+  //   event.preventDefault();
+  // };
+  
+
+  // if (confirmDelete) {
+  //   commentMutation.mutate(postId.toString());
+  // }
+};
+
 
 if (isLoading) {
   return <div>Loading...</div>;
