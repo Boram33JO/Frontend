@@ -11,7 +11,13 @@ import { persistStore } from "redux-persist"
 import { PersistGate } from "redux-persist/integration/react";
 export const persistor = persistStore(store);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+        }
+    }
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 

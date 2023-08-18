@@ -12,7 +12,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/config/configStore'
 import { getProfileImage } from '../../utils/common'
 import { logOut } from '../../redux/modules/loginSlice'
-import { logout, setUserInfo } from '../../redux/modules/userSlice'
+import { logout } from '../../redux/modules/userSlice'
+import { logout2 } from '../../api/user2'
 
 interface Props {
     sideOpen: boolean;
@@ -29,13 +30,15 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
         { id: 2, name: "피플 포스팅", icon: Post, path: "/list/1" },
         { id: 3, name: "피플러", icon: PP, path: "/" },
     ]
-
+    
     const handleMenuClick = (path: string) => {
         setSideOpen(false);
         navigate(path);
     }
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        // const response = await logout2();
+        // console.log(response);
         setSideOpen(false);
         dispatch(logOut(null));
         dispatch(logout());

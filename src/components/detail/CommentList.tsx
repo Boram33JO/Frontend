@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { styled } from "styled-components"
-import { Comment } from "../../pages/DetailPage"
 import { useMutation, useQueryClient } from "react-query"
 import { deleteComment } from "../../api/comment"
 import CommentForm from "./CommentForm"
@@ -8,6 +7,7 @@ import { displayedAt } from "../../utils/common"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
 import { useParams } from "react-router-dom"
+import { Comment } from "../../models/post"
 
 interface Comments {
     comments: Comment[]
