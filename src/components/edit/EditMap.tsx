@@ -54,19 +54,27 @@ const EditMap: React.FC<EditMapProps> = ({
     // const [markers, setMarkers] = useState<any[]>([]);
 
     useEffect(() => {
-        const mapContainer = document.getElementById("map"); // 지도를 표시할 div
-        const mapOption = {
-            center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude), // 지도의 중심좌표
-            level: 3,
+        const script = document.createElement("script");
+        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_REST_API_KEY}&libraries=services&autoload=false`;
+        document.head.appendChild(script);
+
+        script.onload = () => {
+            window.kakao.maps.load(function () {
+                const mapContainer = document.getElementById("map"); // 지도를 표시할 div
+                const mapOption = {
+                    center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude), // 지도의 중심좌표
+                    level: 3,
+                };
+
+                const map = new window.kakao.maps.Map(mapContainer, mapOption);
+
+                if (state.isPanto) {
+                    map.panTo(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
+                } else {
+                    map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
+                }
+            });
         };
-
-        const map = new window.kakao.maps.Map(mapContainer, mapOption);
-
-        if (state.isPanto) {
-            map.panTo(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
-        } else {
-            map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
-        }
     }, [state]);
 
     const searchMap = () => {
@@ -74,7 +82,7 @@ const EditMap: React.FC<EditMapProps> = ({
         const placesSearchCB = function (data: any, status: any, pagination: any) {
             if (status === window.kakao.maps.services.Status.OK) {
                 const newSearch = data[0];
-                // console.log("newSearch", newSearch);
+                console.log("newSearch", newSearch);
                 setAddress(newSearch.address_name);
                 setPlaceName(newSearch.place_name);
                 setLatitude(newSearch.y);
@@ -110,7 +118,6 @@ const EditMap: React.FC<EditMapProps> = ({
         setCategoryNum(isData.location.category);
     }
 
-    
     return (
         <StMapContainer>
             <StSearchForm onSubmit={searchLocationHandler}>
