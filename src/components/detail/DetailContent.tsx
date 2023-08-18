@@ -34,9 +34,7 @@ const DetailContent = ({ post }: PostProps) => {
         } else {
             if (window.confirm(`로그인 후 좋아요 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
                 navigate(`/login`);
-            } else {
-                return;
-            }
+            } else return
         }
     }
 

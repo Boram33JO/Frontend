@@ -72,6 +72,11 @@ const SlideBanner = () => {
     return (
         <Container>
             <SlideContainer ref={slideRef}>
+                {/* <BannerContainer>
+                    <Banner2 />
+                    <Banner3 />
+                    <Banner4 />
+                </BannerContainer> */}
                 {
                     banners.map(item => {
                         return (
@@ -129,12 +134,45 @@ const SlideContainer = styled.div`
     display: flex;
 `
 
+const BannerContainer = styled.div`
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: calc(100% * (2/3));
+    background-color: gray;
+`
+
+const Banner2 = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: blue;
+`
+const Banner3 = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 100%;
+    background-color: green;
+`
+const Banner4 = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 200%;
+    background-color: red;
+`
+
 const Banner = styled.div<{ $url: string }>`
     flex: 0 0 auto;
     width: 390px;
     height: 260px;
     background: url(${(props) => props.$url});
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: top;
 `

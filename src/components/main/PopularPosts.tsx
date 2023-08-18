@@ -4,29 +4,7 @@ import { useQuery } from 'react-query'
 import { getPopularPosts } from '../../api/post'
 import { ReactComponent as Like } from '../../assets/images/like.svg'
 import { useNavigate } from 'react-router-dom'
-
-type Song = {
-    id: string;
-    album: string;
-    artistName: string;
-    songTitle: string;
-    thumbnail: string;
-    audioUrl: string;
-    externalUrl: string;
-}
-
-export type Post = {
-    postId: number;
-    postTitle: string;
-    category: string;
-    content: string;
-    nickname: string;
-    userImage: string;
-    location?: Location;
-    createdAt: string;
-    wishlistCount: number;
-    songs: Song[];
-}
+import { Post } from '../../models/post'
 
 const PopularPosts = () => {
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
@@ -35,7 +13,7 @@ const PopularPosts = () => {
     const { data, isLoading, isError } = useQuery(["popular"],
         async () => {
             const response = await getPopularPosts();
-            // console.log(response.data);
+            // console.log("인기 포스트 요청", response.data);
             return response.data;
         }
     )
@@ -181,8 +159,8 @@ const ItemCategory = styled.div`
     justify-content: center;
 
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 10px;
+    left: 10px;
     height: 30px;
     background-color: #383549;
 

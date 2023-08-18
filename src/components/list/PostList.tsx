@@ -6,6 +6,7 @@ import ListItem from "../common/ListItem";
 import { Post } from "../../models/post";
 import instance from "../../api/common";
 import LoadingSkeleton from "./LoadingSkeleton";
+import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 
 export interface PaginationResponse<T> {
     content: T[];

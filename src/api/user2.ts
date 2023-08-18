@@ -12,3 +12,9 @@ export const login = async (loginFormat: LoginFormat) => {
 
     return response.data;
 };
+
+export const logout2 = async () => {
+    const response = await instance.post(`/api/user/logout`);
+    // console.log("로그아웃", response);
+    return response.data;
+};

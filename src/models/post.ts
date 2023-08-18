@@ -16,6 +16,14 @@ export type Song = {
     externalUrl: string;
 }
 
+export type Comment = {
+    commentId: string,
+    nickname: string,
+    userImage: string,
+    content: string,
+    createdAt: string
+}
+
 export type Post = {
     userId: number;
     postId: number;

@@ -10,24 +10,6 @@ import { useSelector } from "react-redux"
 import { RootState } from '../redux/config/configStore'
 import { useEffect, useState } from 'react'
 
-export type Comment = {
-    commentId: string,
-    nickname: string,
-    userImage: string,
-    content: string,
-    createdAt: string
-}
-
-export type Song = {
-    id: string;
-    album: string;
-    artistName: string;
-    songTitle: string;
-    thumbnail: string;
-    audioUrl: string;
-    externalUrl: string;
-}
-
 const DetailPage = () => {
     const { id } = useParams();
     const { pathname } = useLocation();

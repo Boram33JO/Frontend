@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { styled } from 'styled-components'
 import { postComment, updateComment } from '../../api/comment';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/config/configStore';
 
 interface Comment {
     setTarget?: any;
@@ -13,7 +15,9 @@ interface Comment {
 const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     const { id } = useParams();
     const [content, setContent] = useState('' || comment);
+    const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const isLogin = useSelector((state: RootState) => state.isLogin);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const handleResizeHeight = () => {
@@ -41,9 +45,18 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     });
 
     const handlePostButtonClick = async () => {
-        if (id && content) {
-            commentMutation.mutate(id);
-            setContent("");
+        if (isLogin.isLogin) {
+            if (id && content) {
+                commentMutation.mutate(id);
+                setContent("");
+            } else {
+                alert("내용을 입력해주세요.");
+                return
+            }
+        } else {
+            if (window.confirm(`로그인 후 댓글을 작성할 수 있습니다.\n로그인 하시겠습니까?`)) {
+                navigate('/login')
+            } else return
         }
         if (textareaRef.current) {
             textareaRef.current.style.height = "auto";
@@ -54,6 +67,9 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
         if (commentId && content) {
             updateMutation.mutate(commentId);
             setTarget("");
+        } else {
+            alert("내용을 입력해주세요.");
+            return
         }
     }
 
