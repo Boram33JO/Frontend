@@ -180,6 +180,7 @@ export default SearchSong;
 const StSearchForm = styled.form`
     width: 348px;
     height: 40px;
+    color: #fafafa;
     border: 1px solid #434047;
     background-color: #434047;
     border-radius: 999px;
@@ -191,6 +192,7 @@ const StSearchForm = styled.form`
     input {
         width: 270px;
         height: 16px;
+        color: #fafafa;
         border: 1px solid #434047;
         background-color: #434047;
     }
