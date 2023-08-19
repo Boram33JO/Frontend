@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
 
@@ -74,6 +74,7 @@ const EditPage = () => {
         postTitle: inputForm.postTitle,
         placeName,
     };
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fixPostData = async () => {
@@ -113,12 +114,17 @@ const EditPage = () => {
     };
 
     const onClickPost = async () => {
-        try {
-            await postData(data);
-            alert("success");
-        } catch (error) {
-            console.log(error);
-            alert("failed");
+        if (data.songs.length !== 0) {
+            try {
+                await postData(data);
+                alert("success");
+                navigate(`/`);
+            } catch (error) {
+                console.log(error);
+                alert("failed");
+            }
+        } else {
+            return alert("노래를 추가해주세요.");
         }
     };
 
