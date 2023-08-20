@@ -19,8 +19,26 @@ instance.interceptors.request.use(
       config.headers.AccessToken = `${accessToken}`;
       config.headers.RefreshToken = `${refreshToken}`;
     }
+    // 먼가 여기 인터셉터에서 토큰 관리 할 수 있을 거 같은데, 
+// 엑세스 토큰의 유효 시간을 체크
+const accessTokenExpiration = jwt_decode(accessToken).exp;
+const currentTime = Math.floor(Date.now() / 1000);
 
-    return config;
+if (accessTokenExpiration && accessTokenExpiration < currentTime) {
+  // 엑세스 토큰 만료 시 리프레시 토큰을 사용하여 새로운 엑세스 토큰 발급
+  const newAccessToken = await refreshAccessToken();
+
+  if (newAccessToken) {
+    // 새로 갱신된 엑세스 토큰으로 요청 보내기
+    config.headers.AccessToken = `${newAccessToken}`;
+  } else {
+    // 토큰 갱신에 실패한 경우 로그아웃 처리 또는 다른 처리
+  }
+}
+
+
+return config;
+
   },
   function (error) {
     console.log("인터셉트 요청 오류!");
@@ -35,7 +53,7 @@ instance.interceptors.response.use(
     return response;
   },
   function (error) {
-    console.log(error.response.data);
+    //console.log(error.response.data);
     if (error.response.status === 400) {
       // const token = error.response.headers.authorization;
       // localStorage.setItem("token", token);
