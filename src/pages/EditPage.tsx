@@ -54,8 +54,8 @@ const EditPage = () => {
     const [chooseSongList, setChooseSongList] = useState<Array<ChooseSongListType>>([]);
     const [address, setAddress] = useState("");
     const [placeName, setPlaceName] = useState("");
-    const [latitude, setLatitude] = useState("");
-    const [longitude, setLongitude] = useState("");
+    const [latitude, setLatitude] = useState("37.566826");
+    const [longitude, setLongitude] = useState("126.9786567");
     const [categoryNum, setCategoryNum] = useState<number>(1);
     const { postId } = useParams<{ postId: string }>();
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
 import Category from "../common/Category";
+import pinIcon from "../../assets/images/icon_pin_3x.png";
 
 declare global {
     interface Window {
@@ -47,11 +48,10 @@ const EditMap: React.FC<EditMapProps> = ({
     setIsData,
 }) => {
     const [state, setState] = useState({
-        center: { latitude: 37.566826, longitude: 126.9786567 },
+        center: { latitude, longitude },
         isPanto: true,
     });
     const [searchLocation, setSearchLocation] = useState<string>("");
-    // const [markers, setMarkers] = useState<any[]>([]);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -73,9 +73,23 @@ const EditMap: React.FC<EditMapProps> = ({
                 } else {
                     map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
                 }
+
+                // const imageSrc = pinIcon;
+                const imageSize = new window.kakao.maps.Size(36, 42);
+                const imageOption = { offset: new window.kakao.maps.Point(27, 69) };
+                const markerImage = new window.kakao.maps.MarkerImage(pinIcon, imageSize, imageOption);
+
+                // Create a marker for the map
+                const markerPosition = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+                const marker = new window.kakao.maps.Marker({
+                    position: markerPosition,
+                    image: markerImage,
+                });
+
+                marker.setMap(map); // Add the marker to the map
             });
         };
-    }, [state]);
+    }, [state, latitude, longitude]);
 
     const searchMap = () => {
         const ps = new window.kakao.maps.services.Places();
