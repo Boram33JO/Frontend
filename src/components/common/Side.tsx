@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/config/configStore'
 import { getProfileImage } from '../../utils/common'
-import { logOut } from '../../redux/modules/loginSlice'
 import { logout } from '../../redux/modules/userSlice'
 import { logout2 } from '../../api/user2'
 
@@ -23,7 +22,6 @@ interface Props {
 const Side = ({ sideOpen, setSideOpen }: Props) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const isLogin = useSelector((state: RootState) => state.isLogin);
     const LoginUser = useSelector((state: RootState) => state.user);
     const menuList = [
         { id: 1, name: "피플 맵핑", icon: Map, path: "/map" },
@@ -37,11 +35,10 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
     }
 
     const handleLogout = async () => {
-        // const response = await logout2();
-        // console.log(response);
-        setSideOpen(false);
-        dispatch(logOut(null));
-        dispatch(logout());
+        setSideOpen(false); // 왼쪽 사이드바 다시 닫기
+        // const response = await logout2(); // 로그아웃 서버 요청 보내기
+        // console.log(response); // 출력
+        dispatch(logout()); // userSlice.ts user정보를 초기화 하는 것
         alert("로그아웃 되었습니다.");
     }
 
@@ -56,7 +53,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                         <P $size={"48px"} $weight={"700"} onClick={() => handleMenuClick("/")}>P.Ple</P>
                     </LogoSection>
                     {
-                        (LoginUser.userId) ? (
+                        (LoginUser.isLogin) ? (
                             <ProfileSection onClick={() => handleMenuClick(`/profile/${LoginUser.userId}`)}>
                                 <ProfileImage src={getProfileImage(LoginUser.userImage)} alt="userImage" />
                                 <P $size={"18px"} $weight={"600"}>{LoginUser.nickname}</P>
@@ -84,7 +81,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                     }
 
                     {
-                        (isLogin.isLogin) && (
+                        (LoginUser.isLogin) && (
                             <>
                                 <Hr />
                                 <MenuItem onClick={() => handleMenuClick("/edit")}>

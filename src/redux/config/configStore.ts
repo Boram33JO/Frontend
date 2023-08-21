@@ -1,19 +1,17 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import isLoginSlice from "../modules/loginSlice";
 import userSlice from "../modules/userSlice";
 import { persistReducer } from "redux-persist";
 import storage from 'redux-persist/lib/storage';
 import { useDispatch, useSelector } from "react-redux";
 
 const reducers = combineReducers({
-  isLogin: isLoginSlice,
   user: userSlice,
 });
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["isLogin", "user"]
+  whitelist: ["user"]
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

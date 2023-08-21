@@ -17,7 +17,7 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     const [content, setContent] = useState('' || comment);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const isLogin = useSelector((state: RootState) => state.isLogin);
+    const LoginUser = useSelector((state: RootState) => state.user);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
     const handleResizeHeight = () => {
@@ -45,7 +45,7 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     });
 
     const handlePostButtonClick = async () => {
-        if (isLogin.isLogin) {
+        if (LoginUser.isLogin) {
             if (id && content) {
                 commentMutation.mutate(id);
                 setContent("");

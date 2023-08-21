@@ -8,7 +8,7 @@ export const getPopularPosts = async () => {
 
 // 메인 페이지 인기 노래 조회
 export const getPopularSongs = async () => {
-    const response = await instance.get(`api/mostSong`)
+    const response = await instance.get(`api/song/mostSong`)
     return response;
 }
 

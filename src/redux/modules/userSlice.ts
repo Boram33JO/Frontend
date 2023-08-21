@@ -1,34 +1,47 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { UserInfo } from "../../models/user";
+import { LoginUser } from "../../models/user";
 
-const initialState: UserInfo = {
-    userId: 0,
-    nickname: "",
-    userImage: null,
-    introduce: null
+const initialState: LoginUser = {
+  isLogin: false,
+  userId: null,
+  nickname: null,
+  userImage: null,
+  introduce: null,
 };
 
 const userSlice = createSlice({
-    name: "user",
-    initialState,
-    reducers: {
-        setUserInfo: (state, action) => {
-            return { ...state, ...action.payload };
-        },
-        nicknameUpdate: (state, action) => {
-            state.nickname = action.payload;
-        },
-        userImageUpdate: (state, action) => {
-            state.userImage = action.payload
-        },
-        introduceUpdate: (state, action) => {
-            state.introduce = action.payload;
-        },
-        logout: () => {
-            return { ...initialState }
-        }
+  name: "user",
+  initialState,
+  reducers: {
+    logIn2: (state, action) => {
+      state.isLogin = true;
     },
+    logout: () => {
+      localStorage.removeItem("AccessToken"); // 토큰 삭제
+      localStorage.removeItem("RefreshToken"); // 토큰 삭제
+      return { ...initialState };
+    },
+    setUserInfo: (state, action) => {
+      return { ...state, ...action.payload };
+    },
+    nicknameUpdate: (state, action) => {
+      state.nickname = action.payload;
+    },
+    userImageUpdate: (state, action) => {
+      state.userImage = action.payload;
+    },
+    introduceUpdate: (state, action) => {
+      state.introduce = action.payload;
+    },
+  },
 });
 
-export const { setUserInfo, nicknameUpdate, userImageUpdate, introduceUpdate, logout } = userSlice.actions;
+export const {
+  logIn2,
+  logout,
+  setUserInfo,
+  nicknameUpdate,
+  userImageUpdate,
+  introduceUpdate,
+} = userSlice.actions;
 export default userSlice.reducer;

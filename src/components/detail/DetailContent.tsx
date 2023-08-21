@@ -19,8 +19,7 @@ const DetailContent = ({ post }: PostProps) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const isLogin = useSelector((state: RootState) => state.isLogin);
-    const userInfo = useSelector((state: RootState) => state.user);
+    const LoginUser = useSelector((state: RootState) => state.user);
 
     const LikeMutation = useMutation(likePost, {
         onSuccess: () => {
@@ -29,7 +28,7 @@ const DetailContent = ({ post }: PostProps) => {
     })
 
     const likeButtonHandler = () => {
-        if (isLogin.isLogin) {
+        if (LoginUser.isLogin) {
             LikeMutation.mutate(id);
         } else {
             if (window.confirm(`로그인 후 좋아요 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
@@ -45,7 +44,7 @@ const DetailContent = ({ post }: PostProps) => {
     })
 
     const followButtonHandler = (userId: number) => {
-        if (isLogin.isLogin) {
+        if (LoginUser.isLogin) {
             FollowMutation.mutate(userId);
         } else {
             if (window.confirm(`로그인 후 팔로우 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
@@ -66,7 +65,7 @@ const DetailContent = ({ post }: PostProps) => {
                     </ProfileInfo>
                 </ProfileArea>
                 {
-                    (userInfo.nickname !== post.nickname) && (
+                    (LoginUser.nickname !== post.nickname) && (
                         <FollowBtn $yours={post.follow} onClick={() => followButtonHandler(post.userId)}>
                             {(post.follow) ? "언팔로우" : "팔로우"}
                         </FollowBtn>
