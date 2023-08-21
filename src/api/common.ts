@@ -1,4 +1,6 @@
 import axios from "axios";
+import { logout } from "../redux/modules/userSlice";
+import store from "../redux/config/configStore";
 
 
 export const instance = axios.create({
@@ -29,6 +31,8 @@ instance.interceptors.request.use(
   }
 );
 
+// response
+
 instance.interceptors.response.use(
   
   function (response) {
@@ -41,7 +45,6 @@ instance.interceptors.response.use(
     if (error.response.status === 400) {
       // const token = error.response.headers.authorization;
       // localStorage.setItem("token", token);
-     
     }
     if (error.response.status === 401) {
      
@@ -57,19 +60,19 @@ instance.interceptors.response.use(
         console.log('2');
         // window.location.reload();
         
-        // 지금은 리프레시가 같은 경우였고, 만약 리프레시까지 만료된 경우-> 로그아웃
-        // 엑세스를 안준다. 서버가 새것을 안준다.
       }
-      else 
+      else // 리프레시 토큰까지 만료되어 새 엑세스 토큰을 받을 수 없는 경우
       {
-        // 리프레시 토큰까지 만료되어 새 엑세스 토큰을 받을 수 없는 경우
-        localStorage.removeItem("AccessToken");
-        localStorage.removeItem("RefreshToken");
+        store.dispatch(logout());
         
+        // localStorage.removeItem("AccessToken");
+        // localStorage.removeItem("RefreshToken");
+        alert("로그인 시간이 만료되었습니다, 자동으로 로그아웃됩니다.");
         console.log(error.response.data, "3");
         //여기까지 작동확인 됨.
 
-        //window.location.reload();
+       // 메인 화면의 경로로 설정
+       // window.location.reload();
       }
     }
     return Promise.reject(error);
