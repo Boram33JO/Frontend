@@ -1,5 +1,4 @@
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 
 export const instance = axios.create({
@@ -14,7 +13,7 @@ instance.interceptors.request.use(
     // 로컬 스토리지에서 토큰 값 가져오기
     const accessToken = localStorage.getItem("AccessToken");
     const refreshToken = localStorage.getItem("RefreshToken");
-
+    
     // 토큰이 존재하면 헤더에 담아서 요청 보내기 -> 둘 다 보내고 있었다.
     if (accessToken) {
       config.headers.AccessToken = `${accessToken}`;
@@ -49,26 +48,28 @@ instance.interceptors.response.use(
       //localStorage.removeItem();
      // window.location.reload();
       console.log("401 Unauthorized Error:", error);
-      console.log(error.response.data);
+      console.log(error.response.data, "1");
       const newAccessToken = error.response.headers.accesstoken; // 새 엑세스 토큰 받아오기
+
       if (newAccessToken) {
         localStorage.removeItem("AccessToken");
         localStorage.setItem("AccessToken", newAccessToken); // 새 엑세스 토큰 로컬 스토리지에 저장
+        console.log('2');
         // window.location.reload();
         
         // 지금은 리프레시가 같은 경우였고, 만약 리프레시까지 만료된 경우-> 로그아웃
         // 엑세스를 안준다. 서버가 새것을 안준다.
-      } else {
-       //const navigate = useNavigate();
+      }
+      else 
+      {
         // 리프레시 토큰까지 만료되어 새 엑세스 토큰을 받을 수 없는 경우
         localStorage.removeItem("AccessToken");
         localStorage.removeItem("RefreshToken");
+        
+        console.log(error.response.data, "3");
         //여기까지 작동확인 됨.
-        localStorage.removeItem("pesist:root");
-        console.log('로그아웃 처리나 다른 조치를 수행하십시오.');
-        console.log(error.response.data);
+
         //window.location.reload();
-       //navigate('/login');
       }
     }
     return Promise.reject(error);

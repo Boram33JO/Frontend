@@ -6,14 +6,6 @@ const addUsers = async (newUser) => {
   //console.log("회원가입", response)
   return response.data;
 };
-
-// 회원 탈퇴
-const deleteUsers = async () => {
-  const response = await instance.delete(`/api/user/withdraw`);
-  // console.log("회원 탈퇴", response)
-  return response.data;
-};
-
 // 로그인
 const login = async (loginInformation) => {
   const response = await instance.post(`/api/user/login`, loginInformation);
@@ -47,4 +39,4 @@ const profileEdit = async (userId) => {
   return response;
 }
 
-export { addUsers, deleteUsers, login, logout, profileEdit };
+export { addUsers, login, logout, profileEdit };

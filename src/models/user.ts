@@ -17,6 +17,14 @@ export type UserInfo = {
     introduce: string | null;
 }
 
+export type LoginUser = {
+    isLogin: boolean;
+    userId: number | null;
+    nickname: string | null;
+    userImage: string | null;
+    introduce: string | null;
+}
+
 export type SignupFormat = {
     email: string;
     password: string;

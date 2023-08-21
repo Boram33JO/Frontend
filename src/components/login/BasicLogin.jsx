@@ -5,9 +5,8 @@ import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import useInput from "../../hooks/useInput";
 import { login } from "../../api/user2";
-import { logIn } from "../../redux/modules/loginSlice";
 import { useEffect } from "react";
-import { setUserInfo } from "../../redux/modules/userSlice";
+import { logIn2, setUserInfo } from "../../redux/modules/userSlice";
 
 const BasicLogin = () => {
   const navigate = useNavigate();
@@ -31,7 +30,7 @@ const BasicLogin = () => {
     onSuccess: (response) => {
       // console.log(response);
       alert("로그인 했습니다!");
-      dispatch(logIn());
+      dispatch(logIn2());
       dispatch(setUserInfo(response.data));
       navigate("/");
     },
@@ -41,20 +40,16 @@ const BasicLogin = () => {
       //console.log(error.response);
 
       if (error.response.status === 401)
-        setErrorMessage(
-          "로그인 정보를 찾을 수 없습니다."
-        );
+        setErrorMessage("로그인 정보를 찾을 수 없습니다.");
       else setErrorMessage("찾을 수 없습니다.");
     },
-
   });
 
   const loginClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
-      setErrorMessage(
-        "이메일 형식이 아닙니다.")
+      setErrorMessage("이메일 형식이 아닙니다.");
       return;
     }
 
@@ -104,8 +99,8 @@ const BasicLogin = () => {
 export default BasicLogin;
 
 const InnerContainer = styled.div`
-  width:100%;
-`
+  width: 100%;
+`;
 
 // 에러
 const ErrorMessage = styled.div`
@@ -135,7 +130,7 @@ const Stinput1 = styled.input`
   font-size: 16px;
   font-weight: 500;
   color: #85848b;
-  
+
   background-color: #252628;
   border: none;
   border-radius: 8px;
@@ -154,11 +149,10 @@ const Stinput2 = styled.input`
   border: none;
   border-radius: 8px;
   outline: none;
-  
 `;
 
 const Stlink1 = styled.a`
-margin-top: 4px;
+  margin-top: 4px;
   font-size: 14px;
   line-height: 24px;
   font-weight: 500;
@@ -183,5 +177,3 @@ const Stbutton = styled.button`
     color: #141414;
   }
 `;
-
-

@@ -14,7 +14,6 @@ interface Props {
 
 const Header = ({ setSideOpen }: Props) => {
     const navigate = useNavigate();
-    const isLogin = useSelector((state: RootState) => state.isLogin);
     const userInfo = useSelector((state: RootState) => state.user);
     const persist = localStorage.getItem("persist:root");
     
@@ -33,7 +32,7 @@ const Header = ({ setSideOpen }: Props) => {
             <HeaderRight>
                 {/* <StSearch /> */}
                 {
-                    (isLogin.isLogin) ? (
+                    (userInfo.isLogin) ? (
                         <ProfileImage
                             onClick={() => navigate(`/profile/${userInfo.userId}`)}
                             src={getProfileImage(userInfo.userImage)}
