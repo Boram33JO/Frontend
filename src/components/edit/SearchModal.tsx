@@ -13,20 +13,17 @@ interface SearchModalProps {
 }
 
 const StModalOverlay = styled.div`
-    position: fixed;
+    position: relative;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    /* background-color: rgba(0, 0, 0, 0.5); */
+    margin-top: 6px;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
     z-index: 9999;
 `;
 
 const ModalContainer = styled.div`
     position: fixed;
-    top: 85px;
-    left: 11px;
-    /* transform: translate(-50%, -50%); */
     width: 350px;
     height: 180px;
     border-radius: 8px;
@@ -36,15 +33,6 @@ const ModalContainer = styled.div`
 
     z-index: 10000;
 `;
-
-// const CloseButton = styled.button`
-//     width: 40px;
-//     height: 40px;
-//     border-radius: 100%;
-//     border: 1px solid rgb(221, 221, 221);
-//     cursor: pointer;
-//     margin-left: 200px;
-// `;
 
 const StSearchLocation = styled.div`
     display: flex;
@@ -64,16 +52,6 @@ const SearchModal: React.FC<SearchModalProps> = ({
     setSelectedLocation,
 }) => {
     const modalRef = useRef<HTMLDivElement>(null);
-
-    const closeModal = () => {
-        setModal(false);
-    };
-
-    // const chooseLocationHandler = () => {
-    //     console.log("11122", searchLocationList);
-    //     console.log("11122", searchLocationList.place_name);
-    //     // searchLocationList
-    // };
 
     const chooseLocationHandler = (index: number) => {
         const selectedItem = searchLocationList[index];
@@ -101,8 +79,6 @@ const SearchModal: React.FC<SearchModalProps> = ({
     return (
         <StModalOverlay>
             <ModalContainer ref={modalRef}>
-                {/* <CloseButton onClick={closeModal}>X</CloseButton>
-                <p>닫기 버튼 1개가 있고, 외부 영역을 누르면 모달이 닫혀요.</p> */}
                 <div style={{ color: "white" }}>
                     {searchLocationList.slice(0, 5).map((item: any, index: number) => (
                         <StSearchLocation
