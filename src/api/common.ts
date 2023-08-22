@@ -43,13 +43,9 @@ instance.interceptors.response.use(
   async function (error) {
     //console.log(error.response.data);
     if (error.response.status === 400) {
-      // const token = error.response.headers.authorization;
-      // localStorage.setItem("token", token);
+      console.log(error.response.data);
     }
     if (error.response.status === 401) {
-     
-      //localStorage.removeItem();
-     // window.location.reload();
       console.log("401 Unauthorized Error:", error);
       console.log(error.response.data, "1");
       const newAccessToken = error.response.headers.accesstoken; // 새 엑세스 토큰 받아오기
@@ -58,15 +54,10 @@ instance.interceptors.response.use(
         localStorage.removeItem("AccessToken");
         localStorage.setItem("AccessToken", newAccessToken); // 새 엑세스 토큰 로컬 스토리지에 저장
         console.log('2');
-        // window.location.reload();
-        
       }
       else // 리프레시 토큰까지 만료되어 새 엑세스 토큰을 받을 수 없는 경우
       {
         store.dispatch(logout());
-        
-        // localStorage.removeItem("AccessToken");
-        // localStorage.removeItem("RefreshToken");
         alert("로그인 시간이 만료되었습니다, 자동으로 로그아웃됩니다.");
         console.log(error.response.data, "3");
         //여기까지 작동확인 됨.
