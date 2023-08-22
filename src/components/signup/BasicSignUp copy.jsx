@@ -108,23 +108,19 @@ const BasicSignUp = () => {
             onFocus={() => setIsEmailFocused(true)}
         onBlur={() => setIsEmailFocused(false)}
         isFocused={isEmailFocused}
-        hasValue={nickname.length > 0} 
         />
 
         <Stinput2
           type={"password"}
-          placeholder={"비밀번호 입력(8~15자 이내)"}
+          placeholder={"비밀번호 입력"}
           value={password}
           onChange={onChangePasswordHandler}
           onFocus={() => setIsPasswordFocused(true)}
         onBlur={() => setIsPasswordFocused(false)}
         isFocused={isPasswordFocused}
-        hasValue={nickname.length > 0} 
         />
-          </Stbox>
-          <Stbox>
         <Stnumber>
-          대/소문자, 숫자, 특수문자 각 1개 이상 포함
+          대문자, 소문자, 숫자, 특수문자 각 1개 이상 포함한 8~15자 이내
         </Stnumber>
         <Stinput3
           type={"password"}
@@ -134,10 +130,8 @@ const BasicSignUp = () => {
           onFocus={() => setIsPasswordCheckFocused(true)}
         onBlur={() => setIsPasswordCheckFocused(false)}
         isFocused={isPasswordCheckFocused}
-        hasValue={nickname.length > 0} 
         />
-        </Stbox>
-    
+      </Stbox>
 
       <ErrorMessageContainer>
         {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
@@ -157,7 +151,6 @@ const BasicSignUp = () => {
               onFocus={() => setIsNicknameFocused(true)}
         onBlur={() => setIsNicknameFocused(false)}
         isFocused={isNicknameFocused}
-        hasValue={nickname.length > 0} 
             />
             <Stbutton1 onClick={handleCheckButton}>중복체크</Stbutton1>
           </Stname>
@@ -189,7 +182,7 @@ const ErrorMessageContainer = styled.div`
 `;
 
 const ErrorMessage = styled.div`
-  color: #e7e6f0;
+   color: #e7e6f0;
   margin-top: 10px;
   font-size: 14px;
 
@@ -203,8 +196,8 @@ const Stbox = styled.div`
 `;
 
 const Stinput1 = styled.input`
-  width: 329px;
-  height: 24px;
+  width: 330px;
+  height: 25px;
   padding: 10px;
 
   font-size: 16px;
@@ -216,12 +209,11 @@ const Stinput1 = styled.input`
   border-radius: 6px;
   outline: none;
   margin-bottom: 10px;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" :  "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+  border: 2px solid ${(props) => (props.isFocused ? "#66ccff" : "#252628")};
 `;
 const Stinput2 = styled.input`
- width: 329px;
-  height: 24px;
+  width: 330px;
+  height: 25px;
   padding: 10px;
 
  font-size: 16px;
@@ -233,25 +225,20 @@ const Stinput2 = styled.input`
   border-radius: 6px;
   outline: none;
   margin-bottom: 5px;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" :  "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 const Stnumber = styled.div`
-  font-size: 14px;
+  font-size: 12px;
   line-height: 16px;
   font-weight: 500;
   /* margin-top: 5px; */
-  color: #d9d9d9;
+  color: darkgray;
   width: 300px;
-  margin-left: -40px;
   margin-bottom: 5px;
-  display: flex; /* flex 컨테이너 설정 */
-  align-items: flex-start; /* 요소를 왼쪽으로 정렬 */
 `;
 const Stinput3 = styled.input`
-  width: 329px;
-  height: 24px;
+  width: 330px;
+  height: 25px;
   padding: 10px;
 
   font-size: 16px;
@@ -263,8 +250,6 @@ const Stinput3 = styled.input`
   border-radius: 6px;
   outline: none;
   margin-bottom: 10px;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" :  "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
 `;
 const Stnickname = styled.div`
   display: flex;
@@ -287,8 +272,8 @@ const Stname = styled.div`
   align-items: center; /* 세로 중앙 정렬을 위해 추가 */
 `;
 const Stinput4 = styled.input`
-  width: 229px;
-  height: 24px;
+  width: 230px;
+  height: 25px;
   padding: 10px;
 
   font-size: 16px;
@@ -300,8 +285,6 @@ const Stinput4 = styled.input`
   border: none;
   border-radius: 6px;
   outline: none;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" :  "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
 `;
 const Stbutton1 = styled.button`
   width: 90px;
