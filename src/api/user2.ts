@@ -27,3 +27,9 @@ export const logout2 = async () => {
     // console.log("로그아웃", response);
     return response.data;
 };
+
+// 이메일 중복체크
+export const emailCheck = async (email: string) => {
+    const response = await instance.post(`/api/send-mail/email`, { email });
+    return response;
+}
