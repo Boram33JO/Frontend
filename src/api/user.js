@@ -1,12 +1,12 @@
 import instance from "./common";
 
-// 회원가입
+// 회원가입 0
 const addUsers = async (newUser) => {
   const response = await instance.post(`/api/user/signup`, newUser);
   //console.log("회원가입", response)
   return response.data;
 };
-// 로그인
+// 로그인 0
 const login = async (loginInformation) => {
   const response = await instance.post(`/api/user/login`, loginInformation);
   //console.log("로그인", response);
@@ -26,17 +26,13 @@ const login = async (loginInformation) => {
   return response.data;
 };
 
-//로그 아웃
+//로그 아웃 0
 const logout = async () => {
   const response = await instance.delete(`/api/users/logout`);
   // console.log("로그아웃", response)
   return response.data;
 };
 
-// 수정
-const profileEdit = async (userId) => {
-  const response = await instance.post(`api/profile/${userId}`)
-  return response;
-}
 
-export { addUsers, login, logout, profileEdit };
+
+export { addUsers, login, logout };
