@@ -25,7 +25,7 @@ const MainPage = () => {
             <PopularPosts />
             <Recommend />
             <FamousPeople />
-            <PostList />
+            {/* <PostList /> */}
             <Post onClick={() => navigate(`/edit`)}><StEdit /></Post>
             <Test onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }) }} ><StTop /></Test>
         </Container>
