@@ -21,8 +21,12 @@ instance.interceptors.request.use(
       config.headers.AccessToken = `${accessToken}`;
       config.headers.RefreshToken = `${refreshToken}`;
     }
+    // 먼가 여기 인터셉터에서 토큰 관리 할 수 있을 거 같은데, 
+// 엑세스 토큰의 유효 시간을 체
 
-    return config;
+
+return config;
+
   },
 
   function (error) {
@@ -41,7 +45,7 @@ instance.interceptors.response.use(
     return response;
   },
   async function (error) {
-    //console.log(error.response.data);
+    ////console.log(error.response.data);
     if (error.response.status === 400) {
       console.log(error.response.data);
     }
