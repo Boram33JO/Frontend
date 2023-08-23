@@ -27,3 +27,14 @@ export const getDateNotation = (input?: string) => {
 export const getProfileImage = (image?: string | null) => {
     return (image) ? image : "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1"
 }
+
+// Debouncing
+export const debounce = (callback: (...args: any[]) => void, delay: number) => {
+    let timerId: NodeJS.Timeout | null = null;
+    return (...args: any[]) => {
+        if (timerId) clearTimeout(timerId);
+        timerId = setTimeout(() => {
+            callback(...args);
+        }, delay)
+    }
+}

@@ -11,8 +11,7 @@ export interface PaginationResponse<T> {
     first: boolean;
 }
 
-interface InfiniteScrollOptions<T> {
-    initialData: T[];
+interface InfiniteScrollOptions {
     fetchUrl: string;
     id: string | undefined;
     pageSize: number;
@@ -38,9 +37,9 @@ const throttle = (handler: (...args: any[]) => void, timeout = 300) => {
     }
 }
 
-const useInfiniteScroll2 = <T>({ initialData, fetchUrl, id, pageSize }: InfiniteScrollOptions<T>) => {
+const useInfiniteScroll2 = <T>({ fetchUrl, id, pageSize }: InfiniteScrollOptions) => {
     const [page, setPage] = useState(0);
-    const [data, setData] = useState<T[]>(initialData);
+    const [data, setData] = useState<T[]>([]);
     const [isFetching, setFetching] = useState(false);
     const [hasNextPage, setNextPage] = useState(true);
 

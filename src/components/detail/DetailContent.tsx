@@ -4,7 +4,7 @@ import { ReactComponent as Place } from '../../assets/images/place.svg'
 import { useMutation, useQueryClient } from "react-query"
 import { followUser, likePost } from "../../api/post"
 import { useNavigate, useParams } from "react-router-dom"
-import { displayedAt } from "../../utils/common"
+import { debounce, displayedAt } from "../../utils/common"
 import { Post } from "../../models/post"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
@@ -24,10 +24,13 @@ const DetailContent = ({ post }: PostProps) => {
     const LikeMutation = useMutation(likePost, {
         onSuccess: () => {
             queryClient.invalidateQueries(["post"]);
+        },
+        onError: (error) => {
+            console.log(error);
         }
     })
 
-    const likeButtonHandler = () => {
+    const likeButtonHandler = debounce(() => {
         if (LoginUser.isLogin) {
             LikeMutation.mutate(id);
         } else {
@@ -35,25 +38,26 @@ const DetailContent = ({ post }: PostProps) => {
                 navigate(`/login`);
             } else return
         }
-    }
+    }, 300);
 
     const FollowMutation = useMutation(followUser, {
         onSuccess: () => {
             queryClient.invalidateQueries(["post"]);
+        },
+        onError: (error) => {
+            console.log(error);
         }
     })
 
-    const followButtonHandler = (userId: number) => {
+    const followButtonHandler = debounce((userId: number) => {
         if (LoginUser.isLogin) {
             FollowMutation.mutate(userId);
         } else {
             if (window.confirm(`로그인 후 팔로우 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
                 navigate(`/login`);
-            } else {
-                return;
-            }
+            } else return
         }
-    }
+    }, 300);
 
     return (
         <DetailContainer>
