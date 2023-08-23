@@ -5,14 +5,16 @@ import Category from "../common/Category";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 import SearchModal from "../edit/SearchModal";
 
+import axios from "axios";
+import MyListItem from "../common/MyListItem";
+import { Post } from "../../models/post";
+
+//setAddress: (address: string) => void;
+// setPlaceName: (placeName: string) => void;
+
 const KakaoMap: React.FC = () => {
     const [latitude, setLatitude] = useState<string>("37.566826");
     const [longitude, setLongitude] = useState<string>("126.9786567");
-    // const [state, setState] = useState<any>({
-    //     center: { lat: latitude, lng: longitude },
-    //     isPanto: true,
-    // });
-    // const [isSearch, setIsSearch] = useState<boolean>(false);
     const [searchLocation, setSearchLocation] = useState<string>("");
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
     const [address, setAddress] = useState("");
@@ -21,6 +23,7 @@ const KakaoMap: React.FC = () => {
     const [categoryNum, setCategoryNum] = useState<number>(0);
     const [modal, setModal] = useState(false);
     const [positions, setPositions] = useState<any>([]);
+    const [isData, setIsData] = useState<any>([]);
     //     {
     //         title: "스타벅스 강남R점",
     //         latlng: new window.kakao.maps.LatLng(37.4976744709989, 127.028443419181),
@@ -126,7 +129,25 @@ const KakaoMap: React.FC = () => {
                 setLongitude(lng);
             });
         }
+        // mappingList();
     }, []);
+
+    const mappingList = async () => {
+        try {
+            const response = await axios.post(`https://api.pple.today/api/posts/map?page=0&size=4`, {
+                latitude,
+                longitude,
+            });
+            setIsData(response.data.content);
+            console.log("dididi", isData); // 업데이트 된 상태를 찍어보기
+            console.log("성공", response);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    console.log("isData", isData);
+    console.log("length", Object.keys(isData).length);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -148,6 +169,7 @@ const KakaoMap: React.FC = () => {
                 addMarkersToMap(map, positions);
             });
         };
+        mappingList();
     }, [latitude, longitude]);
 
     console.log("bbdd", selectedLocation);
@@ -170,44 +192,59 @@ const KakaoMap: React.FC = () => {
     };
 
     return (
-        <StMapContainer>
-            <StSearchForm onSubmit={searchLocationHandler}>
-                <div>
-                    <SearchIcon
-                        style={{
-                            width: "16px",
-                            height: "16px",
-                            marginLeft: "16px",
-                            marginRight: "12px",
-                        }}
+        <>
+            <StMapContainer>
+                <StSearchForm onSubmit={searchLocationHandler}>
+                    <div>
+                        <SearchIcon
+                            style={{
+                                width: "16px",
+                                height: "16px",
+                                marginLeft: "16px",
+                                marginRight: "12px",
+                            }}
+                        />
+                    </div>
+                    <input
+                        placeholder="장소를 입력해보세요"
+                        onChange={changeInputHandler}
+                        value={searchLocation}
+                        id="keyword"
                     />
-                </div>
-                <input
-                    placeholder="장소를 입력해보세요"
-                    onChange={changeInputHandler}
-                    value={searchLocation}
-                    id="keyword"
-                />
-            </StSearchForm>
-            {modal && (
-                <SearchModal
-                    setModal={setModal}
-                    searchLocationList={searchLocationList}
-                    setAddress={setAddress}
-                    setPlaceName={setPlaceName}
-                    setLatitude={setLatitude}
-                    setLongitude={setLongitude}
-                    setSelectedLocation={setSelectedLocation}
-                />
-            )}
-            <StCategory>
-                <Category
-                    categoryNum={categoryNum}
-                    setCategoryNum={setCategoryNum}
-                />
-            </StCategory>
-            <StKakaoMap id="map" />
-        </StMapContainer>
+                </StSearchForm>
+                {modal && (
+                    <SearchModal
+                        setModal={setModal}
+                        searchLocationList={searchLocationList}
+                        setAddress={setAddress}
+                        setPlaceName={setPlaceName}
+                        setLatitude={setLatitude}
+                        setLongitude={setLongitude}
+                        setSelectedLocation={setSelectedLocation}
+                    />
+                )}
+                <StCategory>
+                    <Category
+                        categoryNum={categoryNum}
+                        setCategoryNum={setCategoryNum}
+                    />
+                </StCategory>
+                <StKakaoMap id="map" />
+            </StMapContainer>
+            {/* <StLine /> */}
+            <StListContainer>
+                {isData.length === 0 ? (
+                    <div>해당 위치에 포스팅이 없습니다. 다른 지역을 검색해보세요.</div>
+                ) : (
+                    isData.map((post: Post) => (
+                        <MyListItem
+                            key={post.postId}
+                            post={post}
+                        />
+                    ))
+                )}
+            </StListContainer>
+        </>
     );
 };
 
@@ -246,4 +283,18 @@ const StKakaoMap = styled.div`
     width: 347px;
     height: 308px;
     border-radius: 10px;
+`;
+
+// const StLine = styled.div`
+//     width: 390px;
+//     height: 8px;
+//     background: #242325;
+// `;
+
+const StListContainer = styled.div`
+    width: 350px;
+    height: 523px;
+    /* padding: 0 20px; */
+    background-color: beige;
+    /* background-color: #141414; */
 `;
