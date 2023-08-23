@@ -33,7 +33,7 @@ import React, { useEffect } from "react";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setUserInfo } from "../../redux/modules/userSlice";
+import { logIn2, setUserInfo } from "../../redux/modules/userSlice";
 
 const RedirectKakao: React.FC = () => {
     const location = useLocation();
@@ -48,6 +48,7 @@ const RedirectKakao: React.FC = () => {
             // localStorage.setItem("token", response.headers.authorization);
             localStorage.setItem("AccessToken", response.headers.accesstoken);
             localStorage.setItem("RefreshToken", response.headers.refreshtoken);
+            dispatch(logIn2());
             dispatch(setUserInfo({ ...response.data }));
             alert("로그인되었습니다.");
             navigate("/");

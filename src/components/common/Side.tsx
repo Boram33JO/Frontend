@@ -25,7 +25,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
     const LoginUser = useSelector((state: RootState) => state.user);
     const menuList = [
         { id: 1, name: "피플 맵핑", icon: Map, path: "/map" },
-        { id: 2, name: "피플 포스팅", icon: Post, path: "/list/1" },
+        { id: 2, name: "피플 포스팅", icon: Post, path: "/list" },
         { id: 3, name: "피플러", icon: PP, path: "/" },
     ]
     
@@ -37,7 +37,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
     const handleLogout = async () => {
         setSideOpen(false); // 왼쪽 사이드바 다시 닫기
         const response = await logout2(); // 로그아웃 서버 요청 보내기
-        console.log(response); // 출력
+        // console.log(response); // 출력
         dispatch(logout()); // userSlice.ts user정보를 초기화 하는 것
         alert("로그아웃 되었습니다.");
     }

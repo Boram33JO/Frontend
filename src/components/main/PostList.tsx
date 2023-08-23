@@ -31,7 +31,7 @@ const PostList = () => {
                 <H3>
                     피플러는 여기서 포스팅 중
                 </H3>
-                <P onClick={() => navigate(`/list/${categoryNum + 1}`)}>
+                <P onClick={() => navigate(`/list`)}>
                     전체 보기
                 </P>
             </TitleSection>
