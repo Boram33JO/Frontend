@@ -96,7 +96,7 @@ const BasicSignUp = () => {
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
     const response = await emailCheck(email);
-     console.log(response, "4");
+    console.log(response, "4");
 
     if (response.data.message) {
       alert(response.data.message);

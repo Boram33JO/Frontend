@@ -2,16 +2,11 @@ import { styled } from "styled-components";
 import { useParams } from "react-router-dom";
 import { Post } from "../../models/post";
 import { useQuery } from "react-query";
-import { getFavLists} from "../../api/profile";
+import { getFavLists } from "../../api/profile";
 import ListItem from "../common/ListItem";
 
 const FavListAll = () => {
   const { userId } = useParams();
-
-  // const handleViewAllClick = () => {
-  //   // 항상 userIdFromUrl을 사용하여 URL에 담긴 사용자의 닉네임을 표시
-  //   navigate(`/profile/${userId}/post`);
-  // };
 
   const { data, isLoading, isError } = useQuery(["wishList"], async () => {
     const response = await getFavLists(userId);

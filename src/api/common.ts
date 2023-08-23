@@ -58,8 +58,9 @@ instance.interceptors.response.use(
       else // 리프레시 토큰까지 만료되어 새 엑세스 토큰을 받을 수 없는 경우
       {
         store.dispatch(logout());
-        alert("로그인 시간이 만료되었습니다, 자동으로 로그아웃됩니다.");
-        console.log(error.response.data, "3");
+        //console.log(error.response.data, "3");
+        return alert("로그인 시간이 만료되었습니다, 자동으로 로그아웃됩니다.");
+       
         //여기까지 작동확인 됨.
 
        // 메인 화면의 경로로 설정
