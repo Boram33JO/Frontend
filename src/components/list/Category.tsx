@@ -1,51 +1,26 @@
 import { styled } from "styled-components"
-import { useNavigate, useParams } from "react-router-dom";
-// import popular from '../../assets/images/category/01_popular.svg'
-// import near from '../../assets/images/category/02_near.svg'
-import cafe from '../../assets/images/category/03_cafe.svg'
-import restaurant from '../../assets/images/category/04_restaurant.svg'
-import transport from '../../assets/images/category/05_transport.svg'
-import school from '../../assets/images/category/06_school.svg'
-import exercise from '../../assets/images/category/07_exercise.svg'
-import park from '../../assets/images/category/08_park.svg'
-import liver from '../../assets/images/category/09_liver.svg'
-import sea from '../../assets/images/category/10_sea.svg'
-import library from '../../assets/images/category/11_library.svg'
-import culture from '../../assets/images/category/12_culture.svg'
-import leisure from '../../assets/images/category/13_leisure.svg'
-import etc from '../../assets/images/category/14_etc.svg'
+import { categoryIcons } from "../../assets/images/category/category";
+import React from "react";
 
-const Category = () => {
-    const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
-    const categories = [
-        // { id: "1", src: popular, name: "인기" },
-        // { id: "2", src: near, name: "내 주변" },
-        { id: "3", src: cafe, name: "카페" },
-        { id: "4", src: restaurant, name: "식당" },
-        { id: "5", src: transport, name: "대중교통" },
-        { id: "6", src: school, name: "학교" },
-        { id: "7", src: exercise, name: "운동" },
-        { id: "8", src: park, name: "공원" },
-        { id: "9", src: liver, name: "물가" },
-        { id: "10", src: sea, name: "바다" },
-        { id: "11", src: library, name: "도서관" },
-        { id: "12", src: culture, name: "문화공간" },
-        { id: "13", src: leisure, name: "레저" },
-        { id: "14", src: etc, name: "기타" }
-    ];
+interface Props {
+    categoryId: number;
+    setCategoryId: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const Category = ({ categoryId, setCategoryId }: Props) => {
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
     return (
         <>
             <StContainer>
                 {
                     categories.map((item, index) => {
                         return (
-                            <CategoryItem key={item.id} onClick={() => { navigate(`/list/${index + 1}`) }}>
-                                <CategoryItemTop $selected={Number(id) === (index + 1)}>
-                                    <img src={item.src} alt={item.name} />
+                            <CategoryItem key={index} onClick={() => { setCategoryId(index + 1) }}>
+                                <CategoryItemTop $selected={categoryId === (index + 1)}>
+                                    <img src={categoryIcons[index]} alt={item} />
                                 </CategoryItemTop>
-                                <CategoryItemBottom $selected={Number(id) === (index + 1)}>
-                                    {item.name}
+                                <CategoryItemBottom $selected={categoryId === (index + 1)}>
+                                    {item}
                                 </CategoryItemBottom>
                             </CategoryItem>
                         )

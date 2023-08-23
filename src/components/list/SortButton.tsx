@@ -1,52 +1,52 @@
-import React from "react"
+import React, { useState } from "react"
 import { styled } from "styled-components"
 
-interface SortButtonProps {
-    handleSortByOldest: () => void;
-    handleSortByNewest: () => void;
-    handleSortByLikeCount: () => void;
-    activeSort: "Oldest" | "Newest" | "LikeCount";
+interface Props {
+    setSortBy: React.Dispatch<React.SetStateAction<string>>;
+    setDirection: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const SortButton: React.FC<SortButtonProps> = ({
-    handleSortByOldest,
-    handleSortByNewest,
-    handleSortByLikeCount,
-    activeSort
-}) => {
-    const sortlist = [
+const SortButton = ({ setSortBy, setDirection }: Props) => {
+    const [clicked, setClicked] = useState<Number>(1);
+    const handleCategoryClick = (id: number, sortBy: string, direction: string) => {
+        setClicked(id)
+        setSortBy(sortBy);
+        setDirection(direction);
+    }
+    const sortList = [
         {
             id: 1,
-            sort: "최신순",
-            activeSort: "Newest",
-            onClick: handleSortByNewest
+            name: "최신순",
+            onClick: () => handleCategoryClick(1, "createdAt", "desc")
         },
         {
             id: 2,
-            sort: "과거순",
-            activeSort: "Oldest",
-            onClick: handleSortByOldest
+            name: "과거순",
+            onClick: () => handleCategoryClick(2, "createdAt", "asc")
         },
         {
             id: 3,
-            sort: "좋아요순",
-            activeSort: "LikeCount",
-            onClick: handleSortByLikeCount
+            name: "좋아요순",
+            onClick: () => handleCategoryClick(3, "wishlistCount", "desc")
+        },
+        {
+            id: 4,
+            name: "조회순",
+            onClick: () => handleCategoryClick(4, "viewCount", "desc")
         },
     ]
 
     return (
         <SortList>
             {
-                sortlist.map(item => {
-                    const isActive = activeSort === item.activeSort;                    
+                sortList.map(item => {
                     return (
                         <SortListItem
                             key={item.id}
                             onClick={item.onClick}
-                            $active={isActive ? "true" : "false"}
+                            $active={(clicked === item.id) ? "true" : "false"}
                         >
-                            {item.sort}
+                            {item.name}
                         </SortListItem>
                     )
                 })
@@ -65,7 +65,7 @@ const SortList = styled.div`
 
 const SortListItem = styled.div<{ $active: string }>`
     background: ${(props) => (props.$active === "true" ? "linear-gradient(135deg, #8084F4,#C48FED)" : "#58468B")};
-    color: ${(props) => (props.$active === "true"  ? "#FAFAFA" : "#9280BA")};
+    color: ${(props) => (props.$active === "true" ? "#FAFAFA" : "#9280BA")};
     border-radius: 30px;
 
     padding: 8px 16px;
