@@ -70,17 +70,6 @@ const EditMap: React.FC<EditMapProps> = ({
                     level: 3,
                 };
 
-                //     // 버튼 클릭에 따라 지도 확대, 축소 기능을 막거나 풀고 싶은 경우에는 map.setZoomable 함수를 사용합니다
-                // function setZoomable(zoomable: any) {
-                //     // 마우스 휠로 지도 확대,축소 가능여부를 설정합니다
-                //     map.setZoomable(zoomable);
-
-                // // 버튼 클릭에 따라 지도 이동 기능을 막거나 풀고 싶은 경우에는 map.setDraggable 함수를 사용합니다
-                // function setDraggable(draggable: any) {
-                //     // 마우스 드래그로 지도 이동 가능여부를 설정합니다
-                //     map.setDraggable(draggable);
-                // }
-
                 const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
                 if (state.isPanto) {
@@ -172,13 +161,6 @@ const EditMap: React.FC<EditMapProps> = ({
                     id="keyword"
                 />
             </StSearchForm>
-            <StCategory>
-                <Category
-                    categoryNum={categoryNum}
-                    setCategoryNum={setCategoryNum}
-                />
-            </StCategory>
-            <StKakaoMap id="map" />
             {modal && (
                 <SearchModal
                     setModal={setModal}
@@ -190,6 +172,13 @@ const EditMap: React.FC<EditMapProps> = ({
                     setSelectedLocation={setSelectedLocation}
                 />
             )}
+            <StCategory>
+                <Category
+                    categoryNum={categoryNum}
+                    setCategoryNum={setCategoryNum}
+                />
+            </StCategory>
+            <StKakaoMap id="map" />
         </StMapContainer>
     );
 };
@@ -200,10 +189,8 @@ const StMapContainer = styled.div`
     height: 548px;
 `;
 
-const StKakaoMap = styled.div`
-    width: 347px;
-    height: 308px;
-    border-radius: 10px;
+const StCategory = styled.div`
+    margin: 16px 0 22px 0;
 `;
 
 const StSearchForm = styled.form`
@@ -228,8 +215,10 @@ const StSearchForm = styled.form`
     }
 `;
 
-const StCategory = styled.div`
-    margin: 16px 0 22px 0;
+const StKakaoMap = styled.div`
+    width: 347px;
+    height: 308px;
+    border-radius: 10px;
 `;
 
 // st chooseLocationHandler = () => {
