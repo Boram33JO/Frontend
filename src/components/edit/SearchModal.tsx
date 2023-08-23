@@ -17,13 +17,13 @@ const StModalOverlay = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    margin-top: 6px;
+    margin-top: 12px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
     z-index: 9999;
 `;
 
 const ModalContainer = styled.div`
-    position: fixed;
+    position: absolute;
     width: 350px;
     height: 180px;
     border-radius: 8px;
@@ -43,6 +43,7 @@ const StSearchLocation = styled.div`
 `;
 
 const SearchModal: React.FC<SearchModalProps> = ({
+    // selectedLocation,
     setModal,
     searchLocationList,
     setAddress,
@@ -55,13 +56,15 @@ const SearchModal: React.FC<SearchModalProps> = ({
 
     const chooseLocationHandler = (index: number) => {
         const selectedItem = searchLocationList[index];
-        // setSelectedLocation(selectedItem); // 선택한 항목 정보 저장
+        setSelectedLocation(selectedItem); // 선택한 항목 정보 저장
         setAddress(selectedItem.address_name);
         setPlaceName(selectedItem.place_name);
         setLatitude(selectedItem.y);
         setLongitude(selectedItem.x);
         setModal(false);
     };
+
+    console.log("111", searchLocationList);
 
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
