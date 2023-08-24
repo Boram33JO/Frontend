@@ -4,7 +4,6 @@ import instance from "./common";
 export const getPopularSongsList = async () => {
     try {
         const response = await instance.get(`/api/song/AllMostSong`);
-        // console.log("성공111122222", response);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -15,7 +14,6 @@ export const getPopularSongsList = async () => {
 export const getSearchSongs = async (searchSong: string) => {
     try {
         const response = await instance.get(`/api/song/search?keyword=${searchSong}`);
-        // console.log("성공", response);
         return response;
     } catch (error) {
         console.log(error);
