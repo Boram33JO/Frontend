@@ -21,8 +21,12 @@ instance.interceptors.request.use(
       config.headers.AccessToken = `${accessToken}`;
       config.headers.RefreshToken = `${refreshToken}`;
     }
+    // 먼가 여기 인터셉터에서 토큰 관리 할 수 있을 거 같은데, 
+// 엑세스 토큰의 유효 시간을 체
 
-    return config;
+
+return config;
+
   },
 
   function (error) {
@@ -41,7 +45,7 @@ instance.interceptors.response.use(
     return response;
   },
   async function (error) {
-    //console.log(error.response.data);
+    ////console.log(error.response.data);
     if (error.response.status === 400) {
       console.log(error.response.data);
     }
@@ -58,8 +62,9 @@ instance.interceptors.response.use(
       else // 리프레시 토큰까지 만료되어 새 엑세스 토큰을 받을 수 없는 경우
       {
         store.dispatch(logout());
-        alert("로그인 시간이 만료되었습니다, 자동으로 로그아웃됩니다.");
-        console.log(error.response.data, "3");
+        //console.log(error.response.data, "3");
+        return alert("로그인 시간이 만료되었습니다, 자동으로 로그아웃됩니다.");
+       
         //여기까지 작동확인 됨.
 
        // 메인 화면의 경로로 설정

@@ -11,13 +11,20 @@ import { setUserInfo } from "../../redux/modules/userSlice";
 const EditProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [nickname, setNickname] = useState("");
   const [introduce, setIntroduce] = useState("");
+
   const [uploadImage, setUploadimage] = useState(null);
   const [profileImage, setProfileImage] = useState(null);
   const [isCheck, setIsCheck] = useState(true);
-  const userInfo = useSelector(state => state.user);
+
+  const userInfo = useSelector((state) => state.user);
   const formData = new FormData();
+
+  // 인풋창
+  const [isNicknameFocused, setNicknameFocused] = useState(false);
+  const [isIntroduceFocused, setIsFocused] = useState(false);
 
   // 이미지 선택 시 처리
   const handleImageChange = (event) => {
@@ -26,7 +33,7 @@ const EditProfile = () => {
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (imgSize > maxSize) {
       alert("이미지 용량은 5MB 이내로 등록 가능합니다.");
-      return
+      return;
     }
     if (selectedImage) {
       setProfileImage(URL.createObjectURL(selectedImage));
@@ -51,20 +58,23 @@ const EditProfile = () => {
   const handleNicknameChange = (e) => {
     setNickname(e.target.value);
     setIsCheck(false);
-  }
+  };
 
   const handleIntroduceChange = (e) => {
     setIntroduce(e.target.value);
-  }
+  };
 
   const handleCheckButton = async () => {
     try {
       const response = await nicknameCheck(nickname);
-      // console.log(response);
+      console.log(response);
       if (response.data.statusCode < 300) {
         alert("사용가능한 닉네임입니다");
         setIsCheck(true);
-      } else if (response.data.statusCode >= 300 && response.data.statusCode < 400) {
+      } else if (
+        response.data.statusCode >= 300 &&
+        response.data.statusCode < 400
+      ) {
         alert("이미 사용중인 닉네임입니다");
         setIsCheck(false);
       } else {
@@ -74,12 +84,17 @@ const EditProfile = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleSubmitButton = async () => {
     if (isCheck) {
       formData.set("userImage", uploadImage);
-      formData.set("requestDto", new Blob([JSON.stringify({ nickname, introduce })], { type: "application/json" }));
+      formData.set(
+        "requestDto",
+        new Blob([JSON.stringify({ nickname, introduce })], {
+          type: "application/json",
+        })
+      );
       try {
         const response = await updateProfile(userInfo.userId, formData);
         if (response.status <= 300) {
@@ -88,11 +103,14 @@ const EditProfile = () => {
           const accessToken = response.headers.accesstoken;
           const refreshToken = response.headers.refreshtoken;
           // console.log("accessToken:", accessToken);
-          if (accessToken) { // 닉네임 변경 후 토큰 최신화
+          if (accessToken) {
+            // 닉네임 변경 후 토큰 최신화
             localStorage.setItem("AccessToken", accessToken);
             localStorage.setItem("RefreshToken", refreshToken);
           }
-          dispatch(setUserInfo({ nickname, introduce, userImage: response.data.data }));
+          dispatch(
+            setUserInfo({ nickname, introduce, userImage: response.data.data })
+          );
           navigate(-1);
         }
       } catch (error) {
@@ -100,9 +118,9 @@ const EditProfile = () => {
       }
     } else {
       alert("먼저 닉네임 중복체크를 해주세요");
-      return
+      return;
     }
-  }
+  };
 
   return (
     <>
@@ -113,11 +131,11 @@ const EditProfile = () => {
             // 이미지를 클릭하면 input 영역을 클릭한 것과 같은 효과를 내도록 설정
             onClick={(event) => {
               event.preventDefault(); // 기본 클릭 동작 방지
-              const input = document.createElement('input');
-              input.type = 'file';
-              input.accept = 'image/*';
+              const input = document.createElement("input");
+              input.type = "file";
+              input.accept = "image/*";
               input.click(); // 파일 선택 창 열기
-              input.addEventListener('change', handleImageChange);
+              input.addEventListener("change", handleImageChange);
             }}
           >
             {profileImage ? (
@@ -139,11 +157,17 @@ const EditProfile = () => {
           <Stname>
             <Stinput4
               type={"text"}
-              placeholder={"2~8자 입력"} // 이 부분도 로컬스토리지나 서버에서 받아와서 기본 값이 담겨 있어야함. 
+              placeholder={"2~8자 입력"} // 이 부분도 로컬스토리지나 서버에서 받아와서 기본 값이 담겨 있어야함.
               value={nickname} // Display nickname value
               onChange={handleNicknameChange}
+              onFocus={() => setNicknameFocused(true)}
+              onBlur={() => setNicknameFocused(false)}
+              isFocused={isNicknameFocused}
+              hasValue={nickname.length > 0}
             />
-            <Stbutton1 $isCheck={isCheck} onClick={handleCheckButton}>중복체크</Stbutton1>
+            <Stbutton1 $isCheck={isCheck} onClick={handleCheckButton}>
+              중복체크
+            </Stbutton1>
           </Stname>
         </Stnickname>
       </Stbox>
@@ -155,6 +179,10 @@ const EditProfile = () => {
           placeholder={"자기소개를 입력해주세요."}
           value={introduce} // Display email value
           onChange={handleIntroduceChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          isFocused={isIntroduceFocused}
+          hasValue={introduce.length > 0}
         />
       </Stbox>
 
@@ -167,7 +195,6 @@ const EditProfile = () => {
 
 export default EditProfile;
 
-
 // 오류 코드
 const ErrorMessageContainer = styled.div`
   display: flex;
@@ -175,14 +202,13 @@ const ErrorMessageContainer = styled.div`
   align-items: left;
   padding-left: 48px;
 
-  /* align-items: center; */  
+  /* align-items: center; */
 `;
 
 const ErrorMessage = styled.div`
-   color: #e7e6f0;
+  color: #e7e6f0;
   margin-top: 10px;
   font-size: 14px;
-
 `;
 
 // 이미지
@@ -233,14 +259,13 @@ const CameraIconWrapper = styled.div`
   align-items: center;
   width: 30px;
   height: 30px;
- 
+
   svg {
     fill: white;
     width: 30px;
     height: 30px;
   }
 `;
-
 
 // 프로필 수정
 const H1 = styled.h1`
@@ -273,6 +298,8 @@ const Stinput1 = styled.input`
   border-radius: 6px;
   outline: none;
   margin-bottom: 10px;
+  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
+  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 const Stnickname = styled.div`
@@ -295,6 +322,7 @@ const Stname = styled.div`
   justify-content: center; /*요소들을 수평 가운데 정렬하기 위해 변경  */
   align-items: center; /* 세로 중앙 정렬을 위해 추가 */
 `;
+
 // 닉네임
 const Stinput4 = styled.input`
   width: 240px;
@@ -309,6 +337,9 @@ const Stinput4 = styled.input`
   border: none;
   border-radius: 6px;
   outline: none;
+
+  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
+  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 // 중복체크 버튼
@@ -317,8 +348,8 @@ const Stbutton1 = styled.button`
   height: 38px;
   margin-left: 10px;
   background: linear-gradient(135deg, #8084f4, #c48fed);
-  
-  color: #D9D8DF;
+
+  color: #d9d8df;
 
   &:hover {
     color: #141414;
@@ -333,11 +364,13 @@ const Stbutton1 = styled.button`
   ${(props) =>
     props.$isCheck &&
     css`
-      background: #45424E;
-      color: #141414 ;
+      background: #45424e;
+      color: #141414;
       pointer-events: none;
-      `}
+    `}
 `;
+
+//  변경하기 버튼
 const Stbutton2 = styled.button`
   width: 350px;
   height: 45px;
@@ -358,4 +391,3 @@ const Stbutton2 = styled.button`
   margin-top: 20px;
   margin-bottom: 100%;
 `;
-

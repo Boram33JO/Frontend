@@ -5,24 +5,31 @@ import useInput from "../../hooks/useInput";
 import { useMutation } from "react-query";
 import { addUsers } from "../../api/user";
 import { nicknameCheck } from "../../api/profile";
-import { emailCheck } from "../../api/user2";
+import { emailCheck, emailDoubleCheck } from "../../api/user2";
 
 const BasicSignUp = () => {
   const navigate = useNavigate();
 
-  const [email, onChangeEmailHandler] = useInput();
-  const [password, onChangePasswordHandler] = useInput();
-  const [passwordCheck, onChangePasswordCheckHandler] = useInput();
-  const [nickname, onChangeNicknameHandler] = useInput();
+  const [email, onChangeEmailHandler, resetEmail] = useInput();
+  const [code, onChangenumberHandler, resetNumber] = useInput();
+  const [password, onChangePasswordHandler, resetPassword] = useInput();
+  const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] =
+    useInput();
+  const [nickname, onChangeNicknameHandler, resetNickname] = useInput();
+
+  const [isEmailVerified, setIsEmailVerified] = useState(false); // 회원가입하기 버튼 전에 이메일 인증여부로 막기
+  const [isNicknameVerified, setIsNicknameVerified] = useState(false); // 회원가입하기 버튼 전에 닉네임 인증여부로 막기
 
   // 에러
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordCheckError, setPasswordCheckError] = useState("");
   const [nicknameError, setNicknameError] = useState("");
+  const [nicknameServerError, setNicknameServerError] = useState(""); // 에러 메시지 저장 상태 변수
 
   // 포커스
   const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isNumberFocused, setIsNumberFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isPasswordCheckFocused, setIsPasswordCheckFocused] = useState(false);
   const [isNicknameFocused, setIsNicknameFocused] = useState(false);
@@ -43,6 +50,15 @@ const BasicSignUp = () => {
   });
 
   const onSignUpClickHandler = () => {
+    if (!isEmailVerified) {
+      alert("이메일 인증을 먼저 진행해 주세요.");
+      return;
+    }
+    if (!isNicknameVerified) {
+      alert("닉네임 중복체크를 먼저 진행해 주세요.");
+      return;
+    }
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
@@ -54,7 +70,7 @@ const BasicSignUp = () => {
       errors.email = "이메일 형식이 아닙니다.";
     }
     if (!passwordRegex.test(password)) {
-      errors.password = "password 조건이 충족되지 않았습니다.";
+      errors.password = "Password 조건이 충족되지 않았습니다.";
     }
     if (password !== passwordCheck) {
       errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
@@ -88,20 +104,58 @@ const BasicSignUp = () => {
 
     if (response.data.message) {
       alert(response.data.message);
+      setIsNicknameVerified(true);
     } else {
+      // setNicknameServerError(response.data.error);
       alert(response.data.error);
+      setIsNicknameVerified(false);
     }
   };
 
+  // 이메일 검사를 누르는데 이메일이 전송되지 않는 형식이면 발송이 안대고 500번에러 뜸.
+  // 인증 버튼 누르기 전에 이메일 형식인지 아닌지 여부 판단해서 이메일 형식이 맞을 경우만 되려나.
+  //
+
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
-    const response = await emailCheck(email);
-     console.log(response, "4");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
+      resetEmail(""); // 입력 칸 비우기
+      return;
+    }
 
-    if (response.data.message) {
-      alert(response.data.message);
-    } else {
-      alert(response.data.error);
+    // if (response.status===500) {
+    //   alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
+    //   resetEmail(""); // 입력 칸 비우기
+    //   return;
+    // }
+    const response = await emailCheck(email);
+    console.log(response, "5");
+    alert(response.data);
+    // if (response.data.message) {
+    //   alert(response.data.message);
+    // } else {
+    //   alert(response.data.error, "에러용2");
+    // }
+  };
+
+  // 이메일 6자리 검증 숫자 검사 (유효기간 5분)
+  // true이면 진행되도록 변수를 만들던지 하자.
+  const DoubleCheckhandleButton = async () => {
+    const response = await emailDoubleCheck(email, code);
+    console.log(response, "숫자 확인1");
+
+    if (response.data === true) {
+      setIsEmailVerified(true);
+      alert("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.");
+      console.log(response.data, "숫자 확인2");
+    } else if (response.data === false) {
+      setIsEmailVerified(false);
+      console.log(response.data, "숫자 확인3");
+      alert("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.");
+      resetEmail();
+      resetNumber();
     }
   };
 
@@ -120,21 +174,23 @@ const BasicSignUp = () => {
               isFocused={isEmailFocused}
               hasValue={email.length > 0}
             />
-            <Stbutton1 onClick={EmailhandleCheckButton}>중복체크</Stbutton1>
+            <Stbutton1 onClick={EmailhandleCheckButton}>인증하기</Stbutton1>
           </Stname>
         </Stnickname>
         <Stnickname>
           <Stname>
             <Stinput4
               type={"text"}
+              value={code}
               placeholder={"인증번호 6자리"}
-              onChange={onChangeNicknameHandler}
-              onFocus={() => setIsNicknameFocused(true)}
-              onBlur={() => setIsNicknameFocused(false)}
-              isFocused={isNicknameFocused}
-              hasValue={nickname.length > 0}
+              onChange={onChangenumberHandler}
+              onFocus={() => setIsNumberFocused(true)}
+              onBlur={() => setIsNumberFocused(false)}
+              isFocused={isNumberFocused}
+              hasValue={code.length > 0}
             />
-            <Stbutton1 onClick={EmailhandleCheckButton}>인증하기</Stbutton1>
+
+            <Stbutton1 onClick={DoubleCheckhandleButton}>인증완료</Stbutton1>
           </Stname>
         </Stnickname>
         <Stinput2
@@ -185,7 +241,10 @@ const BasicSignUp = () => {
             />
             <Stbutton1 onClick={handleCheckButton}>중복체크</Stbutton1>
           </Stname>
-          {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
+          {nicknameServerError && (
+            <ErrorMessage>{nicknameServerError}</ErrorMessage>
+          )}
+          {/* {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>} */}
         </Stnickname>
 
         <Stbutton2 onClick={onSignUpClickHandler}>회원가입하기</Stbutton2>
@@ -221,23 +280,24 @@ const Stbox = styled.div`
   align-items: center;
 `;
 
-const Stinput1 = styled.input`
-  width: 229px;
-  height: 24px;
-  padding: 10px;
+// const Stinput1 = styled.input`
+//   width: 229px;
+//   height: 24px;
+//   padding: 10px;
 
-  font-size: 16px;
-  font-weight: 500;
-  color: #85848b;
+//   font-size: 16px;
+//   font-weight: 500;
+//   color: #85848b;
 
-  background-color: #252628;
+//   background-color: #252628;
 
-  border: none;
-  border-radius: 6px;
-  outline: none;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
-`;
+//   border: none;
+//   border-radius: 6px;
+//   outline: none;
+//   border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
+//   color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+// `;
+
 const Stinput2 = styled.input`
   width: 329px;
   height: 24px;
@@ -304,6 +364,7 @@ const Stname = styled.div`
   display: flex; /* 가로 정렬을 위해 추가 */
   justify-content: center; /*요소들을 수평 가운데 정렬하기 위해 변경  */
   align-items: center; /* 세로 중앙 정렬을 위해 추가 */
+  padding-bottom: 8px;
 `;
 const Stinput4 = styled.input`
   width: 229px;

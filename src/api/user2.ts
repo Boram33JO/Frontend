@@ -28,8 +28,14 @@ export const logout2 = async () => {
     return response.data;
 };
 
-// 이메일 중복체크
+// 이메일 보내는 api
 export const emailCheck = async (email: string) => {
     const response = await instance.post(`/api/send-mail/email`, { email });
+    return response;
+}
+
+// 이메일 검증 api 6자리 숫자
+export const emailDoubleCheck = async (email: string, code: string) => {
+    const response = await instance.post(`/api/send-mail/check`, { email, code});
     return response;
 }
