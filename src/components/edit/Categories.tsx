@@ -1,57 +1,71 @@
-import React from "react";
-import styled from "styled-components";
+import { styled } from "styled-components";
 
-const Categories = () => {
-    const clickCategoryHandler = (category: any) => {
-        // console.log("category", category);
-        localStorage.setItem("category", category);
+interface Props {
+    categoryNum: number;
+    setCategoryNum: React.Dispatch<React.SetStateAction<number>>;
+}
+
+const Categories = ({ categoryNum, setCategoryNum }: Props) => {
+    const categories = ["내주변", "카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
+    const categoryClickHandler = (index: number) => {
+        setCategoryNum(index);
     };
 
-    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
-
     return (
-        <StScroll>
-            {/* <ScrollableComponent> */}
-            <StContainer>
-                {categories.map((category, index) => (
-                    <CategoryItem
+        <CategoryList>
+            {categories.map((category, index: number) => {
+                return (
+                    <CategoryListItem
                         key={index}
-                        onClick={() => clickCategoryHandler(index + 1)}
+                        $active={categoryNum === index}
+                        onClick={() => categoryClickHandler(index)}
                     >
                         {category}
-                    </CategoryItem>
-                ))}
-            </StContainer>
-            {/* </ScrollableComponent> */}
-        </StScroll>
+                    </CategoryListItem>
+                );
+            })}
+        </CategoryList>
     );
 };
 
 export default Categories;
 
-const StScroll = styled.div`
+const CategoryList = styled.div`
+    display: flex;
+    gap: 10px;
+    box-sizing: border-box;
     overflow-x: scroll;
-    overflow-y: hidden;
-    /* 스크롤바 숨기기 */
-    scrollbar-width: none; /* Firefox, IE, Edge */
+    /* padding-bottom: 10px; */
+
     &::-webkit-scrollbar {
-        width: 0 !important;
         display: none;
+        height: 4px;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #dddddd;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: #3a3a3a;
+        border-radius: 10px;
     }
 `;
 
-const StContainer = styled.div`
-    display: flex;
-    gap: 20px;
-`;
+const CategoryListItem = styled.div<{ $active: boolean }>`
+    background: ${(props) => (props.$active === true ? "linear-gradient(135deg, #8084F4, #C48FED)" : "#58468B")};
+    color: ${(props) => (props.$active === true ? "#FAFAFA" : "#9280BA")};
+    border-radius: 30px;
 
-const CategoryItem = styled.div`
-    color: #fff;
-    background-color: #8084f3;
-    padding: 3px 10px;
-    border-radius: 20px;
-    white-space: nowrap; /* 가로로 출력 */
+    white-space: nowrap;
+    padding: 8px 16px;
+    text-align: center;
 
     box-sizing: border-box;
     cursor: pointer;
+
+    &:hover {
+        background: linear-gradient(135deg, #8084f4, #c48fed);
+        color: #fafafa;
+    }
 `;
