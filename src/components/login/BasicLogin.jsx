@@ -73,8 +73,8 @@ const [isEmailFocused, setIsEmailFocused] = useState(false);
           onChange={onChangeEmailHandler}
           onFocus={() => setIsEmailFocused(true)}
         onBlur={() => setIsEmailFocused(false)}
-        isFocused={isEmailFocused}
-        hasValue={email.length > 0} 
+        $isFocused={isEmailFocused}
+        $hasValue={email.length > 0} 
         />
         <Stinput2
           type={"password"}
@@ -83,8 +83,8 @@ const [isEmailFocused, setIsEmailFocused] = useState(false);
           onChange={onChangePasswordHandler}
           onFocus={() => setIsPasswordFocused(true)}
         onBlur={() => setIsPasswordFocused(false)}
-        isFocused={isPasswordFocused}
-        hasValue={password.length > 0} 
+        $isFocused={isPasswordFocused}
+        $hasValue={password.length > 0} 
         />
       </Stbox>
 
@@ -148,8 +148,8 @@ const Stinput1 = styled.input`
   outline: none;
   margin-bottom: 10px;
 
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" :  "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" :  "#141414;")};
+  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 const Stinput2 = styled.input`
@@ -163,8 +163,8 @@ const Stinput2 = styled.input`
   border: none;
   border-radius: 8px;
   outline: none;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" :  "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" :  "#141414;")};
+  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 const Stlink1 = styled.a`
