@@ -99,7 +99,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
             </SideTop>
             <SideBottom>
                 {
-                    (LoginUser.userId !== 0) && <P $color={"#A6A3AF"} $size={"16px"} $weight={"500"} onClick={handleLogout}>로그아웃</P>
+                    (LoginUser.isLogin) && <P $color={"#A6A3AF"} $size={"16px"} $weight={"500"} onClick={handleLogout}>로그아웃</P>
                 }
             </SideBottom>
             <Label onClick={() => setSideOpen(false)} />

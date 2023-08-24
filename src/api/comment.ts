@@ -1,5 +1,13 @@
 import instance from "./common";
 
+// 댓글 조회
+export const getComments = async (postId: string | undefined, page: number) => {
+    const response = await instance.get(`api/posts/${postId}/comments`,
+        { params: { page, size: 5 } }
+    )
+    return response;
+}
+
 // 댓글 작성
 export const postComment = async (postId: string, body: { content: string | undefined }) => {
     const response = await instance.post(`api/posts/${postId}/comments`, body)
