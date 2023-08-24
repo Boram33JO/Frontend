@@ -162,8 +162,8 @@ const EditProfile = () => {
               onChange={handleNicknameChange}
               onFocus={() => setNicknameFocused(true)}
               onBlur={() => setNicknameFocused(false)}
-              isFocused={isNicknameFocused}
-              hasValue={nickname.length > 0}
+              $isFocused={isNicknameFocused}
+              $hasValue={nickname.length > 0}
             />
             <Stbutton1 $isCheck={isCheck} onClick={handleCheckButton}>
               중복체크
@@ -181,8 +181,8 @@ const EditProfile = () => {
           onChange={handleIntroduceChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          isFocused={isIntroduceFocused}
-          hasValue={introduce.length > 0}
+          $isFocused={isIntroduceFocused}
+          $hasValue={introduce.length > 0}
         />
       </Stbox>
 
@@ -298,8 +298,8 @@ const Stinput1 = styled.input`
   border-radius: 6px;
   outline: none;
   margin-bottom: 10px;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 const Stnickname = styled.div`
@@ -338,8 +338,8 @@ const Stinput4 = styled.input`
   border-radius: 6px;
   outline: none;
 
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 // 중복체크 버튼

@@ -11,13 +11,12 @@ const Pictures = () => {
   const { userId } = useParams();
   const queryClient = useQueryClient();
 
-  // Check if userId is available before using it in the query
   const { data: followerData, isLoading, isError } = useQuery(
     ['Follow', userId],
     () => userId ? getFollowLists(userId) : Promise.resolve([]), // If userId is undefined, return an empty array
     { enabled: !!userId }
   );
-  //console.log(followerData); // 이 줄을 추가하여 데이터 구조를 확인
+  console.log(followerData); // 데이터 구조를 확인
 
 
 // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
@@ -51,13 +50,13 @@ const handleDelete = (followerId: number) => {
     <InnerContainer>
       <Follower1>
         <H3>{`${followerData.nickname}님의 피플러`}</H3>
-        <Nums>{`${followerData.followList.length}명`}</Nums>
+        <Nums>{`${followerData.followList.content.length}명`}</Nums>
       </Follower1>
       
-      {followerData.followList.length === 0 ? (
+      {followerData.followList.content.length === 0 ? (
         <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
       ) : (
-        followerData.followList.map((follower: any) => (
+        followerData.followList.content.map((follower: any) => (
           <MyProfile key={follower.userId} >
             <MyThumb src={getProfileImage(follower.userImage)} onClick={() => navigate(`/profile/${follower.userId}`)} />
             <MyProfile1>

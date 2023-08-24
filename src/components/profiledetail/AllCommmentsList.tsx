@@ -25,15 +25,19 @@ const AllCommentsList = () => {
   //console.log("qqqq", userId);
 
 
-  const handleCommentClick = (postId: number) => {
+  const handleCommentClick = (postId: number, ) => {
   // 댓글을 클릭했을 때 해당 댓글의 상세 페이지로 이동
   navigate(`/detail/${postId}`);
 };
 
 const { data, isLoading, isError } = useQuery(["comments"], async () => {
   const response = await getCommentsLists(userId);
-  return response.data;
+  console.log(response);
+  return response.data.content;
 });
+
+console.log("@@@@",data);
+
 
 const commentMutation = useMutation(deleteComment, {
   onSuccess: () => {
@@ -75,10 +79,10 @@ if (isError) {
         <H3>나의 댓글 모아보기</H3>
       </Post>
       {
-         data.length === 0 ? (<NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
+         data && data.length === 0 ? (<NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
          ) : (
-        data.map((item: myComment) => {
-          return (
+        data.map((item: myComment) => (
+          
             <CommentList key={item.id} 
             >
               <CommentListItem>
@@ -100,8 +104,7 @@ if (isError) {
               </CommentListItem>
              
             </CommentList>
-          )
-        })
+        ))
       )}
     </InnerContainer>
   );

@@ -171,8 +171,8 @@ const BasicSignUp = () => {
               onChange={onChangeEmailHandler}
               onFocus={() => setIsEmailFocused(true)}
               onBlur={() => setIsEmailFocused(false)}
-              isFocused={isEmailFocused}
-              hasValue={email.length > 0}
+              $isFocused={isEmailFocused}
+              $hasValue={email.length > 0}
             />
             <Stbutton1 onClick={EmailhandleCheckButton}>인증하기</Stbutton1>
           </Stname>
@@ -186,8 +186,8 @@ const BasicSignUp = () => {
               onChange={onChangenumberHandler}
               onFocus={() => setIsNumberFocused(true)}
               onBlur={() => setIsNumberFocused(false)}
-              isFocused={isNumberFocused}
-              hasValue={code.length > 0}
+              $isFocused={isNumberFocused}
+              $hasValue={code.length > 0}
             />
 
             <Stbutton1 onClick={DoubleCheckhandleButton}>인증완료</Stbutton1>
@@ -200,8 +200,8 @@ const BasicSignUp = () => {
           onChange={onChangePasswordHandler}
           onFocus={() => setIsPasswordFocused(true)}
           onBlur={() => setIsPasswordFocused(false)}
-          isFocused={isPasswordFocused}
-          hasValue={password.length > 0}
+          $isFocused={isPasswordFocused}
+          $hasValue={password.length > 0}
         />
       </Stbox>
       <Stbox>
@@ -213,8 +213,8 @@ const BasicSignUp = () => {
           onChange={onChangePasswordCheckHandler}
           onFocus={() => setIsPasswordCheckFocused(true)}
           onBlur={() => setIsPasswordCheckFocused(false)}
-          isFocused={isPasswordCheckFocused}
-          hasValue={passwordCheck.length > 0}
+          $isFocused={isPasswordCheckFocused}
+          $hasValue={passwordCheck.length > 0}
         />
       </Stbox>
 
@@ -236,8 +236,8 @@ const BasicSignUp = () => {
               onChange={onChangeNicknameHandler}
               onFocus={() => setIsNicknameFocused(true)}
               onBlur={() => setIsNicknameFocused(false)}
-              isFocused={isNicknameFocused}
-              hasValue={nickname.length > 0}
+              $isFocused={isNicknameFocused}
+              $hasValue={nickname.length > 0}
             />
             <Stbutton1 onClick={handleCheckButton}>중복체크</Stbutton1>
           </Stname>
@@ -312,8 +312,8 @@ const Stinput2 = styled.input`
   border-radius: 6px;
   outline: none;
   margin-bottom: 5px;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 const Stnumber = styled.div`
@@ -342,8 +342,8 @@ const Stinput3 = styled.input`
   border-radius: 6px;
   outline: none;
   margin-bottom: 10px;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 const Stnickname = styled.div`
   display: flex;
@@ -380,8 +380,8 @@ const Stinput4 = styled.input`
   border: none;
   border-radius: 6px;
   outline: none;
-  border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 const Stbutton1 = styled.button`
   width: 90px;
