@@ -16,9 +16,9 @@ const YourPostList = () => {
 
   const { data, isLoading, isError } = useQuery(["posts"], async () => {
     const response = await getMyPostLists(userId);
-    // console.log(" 내가쓴 포스팅 response:", response); // response를 console에 출력
+     console.log(" 내가쓴 포스팅 response:", response); // response를 console에 출력
     // console.log("포스트 response:", response.data.nickname);
-    return response.data.postList;
+    return response.data.postList.content;
   });
 
   if (isLoading) {

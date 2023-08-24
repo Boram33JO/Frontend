@@ -25,14 +25,15 @@ const AllCommentsList = () => {
   //console.log("qqqq", userId);
 
 
-  const handleCommentClick = (postId: number) => {
+  const handleCommentClick = (postId: number, ) => {
   // 댓글을 클릭했을 때 해당 댓글의 상세 페이지로 이동
   navigate(`/detail/${postId}`);
 };
 
 const { data, isLoading, isError } = useQuery(["comments"], async () => {
   const response = await getCommentsLists(userId);
-  return response.data;
+  console.log(response);
+  return response.data.content;
 });
 
 const commentMutation = useMutation(deleteComment, {
