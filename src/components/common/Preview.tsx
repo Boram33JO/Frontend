@@ -17,7 +17,7 @@ const Preview = ({ url, song, setPreview }: Props) => {
             <ModalContainer>
                 <ModalContent>
                     <ModalContentTop>
-                        <img src={spotify} style={{ height: "24px" }} alt="spotify" />
+                        <Icon src={spotify} alt="spotify" />
                     </ModalContentTop>
                     <PlaylistItem key={song.id} onClick={() => { window.open(song.externalUrl) }}>
                         <PlaylistLeft>
@@ -31,10 +31,10 @@ const Preview = ({ url, song, setPreview }: Props) => {
                                 </StP>
                             </MusicInfo>
                         </PlaylistLeft>
-                        <img src={external} style={{ height: "20px" }} alt="external" />
+                        <Icon src={external} alt="external" $height='20px' />
                     </PlaylistItem>
                 </ModalContent>
-                <iframe title="External Content" src={url} />
+                {url ? (<iframe title="External Content" src={url} />) : <NoPreview><NoPreviewMessage>해당 곡은 미리듣기가 제공되지 않습니다.</NoPreviewMessage></NoPreview>}
             </ModalContainer>
         </>
     )
@@ -129,8 +129,23 @@ const StP = styled.p<{ $color: string, $size: string }>`
     }
 `
 
-const SpotifyIcon = styled.img`
-    height: 24px;
+const NoPreview = styled.div`
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 300px;
+    height: 150px;
+`
+
+const NoPreviewMessage = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px;
+`
+
+const Icon = styled.img<{ $height?: string }>`
+    height: ${(props) => props.$height || "24px"};
 `
 
 const TestDiv = styled.div`

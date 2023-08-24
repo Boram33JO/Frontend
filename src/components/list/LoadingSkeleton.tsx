@@ -1,7 +1,7 @@
 import { styled } from "styled-components"
 
 const LoadingSkeleton = () => {
-    const dummy = [1, 2]
+    const dummy = [1, 2, 3]
     return (
         <>
             {dummy.map((index) => {

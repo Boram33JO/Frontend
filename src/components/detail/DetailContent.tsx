@@ -8,6 +8,7 @@ import { debounce, displayedAt } from "../../utils/common"
 import { Post } from "../../models/post"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
+import { useEffect, useRef, useState } from "react"
 
 type PostProps = {
     post: Post
@@ -20,6 +21,21 @@ const DetailContent = ({ post }: PostProps) => {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const LoginUser = useSelector((state: RootState) => state.user);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [fold, setFold] = useState<boolean>(true);
+    const [contentHeight, setContentHeight] = useState<number>(0);
+
+    const handleContentResizeHeight = () => {
+        if (containerRef.current) {
+            if (fold) { // 현재 접혀있는 상태(true)면, auto로 높이 늘리기
+                containerRef.current.style.height = "auto";
+            } else { // 현재 접어둔 상태(false)면, 154px로 높이 줄이기
+                containerRef.current.style.height = "154px";
+            }
+            setFold(!fold); // 높이 조절 후 fold 상태 변경
+        }
+    }
 
     const LikeMutation = useMutation(likePost, {
         onSuccess: () => {
@@ -58,6 +74,12 @@ const DetailContent = ({ post }: PostProps) => {
             } else return
         }
     }, 300);
+
+    useEffect(() => {
+        if (contentRef.current) {
+            setContentHeight(contentRef.current.scrollHeight);
+        }
+    }, [contentHeight]);
 
     return (
         <DetailContainer>
@@ -99,7 +121,10 @@ const DetailContent = ({ post }: PostProps) => {
                 </TitleSectionRight>
             </TitleSection>
             <ContentSection>
-                {post.content}
+                <ContentContainer ref={containerRef}>
+                    <ContainerText ref={contentRef}>{post.content}</ContainerText>
+                </ContentContainer>
+                {(contentHeight > 154) && <ContentFoldToggle onClick={handleContentResizeHeight}>{fold ? "더보기" : "접기"}</ContentFoldToggle>}
             </ContentSection>
             <LocationSection>
                 <LocationInfo>
@@ -240,7 +265,6 @@ const StLike = styled(Like) <{ $yours: boolean }>`
 
 const ContentSection = styled.div`
     display: block;
-    min-height: 200px;
     height: auto;
 
     color: #D9D8DF;
@@ -253,6 +277,22 @@ const ContentSection = styled.div`
 
     box-sizing: border-box;
     padding: 20px;
+`
+
+const ContentContainer = styled.div`
+    min-height: 154px; // 최소 높이 설정
+    height: 154px; // 접기, 더보기 상태에 따라 변경될 높이
+    white-space: pre-wrap;
+    overflow: hidden; 
+`
+
+const ContainerText = styled.div`    
+`
+
+const ContentFoldToggle = styled.p`
+    margin-top: 10px;
+    color: #7D7B85;
+    cursor: pointer;
 `
 
 const SvgIcon = styled.span`
