@@ -43,6 +43,7 @@ export const getDetailPost = async (postId: string | undefined) => {
 // 게시글 삭제
 export const deletePost = async (postId: string | undefined) => {
     const response = await instance.delete(`api/posts/${postId}`)
+    console.log(response);
     return response;
 }
 

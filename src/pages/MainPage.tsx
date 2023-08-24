@@ -9,10 +9,13 @@ import { ReactComponent as Edit } from '../assets/images/side/edit.svg'
 import { ReactComponent as Top } from '../assets/images/top.svg'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '../redux/config/configStore'
 
 const MainPage = () => {
     const pathname = useLocation();
     const navigate = useNavigate();
+    const LoginUser = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -26,7 +29,7 @@ const MainPage = () => {
             <Recommend />
             <FamousPeople />
             <PostList />
-            <Post onClick={() => navigate(`/edit`)}><StEdit /></Post>
+            { LoginUser.isLogin && <Post onClick={() => navigate(`/edit`)}><StEdit /></Post>}
             <Test onClick={() => { window.scrollTo({ top: 0, behavior: 'smooth' }) }} ><StTop /></Test>
         </Container>
     )

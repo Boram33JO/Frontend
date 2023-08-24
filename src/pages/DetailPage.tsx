@@ -9,11 +9,12 @@ import { styled } from 'styled-components'
 import { useSelector } from "react-redux"
 import { RootState } from '../redux/config/configStore'
 import { useEffect, useState } from 'react'
+import DeleteModal from '../components/common/DeleteModal'
 
 const DetailPage = () => {
     const { id } = useParams();
     const { pathname } = useLocation();
-    const [deleteToggle, setDeleteToggle] = useState<Boolean>(false);
+    const [deleteToggle, setDeleteToggle] = useState<boolean>(false);
     const navigate = useNavigate();
     const userInfo = useSelector((state: RootState) => state.user);
     const queryClient = useQueryClient();
@@ -27,10 +28,6 @@ const DetailPage = () => {
     const handleDeleteButton = () => {
         DeleteMutation.mutate(id);
         navigate(-1);
-    }
-
-    const handleDeleteToggle = () => {
-        setDeleteToggle(true);
     }
 
     useEffect(() => {
@@ -57,38 +54,21 @@ const DetailPage = () => {
         <>
             <DetailContent post={data} />
             <Playlist songs={data.songs} />
-            {
-                (userInfo.nickname === data.nickname) && (
-                    <UpdateSection>
-                        <StButton onClick={() => navigate(`/edit/${id}`)}>수정</StButton>
-                        <Divider />
-                        <StButton onClick={handleDeleteToggle}>삭제</StButton>
-                    </UpdateSection>
-                )
-            }
+            <UpdateSection>
+                {
+                    (userInfo.nickname === data.nickname) && (
+                        <>
+                            <StButton onClick={() => navigate(`/edit/${id}`)}>수정</StButton>
+                            <Divider />
+                            <StButton onClick={() => setDeleteToggle(true)}>삭제</StButton>
+                        </>
+                    )
+                }
+            </UpdateSection >
             <StyledHr />
-            {
-                (deleteToggle) && (
-                    <>
-                        <ModalBackground onClick={() => setDeleteToggle(false)} />
-                        <DeleteModal>
-                            <P>
-                                {`게시글을 삭제하시겠습니까?`}
-                            </P>
-                            <DeleteButtonArea>
-                                <DeleteModalButton onClick={() => setDeleteToggle(false)} >
-                                    취소
-                                </DeleteModalButton>
-                                <DeleteModalButton $delete={true} onClick={handleDeleteButton}>
-                                    삭제
-                                </DeleteModalButton>
-                            </DeleteButtonArea>
-                        </DeleteModal>
-                    </>
-                )
-            }
-            <CommentList comments={data.comments} />
+            <CommentList />
             <CommentForm />
+            {(deleteToggle) && <DeleteModal name={"게시글"} deleteToggle={setDeleteToggle} deleteButton={handleDeleteButton} />}
         </>
     )
 }
@@ -107,6 +87,7 @@ const UpdateSection = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    height: 22px;
     gap: 10px;
     box-sizing: border-box;
     padding: 0px 20px;
@@ -143,57 +124,4 @@ const ModalBackground = styled.div`
     background-color: gray;
     opacity: 0.3;
     /* background-color: rgba(33, 38, 41, 0.3); */
-`
-
-const DeleteModal = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    z-index: 5;
-    width: 300px;
-    background-color: #141414;
-    color: #FAFAFA;
-    border-radius: 10px;
-    box-sizing: border-box;
-    padding: 20px;
-    gap: 20px;
-`
-
-const DeleteButtonArea = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-    gap: 10px;
-`
-
-const DeleteModalButton = styled.div<{ $delete?: boolean }>`
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    
-    flex: 1 0 0;
-    background: ${(props) => props.$delete ? "linear-gradient(135deg, #8084F4, #C48FED)" : "#2C2A30"};
-    
-    font-size: 16px;
-    line-height: 22px;
-    color: ${(props) => props.$delete ? "#FAFAFA" : "#797582"};
-    border-radius: 6px;
-    box-sizing: border-box;
-    padding: 10px;
-    cursor: pointer;
-    &:hover {
-        color: ${(props) => props.$delete ? "#141414" : "#FAFAFA"};
-    }
-`
-
-const P = styled.p`
-    font-size: 16px;
-    line-height: 22px;
-    white-space: pre-wrap;
 `

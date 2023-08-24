@@ -34,13 +34,13 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
 
     const commentMutation = useMutation((postId: string) => postComment(postId, { content: content }), {
         onSuccess: () => {
-            queryClient.invalidateQueries("post");
+            queryClient.invalidateQueries("comment");
         }
     });
 
     const updateMutation = useMutation((commentId: string) => updateComment(commentId, { content: content }), {
         onSuccess: () => {
-            queryClient.invalidateQueries("post");
+            queryClient.invalidateQueries("comment");
         }
     });
 
