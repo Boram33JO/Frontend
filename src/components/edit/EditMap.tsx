@@ -94,29 +94,17 @@ const EditMap: React.FC<EditMapProps> = ({
         };
     }, [state, latitude, longitude]);
 
-    console.log("lat,lng", latitude, longitude);
-
     const searchMap = () => {
         const ps = new window.kakao.maps.services.Places();
         const placesSearchCB = function (data: any, status: any, pagination: any) {
             if (status === window.kakao.maps.services.Status.OK) {
                 setSearchLocationList(data);
-
-                // setAddress(newSearch.address_name);
-                // setPlaceName(newSearch.place_name);
-                // setLatitude(newSearch.y);
-                // setLongitude(newSearch.x);
-                // setState({
-                //     center: { latitude: newSearch.y, longitude: newSearch.x },
-                //     isPanto: true,
-                // });
             }
         };
         ps.keywordSearch(searchLocation, placesSearchCB);
-        // console.log("state before setState", state);
     };
 
-    console.log("1234", searchLocationList);
+    // console.log("1234", searchLocationList);
 
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchLocation(event.target.value);
@@ -128,7 +116,7 @@ const EditMap: React.FC<EditMapProps> = ({
             return alert("내용을 입력하세요");
         }
         setModal(true);
-        // setSearchLocation("");
+        setSearchLocation("");
         searchMap();
     };
 

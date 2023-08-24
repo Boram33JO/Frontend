@@ -56,7 +56,7 @@ const EditPage = () => {
     const [placeName, setPlaceName] = useState("");
     const [latitude, setLatitude] = useState("37.566826");
     const [longitude, setLongitude] = useState("126.9786567");
-    const [categoryNum, setCategoryNum] = useState<number>(1);
+    const [categoryNum, setCategoryNum] = useState<number>(0);
     const { postId } = useParams<{ postId: string }>();
 
     const [isData, setIsData] = useState<IsData | null>(null);
@@ -76,12 +76,13 @@ const EditPage = () => {
     };
     const navigate = useNavigate();
 
+    console.log("@@@", address, category, chooseSongList, inputForm.postTitle, inputForm.content);
+
     useEffect(() => {
         const fixPostData = async () => {
             try {
                 const response = await getDetailPost(postId);
                 setIsData(response.data);
-                // console.log("dididi", isData); // 업데이트 된 상태를 찍어보기
             } catch (error) {
                 console.error(error);
             }
@@ -93,15 +94,49 @@ const EditPage = () => {
     }, [postId]);
 
     // 클릭 시 슬라이드 번호 이동
-    const NextButtonHandler = () => {
-        if (slideIndex === 0) {
-            goToSlide(slideIndex + 1);
-        } else if (slideIndex === 2) {
-            // 업로드
-            // return alert("마지막");
-            onClickPost();
+    // const NextButtonHandler = () => {
+    //     if (slideIndex === 0) {
+    //         if (!address) {
+    //             return alert("주소를 입력해주세요.");
+    //         }
+    //         goToSlide(slideIndex + 1);
+    //     } else if (slideIndex === 0) {
+    //         if (chooseSongList.length === 0) {
+    //             return alert("노래를 선택해주세요.");
+    //         }
+    //     } else if (slideIndex === 2) {
+    //         // 업로드
+    //         // return alert("마지막");
+    //         onClickPost();
+    //     }
+
+    //     goToSlide(slideIndex + 1);
+    // };
+
+    const getErrorMessage = () => {
+        if (slideIndex === 0 && !address) {
+            return "주소를 입력해주세요.";
         }
-        goToSlide(slideIndex + 1);
+
+        if (slideIndex === 1 && chooseSongList.length === 0) {
+            return "노래를 선택해주세요.";
+        }
+
+        return null;
+    };
+
+    const NextButtonHandler = () => {
+        const errorMessage = getErrorMessage();
+
+        if (errorMessage) {
+            alert(errorMessage);
+        } else {
+            if (slideIndex === 2) {
+                // 업로드 로직을 이곳에 추가
+                // onClickPost();
+            }
+            goToSlide(slideIndex + 1);
+        }
     };
 
     const BeforeButtonHandler = () => {
@@ -114,17 +149,21 @@ const EditPage = () => {
     };
 
     const onClickPost = async () => {
-        if (data.songs.length !== 0) {
-            try {
-                await postData(data);
-                alert("success");
-                navigate(`/`);
-            } catch (error) {
-                console.log(error);
-                alert("failed");
+        if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
+            if (inputForm.content.length <= 500) {
+                try {
+                    await postData(data);
+                    alert("success");
+                    navigate(`/`);
+                } catch (error) {
+                    console.log(error);
+                    alert("failed");
+                }
+            } else {
+                alert("내용은 500자 이하여야 합니다.");
             }
         } else {
-            return alert("노래를 추가해주세요.");
+            alert("제목과 내용은 필수입니다.");
         }
     };
 

@@ -4,7 +4,7 @@ import { ReactComponent as CheckBox } from "../../assets/images/check_slc.svg";
 import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg";
 import { ReactComponent as Search } from "../../assets/images/search.svg";
 import { getPopularSongsList, getSearchSongs } from "../../api/edit";
-
+import { ReactComponent as Spotify } from "../../assets/images/spotify/Spotify_Icon_RGB_White.svg";
 interface SongListType {
     album: string;
     artistName: string;
@@ -125,6 +125,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                                 addToChooseSongList(item);
                             }}
                         >
+                            <Spotify style={{ width: "21px" }} />
                             <img
                                 src={item.thumbnail}
                                 alt={`Thumbnail for ${item.songTitle}`}
@@ -146,6 +147,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                                 addToChooseSongList(item);
                             }}
                         >
+                            <Spotify style={{ width: "21px" }} />
                             <img
                                 src={item.thumbnail}
                                 alt={`Thumbnail for ${item.songTitle}`}
@@ -203,16 +205,28 @@ const StSearchForm = styled.form`
 
 const StPopularContainer = styled.div`
     color: #fafafa;
+    width: 350px;
     h2 {
         font-size: 18px;
         margin: 28px 0 24px 0;
     }
     h3 {
+        width: 130px;
         font-size: 16px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
     }
     p {
         color: #a6a3af;
         font-size: 14px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
     }
 `;
 
@@ -227,17 +241,52 @@ const StContainer = styled.div`
 
     margin-top: 12px;
     padding-top: 19px;
+    &::-webkit-scrollbar {
+        width: 4px;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #dddddd;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: #3a3a3a;
+        border-radius: 10px;
+    }
+    textarea:focus {
+        outline: none;
+    }
 `;
 
 const StSongList = styled.div`
     display: inline-flex;
     align-items: center;
     gap: 18px;
-    margin: 7px 16px;
+    margin: 7px 20px 12px 16px;
+    color: #fafafa;
+
     div {
         display: flex;
         flex-direction: column;
-        width: 193px;
+        width: 156px;
+    }
+
+    h3 {
+        width: 130px;
+        font-size: 16px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
+    }
+    p {
+        font-size: 14px;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        word-break: break-all;
     }
 
     img {
@@ -258,6 +307,21 @@ const StChooseSongListContainer = styled.div`
 
     display: flex;
     flex-direction: column;
+    &::-webkit-scrollbar {
+        width: 4px;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #dddddd;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: #3a3a3a;
+        border-radius: 10px;
+    }
+    textarea:focus {
+        outline: none;
+    }
 `;
 
 const StChooseSongLists = styled.div`
