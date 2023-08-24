@@ -12,18 +12,20 @@ const BasicSignUp = () => {
 
   const [email, onChangeEmailHandler, resetEmail] = useInput();
   const [code, onChangenumberHandler, resetNumber] = useInput();
+  const [password, onChangePasswordHandler, resetPassword] = useInput();
+  const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] =
+    useInput();
+  const [nickname, onChangeNicknameHandler, resetNickname] = useInput();
 
   const [isEmailVerified, setIsEmailVerified] = useState(false); // 회원가입하기 버튼 전에 이메일 인증여부로 막기
-
-  const [password, onChangePasswordHandler] = useInput();
-  const [passwordCheck, onChangePasswordCheckHandler] = useInput();
-  const [nickname, onChangeNicknameHandler] = useInput();
+  const [isNicknameVerified, setIsNicknameVerified] = useState(false); // 회원가입하기 버튼 전에 닉네임 인증여부로 막기
 
   // 에러
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [passwordCheckError, setPasswordCheckError] = useState("");
   const [nicknameError, setNicknameError] = useState("");
+  const [nicknameServerError, setNicknameServerError] = useState(""); // 에러 메시지 저장 상태 변수
 
   // 포커스
   const [isEmailFocused, setIsEmailFocused] = useState(false);
@@ -48,9 +50,12 @@ const BasicSignUp = () => {
   });
 
   const onSignUpClickHandler = () => {
-
     if (!isEmailVerified) {
       alert("이메일 인증을 먼저 진행해 주세요.");
+      return;
+    }
+    if (!isNicknameVerified) {
+      alert("닉네임 중복체크를 먼저 진행해 주세요.");
       return;
     }
 
@@ -83,7 +88,7 @@ const BasicSignUp = () => {
       setNicknameError(errors.nickname || "");
       return;
     }
-   
+
     const newUser = {
       email: email,
       password: password,
@@ -99,30 +104,32 @@ const BasicSignUp = () => {
 
     if (response.data.message) {
       alert(response.data.message);
+      setIsNicknameVerified(true);
     } else {
+      // setNicknameServerError(response.data.error);
       alert(response.data.error);
+      setIsNicknameVerified(false);
     }
   };
 
-// 이메일 검사를 누르는데 이메일이 전송되지 않는 형식이면 발송이 안대고 500번에러 뜸. 
-// 인증 버튼 누르기 전에 이메일 형식인지 아닌지 여부 판단해서 이메일 형식이 맞을 경우만 되려나.
-// 
+  // 이메일 검사를 누르는데 이메일이 전송되지 않는 형식이면 발송이 안대고 500번에러 뜸.
+  // 인증 버튼 누르기 전에 이메일 형식인지 아닌지 여부 판단해서 이메일 형식이 맞을 경우만 되려나.
+  //
 
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
-    resetEmail(""); // 입력 칸 비우기
-    return;
-  }
+    if (!emailRegex.test(email)) {
+      alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
+      resetEmail(""); // 입력 칸 비우기
+      return;
+    }
 
-  // if (response.status===500) {
-  //   alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
-  //   resetEmail(""); // 입력 칸 비우기
-  //   return;
-  // }
+    // if (response.status===500) {
+    //   alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
+    //   resetEmail(""); // 입력 칸 비우기
+    //   return;
+    // }
     const response = await emailCheck(email);
     console.log(response, "5");
     alert(response.data);
@@ -234,7 +241,10 @@ const BasicSignUp = () => {
             />
             <Stbutton1 onClick={handleCheckButton}>중복체크</Stbutton1>
           </Stname>
-          {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>}
+          {nicknameServerError && (
+            <ErrorMessage>{nicknameServerError}</ErrorMessage>
+          )}
+          {/* {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>} */}
         </Stnickname>
 
         <Stbutton2 onClick={onSignUpClickHandler}>회원가입하기</Stbutton2>
@@ -339,7 +349,6 @@ const Stnickname = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 `;
 
 const H3 = styled.h3`
