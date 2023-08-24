@@ -18,6 +18,7 @@ export const getProfileLists = async (userId: string | undefined) => {
 // 내가 쓴 포스팅 조회
 export const getMyPostLists = async (userId: string | undefined) => {
     const response = await instance.get(`/api/profile/${userId}/posts`)
+    console.log("1234",response)
     return response;
 }
 
@@ -44,6 +45,7 @@ export const getFollowLists = async (userId: string): Promise<any> => {
 // 내가 댓글 단 포스팅 조회
 export const getCommentsLists = async (userId: string | undefined) => {
     const response = await instance.get(`/api/profile/${userId}/comments`)
+    console.log("!@#$$",response)
     return response;
 }
 

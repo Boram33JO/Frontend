@@ -50,7 +50,7 @@ const handleDelete = (followerId: number) => {
     <InnerContainer>
       <Follower1>
         <H3>{`${followerData.nickname}님의 피플러`}</H3>
-        <Nums>{`${followerData.followList.content}명`}</Nums>
+        <Nums>{`${followerData.followList.content.length}명`}</Nums>
       </Follower1>
       
       {followerData.followList.content.length === 0 ? (

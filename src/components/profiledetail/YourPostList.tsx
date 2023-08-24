@@ -4,10 +4,12 @@ import { Post } from "../../models/post";
 import MyListItem from "../common/MyListItem";
 import { useQuery } from "react-query";
 import { getMyPostLists } from "../../api/profile";
+import { useState } from "react";
 
 
 const YourPostList = () => {
   const { userId } = useParams();
+  const [nickname,setNickname] = useState<string>("")
 
   // const handleViewAllClick = () => {
   //   // 항상 userIdFromUrl을 사용하여 URL에 담긴 사용자의 닉네임을 표시
@@ -17,9 +19,13 @@ const YourPostList = () => {
   const { data, isLoading, isError } = useQuery(["posts"], async () => {
     const response = await getMyPostLists(userId);
      console.log(" 내가쓴 포스팅 response:", response); // response를 console에 출력
-    // console.log("포스트 response:", response.data.nickname);
+     console.log("포스트 response:", response.data?.nickname);
+     setNickname(response.data?.nickname)
     return response.data.postList.content;
   });
+  console.log("state",nickname)
+
+  console.log("112223333",data)
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -33,7 +39,7 @@ const YourPostList = () => {
     <>
       <InnerContainer>
         <TitleSection>
-          <H3>{data.nickname}포스팅</H3>
+          <H3>{nickname}의 포스팅</H3>
         </TitleSection>
         {data.map((post: Post) => {
           return <MyListItem key={post.postId} post={post}></MyListItem>;
