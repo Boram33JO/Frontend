@@ -7,8 +7,8 @@ import { Post } from "../models/post";
 
 const MapPage = () => {
     const [isData, setIsData] = useState<any>([]);
-    const [latitude, setLatitude] = useState<string>("37.566826");
-    const [longitude, setLongitude] = useState<string>("126.9786567");
+    // const [latitude, setLatitude] = useState<string>("37.566826");
+    // const [longitude, setLongitude] = useState<string>("126.9786567");
 
     return (
         <>
@@ -17,10 +17,10 @@ const MapPage = () => {
                 <KakaoMap
                     isData={isData}
                     setIsData={setIsData}
-                    latitude={latitude}
-                    setLatitude={setLatitude}
-                    longitude={longitude}
-                    setLongitude={setLongitude}
+                    // latitude={latitude}
+                    // setLatitude={setLatitude}
+                    // longitude={longitude}
+                    // setLongitude={setLongitude}
                 />
             </StMapContainer>
             <StLine />
