@@ -58,40 +58,37 @@ const EditMap: React.FC<EditMapProps> = ({
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
     useEffect(() => {
-        const script = document.createElement("script");
-        script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_REST_API_KEY}&libraries=services&autoload=false`;
-        document.head.appendChild(script);
+        // const script = document.createElement("script");
+        // script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_REST_API_KEY}&libraries=services&autoload=false`;
+        // document.head.appendChild(script);
+        window.kakao.maps.load(function () {
+            const mapContainer = document.getElementById("map"); // 지도를 표시할 div
+            const mapOption = {
+                center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude), // 지도의 중심좌표
+                level: 3,
+            };
 
-        script.onload = () => {
-            window.kakao.maps.load(function () {
-                const mapContainer = document.getElementById("map"); // 지도를 표시할 div
-                const mapOption = {
-                    center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude), // 지도의 중심좌표
-                    level: 3,
-                };
+            const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-                const map = new window.kakao.maps.Map(mapContainer, mapOption);
+            if (state.isPanto) {
+                map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+            } else {
+                map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
+            }
 
-                if (state.isPanto) {
-                    map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
-                } else {
-                    map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
-                }
+            // const imageSrc = pinIcon;
+            const imageSize = new window.kakao.maps.Size(36, 42);
+            const markerImage = new window.kakao.maps.MarkerImage(pinIcon, imageSize);
 
-                // const imageSrc = pinIcon;
-                const imageSize = new window.kakao.maps.Size(36, 42);
-                const markerImage = new window.kakao.maps.MarkerImage(pinIcon, imageSize);
-
-                // Create a marker for the map
-                const markerPosition = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
-                const marker = new window.kakao.maps.Marker({
-                    position: markerPosition,
-                    image: markerImage,
-                });
-
-                marker.setMap(map); // Add the marker to the map
+            // Create a marker for the map
+            const markerPosition = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+            const marker = new window.kakao.maps.Marker({
+                position: markerPosition,
+                image: markerImage,
             });
-        };
+
+            marker.setMap(map); // Add the marker to the map
+        });
     }, [state, latitude, longitude]);
 
     const searchMap = () => {

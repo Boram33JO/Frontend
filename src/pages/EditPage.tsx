@@ -147,21 +147,25 @@ const EditPage = () => {
     };
 
     const onClickPost = async () => {
-        if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
-            if (inputForm.content.length <= 500) {
-                try {
-                    await postData(data);
-                    alert("success");
-                    navigate(`/`);
-                } catch (error) {
-                    console.log(error);
-                    alert("failed");
+        if (data.songs?.length !== 0) {
+            if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
+                if (inputForm.content.length <= 500) {
+                    try {
+                        await postData(data);
+                        alert("success");
+                        navigate(`/`);
+                    } catch (error) {
+                        console.log(error);
+                        alert("failed");
+                    }
+                } else {
+                    alert("내용은 500자 이하여야 합니다.");
                 }
             } else {
-                alert("내용은 500자 이하여야 합니다.");
+                alert("제목과 내용은 필수입니다.");
             }
         } else {
-            alert("제목과 내용은 필수입니다.");
+            alert("노래를 선택해주세요.")
         }
     };
 
@@ -227,7 +231,7 @@ const EditPage = () => {
                         background: "#45424E",
                     }}
                     onClick={BeforeButtonHandler}
-                    // disabled={slideIndex === 0}
+                // disabled={slideIndex === 0}
                 >
                     이전
                 </ButtonComponent>

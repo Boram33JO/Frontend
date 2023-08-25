@@ -4,13 +4,7 @@ import { styled } from "styled-components";
 import { ReactComponent as KakaoSVG } from "../../assets/images/login_signup/kakao.svg"; // 변경된 부분
 
 const KakaoLogin = () => {
-    const REST_API_KEY = "545665f819304672fe24245d39231f28";
-    const REDIRECT_URI = `http://localhost:3000/api/oauth/token`;
-    // const REDIRECT_URI = `  http://p.ple.s3-website.ap-northeast-2.amazonaws.com/api/oauth/token`;
-    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-
-    // console.log(REST_API_KEY);
-    // console.log(REDIRECT_URI);
+    const KAKAO_AUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API_KEY}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
 
     const handleKakaoLogin = () => {
         window.location.href = KAKAO_AUTH_URL;

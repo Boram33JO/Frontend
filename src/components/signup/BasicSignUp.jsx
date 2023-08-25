@@ -131,7 +131,7 @@ const BasicSignUp = () => {
     //   return;
     // }
     const response = await emailCheck(email);
-    console.log(response, "5");
+    // console.log(response, "5");
     alert(response.data);
     // if (response.data.message) {
     //   alert(response.data.message);
@@ -144,15 +144,15 @@ const BasicSignUp = () => {
   // true이면 진행되도록 변수를 만들던지 하자.
   const DoubleCheckhandleButton = async () => {
     const response = await emailDoubleCheck(email, code);
-    console.log(response, "숫자 확인1");
+    // console.log(response, "숫자 확인1");
 
     if (response.data === true) {
       setIsEmailVerified(true);
       alert("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.");
-      console.log(response.data, "숫자 확인2");
+      // console.log(response.data, "숫자 확인2");
     } else if (response.data === false) {
       setIsEmailVerified(false);
-      console.log(response.data, "숫자 확인3");
+      // console.log(response.data, "숫자 확인3");
       alert("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.");
       resetEmail();
       resetNumber();

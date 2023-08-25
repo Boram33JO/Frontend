@@ -47,7 +47,7 @@ function App() {
         <Route path="/map" element={<MapPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Route>
-      <Route path="/api/oauth/token" element={<RedirectKakao />} />
+      <Route path="/oauth/token" element={<RedirectKakao />} />
     </Routes>
   );
 }

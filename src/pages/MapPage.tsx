@@ -24,11 +24,8 @@ const MapPage = () => {
                     <div>해당 위치에 포스팅이 없습니다. 다른 지역을 검색해보세요.</div>
                 ) : (
                     isData.map((post: Post) => (
-                        <StMyListItem>
-                            <ListItem
-                                key={post.postId}
-                                post={post}
-                            />
+                        <StMyListItem key={post.postId}>
+                            <ListItem post={post} />
                         </StMyListItem>
                     ))
                 )}

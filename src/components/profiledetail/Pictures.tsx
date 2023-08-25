@@ -16,25 +16,25 @@ const Pictures = () => {
     () => userId ? getFollowLists(userId) : Promise.resolve([]), // If userId is undefined, return an empty array
     { enabled: !!userId }
   );
-  console.log(followerData); // 데이터 구조를 확인
+  // console.log(followerData); // 데이터 구조를 확인
 
 
-// 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
-const mutation = useMutation(followUser, {
-  onSuccess: () => {
-    // 삭제 후 데이터를 다시 불러오기 위해 팔로워 정보 캐시를 무효화합니다.
-    queryClient.invalidateQueries(['Follow', userId]);
-  }
-});
+  // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
+  const mutation = useMutation(followUser, {
+    onSuccess: () => {
+      // 삭제 후 데이터를 다시 불러오기 위해 팔로워 정보 캐시를 무효화합니다.
+      queryClient.invalidateQueries(['Follow', userId]);
+    }
+  });
 
-// "삭제" 버튼을 클릭했을 때 호출되는 함수입니다.
-const handleDelete = (followerId: number) => {
-  const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
-  if (confirmDelete) {
-    // 팔로워 삭제 API 호출을 수행합니다.
-    mutation.mutate(followerId);
-  }
-};
+  // "삭제" 버튼을 클릭했을 때 호출되는 함수입니다.
+  const handleDelete = (followerId: number) => {
+    const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
+    if (confirmDelete) {
+      // 팔로워 삭제 API 호출을 수행합니다.
+      mutation.mutate(followerId);
+    }
+  };
 
 
   if (isLoading) {
@@ -52,7 +52,7 @@ const handleDelete = (followerId: number) => {
         <H3>{`${followerData.nickname}님의 피플러`}</H3>
         <Nums>{`${followerData.followList.content.length}명`}</Nums>
       </Follower1>
-      
+
       {followerData.followList.content.length === 0 ? (
         <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
       ) : (
@@ -72,7 +72,7 @@ const handleDelete = (followerId: number) => {
     </InnerContainer>
   );
 
-        }
+}
 export default Pictures;
 
 const NoDataMessage = styled.p`

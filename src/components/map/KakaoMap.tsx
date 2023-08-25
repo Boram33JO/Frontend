@@ -113,7 +113,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
         try {
             const response = await postCategoryData(latlng, categoryId);
             setIsData(response?.data.content);
-            console.log("isData", isData);
 
             const updatedPositions = response?.data.content.map((item: any) => ({
                 key: item.id,

@@ -10,7 +10,7 @@ const FavListAll = () => {
 
   const { data, isLoading, isError } = useQuery(["wishList"], async () => {
     const response = await getFavLists(userId);
-    console.log("좋아요함 response:", response); // response를 console에 출력
+    // console.log("좋아요함 response:", response); // response를 console에 출력
     // console.log("포스트 response:", response.data.nickname);
     //console.log("좋아요함 data:", response.data); // 확인용 로그
     return response.data.content;

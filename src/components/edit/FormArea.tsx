@@ -76,6 +76,7 @@ const FormArea: React.FC<FormProps> = ({
                         placeholder="내용을 입력하세요."
                         id="content"
                         name="content"
+                        spellCheck="false"
                         value={inputForm.content}
                         onChange={handleChange}
                     />

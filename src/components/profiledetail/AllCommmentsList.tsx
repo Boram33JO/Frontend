@@ -21,10 +21,6 @@ const AllCommentsList = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-
-  //console.log("qqqq", userId);
-
-
   const handleCommentClick = (postId: number,) => {
     // 댓글을 클릭했을 때 해당 댓글의 상세 페이지로 이동
     navigate(`/detail/${postId}`);
@@ -32,12 +28,9 @@ const AllCommentsList = () => {
 
   const { data, isLoading, isError } = useQuery(["comments"], async () => {
     const response = await getCommentsLists(userId);
-    console.log(response);
+    // console.log(response);
     return response.data.content;
   });
-
-  console.log("@@@@", data);
-
 
   const commentMutation = useMutation(deleteComment, {
     onSuccess: () => {
