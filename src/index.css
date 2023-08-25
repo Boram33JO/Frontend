@@ -3,7 +3,7 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
+b, u, i, center, input, textarea, button,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
 table, caption, tbody, tfoot, thead, tr, th, td,
@@ -15,8 +15,13 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
+	font: "inherit";
+	font-family: "Pretendard";
 	vertical-align: baseline;
+    background: transparent;
+}
+body {
+	background-color: #141414;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -41,3 +46,31 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
+
+@font-face {
+	font-family: "Pretendard";
+	font-weight: 400;
+	font-style: normal;
+	src: url("./assets/fonts/Pretendard-Regular.woff2") format("woff2");
+  }
+  
+  @font-face {
+	font-family: "Pretendard";
+	font-weight: 500;
+	font-style: normal;
+	src: url("./assets/fonts/Pretendard-Medium.woff2") format("woff2");
+  }
+  
+  @font-face {
+	font-family: "Pretendard";
+	font-weight: 600;
+	font-style: normal;
+	src: url("./assets/fonts/Pretendard-SemiBold.woff2") format("woff2");
+  }
+  
+  @font-face {
+	font-family: "Pretendard";
+	font-weight: 700;
+	font-style: normal;
+	src: url("./assets/fonts/Pretendard-Bold.woff2") format("woff2");
+  }
