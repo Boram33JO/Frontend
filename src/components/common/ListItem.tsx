@@ -30,100 +30,112 @@ const ListItem = ({ post }: Props) => {
     }
 
     return (
-        <ListItemContainer $src={cardBackground(post.category, post.postId)}>
-            <ListItemTop onClick={() => navigate(`/detail/${post.postId}`)}>
-                <ProfileArea>
-                    <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" />
-                    <ProfileInfo>
-                        <StP $color="#FAFAFA" $size={"14px"}>
-                            {post.nickname}
+        <ListItemContainer>
+            <ListItemBackground $src={cardBackground(post.category, post.postId)}>
+                <ListItemTop onClick={() => navigate(`/detail/${post.postId}`)}>
+                    <ProfileArea>
+                        <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" />
+                        <ProfileInfo>
+                            <StP $color="#FAFAFA" $size={"14px"}>
+                                {post.nickname}
+                            </StP>
+                            <StP $color="#C7C7C7" $size={"14px"}>
+                                {displayedAt(post.createdAt)}
+                            </StP>
+                        </ProfileInfo>
+                    </ProfileArea>
+                    <TitleArea>
+                        <StP $color="#FAFAFA" $size={"16px"}>
+                            {post.postTitle}
                         </StP>
-                        <StP $color="#C7C7C7" $size={"14px"}>
-                            {displayedAt(post.createdAt)}
-                        </StP>
-                    </ProfileInfo>
-                </ProfileArea>
-                <TitleArea>
-                    <StP $color="#FAFAFA" $size={"16px"}>
-                        {post.postTitle}
-                    </StP>
-                    <TitleSubArea>
-                        <SvgIcon style={{ marginRight: "4px" }}>
-                            <StLike />
+                        <TitleSubArea>
+                            <SvgIcon style={{ marginRight: "4px" }}>
+                                <StLike />
+                            </SvgIcon>
+                            <StP $color="#FAFAFA" $size={"14px"}>
+                                {post.wishlistCount}
+                            </StP>
+                            <Divider />
+                            <StP $color="#FAFAFA" $size={"14px"} $weight={"500"}>
+                                {categories[Number(post.category) - 1]}
+                            </StP>
+                        </TitleSubArea>
+                    </TitleArea>
+                </ListItemTop>
+                <DropdownToggle onClick={toggleDropdown}>
+                    <PlaylistLeft>
+                        <MusicInfo>
+                            <StP $color={"#222222"} $size={"16px"}>
+                                {post.songs[0].songTitle}
+                            </StP>
+                            <StP $color={"#A6A3AF"} $size={"14px"}>
+                                {post.songs[0].artistName}
+                            </StP>
+                        </MusicInfo>
+                    </PlaylistLeft>
+                    <PlaylistRight>
+                        <SvgIcon>
+                            <Headphone />
+                            <StP $color={"#414141"} $size={"14px"}>
+                                {`+${post.songs.length}`}
+                            </StP>
                         </SvgIcon>
-                        <StP $color="#FAFAFA" $size={"14px"}>
-                            {post.wishlistCount}
-                        </StP>
-                        <Divider />
-                        <StP $color="#FAFAFA" $size={"14px"} $weight={"500"}>
-                            {categories[Number(post.category) - 1]}
-                        </StP>
-                    </TitleSubArea>
-                </TitleArea>
-            </ListItemTop>
-            <DropdownToggle onClick={toggleDropdown}>
-                <PlaylistLeft>
-                    <MusicInfo>
-                        <StP $color={"#222222"} $size={"16px"}>
-                            {post.songs[0].songTitle}
-                        </StP>
-                        <StP $color={"#A6A3AF"} $size={"14px"}>
-                            {post.songs[0].artistName}
-                        </StP>
-                    </MusicInfo>
-                </PlaylistLeft>
-                <PlaylistRight>
-                    <SvgIcon>
-                        <Headphone />
-                        <StP $color={"#414141"} $size={"14px"}>
-                            {`+${post.songs.length}`}
-                        </StP>
-                    </SvgIcon>
-                    <SvgIcon>
-                        {
-                            (!isOpen) ? <Expand /> : <Contract />
-                        }
-                    </SvgIcon>
-                </PlaylistRight>
-                {isOpen && (
-                    <DropdownList>
-                        {post.songs.map((song, index) => {
-                            return (
-                                <DropdownItem key={song.id} onClick={() => { handleClickListItem(index) }}>
-                                    <PlaylistLeft>
-                                        <MusicThumbnail src={song.thumbnail} />
-                                        <MusicInfo>
-                                            <StP $color={"#222222"} $size={"16px"}>
-                                                {song.songTitle}
-                                            </StP>
-                                            <StP $color={"#A6A3AF"} $size={"14px"}>
-                                                {song.artistName}
-                                            </StP>
-                                        </MusicInfo>
-                                    </PlaylistLeft>
-                                    <SpotifyIcon src={spotify} />
-                                </DropdownItem>
-                            )
-                        })}
-                    </DropdownList>
-                )}
-            </DropdownToggle>
-            {preview && <Preview url={post.songs[songIndex].audioUrl} song={post.songs[songIndex]} setPreview={setPreview} />}
-        </ListItemContainer >
+                        <SvgIcon>
+                            {
+                                (!isOpen) ? <Expand /> : <Contract />
+                            }
+                        </SvgIcon>
+                    </PlaylistRight>
+                    {isOpen && (
+                        <DropdownList>
+                            {post.songs.map((song, index) => {
+                                return (
+                                    <DropdownItem key={song.id} onClick={() => { handleClickListItem(index) }}>
+                                        <PlaylistLeft>
+                                            <MusicThumbnail src={song.thumbnail} />
+                                            <MusicInfo>
+                                                <StP $color={"#222222"} $size={"16px"}>
+                                                    {song.songTitle}
+                                                </StP>
+                                                <StP $color={"#A6A3AF"} $size={"14px"}>
+                                                    {song.artistName}
+                                                </StP>
+                                            </MusicInfo>
+                                        </PlaylistLeft>
+                                        <SpotifyIcon src={spotify} />
+                                    </DropdownItem>
+                                )
+                            })}
+                        </DropdownList>
+                    )}
+                </DropdownToggle>
+                {preview && <Preview url={post.songs[songIndex].audioUrl} song={post.songs[songIndex]} setPreview={setPreview} />}
+            </ListItemBackground>
+        </ListItemContainer>
     )
 }
 
 export default ListItem
 
-const ListItemContainer = styled.div<{ $src?: string }>`
+const ListItemContainer = styled.div`
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: calc(100% * 2 / 3);
+`
+
+const ListItemBackground = styled.div<{ $src?: string }>`
+    position: absolute;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
     width: 100%;
-    height: 250px;
+    height: 100%;
     
     background: ${(props) => props.$src || "#322D2A"};
+    background-size: cover;
+    background-repeat: no-repeat;
     color: white;
 
     border-radius: 8px;

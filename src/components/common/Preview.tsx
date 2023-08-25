@@ -116,7 +116,6 @@ const MusicInfo = styled.div`
 `
 
 const StP = styled.p<{ $color: string, $size: string }>`
-    font-family: "Pretendard";
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
     font-weight: 600;

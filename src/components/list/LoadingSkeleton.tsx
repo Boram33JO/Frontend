@@ -1,25 +1,28 @@
 import { styled } from "styled-components"
 
 const LoadingSkeleton = () => {
-    const dummy = [1, 2, 3]
+    const dummy = Array.from({ length: 10 }, (_, i) => i);
     return (
         <>
             {dummy.map((index) => {
                 return (
                     <ListItemContainer key={index}>
-                        <ListItemTop>
-                            <ProfileArea>
-                                <ProfileThumnail />
-                                <ProfileInfo>
+                        <ListItemBackground>
+                            <ListItemTop>
+                                <ProfileArea>
+                                    <ProfileThumnail />
+                                    <ProfileInfo>
+                                        <StP />
+                                        <StP />
+                                    </ProfileInfo>
+                                </ProfileArea>
+                                <TitleArea>
                                     <StP />
                                     <StP />
-                                </ProfileInfo>
-                            </ProfileArea>
-                            <TitleArea>
-                                <StP />
-                            </TitleArea>
-                        </ListItemTop>
-                        <DropdownToggle />
+                                </TitleArea>
+                            </ListItemTop>
+                            <DropdownToggle />
+                        </ListItemBackground>
                     </ListItemContainer>
                 )
             })}
@@ -30,12 +33,20 @@ const LoadingSkeleton = () => {
 export default LoadingSkeleton
 
 const ListItemContainer = styled.div`
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: calc(100% * 2 / 3);
+`
+
+const ListItemBackground = styled.div`
+    position: absolute;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 
     width: 100%;
-    height: 250px;
+    height: 100%;
     
     background-color: #322D2A;
 
@@ -61,8 +72,10 @@ const ProfileArea = styled.div`
 
 const TitleArea = styled.div`
     display: inline-flex;
+    flex-direction: column;
     flex: 0.54 0 0;
     justify-content: flex-end;
+    gap: 4px;
 `
 
 const ProfileThumnail = styled.div`
