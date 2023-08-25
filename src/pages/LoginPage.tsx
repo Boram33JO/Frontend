@@ -10,7 +10,7 @@ const LoginPage = () => {
   return (
     <Container>
       <InnerContainer>
-        <H3>로그인</H3>
+        <H3>로그인 테스트</H3>
         <LoginSection>
           <BasicLogin />
           <KakaoLogin />
