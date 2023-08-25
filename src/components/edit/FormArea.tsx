@@ -61,7 +61,7 @@ const FormArea: React.FC<FormProps> = ({
     };
 
     return (
-        <>
+        <Container>
             <StFormArea>
                 <div>
                     <input
@@ -79,7 +79,7 @@ const FormArea: React.FC<FormProps> = ({
                         value={inputForm.content}
                         onChange={handleChange}
                     />
-                    <p>500자 내외</p>
+                    <p>500자 이내</p>
                 </div>
             </StFormArea>
 
@@ -91,25 +91,36 @@ const FormArea: React.FC<FormProps> = ({
                 <StChooseSongListContainer>
                     {chooseSongList.map((song) => (
                         <StChooseSongLists key={song.songNum}>
-                            <h3>{song.songTitle}</h3>
-                            <div>{song.artistName}</div>
+                            <ChooseH3>{song.songTitle}</ChooseH3>
+                            <ChooseP>{song.artistName}</ChooseP>
                             <button onClick={() => removeFromChooseSongList(song)}>삭제</button>
                         </StChooseSongLists>
                     ))}
                 </StChooseSongListContainer>
             )}
-        </>
+        </Container>
     );
 };
 
 export default FormArea;
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    gap: 10px;
+    padding: 10px;
+`;
+
 const StFormArea = styled.div`
-    width: 348px;
-    height: 222px;
+    width: 100%;
+    height: auto;
     border: 1px solid #524d58;
     background: #434047;
     border-radius: 6px;
+    box-sizing: border-box;
 
     input {
         width: 235px;
@@ -123,14 +134,20 @@ const StFormArea = styled.div`
         outline: none;
     }
     textarea {
-        width: 318px;
-        height: 120px;
+        width: 100%;
+        height: 208px;
         border: none;
         resize: none;
         border-top: 1px solid #524d58;
-        padding: 16px 13px;
         background: #434047;
+
         color: #d9d8df;
+        font-size: 16px;
+        line-height: calc(100% + 6px);
+
+        box-sizing: border-box;
+        padding: 16px 13px;
+
         &::-webkit-scrollbar {
             width: 4px;
             border-radius: 10px;
@@ -151,18 +168,19 @@ const StFormArea = styled.div`
         color: #a6a3af;
         text-align: right;
         padding: 0 16px;
+        margin-bottom: 9px;
     }
 `;
 
 const StLocation = styled.div`
-    width: 322px;
-    height: 16px;
+    width: 100%;
+    height: auto;
     border-radius: 6px;
     border: 1px solid #524d58;
     background: #434047;
-    margin-top: 12px;
+    box-sizing: border-box;
     color: #f1f1f1;
-    padding: 16px 13px;
+    padding: 10px 16px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -183,12 +201,12 @@ const StLocation = styled.div`
 const StChooseSongListContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
-    height: 104px;
-    width: 348px;
-    border-radius: 0 0 6px 6px;
+    height: 102px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 6px;
     border: 1px solid #524d58;
     background: #434047;
-    margin-top: 12px;
 
     display: flex;
     flex-direction: column;
@@ -201,8 +219,13 @@ const StChooseSongListContainer = styled.div`
         border-radius: 10px;
     }
     &::-webkit-scrollbar-track {
+        height: 10px;
         background-color: #3a3a3a;
         border-radius: 10px;
+    }
+    &::-webkit-scrollbar-button:vertical:start:decrement,
+    &::-webkit-scrollbar-button:vertical:end:decrement {
+        height: 7px;
     }
     textarea:focus {
         outline: none;
@@ -210,37 +233,43 @@ const StChooseSongListContainer = styled.div`
 `;
 
 const StChooseSongLists = styled.div`
-    width: 309px;
-    margin: 7px 16px;
+    width: 100%;
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
 
-    h3 {
-        width: 113px;
-        margin-right: 35px;
-        color: #f1f1f1;
-        font-size: 14px;
+    box-sizing: border-box;
+    padding: 7px 16px;
 
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        word-break: break-all;
-    }
-    div {
-        width: 90px;
-        color: #a6a3af;
-        font-size: 14px;
-
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        word-break: break-all;
-    }
     button {
         border: none;
         color: #a6a3af;
         background-color: #434047;
         cursor: pointer;
     }
+`;
+
+const ChooseH3 = styled.h3`
+    flex: 0.6 0 0;
+    color: #f1f1f1;
+    font-size: 14px;
+    line-height: calc(100% + 6px);
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+`;
+
+const ChooseP = styled.p`
+    flex: 0.4 0 0;
+    color: #a6a3af;
+    font-size: 14px;
+    line-height: calc(100% + 6px);
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
 `;

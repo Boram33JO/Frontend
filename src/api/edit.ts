@@ -3,7 +3,7 @@ import instance from "./common";
 // 인기 리스트
 export const getPopularSongsList = async () => {
     try {
-        const response = await instance.get(`/api/song/AllMostSong`);
+        const response = await instance.get(`/song/top4`);
         return response.data;
     } catch (error) {
         console.log(error);
@@ -13,7 +13,7 @@ export const getPopularSongsList = async () => {
 // 노래 검색
 export const getSearchSongs = async (searchSong: string) => {
     try {
-        const response = await instance.get(`/api/song/search?keyword=${searchSong}`);
+        const response = await instance.get(`/song/search?keyword=${searchSong}`);
         return response;
     } catch (error) {
         console.log(error);
@@ -23,7 +23,7 @@ export const getSearchSongs = async (searchSong: string) => {
 // 포스팅 데이터 등록
 export const postData = async (data: any) => {
     try {
-        const response = await instance.post(`/api/posts`, data);
+        const response = await instance.post(`/posts`, data);
         return response;
     } catch (error) {
         console.log(error);

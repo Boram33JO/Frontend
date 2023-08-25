@@ -1,14 +1,14 @@
-import Header from './Header'
-import Footer from './Footer'
-import { Outlet, useNavigate } from 'react-router-dom'
-import { styled } from 'styled-components'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
-import Side from './Side'
-import { throttle } from '../../utils/common'
-import { ReactComponent as Post } from '../../assets/images/floating_post.svg'
-import { ReactComponent as Top } from '../../assets/images/floating_top.svg'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../redux/config/configStore'
+import Header from "./Header";
+import Footer from "./Footer";
+import { Outlet, useNavigate } from "react-router-dom";
+import { styled } from "styled-components";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import Side from "./Side";
+import { throttle } from "../../utils/common";
+import { ReactComponent as Post } from "../../assets/images/floating_post.svg";
+import { ReactComponent as Top } from "../../assets/images/floating_top.svg";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/config/configStore";
 
 // Context API를 통해 MiddleRef를 전역으로 사용
 const MiddleRefContext = createContext<React.RefObject<HTMLDivElement> | undefined>(undefined);
@@ -37,9 +37,15 @@ const Layout = () => {
             }
         }, 100);
 
-        if (middleRef.current) { middleRef.current.addEventListener('scroll', handleScroll); }
-        return () => { if (middleRef.current) { middleRef.current.removeEventListener('scroll', handleScroll); } }
-    }, [])
+        if (middleRef.current) {
+            middleRef.current.addEventListener("scroll", handleScroll);
+        }
+        return () => {
+            if (middleRef.current) {
+                middleRef.current.removeEventListener("scroll", handleScroll);
+            }
+        };
+    }, []);
 
     return (
         <Container>
@@ -54,19 +60,32 @@ const Layout = () => {
                     </Middle>
                 </MiddleRefContext.Provider>
                 {/* <Footer /> */}
-                <Left $open={sideOpen} >
-                    <Side sideOpen={sideOpen} setSideOpen={setSideOpen} />
+                <Left $open={sideOpen}>
+                    <Side
+                        sideOpen={sideOpen}
+                        setSideOpen={setSideOpen}
+                    />
                 </Left>
                 <Right>
-                    {LoginUser.isLogin && <PostButton onClick={() => navigate(`/edit`)}><StPost /></PostButton>}
-                    <TopButton onClick={() => { middleRef.current?.scrollTo({ top: 0, behavior: 'smooth' }) }} ><StTop /></TopButton>
+                    {LoginUser.isLogin && (
+                        <PostButton onClick={() => navigate(`/edit`)}>
+                            <StPost />
+                        </PostButton>
+                    )}
+                    <TopButton
+                        onClick={() => {
+                            middleRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                    >
+                        <StTop />
+                    </TopButton>
                 </Right>
             </InnerContainer>
         </Container>
-    )
-}
+    );
+};
 
-export default Layout
+export default Layout;
 
 const Container = styled.div`
     position: relative;
@@ -77,7 +96,7 @@ const Container = styled.div`
     align-items: center;
     justify-content: center;
     overflow: hidden;
-`
+`;
 
 const InnerContainer = styled.div`
     position: relative;
@@ -95,7 +114,7 @@ const InnerContainer = styled.div`
         height: 100%;
         max-height: 100%;
     }
-`
+`;
 
 const ProgressBar = styled.div`
     position: absolute;
@@ -104,41 +123,41 @@ const ProgressBar = styled.div`
     z-index: 3;
     height: 3px;
     width: 100%;
-    transition: width .2s;
-    background-color: #7462E2;
-`
+    transition: width 0.2s;
+    background-color: #7462e2;
+`;
 
 const Middle = styled.div`
     width: 100%;
     height: calc(100% - 50px);
     overflow-y: scroll;
-    
+
     &::-webkit-scrollbar {
         width: 0px;
     }
-`
+`;
 
 const OutletContainer = styled.div`
     width: 100%;
     height: auto;
-`
+`;
 
 const Left = styled.div<{ $open: boolean }>`
     position: absolute;
     width: inherit;
     height: 100%;
     max-height: 900px;
-    
+
     overflow: hidden;
     top: 0;
     z-index: 3;
     visibility: ${(props) => (props.$open ? "visible" : "hidden")};
-    
+
     @media (max-width: 480px) {
         height: 100%;
         max-height: 100%;
     }
-`
+`;
 
 const Right = styled.div`
     display: flex;
@@ -152,7 +171,7 @@ const Right = styled.div`
     z-index: 3;
 
     gap: 10px;
-`
+`;
 
 const PostButton = styled.div`
     display: flex;
@@ -166,7 +185,7 @@ const PostButton = styled.div`
     border-radius: 50%;
     background-color: gray;
     cursor: pointer;
-`
+`;
 
 const TopButton = styled.div`
     display: flex;
@@ -180,18 +199,18 @@ const TopButton = styled.div`
     border-radius: 50%;
     background-color: gray;
     cursor: pointer;
-`
+`;
 
 const StPost = styled(Post)`
     width: 30px;
     height: 30px;
-`
+`;
 
 const StTop = styled(Top)`
     width: 30px;
     height: 30px;
     path {
-        fill: #FAFAFA;
-        stroke: #FAFAFA;
+        fill: #fafafa;
+        stroke: #fafafa;
     }
-`
+`;

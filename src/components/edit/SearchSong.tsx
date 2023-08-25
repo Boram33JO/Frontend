@@ -104,7 +104,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
     };
 
     return (
-        <>
+        <Container>
             <StSearchForm onSubmit={getSearchSongHandler}>
                 <div>
                     <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
@@ -118,25 +118,29 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
             {songList.length === 0 ? (
                 <StPopularContainer>
                     <h2>이 노래는 어때요?</h2>
-                    {popularSongList.map((item) => (
-                        <StSongList
-                            key={item.songNum}
-                            onClick={() => {
-                                addToChooseSongList(item);
-                            }}
-                        >
-                            <Spotify style={{ width: "21px" }} />
-                            <img
-                                src={item.thumbnail}
-                                alt={`Thumbnail for ${item.songTitle}`}
-                            />
-                            <div>
-                                <h3>{item.songTitle}</h3>
-                                <p>{item.artistName}</p>
-                            </div>
-                            {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
-                        </StSongList>
-                    ))}
+                    <StSongListContainer>
+                        {popularSongList.map((item) => (
+                            <StSongList
+                                key={item.songNum}
+                                onClick={() => {
+                                    addToChooseSongList(item);
+                                }}
+                            >
+                                <StSongListLeft>
+                                    <Spotify style={{ width: "21px" }} />
+                                    <img
+                                        src={item.thumbnail}
+                                        alt={`Thumbnail for ${item.songTitle}`}
+                                    />
+                                    <StSongListInfo>
+                                        <h3>{item.songTitle}</h3>
+                                        <p>{item.artistName}</p>
+                                    </StSongListInfo>
+                                </StSongListLeft>
+                                {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
+                            </StSongList>
+                        ))}
+                    </StSongListContainer>
                 </StPopularContainer>
             ) : (
                 <StContainer>
@@ -147,43 +151,53 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                                 addToChooseSongList(item);
                             }}
                         >
-                            <Spotify style={{ width: "21px" }} />
-                            <img
-                                src={item.thumbnail}
-                                alt={`Thumbnail for ${item.songTitle}`}
-                            />
-                            <div>
-                                <h3>{item.songTitle}</h3>
-                                <p>{item.artistName}</p>
-                            </div>
+                            <StSongListLeft>
+                                <Spotify style={{ width: "21px" }} />
+                                <img
+                                    src={item.thumbnail}
+                                    alt={`Thumbnail for ${item.songTitle}`}
+                                />
+                                <StSongListInfo>
+                                    <h3>{item.songTitle}</h3>
+                                    <p>{item.artistName}</p>
+                                </StSongListInfo>
+                            </StSongListLeft>
                             {!chooseSongList.some((addedItem) => addedItem.songNum === item.songNum) ? <NonCheckBox /> : <CheckBox />}
                         </StSongList>
                     ))}
                 </StContainer>
             )}
-
             {chooseSongList.length !== 0 && (
                 <StChooseSongListContainer>
                     {chooseSongList.map((song) => (
                         <StChooseSongLists key={song.songNum}>
-                            <h3>{song.songTitle}</h3>
-                            <div>{song.artistName}</div>
+                            <ChooseH3>{song.songTitle}</ChooseH3>
+                            <ChooseP>{song.artistName}</ChooseP>
                             <button onClick={() => removeFromChooseSongList(song)}>삭제</button>
                         </StChooseSongLists>
                     ))}
                 </StChooseSongListContainer>
             )}
-        </>
+        </Container>
     );
 };
 
 export default SearchSong;
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    gap: 20px;
+    padding: 10px;
+`;
+
 const StSearchForm = styled.form`
-    width: 348px;
+    width: 100%;
     height: 40px;
     color: #fafafa;
-    border: 1px solid #434047;
     background-color: #434047;
     border-radius: 999px;
 
@@ -205,10 +219,8 @@ const StSearchForm = styled.form`
 
 const StPopularContainer = styled.div`
     color: #fafafa;
-    width: 350px;
     h2 {
         font-size: 18px;
-        margin: 28px 0 24px 0;
     }
     h3 {
         width: 130px;
@@ -233,14 +245,18 @@ const StPopularContainer = styled.div`
 const StContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
-    width: 348px;
-    height: 297px;
-    border-radius: 6px 6px 0 0;
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    height: 274px;
+    border-radius: 6px;
     border: 1px solid #524d58;
     background: #434047;
 
-    margin-top: 12px;
-    padding-top: 19px;
+    box-sizing: border-box;
+    gap: 10px;
+    padding: 10px 16px;
     &::-webkit-scrollbar {
         width: 4px;
         border-radius: 10px;
@@ -253,22 +269,32 @@ const StContainer = styled.div`
         background-color: #3a3a3a;
         border-radius: 10px;
     }
+    &::-webkit-scrollbar-button:vertical:start:decrement,
+    &::-webkit-scrollbar-button:vertical:end:decrement {
+        height: 10px;
+    }
     textarea:focus {
         outline: none;
     }
 `;
 
+const StSongListContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-sizing: border-box;
+    padding-top: 20px;
+`;
+
 const StSongList = styled.div`
-    display: inline-flex;
+    display: flex;
+    flex-direction: row;
     align-items: center;
-    gap: 18px;
-    margin: 7px 20px 12px 16px;
+    justify-content: space-between;
+    width: 100%;
     color: #fafafa;
 
     div {
-        display: flex;
-        flex-direction: column;
-        width: 156px;
     }
 
     h3 {
@@ -296,12 +322,26 @@ const StSongList = styled.div`
     }
 `;
 
+const StSongListLeft = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+`;
+
+const StSongListInfo = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 156px;
+`;
+
 const StChooseSongListContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
-    height: 104px;
-    width: 348px;
-    border-radius: 0 0 6px 6px;
+    height: 102px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 6px;
     border: 1px solid #524d58;
     background: #434047;
 
@@ -316,8 +356,13 @@ const StChooseSongListContainer = styled.div`
         border-radius: 10px;
     }
     &::-webkit-scrollbar-track {
+        height: 10px;
         background-color: #3a3a3a;
         border-radius: 10px;
+    }
+    &::-webkit-scrollbar-button:vertical:start:decrement,
+    &::-webkit-scrollbar-button:vertical:end:decrement {
+        height: 7px;
     }
     textarea:focus {
         outline: none;
@@ -325,37 +370,43 @@ const StChooseSongListContainer = styled.div`
 `;
 
 const StChooseSongLists = styled.div`
-    width: 309px;
-    margin: 7px 16px;
+    width: 100%;
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
 
-    h3 {
-        width: 113px;
-        margin-right: 35px;
-        color: #f1f1f1;
-        font-size: 14px;
+    box-sizing: border-box;
+    padding: 7px 16px;
 
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        word-break: break-all;
-    }
-    div {
-        width: 90px;
-        color: #a6a3af;
-        font-size: 14px;
-
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        word-break: break-all;
-    }
     button {
         border: none;
         color: #a6a3af;
         background-color: #434047;
         cursor: pointer;
     }
+`;
+
+const ChooseH3 = styled.h3`
+    flex: 0.6 0 0;
+    color: #f1f1f1;
+    font-size: 14px;
+    line-height: calc(100% + 6px);
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+`;
+
+const ChooseP = styled.p`
+    flex: 0.4 0 0;
+    color: #a6a3af;
+    font-size: 14px;
+    line-height: calc(100% + 6px);
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
 `;

@@ -171,53 +171,55 @@ const EditPage = () => {
     };
 
     return (
-        <>
-            <StContainer>
-                <StSlides style={{ transform: `translateX(-${slideIndex * 375}px)` }}>
-                    {/* 1 */}
-                    <StSlide>
-                        <h1>어디로 설정할까요?</h1>
-                        <EditMap
-                            address={address}
-                            placeName={placeName}
-                            latitude={latitude}
-                            longitude={longitude}
-                            categoryNum={categoryNum}
-                            isData={isData}
-                            setAddress={setAddress}
-                            setPlaceName={setPlaceName}
-                            setLatitude={setLatitude}
-                            setLongitude={setLongitude}
-                            setCategoryNum={setCategoryNum}
-                            setIsData={setIsData}
-                        />
-                    </StSlide>
-                    {/* 2 */}
-                    <StSlide>
-                        <h1>어떤 음악을 추천할까요?</h1>
-                        <SearchSong
-                            chooseSongList={chooseSongList}
-                            setChooseSongList={setChooseSongList}
-                            isData={isData}
-                            setIsData={setIsData}
-                        />
-                    </StSlide>
-                    {/* 3 */}
-                    <StSlide>
-                        <h1>지금의 감성을 기록하세요.</h1>
-                        <FormArea
-                            inputForm={inputForm}
-                            setInputForm={setInputForm}
-                            chooseSongList={chooseSongList}
-                            setChooseSongList={setChooseSongList}
-                            categoryNum={categoryNum}
-                            placeName={placeName}
-                            isData={isData}
-                            setIsData={setIsData}
-                        />
-                    </StSlide>
-                </StSlides>
-            </StContainer>
+        <StContainer>
+            <StInnerContainer>
+                <StSlideContainer>
+                    <StSlides style={{ transform: `translateX(-${slideIndex}00%)` }}>
+                        {/* 1 */}
+                        <StSlide $position={"0%"}>
+                            <h1>어디로 설정할까요?</h1>
+                            <EditMap
+                                address={address}
+                                placeName={placeName}
+                                latitude={latitude}
+                                longitude={longitude}
+                                categoryNum={categoryNum}
+                                isData={isData}
+                                setAddress={setAddress}
+                                setPlaceName={setPlaceName}
+                                setLatitude={setLatitude}
+                                setLongitude={setLongitude}
+                                setCategoryNum={setCategoryNum}
+                                setIsData={setIsData}
+                            />
+                        </StSlide>
+                        {/* 2 */}
+                        <StSlide $position={"100%"}>
+                            <h1>어떤 음악을 추천할까요?</h1>
+                            <SearchSong
+                                chooseSongList={chooseSongList}
+                                setChooseSongList={setChooseSongList}
+                                isData={isData}
+                                setIsData={setIsData}
+                            />
+                        </StSlide>
+                        {/* 3 */}
+                        <StSlide $position={"200%"}>
+                            <h1>지금의 감성을 기록하세요.</h1>
+                            <FormArea
+                                inputForm={inputForm}
+                                setInputForm={setInputForm}
+                                chooseSongList={chooseSongList}
+                                setChooseSongList={setChooseSongList}
+                                categoryNum={categoryNum}
+                                placeName={placeName}
+                                isData={isData}
+                                setIsData={setIsData}
+                            />
+                        </StSlide>
+                    </StSlides>
+                </StSlideContainer>
+            </StInnerContainer>
             <StButtons>
                 <ButtonComponent
                     style={{
@@ -251,44 +253,58 @@ const EditPage = () => {
                     </ButtonComponent>
                 )}
             </StButtons>
-        </>
+        </StContainer>
     );
 };
 
 export default EditPage;
 
 const StContainer = styled.div`
-    width: 350px;
-    height: 549px;
-    padding: 0 10px;
-    margin-top: 47px;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+`;
+
+const StInnerContainer = styled.div`
+    width: 100%;
     overflow: hidden;
 `;
 
-const StSlides = styled.div`
+const StSlideContainer = styled.div`
+    width: 100%;
     display: flex;
     flex-direction: row;
-    transition: transform 0.5s ease;
-    min-width: 1120px;
-    height: 500px;
 `;
 
-const StSlide = styled.div`
+const StSlides = styled.div`
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 150%;
+    transition: transform 0.5s ease;
+`;
+
+const StSlide = styled.div<{ $position: string }>`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: ${(props) => props.$position};
     display: flex;
     flex-direction: column;
     margin: 0 auto;
-    width: 350px;
-    height: 500px;
     h1 {
         font-size: 20px;
         color: #fafafa;
         margin-bottom: 16px;
+        padding: 0 10px;
     }
 `;
 
 const StButtons = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    padding: 0 20px 126px 20px;
+    gap: 20px;
+    padding: 0 10px;
 `;
