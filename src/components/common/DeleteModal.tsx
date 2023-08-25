@@ -43,8 +43,8 @@ const ModalBackground = styled.div`
     z-index: 4;
     width: 100%;
     height: 100%;
-    background-color: gray;
-    opacity: 0.5;
+    background-color: black;
+    opacity: 0.7;
 `
 
 const ModalContainer = styled.div`
