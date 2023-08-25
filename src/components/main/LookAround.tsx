@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { styled } from 'styled-components'
-import { ReactComponent as Place } from '../../assets/images/place.svg'
+import { ReactComponent as Map } from '../../assets/images/main_map.svg'
 import { RootState } from '../../redux/config/configStore';
 import { useSelector } from 'react-redux';
 
@@ -39,10 +39,7 @@ const LookAround = () => {
                     </LeftSection>
                     <RightSection>
                         <MapButton onClick={() => navigate(`/map`)}>
-                            <MapImage src="https://map.daumcdn.net/map_k3f_prod/bakery/image_map_png/PNG01/v20_ppxmp/5/500/222.png" alt="map" />
-                            <IconContainer>
-                                <StPlace />
-                            </IconContainer>
+                            <StMap />
                         </MapButton>
                     </RightSection>
                 </Wrapper>
@@ -63,7 +60,7 @@ const Container = styled.div`
 const InnerContainer = styled.div`
     display: flex;
     width: 100%;
-    background: linear-gradient(135deg, #8084F4, #C48FED);
+    background-color: #373737;
     border-radius: 10px;
     box-sizing: border-box;
     padding: 25px 15px;
@@ -99,6 +96,7 @@ const P = styled.p`
 `
 
 const MapButton = styled.div`
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,28 +108,8 @@ const MapButton = styled.div`
     cursor: pointer;
 `
 
-const MapImage = styled.img`
-    width: 100%;
-    height: 100%;
+const StMap = styled(Map)`
+    width: 62px;
+    height: 62px;
     border-radius: 6px;
-`
-
-const IconContainer = styled.div`
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background-color: rgba(213, 188, 242, 0.58);
-`
-
-const StPlace = styled(Place)`
-    width: 20px;
-    height: 20px;
-    path {
-        fill: #5C4A83;
-    }
 `

@@ -8,10 +8,12 @@ import onboard1 from '../../assets/images/onboard/05_onboard_01.svg'
 import onboard2 from '../../assets/images/onboard/06_onboard_02.svg'
 import onboard3 from '../../assets/images/onboard/07_onboard_03.svg'
 
-interface BannerItem {
+export interface BannerItem {
     id: number;
     image: string;
-    comment: string;
+    position: string;
+    comment1: string;
+    comment2: string;
 }
 
 const SlideBanner = () => {
@@ -23,17 +25,23 @@ const SlideBanner = () => {
         {
             id: 0,
             image: onboard1,
-            comment: "피플은 장소 기반의\n음악 공유 플랫폼 이에요!"
+            position: "0%",
+            comment1: "언제 어디서든 모두들\nP.Ple 하는 중",
+            comment2: "피플에서 함께 나누는 피플러들의 감성"
         },
         {
             id: 1,
             image: onboard2,
-            comment: "장소를 탐색하고, 피플러들의\n포스팅을 구경하세요!"
+            position: "100%",
+            comment1: "감성을 가득한 장소들을\nP.Ple에 모아모아",
+            comment2: "그 때 그 감성 피플에서 함께 공유해 주세요!"
         },
         {
             id: 2,
             image: onboard3,
-            comment: "피플의 음악 검색으로\n빠르게 플리를 공유해 보세요!"
+            position: "200%",
+            comment1: "스포티파이와 함께하는\nP.Ple의 감성 플리",
+            comment2: "다양한 음악들을 감상해 보세요!"
         },
     ]
     const totalSlides = banners.length - 1;
@@ -72,24 +80,20 @@ const SlideBanner = () => {
     return (
         <Container>
             <SlideContainer ref={slideRef}>
-                {/* <BannerContainer>
-                    <Banner2 />
-                    <Banner3 />
-                    <Banner4 />
-                </BannerContainer> */}
-                {
-                    banners.map(item => {
-                        return (
-                            <Banner key={item.id} $url={item.image}>
-                                <BannerContent>
-                                    <H3>
-                                        {item.comment}
-                                    </H3>
-                                </BannerContent>
-                            </Banner>
-                        )
-                    })
-                }
+                <Banner>
+                    {
+                        banners.map(item => {
+                            return (
+                                <BannerImage key={item.id} $url={item.image} $position={item.position}>
+                                    <BannerComment>
+                                        <P $size="22px">{item.comment1}</P>
+                                        <P>{item.comment2}</P>
+                                    </BannerComment>
+                                </BannerImage>
+                            )
+                        })
+                    }
+                </Banner>
             </SlideContainer>
             <Navigation>
                 <NavigationButton onClick={handlePrevSlideButton} type="button" aria-label="slideLeft">
@@ -134,68 +138,44 @@ const SlideContainer = styled.div`
     display: flex;
 `
 
-const BannerContainer = styled.div`
+const Banner = styled.div`
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: calc(100% * (2/3));
-    background-color: gray;
+    padding-bottom: calc(100% * 2 / 3);
 `
 
-const Banner2 = styled.div`
+const BannerImage = styled.div<{ $url: string, $position: string }>`
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
-    left: 0;
-    background-color: blue;
-`
-const Banner3 = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 100%;
-    background-color: green;
-`
-const Banner4 = styled.div`
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 200%;
-    background-color: red;
-`
-
-const Banner = styled.div<{ $url: string }>`
-    flex: 0 0 auto;
-    width: 390px;
-    height: 260px;
+    left: ${(props) => props.$position};
     background: url(${(props) => props.$url});
-    background-size: cover;
+    background-size: contain;
     background-repeat: no-repeat;
     background-position: top;
 `
 
-const BannerContent = styled.div`
+const BannerComment = styled.div`
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    justify-content: flex-end;
     position: relative;
 
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(197, 197, 197, 0.0) 0%, #141414 100%);
     box-sizing: border-box;
+    padding: 30px;
+    gap: 10px;
 `
 
-const H3 = styled.h3`
-    font-size: 20px;
-    line-height: 26px;
+const P = styled.p< { $size?: string, $color?: string } >`
+    color: ${props => props.$color ? props.$color : "#FAFAFA"};
+    font-size: ${(props) => props.$size ? props.$size : "14px"};
     font-weight: 600;
+    line-height: calc(100% + 6px);
     white-space: pre-wrap;
-    position: absolute;
-    left: 5%;
-    bottom: 20%;
 `
 
 const Navigation = styled.div`
@@ -207,15 +187,14 @@ const Navigation = styled.div`
     top: 50%;
     transform: translateY(-50%);
     box-sizing: border-box;
-    padding: 10px;
 `
 
 const NavigationButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 20px;
-    height: 20px;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
     
     &:hover{
@@ -229,8 +208,9 @@ const Pagination = styled.div`
     align-items: center;
     justify-content: flex-end;
     width: 100%;
-    right: 5%;
-    bottom: 20%;
+    height: 20px;
+    right: 30px;
+    bottom: 30px;
     gap: 8px;
 `
 

@@ -115,7 +115,7 @@ const SideMenu = styled.div<{ $open: boolean }>`
     left: 0;
     bottom: 0;
     width: calc(100% * 2 / 3);
-    height: 100vh;
+    height: inherit;
     background-color: #141414;
     box-shadow: 0 0 20px 20px #141414;
     color: white;

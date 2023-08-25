@@ -6,6 +6,8 @@ import ListItem from "../components/common/ListItem";
 import LoadingSkeleton from "../components/list/LoadingSkeleton";
 import { Post } from "../models/post";
 import instance from "../api/common";
+import { useMiddleRef } from "../components/common/Layout";
+import { throttle } from "../utils/common";
 
 export interface PaginationResponse<T> {
     content: T[];
@@ -26,6 +28,7 @@ const ListPage = () => {
     const [sortBy, setSortBy] = useState<string>("createdAt");
     const [direction, setDirection] = useState<string>("desc");
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
+    const middleRef = useMiddleRef();
 
     const fetchPosts = useCallback(async () => {
         const { data } = await instance.get<PaginationResponse<Post>>(`api/posts/category/${categoryId}`, {
@@ -39,16 +42,17 @@ const ListPage = () => {
     }, [page])
 
     useEffect(() => {
-        const handleScroll = () => {
-            const { scrollTop, offsetHeight } = document.documentElement
-            if (window.innerHeight + scrollTop >= offsetHeight) {
-                setFetching(true)
+        const handleScroll = throttle(() => {
+            if (middleRef?.current) {
+                if (window.innerHeight + middleRef.current.scrollTop >= middleRef.current.scrollHeight) {
+                    setFetching(true)
+                }
             }
-        }
+        });
         setFetching(true)
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
+        if (middleRef?.current) middleRef.current.addEventListener('scroll', handleScroll)
+        return () => { if (middleRef?.current) { middleRef.current.removeEventListener('scroll', handleScroll) } }
+    }, [middleRef])
 
     useEffect(() => {
         if (isFetching && hasNextPage) fetchPosts()
