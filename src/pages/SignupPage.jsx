@@ -8,7 +8,7 @@ const SignupPage = () => {
   return (
     <Container>
       <InnerContainer>
-        <H1>회원가입 테스트</H1>
+        <H1>회원가입</H1>
         <BasicSignUp />
         <SignUp>
           <div>이미 회원이신가요?</div>
