@@ -117,7 +117,6 @@ const SideMenu = styled.div<{ $open: boolean }>`
     width: calc(100% * 2 / 3);
     height: inherit;
     background-color: #141414;
-    box-shadow: 0 0 20px 20px #141414;
     color: white;
 
     display: flex;
@@ -229,9 +228,11 @@ const SideBottom = styled.div`
 const Label = styled.label`
     position: absolute;
     height: 100%;
-    width: 100%;
+    width: 200%;
     left: 100%;
     top: 0;
+    background-color: black;
+    opacity: 0.7;
 `
 
 const P = styled.p<{ $size: string, $weight: string, $color?: string }>`

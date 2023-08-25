@@ -31,7 +31,7 @@ const ListPage = () => {
     const middleRef = useMiddleRef();
 
     const fetchPosts = useCallback(async () => {
-        const { data } = await instance.get<PaginationResponse<Post>>(`api/posts/category/${categoryId}`, {
+        const { data } = await instance.get<PaginationResponse<Post>>(`/posts/category/${categoryId}`, {
             params: { page, size: 10, sortBy, direction },
         })
         // console.log(data);

@@ -16,10 +16,12 @@ import MycommentsPage from "./pages/MycommentsPage";
 import WishlistPage from "./pages/WishlistPage";
 import PasswordPage from "./pages/PasswordPage";
 import ProfileEditPage from "./pages/ProfileEditPage ";
+import IntroPage from "./pages/IntroPage";
 
 function App() {
   return (
     <Routes>
+      <Route path="/intro" element={<IntroPage />} />
       <Route element={<Layout />}>
         <Route path="/" element={<MainPage />} />
         <Route path="/login" element={<LoginPage />} />

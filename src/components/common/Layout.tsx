@@ -1,14 +1,14 @@
-import Header from "./Header";
-import Footer from "./Footer";
-import { Outlet, useNavigate } from "react-router-dom";
-import { styled } from "styled-components";
-import { createContext, useContext, useEffect, useRef, useState } from "react";
-import Side from "./Side";
-import { throttle } from "../../utils/common";
-import { ReactComponent as Post } from "../../assets/images/floating_post.svg";
-import { ReactComponent as Top } from "../../assets/images/floating_top.svg";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/config/configStore";
+import Header from './Header'
+import Footer from './Footer'
+import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import { styled } from 'styled-components'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import Side from './Side'
+import { throttle } from '../../utils/common'
+import { ReactComponent as Post } from '../../assets/images/floating_post.svg'
+import { ReactComponent as Top } from '../../assets/images/floating_top.svg'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/config/configStore'
 
 // Context API를 통해 MiddleRef를 전역으로 사용
 const MiddleRefContext = createContext<React.RefObject<HTMLDivElement> | undefined>(undefined);
@@ -22,6 +22,7 @@ const Layout = () => {
     const progressRef = useRef<HTMLDivElement>(null);
     const middleRef = useRef<HTMLDivElement>(null);
     const outletRef = useRef<HTMLDivElement>(null);
+    const { id } = useParams();
 
     const navigate = useNavigate();
     const LoginUser = useSelector((state: RootState) => state.user);
@@ -67,18 +68,8 @@ const Layout = () => {
                     />
                 </Left>
                 <Right>
-                    {LoginUser.isLogin && (
-                        <PostButton onClick={() => navigate(`/edit`)}>
-                            <StPost />
-                        </PostButton>
-                    )}
-                    <TopButton
-                        onClick={() => {
-                            middleRef.current?.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                    >
-                        <StTop />
-                    </TopButton>
+                    {LoginUser.isLogin && !!!id && <PostButton onClick={() => navigate(`/edit`)}><StPost /></PostButton>}
+                    {!!!id && <TopButton onClick={() => { middleRef.current?.scrollTo({ top: 0, behavior: 'smooth' }) }} ><StTop /></TopButton>}
                 </Right>
             </InnerContainer>
         </Container>
@@ -150,7 +141,7 @@ const Left = styled.div<{ $open: boolean }>`
 
     overflow: hidden;
     top: 0;
-    z-index: 3;
+    z-index: 4;
     visibility: ${(props) => (props.$open ? "visible" : "hidden")};
 
     @media (max-width: 480px) {
@@ -165,7 +156,7 @@ const Right = styled.div`
 
     position: absolute;
     right: 20px;
-    bottom: 20px;
+    bottom: 10px;
 
     background-color: transparent;
     z-index: 3;
@@ -180,10 +171,10 @@ const PostButton = styled.div`
 
     bottom: 110px;
     left: 90%;
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background-color: gray;
+    background-color: #A08DEC;
     cursor: pointer;
 `;
 
@@ -194,23 +185,23 @@ const TopButton = styled.div`
 
     bottom: 40px;
     left: 90%;
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
+    background-color: #45424E;
     border-radius: 50%;
-    background-color: gray;
+    box-sizing: border-box;
     cursor: pointer;
 `;
 
 const StPost = styled(Post)`
-    width: 30px;
-    height: 30px;
-`;
+    width: 22px;
+    height: 22px;
+`
 
 const StTop = styled(Top)`
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
     path {
-        fill: #fafafa;
-        stroke: #fafafa;
+        stroke: #A6A3AF;
     }
 `;

@@ -5,11 +5,11 @@ import instance from "./common"
 // 전체 프로필 조회
 export const getProfileLists = async (userId: string | undefined) => {
     try {
-        const response = await instance.get(`/api/profile/${userId}`);
+        const response = await instance.get(`/user/${userId}`);
         // console.log('Response:', response);
         return response;
     } catch (error) {
-     //   console.error('요청 실패:', error);
+        //   console.error('요청 실패:', error);
         throw error;
     }
 };
@@ -17,35 +17,35 @@ export const getProfileLists = async (userId: string | undefined) => {
 // 마이페이지 하위 페이지들
 // 내가 쓴 포스팅 조회
 export const getMyPostLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/posts`)
-    console.log("1234",response)
+    const response = await instance.get(`/user/${userId}/posts`)
     return response;
 }
 
 // 내가 좋아요한 포스팅 조회
 export const getFavLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/wishlist`)
+    const response = await instance.get(`/user/${userId}/wishlist`)
     return response;
 }
 
 
 // 팔로워 조회
 export const getFollowLists = async (userId: string): Promise<any> => {
-  try {
-    const response = await instance.get(`/api/profile/${userId}/follow`);
-    return response.data;
-  } catch (error) {
-    console.error("팔로워 조회 중 오류 발생:", error);
-    throw error;
-  }
+    try {
+        const response = await instance.get(`/user/${userId}/follow`);
+        return response.data;
+    } catch (error) {
+        console.error("팔로워 조회 중 오류 발생:", error);
+        throw error;
+    }
 };
 
 
 
-// 내가 댓글 단 포스팅 조회
+// 내가 댓글 단 포스팅 조회 (댓글 조회)
 export const getCommentsLists = async (userId: string | undefined) => {
-    const response = await instance.get(`/api/profile/${userId}/comments`)
-    console.log("!@#$$",response)
+    const response = await instance.get(`/user/${userId}/comments`,
+        { params: { page: 0, size: 10, sort: "createdAt,asc" } }
+    )
     return response;
 }
 
@@ -59,12 +59,12 @@ export const getCommentsLists = async (userId: string | undefined) => {
 
 // 프로필 수정
 export const updateProfile = async (userId: string | undefined, formData: FormData) => {
-    const response = await instance.put(`/api/profile/${userId}`, formData);
+    const response = await instance.put(`/user/${userId}`, formData);
     return response;
 }
 
 // 닉네임 중복체크
 export const nicknameCheck = async (nickname: string) => {
-    const response = await instance.post(`/api/profile/check`, { nickname });
+    const response = await instance.post(`/user/check`, { nickname });
     return response;
 }

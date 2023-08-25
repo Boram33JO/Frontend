@@ -33,8 +33,8 @@ const FamousPeople = () => {
                     data.map((item: User2) => {
                         return (
                             <FamousListItem key={item.id} onClick={() => navigate(`/profile/${item.id}`)}>
-                                <FamousListItemThumb src={getProfileImage(item.userImage)} alt="userImage" />
-                                <FamousListItemNickname>{item.nickname}</FamousListItemNickname>
+                                <FamousListItemThumb $src={getProfileImage(item.userImage)} />
+                                <FamousListItemNickname><P>{item.nickname}</P></FamousListItemNickname>
                             </FamousListItem>
                         )
                     })
@@ -64,17 +64,16 @@ const H3 = styled.h3`
 const FamousList = styled.div`
     display: flex;
     justify-content: space-between;
+    width: 100%;
 `
 
 const FamousListItem = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    width: 75px;
+    position: relative;
+    width: 22%;
+    height: 0;
+    padding-bottom: 22%;
 
     box-sizing: border-box;
-    gap: 10px;
     cursor: pointer;
     
     &:hover {
@@ -82,24 +81,41 @@ const FamousListItem = styled.div`
     }
 `
 
-const FamousListItemThumb = styled.img`
-    width: 75px;
-    height: 75px;
+const FamousListItemThumb = styled.div<{ $src?: string }>`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: url(${(props) => props.$src});
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     background-color: #ECECEC;
     border-radius: 50%;
 `
 
-const FamousListItemNickname = styled.p`
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    white-space: normal;
-    word-break: break-all;
-    overflow: hidden;
+const FamousListItemNickname = styled.div`
+    position: absolute;
+    width: 100%;
+    height: 40%;
+    top: 100%;
+    left: 0;
     
-    text-align: center;
-    width: inherit;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+`
 
+const P = styled.div`
+    flex: 1 1 auto;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    text-align: center;
+    cursor: pointer;
+       
     font-size: 14px;
-    line-height: calc(100% + 2px);
+    line-height: calc(100% + 6px);
 `
