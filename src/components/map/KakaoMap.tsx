@@ -5,8 +5,7 @@ import Categories from "../edit/Categories";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 import SearchModal from "../edit/SearchModal";
 
-import axios from "axios";
-import { postData } from "../../api/map";
+import { postData, postCategoryData } from "../../api/map";
 
 interface Location {
     placeName: string;
@@ -15,40 +14,34 @@ interface Location {
 }
 
 interface KakaoProps {
-    isData: Location[]; // 데이터 구조에 따라 변경
-    setIsData: React.Dispatch<React.SetStateAction<Location[]>>; // 데이터 구조에 따라 변경
-    latitude: string;
-    setLatitude: (latitude: string) => void;
-    longitude: string;
-    setLongitude: (longitude: string) => void;
+    isData: Location[];
+    setIsData: React.Dispatch<React.SetStateAction<Location[]>>;
 }
 
-const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData, latitude, setLatitude, longitude, setLongitude }) => {
+const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
     const [searchLocation, setSearchLocation] = useState<string>("");
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
+    const [geoLatitude, setGeoLatitude] = useState<string>("");
+    const [geoLongitude, setGeoLongitude] = useState<string>("");
+    const [latitude, setLatitude] = useState<string>("37.566826");
+    const [longitude, setLongitude] = useState<string>("126.9786567");
     const [address, setAddress] = useState("");
     const [placeName, setPlaceName] = useState("");
     const [selectedLocation, setSelectedLocation] = useState<any>({});
     const [categoryNum, setCategoryNum] = useState<number>(0);
     const [modal, setModal] = useState(false);
 
-    const [selectedMarker, setSelectedMarker] = useState(null);
-
     const addMarkersToMap = (map: any, positions: any[]) => {
         const imageSrc = pinIcon;
         for (let i = 0; i < positions.length; i++) {
             const imageSize = new window.kakao.maps.Size(36, 42);
             const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
-
             const marker = new window.kakao.maps.Marker({
                 map: map,
-                // position: new window.kakao.maps.LatLng(isData[i]?.location?.latitude, isData[i]?.location?.longitude),
                 position: positions[i].latlng,
-                // title: isData[i]?.location?.placeName,
                 title: positions[i].title,
                 image: markerImage,
             });
-            // 마커가 지도 위에 표시되도록 설정합니다
             marker.setMap(map);
         }
     };
@@ -60,9 +53,10 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData, latitude, setLatitu
                 function (position) {
                     const lat = String(position.coords.latitude);
                     const lng = String(position.coords.longitude);
-
                     setLatitude(lat);
                     setLongitude(lng);
+                    setGeoLatitude(lat);
+                    setGeoLongitude(lng);
                 },
                 (error) => {
                     console.error("error", error);
@@ -85,7 +79,8 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData, latitude, setLatitu
                 // 좌표로 이동
                 map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
                 // 좌표에 있는 data로 markers에 넣을 배열 생성
-                const position = res.map((item: any) => ({
+                const position = res.map((item: any, index: number) => ({
+                    key: index,
                     title: item.location.placeName,
                     latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
                 }));
@@ -93,7 +88,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData, latitude, setLatitu
                 addMarkersToMap(map, position);
             });
         });
-    }, [latitude, longitude]);
+    }, [latitude, longitude, geoLatitude, geoLongitude]);
 
     const mappingList = async () => {
         const latlng = { latitude, longitude };
@@ -106,19 +101,54 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData, latitude, setLatitu
         }
     };
 
+    const mappingCategoryHandler = async () => {
+        const categoryId = categoryNum;
+        let latlng;
+        if (categoryId !== 0) {
+            latlng = { latitude, longitude };
+        } else {
+            latlng = { geoLatitude, geoLongitude };
+        }
+
+        try {
+            const response = await postCategoryData(latlng, categoryId);
+            setIsData(response?.data.content);
+            console.log("isData", isData);
+
+            const updatedPositions = response?.data.content.map((item: any) => ({
+                key: item.id,
+                title: item.location.placeName,
+                latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
+            }));
+
+            // 업데이트된 positions로 addMarkersToMap 호출
+            window.kakao.maps.load(() => {
+                const mapContainer = document.getElementById("map");
+                const map = new window.kakao.maps.Map(mapContainer, {
+                    center: new window.kakao.maps.LatLng(latitude, longitude),
+                    level: 3,
+                });
+                map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+                addMarkersToMap(map, updatedPositions);
+            });
+
+            return response?.data.content;
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const searchMap = () => {
         const ps = new window.kakao.maps.services.Places();
         const placesSearchCB = function (data: any, status: any) {
             if (status === window.kakao.maps.services.Status.OK) {
                 setSearchLocationList(data);
-                setLatitude(selectedLocation.y); // 검색한 위치의 위도로 변경
-                setLongitude(selectedLocation.x); // 검색한 위치의 경도로 변경
+                setLatitude(selectedLocation.y);
+                setLongitude(selectedLocation.x);
             }
         };
         ps.keywordSearch(searchLocation, placesSearchCB);
     };
-
-    // console.log("이거 맞음", latitude, longitude);
 
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchLocation(event.target.value);
@@ -167,7 +197,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData, latitude, setLatitu
                         setSelectedLocation={setSelectedLocation}
                     />
                 )}
-                <StCategory>
+                <StCategory onClick={mappingCategoryHandler}>
                     <Categories
                         categoryNum={categoryNum}
                         setCategoryNum={setCategoryNum}
@@ -215,124 +245,3 @@ const StKakaoMap = styled.div`
     height: 308px;
     border-radius: 10px;
 `;
-
-// // positions 배열을 매핑하고 각 객체를 위치 정보로 업데이트합니다
-// const updatedPositions = positions.map((position, index) => {
-//     const locationInfo = response.locations[index]; // 해당 위치 정보 가져오기
-//     if (locationInfo) {
-//         const { latitude, longitude, placeName } = locationInfo;
-//         return {
-//             ...position,
-//             latlng: new window.kakao.maps.LatLng(latitude, longitude), // LatLng 객체를 사용한다고 가정합니다
-//             title: placeName,
-//         };
-//     }
-//     return position; // 해당하는 위치 정보가 없으면 원래 객체를 그대로 유지합니다
-// });
-
-// // 이제 updatedPositions는 업데이트된 위치 정보가 포함된 새 배열입니다
-// setPositions(updatedPositions);
-// setPositions()
-
-//     {
-//         title: "스타벅스 청담스타R점",
-//         latlng: new window.kakao.maps.LatLng(37.5252051860766, 127.041816506596),
-//     },
-//     {
-//         title: "스타벅스 청담사거리점",
-//         latlng: new window.kakao.maps.LatLng(37.523735555011335, 127.046872393057),
-//     },
-//     {
-//         title: "스타벅스 수서역R점",
-//         latlng: new window.kakao.maps.LatLng(37.48800665367514, 127.10297988971773),
-//     },
-//     {
-//         title: "스타벅스 신사역점",
-//         latlng: new window.kakao.maps.LatLng(37.51622596162784, 127.0207677490634),
-//     },
-//     {
-//         title: "스타벅스 스타필드코엑스몰 R점",
-//         latlng: new window.kakao.maps.LatLng(37.50979926297963, 127.06163058645485),
-//     },
-//     {
-//         title: "스타벅스 강남대로점",
-//         latlng: new window.kakao.maps.LatLng(37.5032649716005, 127.025559367137),
-//     },
-//     {
-//         title: "스타벅스 압구정로데오역점",
-//         latlng: new window.kakao.maps.LatLng(37.5265751539424, 127.040541168059),
-//     },
-//     {
-//         title: "스타벅스 선릉역점",
-//         latlng: new window.kakao.maps.LatLng(37.5038956552172, 127.04859034788),
-//     },
-
-//     {
-//         title: "스타벅스 양재강남빌딩R점",
-//         latlng: new window.kakao.maps.LatLng(37.48516628428305, 127.03646645149259),
-//     },
-//     {
-//         title: "스타벅스 선릉세화빌딩점",
-//         latlng: new window.kakao.maps.LatLng(37.5037864222678, 127.051223136165),
-//     },
-//     {
-//         title: "스타벅스 강남비젼타워점",
-//         latlng: new window.kakao.maps.LatLng(37.49649026006633, 127.0296167853337),
-//     },
-//     {
-//         title: "스타벅스 강남구청역점",
-//         latlng: new window.kakao.maps.LatLng(37.5167215373803, 127.041264296462),
-//     },
-//     {
-//         title: "스타벅스 청담점",
-//         latlng: new window.kakao.maps.LatLng(37.5243543810765, 127.051585624477),
-//     },
-//     {
-//         title: "스타벅스 포이점",
-//         latlng: new window.kakao.maps.LatLng(37.4778218663276, 127.045145597366),
-//     },
-// ]);
-
-// const addMarkersToMap = (map: any, positions: any[]) => {
-//     const imageSrc = pinIcon;
-
-//     for (let i = 0; i < positions.length; i++) {
-//         const imageSize = new window.kakao.maps.Size(36, 42);
-//         const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
-
-//         const marker = new window.kakao.maps.Marker({
-//             map: map,
-//                         position: new window.kakao.maps.LatLng(positions[i].latitude, positions[i].longitude),
-
-//             title: positions[i].title,
-//             image: markerImage,
-//         });
-//     }
-//     positions.forEach((el) => {
-//         // 마커를 생성합니다
-//         new window.kakao.maps.Marker({
-//           //마커가 표시 될 지도
-//           map: map,
-//           //마커가 표시 될 위치
-//           position: new window.kakao.maps.LatLng(el.lat, el.lng),
-//           //마커에 hover시 나타날 title
-//           title: el.title,
-//         });
-//       });
-//     };
-
-// };
-
-// const addMarkersToMap = (map: any, positions: any[]) => {
-//     positions.forEach((el) => {
-//         // el.latlng에 있는 위도와 경도 정보를 가져와서 마커를 생성합니다
-//         new window.kakao.maps.Marker({
-//             // 마커가 표시될 지도
-//             map: map,
-//             // 마커가 표시될 위치
-//             position: el.latlng,
-//             // 마커에 hover 시 나타날 title
-//             title: el.title,
-//         });
-//     });
-// };

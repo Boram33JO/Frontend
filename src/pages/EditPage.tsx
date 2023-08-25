@@ -76,8 +76,6 @@ const EditPage = () => {
     };
     const navigate = useNavigate();
 
-    console.log("@@@", address, category, chooseSongList, inputForm.postTitle, inputForm.content);
-
     useEffect(() => {
         const fixPostData = async () => {
             try {

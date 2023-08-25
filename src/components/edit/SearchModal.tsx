@@ -64,8 +64,6 @@ const SearchModal: React.FC<SearchModalProps> = ({
         setModal(false);
     };
 
-    console.log("111", searchLocationList);
-
     useEffect(() => {
         const handleOutsideClick = (event: MouseEvent) => {
             if (modalRef.current && !modalRef.current.contains(event.target as Node)) {

@@ -104,8 +104,6 @@ const EditMap: React.FC<EditMapProps> = ({
         ps.keywordSearch(searchLocation, placesSearchCB);
     };
 
-    // console.log("1234", searchLocationList);
-
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchLocation(event.target.value);
     };
@@ -120,7 +118,6 @@ const EditMap: React.FC<EditMapProps> = ({
         searchMap();
     };
 
-    // console.log(isData);
     if (isData) {
         setAddress(isData.location.address);
         setPlaceName(isData.location.placeName);
@@ -208,12 +205,3 @@ const StKakaoMap = styled.div`
     height: 308px;
     border-radius: 10px;
 `;
-
-// st chooseLocationHandler = () => {
-//     console.log("fff", chooseLocation);
-
-//     setAddress(chooseLocation.address_name);
-//     setPlaceName(chooseLocation.place_name);
-//     setLatitude(chooseLocation.y);
-//     setLongitude(chooseLocation.x);
-// };
