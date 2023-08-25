@@ -23,12 +23,12 @@ jobs: # Job 설정
             - name: 필요한 env 안에 추가하고 secret 도 추가 
               run: |
                echo "REACT_APP_SERVER_URL=$REACT_APP_SERVER_URL" >> .env
-               echo "REACT_APP_KAKAO_JAVASCRIPT_KEYL=$REACT_APP_KAKAO_JAVASCRIPT_KEY" >> .env
+               echo "REACT_APP_KAKAO_JAVASCRIPT_KEY=$REACT_APP_KAKAO_JAVASCRIPT_KEY" >> .env
                echo "REACT_APP_KAKAO_REST_API_KEY=$REACT_APP_KAKAO_REST_API_KEY" >> .env
                echo "REACT_APP_KAKAO_REDIRECT_URI=$REACT_APP_KAKAO_REDIRECT_URI" >> .env
               env:
                REACT_APP_SERVER_URL: ${{ secrets.REACT_APP_SERVER_URL }}
-               REACT_APP_KAKAO_JAVASCRIPT_KEYL: ${{ secrets.REACT_APP_KAKAO_JAVASCRIPT_KEY }}
+               REACT_APP_KAKAO_JAVASCRIPT_KEY: ${{ secrets.REACT_APP_KAKAO_JAVASCRIPT_KEY }}
                REACT_APP_KAKAO_REST_API_KEY: ${{ secrets.REACT_APP_KAKAO_REST_API_KEY }}
                REACT_APP_KAKAO_REDIRECT_URI: ${{ secrets.REACT_APP_KAKAO_REDIRECT_URI }}
 
