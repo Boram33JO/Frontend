@@ -60,7 +60,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                 if (response) {
                     setPopularSongList(response);
                 } else {
-                    // console.log("검색 결과 없음");
+                    alert("검색 결과 없음");
                 }
             } catch (error) {
                 console.log(error);
@@ -76,7 +76,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
             if (response) {
                 setSongList(response.data);
             } else {
-                // console.log("검색 결과 없음");
+                alert("검색 결과 없음");
             }
         } catch (error) {
             console.log(error);

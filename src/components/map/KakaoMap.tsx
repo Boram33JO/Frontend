@@ -5,7 +5,6 @@ import Categories from "../edit/Categories";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 import SearchModal from "../edit/SearchModal";
 
-import axios from "axios";
 import { postData, postCategoryData } from "../../api/map";
 
 interface Location {
@@ -15,19 +14,11 @@ interface Location {
 }
 
 interface KakaoProps {
-    isData: Location[]; // 데이터 구조에 따라 변경
-    setIsData: React.Dispatch<React.SetStateAction<Location[]>>; // 데이터 구조에 따라 변경
-    // latitude: string;
-    // setLatitude: (latitude: string) => void;
-    // longitude: string;
-    // setLongitude: (longitude: string) => void;
+    isData: Location[];
+    setIsData: React.Dispatch<React.SetStateAction<Location[]>>;
 }
 
-const KakaoMap: React.FC<KakaoProps> = ({
-    isData,
-    setIsData,
-    // , latitude, setLatitude, longitude, setLongitude
-}) => {
+const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
     const [searchLocation, setSearchLocation] = useState<string>("");
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
     const [geoLatitude, setGeoLatitude] = useState<string>("");
@@ -40,14 +31,11 @@ const KakaoMap: React.FC<KakaoProps> = ({
     const [categoryNum, setCategoryNum] = useState<number>(0);
     const [modal, setModal] = useState(false);
 
-    const [selectedMarker, setSelectedMarker] = useState(null);
-
     const addMarkersToMap = (map: any, positions: any[]) => {
         const imageSrc = pinIcon;
         for (let i = 0; i < positions.length; i++) {
             const imageSize = new window.kakao.maps.Size(36, 42);
             const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
-
             const marker = new window.kakao.maps.Marker({
                 map: map,
                 position: positions[i].latlng,
@@ -106,19 +94,16 @@ const KakaoMap: React.FC<KakaoProps> = ({
         const latlng = { latitude, longitude };
         try {
             const response = await postData(latlng);
-            console.log("!@#", response);
             setIsData(response?.data.content);
             return response?.data.content;
         } catch (error) {
             console.error(error);
         }
     };
-    console.log(categoryNum);
 
     const mappingCategoryHandler = async () => {
         const categoryId = categoryNum;
         let latlng;
-
         if (categoryId !== 0) {
             latlng = { latitude, longitude };
         } else {
@@ -131,7 +116,7 @@ const KakaoMap: React.FC<KakaoProps> = ({
             console.log("isData", isData);
 
             const updatedPositions = response?.data.content.map((item: any) => ({
-                key: item.id, // 적절한 키를 사용하세요
+                key: item.id,
                 title: item.location.placeName,
                 latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
             }));
@@ -158,14 +143,12 @@ const KakaoMap: React.FC<KakaoProps> = ({
         const placesSearchCB = function (data: any, status: any) {
             if (status === window.kakao.maps.services.Status.OK) {
                 setSearchLocationList(data);
-                setLatitude(selectedLocation.y); // 검색한 위치의 위도로 변경
-                setLongitude(selectedLocation.x); // 검색한 위치의 경도로 변경
+                setLatitude(selectedLocation.y);
+                setLongitude(selectedLocation.x);
             }
         };
         ps.keywordSearch(searchLocation, placesSearchCB);
     };
-
-    // console.log("이거 맞음", latitude, longitude);
 
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchLocation(event.target.value);
