@@ -6,6 +6,10 @@ on: # Event 감지
 jobs: # Job 설정
     build:
         runs-on: ubuntu-latest
+
+        env:
+          CI: false
+          
         steps:
             - name: Checkout source code. # Repo checkout
               uses: actions/checkout@v2
@@ -17,4 +21,4 @@ jobs: # Job 설정
               run: yarn install --frozen-lockfile
 
             - name: Build # React Build
-              run: yarn build
+              run: CI=false yarn build
