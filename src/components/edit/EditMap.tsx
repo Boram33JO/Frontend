@@ -163,7 +163,9 @@ const EditMap: React.FC<EditMapProps> = ({
                     setCategoryNum={setCategoryNum}
                 />
             </StCategory>
-            <StKakaoMap id="map" />
+            <StKakaoMapContainer>
+                <StKakaoMap id="map" />
+            </StKakaoMapContainer>
         </StMapContainer>
     );
 };
@@ -171,7 +173,10 @@ const EditMap: React.FC<EditMapProps> = ({
 export default EditMap;
 
 const StMapContainer = styled.div`
-    height: 548px;
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
 `;
 
 const StCategory = styled.div`
@@ -179,7 +184,7 @@ const StCategory = styled.div`
 `;
 
 const StSearchForm = styled.form`
-    width: 346px;
+    max-width: 460px;
     height: 40px;
     border: 1px solid #434047;
     background-color: #434047;
@@ -200,8 +205,18 @@ const StSearchForm = styled.form`
     }
 `;
 
+const StKakaoMapContainer = styled.div`
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+`;
+
 const StKakaoMap = styled.div`
-    width: 347px;
-    height: 308px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
 `;

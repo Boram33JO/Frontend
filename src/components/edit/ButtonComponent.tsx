@@ -21,7 +21,7 @@ const ButtonComponent: React.FC<Props> = ({ children, onClick, style }) => {
 export default ButtonComponent;
 
 const StButton = styled.button`
-    width: 168px;
+    width: 100%;
     height: 56px;
     border-radius: 6px;
     border: none;

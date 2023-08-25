@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import KakaoMap from "../components/map/KakaoMap";
-import MyListItem from "../components/common/MyListItem";
 import { Post } from "../models/post";
+import ListItem from "../components/common/ListItem";
 
 const MapPage = () => {
     const [isData, setIsData] = useState<any>([]);
 
     return (
-        <>
+        <InnerContainer>
             <StMapContainer>
                 <h1>지금 피플러는 뭘 듣고 있을까요?</h1>
                 <KakaoMap
@@ -25,7 +25,7 @@ const MapPage = () => {
                 ) : (
                     isData.map((post: Post) => (
                         <StMyListItem>
-                            <MyListItem
+                            <ListItem
                                 key={post.postId}
                                 post={post}
                             />
@@ -33,17 +33,21 @@ const MapPage = () => {
                     ))
                 )}
             </StListContainer>
-        </>
+        </InnerContainer>
     );
 };
 
 export default MapPage;
 
+const InnerContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+`;
+
 export const StMapContainer = styled.div`
-    width: 350px;
-    /* height: 523px; */
-    padding: 0 20px;
-    margin-top: 47px;
+    padding: 20px;
+    margin-top: 20px;
     background-color: #141414;
 
     h1 {
@@ -54,21 +58,22 @@ export const StMapContainer = styled.div`
 `;
 
 const StLine = styled.div`
-    width: 390px;
+    /* width: 390px; */
     height: 8px;
     background: #242325;
 `;
 
 const StListContainer = styled.div`
-    width: 350px;
+    /* width: 350px; */
     /* height: 523px; */
-    padding: 0 20px 78px 20px;
+    padding: 20px;
     background-color: #141414;
     color: #fafafa;
 
     h1 {
         font-size: 20px;
-        padding: 31px 0 16px 0;
+        line-height: calc(100% + 6px);
+        margin-bottom: 20px;
     }
 `;
 
