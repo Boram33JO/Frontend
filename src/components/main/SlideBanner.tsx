@@ -196,7 +196,7 @@ const NavigationButton = styled.button`
     width: 40px;
     height: 40px;
     cursor: pointer;
-    
+    z-index: 2px;
     &:hover{
         opacity: 0.7;
     }

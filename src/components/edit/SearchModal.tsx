@@ -24,7 +24,7 @@ const StModalOverlay = styled.div`
 
 const ModalContainer = styled.div`
     position: absolute;
-    width: 350px;
+    width: 100%;
     height: 180px;
     border-radius: 8px;
     box-sizing: border-box;

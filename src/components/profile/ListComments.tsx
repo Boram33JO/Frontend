@@ -29,19 +29,6 @@ const ListComments = ({ commentList }: Props) => {
     navigate(`/detail/${postId}`);
   };
 
-  const { isLoading, isError } = useQuery(["comments"], async () => {
-    const response = await getCommentsLists(userId);
-    // console.log('댓글 response:', response);
-    return response.data;
-  });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (isError) {
-    return <div>Error...</div>;
-  }
 
   return (
     <InnerContainer>
