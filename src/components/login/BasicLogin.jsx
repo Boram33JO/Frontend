@@ -13,7 +13,7 @@ const BasicLogin = () => {
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState(""); // 추가: 에러 메시지 상태
 
-const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
   // 에러 메시지 표시 후 일정 시간이 지나면 초기화
@@ -38,13 +38,7 @@ const [isEmailFocused, setIsEmailFocused] = useState(false);
       navigate("/");
     },
     onError: (error) => {
-      // 에러 발생 시 에러 메시지 표시
-      //console.log("Error response from server:", error?.response?.data);
-      //console.log(error.response);
-
-      if (error.response.status === 401)
-        setErrorMessage("로그인 정보를 찾을 수 없습니다.");
-      else setErrorMessage("찾을 수 없습니다.");
+      setErrorMessage("로그인 정보를 찾을 수 없습니다.");
     },
   });
 
@@ -72,9 +66,9 @@ const [isEmailFocused, setIsEmailFocused] = useState(false);
           value={email}
           onChange={onChangeEmailHandler}
           onFocus={() => setIsEmailFocused(true)}
-        onBlur={() => setIsEmailFocused(false)}
-        $isFocused={isEmailFocused}
-        $hasValue={email.length > 0} 
+          onBlur={() => setIsEmailFocused(false)}
+          $isFocused={isEmailFocused}
+          $hasValue={email.length > 0}
         />
         <Stinput2
           type={"password"}
@@ -82,9 +76,9 @@ const [isEmailFocused, setIsEmailFocused] = useState(false);
           value={password}
           onChange={onChangePasswordHandler}
           onFocus={() => setIsPasswordFocused(true)}
-        onBlur={() => setIsPasswordFocused(false)}
-        $isFocused={isPasswordFocused}
-        $hasValue={password.length > 0} 
+          onBlur={() => setIsPasswordFocused(false)}
+          $isFocused={isPasswordFocused}
+          $hasValue={password.length > 0}
         />
       </Stbox>
 
@@ -100,7 +94,6 @@ const [isEmailFocused, setIsEmailFocused] = useState(false);
 
       <Stbox>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}{" "}
-        {/* 추가: 에러 메시지 표시 */}
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox>
     </InnerContainer>
@@ -148,12 +141,12 @@ const Stinput1 = styled.input`
   outline: none;
   margin-bottom: 10px;
 
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" :  "#141414;")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
   color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
 const Stinput2 = styled.input`
-    width: 329px;
+  width: 329px;
   height: 24px;
   padding: 10px;
   font-size: 16px;
@@ -163,7 +156,7 @@ const Stinput2 = styled.input`
   border: none;
   border-radius: 8px;
   outline: none;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" :  "#141414;")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
   color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
