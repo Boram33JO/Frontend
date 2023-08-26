@@ -1,41 +1,54 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { getFollowLists } from '../../api/profile';
-import { followUser } from '../../api/post';
-import { getProfileImage } from '../../utils/common';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { useNavigate, useParams } from "react-router-dom";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { getFollowLists } from "../../api/profile";
+import { followUser } from "../../api/post";
+import { getProfileImage } from "../../utils/common";
+import DeleteModal from "../common/DeleteModal";
 
 const Pictures = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
   const queryClient = useQueryClient();
 
-  const { data: followerData, isLoading, isError } = useQuery(
-    ['Follow', userId],
-    () => userId ? getFollowLists(userId) : Promise.resolve([]), // If userId is undefined, return an empty array
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
+    null
+  );
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const {
+    data: followerData,
+    isLoading,
+    isError,
+  } = useQuery(
+    ["Follow", userId],
+    () => (userId ? getFollowLists(userId) : Promise.resolve([])), // If userId is undefined, return an empty array
     { enabled: !!userId }
   );
   // console.log(followerData); // 데이터 구조를 확인
-
 
   // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
   const mutation = useMutation(followUser, {
     onSuccess: () => {
       // 삭제 후 데이터를 다시 불러오기 위해 팔로워 정보 캐시를 무효화합니다.
-      queryClient.invalidateQueries(['Follow', userId]);
-    }
+      queryClient.invalidateQueries(["Follow", userId]);
+    },
   });
 
   // "삭제" 버튼을 클릭했을 때 호출되는 함수입니다.
   const handleDelete = (followerId: number) => {
-    const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
-    if (confirmDelete) {
-      // 팔로워 삭제 API 호출을 수행합니다.
-      mutation.mutate(followerId);
-    }
+    setSelectedCommentId(followerId);
+    setDeleteModalOpen(true);
   };
-
+  const deleteCommentAsync = async (commentId: string) => {
+    try {
+      await mutation.mutateAsync(followerData);
+    } catch (error) {
+      console.error("An error occurred while deleting the comment:", error);
+    }
+    setDeleteModalOpen(false);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -57,8 +70,11 @@ const Pictures = () => {
         <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
       ) : (
         followerData.followList.content.map((follower: any) => (
-          <MyProfile key={follower.userId} >
-            <MyThumb src={getProfileImage(follower.userImage)} onClick={() => navigate(`/profile/${follower.userId}`)} />
+          <MyProfile key={follower.userId}>
+            <MyThumb
+              src={getProfileImage(follower.userImage)}
+              onClick={() => navigate(`/profile/${follower.userId}`)}
+            />
             <MyProfile1>
               <MyProfile2>
                 <Nickname>{follower.nickname}</Nickname>
@@ -69,18 +85,23 @@ const Pictures = () => {
           </MyProfile>
         ))
       )}
+      {isDeleteModalOpen && (
+        <DeleteModal
+          name="피플러"
+          deleteToggle={setDeleteModalOpen}
+          deleteButton={() => deleteCommentAsync(selectedCommentId!.toString())}
+        />
+      )}
     </InnerContainer>
   );
-
-}
+};
 export default Pictures;
 
 const NoDataMessage = styled.p`
   font-size: 16px;
   color: #e7e6f0;
-  padding-top: 20px;;
+  padding-top: 20px;
 `;
-
 
 const InnerContainer = styled.div`
   display: block;
@@ -93,15 +114,14 @@ const InnerContainer = styled.div`
 const Follower1 = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
   align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
-  
 `;
 const Nums = styled.div`
-margin-left: 10px;
-font-size: 14px;
-font-weight: 500;
-color: #a6a3af;
-align-items: center; 
-`
+  margin-left: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #a6a3af;
+  align-items: center;
+`;
 
 const H3 = styled.h3`
   font-size: 20px;
@@ -130,8 +150,6 @@ const Bt = styled.button`
   &:hover {
     color: #141414;
   }
-  
- 
 `;
 const MyProfile = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
@@ -154,7 +172,7 @@ const MyThumb = styled.img`
 `;
 
 const MyProfile2 = styled.div`
-padding-left: 10px; // 원래 5정도?
+  padding-left: 10px; // 원래 5정도?
 `;
 
 const Nickname = styled.div`
@@ -164,9 +182,8 @@ const Nickname = styled.div`
 `;
 
 const Produce = styled.div`
-  font-size: 14px; 
+  font-size: 14px;
   padding-top: 5px;
   color: #626262;
   font-weight: 500; //미디엄
- 
 `;
