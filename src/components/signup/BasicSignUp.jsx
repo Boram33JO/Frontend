@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { useMutation } from "react-query";
-import { addUsers } from "../../api/user2";
+import { addUsers, mobileCheck, mobileDoubleCheck } from "../../api/user2";
 import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user2";
 
@@ -12,12 +12,17 @@ const BasicSignUp = () => {
 
   const [email, onChangeEmailHandler, resetEmail] = useInput();
   const [code, onChangenumberHandler, resetNumber] = useInput();
+
+  const [to, onChangeMobileHandler, resetMobile] = useInput();
+  const [smsConfirmNum, onChangeMobileCodeHandler, resetMobileCode] = useInput();
+
   const [password, onChangePasswordHandler, resetPassword] = useInput();
-  const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] =
-    useInput();
+  const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] = useInput();
   const [nickname, onChangeNicknameHandler, resetNickname] = useInput();
 
   const [isEmailVerified, setIsEmailVerified] = useState(false); // 회원가입하기 버튼 전에 이메일 인증여부로 막기
+  const [isMobileVerified, setIsMobileVerified] = useState(false);
+
   const [isNicknameVerified, setIsNicknameVerified] = useState(false); // 회원가입하기 버튼 전에 닉네임 인증여부로 막기
 
   // 에러
@@ -25,14 +30,23 @@ const BasicSignUp = () => {
   const [passwordError, setPasswordError] = useState("");
   const [passwordCheckError, setPasswordCheckError] = useState("");
   const [nicknameError, setNicknameError] = useState("");
+
   const [nicknameServerError, setNicknameServerError] = useState(""); // 에러 메시지 저장 상태 변수
 
   // 포커스
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isNumberFocused, setIsNumberFocused] = useState(false);
+
+  const [isMobileFocused, setIsMobileFocused] = useState(false);
+  const [isMobileNumberFocused, setIsMobileNumberFocused] = useState(false);
+
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isPasswordCheckFocused, setIsPasswordCheckFocused] = useState(false);
+
   const [isNicknameFocused, setIsNicknameFocused] = useState(false);
+
+  const [showCodeInput, setShowCodeInput] = useState(false); // 상태 추가
+  const [showMobileInput, setShowMobileInput] = useState(false);
 
   const addNewUserMutation = useMutation(addUsers, {
     onSuccess: () => {
@@ -54,10 +68,15 @@ const BasicSignUp = () => {
       alert("이메일 인증을 먼저 진행해 주세요.");
       return;
     }
-    if (!isNicknameVerified) {
-      alert("닉네임 중복체크를 먼저 진행해 주세요.");
+    if (!isMobileVerified) {
+      alert("핸드폰 인증을 먼저 진행해 주세요.");
       return;
     }
+    if (!isNicknameVerified) {
+      alert("닉네임 인증을 먼저 진행해 주세요.");
+      return;
+    }
+
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
     const passwordRegex =
@@ -112,52 +131,76 @@ const BasicSignUp = () => {
     }
   };
 
-  // 이메일 검사를 누르는데 이메일이 전송되지 않는 형식이면 발송이 안대고 500번에러 뜸.
-  // 인증 버튼 누르기 전에 이메일 형식인지 아닌지 여부 판단해서 이메일 형식이 맞을 경우만 되려나.
-  //
 
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
-      resetEmail(""); // 입력 칸 비우기
+      resetEmail();
       return;
     }
-
-    // if (response.status===500) {
-    //   alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
-    //   resetEmail(""); // 입력 칸 비우기
-    //   return;
-    // }
+    // 이메일 보내기
     const response = await emailCheck(email);
-    // console.log(response, "5");
     alert(response.data);
-    // if (response.data.message) {
-    //   alert(response.data.message);
-    // } else {
-    //   alert(response.data.error, "에러용2");
-    // }
+    setShowCodeInput(true);
   };
 
   // 이메일 6자리 검증 숫자 검사 (유효기간 5분)
-  // true이면 진행되도록 변수를 만들던지 하자.
   const DoubleCheckhandleButton = async () => {
     const response = await emailDoubleCheck(email, code);
-    // console.log(response, "숫자 확인1");
 
     if (response.data === true) {
       setIsEmailVerified(true);
       alert("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.");
-      // console.log(response.data, "숫자 확인2");
+      setShowCodeInput(false);
+
+      // 3초 후에 숨김 상태 해제
     } else if (response.data === false) {
       setIsEmailVerified(false);
-      // console.log(response.data, "숫자 확인3");
       alert("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.");
       resetEmail();
       resetNumber();
     }
   };
+
+
+  // 모바일 인증
+  const MobilehandleCheckButton = async () => {
+    const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
+    
+    if (!phoneNumberRegex.test(to)) {
+      alert("올바른 11자리 숫자로만 입력해주세요.");
+      resetMobile(); // 입력 칸 비우기
+      return;
+    }
+    
+    const response = await mobileCheck(to);
+    console.log(response);
+    setShowMobileInput(true);
+    alert("모바일 인증 번호를 발송했습니다.");
+  };
+  
+
+// 모바일 6자리 검증 숫자 검사 (유효기간 5분)
+const MobileDoubleCheckhandleButton = async () => {
+  const response = await mobileDoubleCheck(smsConfirmNum, to);
+  // console.log(response, "숫자 확인1");
+
+  if (response.data === true) {
+    setIsMobileVerified(true);
+    alert("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.");
+    setShowMobileInput(false);
+    // console.log(response.data, "숫자 확인2");
+  } else if (response.data === false) {
+    setIsMobileVerified(false);
+    // console.log(response.data, "숫자 확인3");
+    alert("모바일 인증에 실패했습니다. 다시 시도해주세요.");
+    resetMobile();
+    resetMobileCode();
+  }
+};
+
 
   return (
     <InnerContainer>
@@ -174,9 +217,10 @@ const BasicSignUp = () => {
               $isFocused={isEmailFocused}
               $hasValue={email.length > 0}
             />
-            <Stbutton1 onClick={EmailhandleCheckButton}>인증하기</Stbutton1>
+            <Stbutton1 onClick={EmailhandleCheckButton}>중복확인</Stbutton1>
           </Stname>
         </Stnickname>
+{showCodeInput && (
         <Stnickname>
           <Stname>
             <Stinput4
@@ -189,10 +233,44 @@ const BasicSignUp = () => {
               $isFocused={isNumberFocused}
               $hasValue={code.length > 0}
             />
-
-            <Stbutton1 onClick={DoubleCheckhandleButton}>인증완료</Stbutton1>
+            <Stbutton1 onClick={DoubleCheckhandleButton}>인증</Stbutton1>
           </Stname>
         </Stnickname>
+        )}
+
+        <Stnickname>
+          <Stname>
+            <Stinput4
+              type={"text"}
+              placeholder={"핸드폰 번호"}
+              value={to}
+              onChange={onChangeMobileHandler}
+              onFocus={() => setIsMobileFocused(true)}
+              onBlur={() => setIsMobileFocused(false)}
+              $isFocused={isMobileFocused}
+              $hasValue={email.length > 0}
+            />
+            <Stbutton1 onClick={MobilehandleCheckButton}>중복확인</Stbutton1>
+          </Stname>
+        </Stnickname>
+{showMobileInput &&(
+        <Stnickname>
+          <Stname>
+            <Stinput4
+              type={"text"}
+              value={smsConfirmNum}
+              placeholder={"핸드폰 인증번호 6자리"}
+              onChange={onChangeMobileCodeHandler}
+              onFocus={() => setIsMobileNumberFocused(true)}
+              onBlur={() => setIsMobileNumberFocused(false)}
+              $isFocused={isMobileNumberFocused}
+              $hasValue={code.length > 0}
+            />
+            <Stbutton1 onClick={MobileDoubleCheckhandleButton}>인증</Stbutton1>
+          </Stname>
+        </Stnickname>
+        )}
+
         <Stinput2
           type={"password"}
           placeholder={"비밀번호 입력(8~15자 이내)"}
