@@ -6,29 +6,31 @@ import { Post } from "../models/post";
 import ListItem from "../components/common/ListItem";
 
 const MapPage = () => {
-    const [isData, setIsData] = useState<any>([]);
+    const [updatedPosition, setUpdatedPosition] = useState<any>([]);
+    console.log("up", updatedPosition);
+    console.log("11", updatedPosition.length);
 
     return (
         <InnerContainer>
             <StMapContainer>
                 <h1>지금 피플러는 뭘 듣고 있을까요?</h1>
                 <KakaoMap
-                    isData={isData}
-                    setIsData={setIsData}
+                    updatedPosition={updatedPosition}
+                    setUpdatedPosition={setUpdatedPosition}
                 />
             </StMapContainer>
             <StLine />
             <StListContainer>
-                <h1>{isData.length}의 포스팅 결과</h1>
-                {isData.length === 0 ? (
+                <h1>{updatedPosition.length}의 포스팅 결과</h1>
+                {/* {updatedPosition.length === 0 ? (
                     <div>해당 위치에 포스팅이 없습니다. 다른 지역을 검색해보세요.</div>
                 ) : (
-                    isData.map((post: Post) => (
-                        <StMyListItem key={post.postId}>
+                    updatedPosition.map((post: Post, index: number) => (
+                        <StMyListItem key={index}>
                             <ListItem post={post} />
                         </StMyListItem>
                     ))
-                )}
+                )} */}
             </StListContainer>
         </InnerContainer>
     );

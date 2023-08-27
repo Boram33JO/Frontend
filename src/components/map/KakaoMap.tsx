@@ -14,11 +14,11 @@ interface Location {
 }
 
 interface KakaoProps {
-    isData: Location[];
-    setIsData: React.Dispatch<React.SetStateAction<Location[]>>;
+    updatedPosition: Location[];
+    setUpdatedPosition: React.Dispatch<React.SetStateAction<Location[]>>;
 }
 
-const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
+const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition }) => {
     const [searchLocation, setSearchLocation] = useState<string>("");
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
     const [geoLatitude, setGeoLatitude] = useState<string>("");
@@ -30,9 +30,22 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
     const [selectedLocation, setSelectedLocation] = useState<any>({});
     const [categoryNum, setCategoryNum] = useState<number>(0);
     const [modal, setModal] = useState(false);
+    // const [testMapContainer, setTestMapContainer] = useState<any>();
+    const [map, setMap] = useState<any>(null);
+    const [isData, setIsData] = useState<any>([]);
+    const [markers, setMarkers] = useState<any[]>([]);
+    const [level, setLevel] = useState();
 
+    // 지도에 핀 꽂기
     const addMarkersToMap = (map: any, positions: any[]) => {
+        // 기존 마커들 제거
+        for (const marker of markers) {
+            marker.setMap(null);
+        }
+
+        // 새로운 마커들 추가
         const imageSrc = pinIcon;
+        const newMarkers = [];
         for (let i = 0; i < positions.length; i++) {
             const imageSize = new window.kakao.maps.Size(36, 42);
             const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
@@ -42,8 +55,10 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
                 title: positions[i].title,
                 image: markerImage,
             });
-            marker.setMap(map);
+            // marker.setMap(map);
+            newMarkers.push(marker);
         }
+        setMarkers(newMarkers); // 새로운 마커들 저장
     };
 
     // 최초 GPS 위치 설정
@@ -67,71 +82,110 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
         }
     }, []);
 
-    // 마커 데이터 업데이트
+    console.log("111", latitude, longitude);
+    console.log("2222", geoLatitude, geoLongitude);
+
+    // useEffect(() => {
+    //     window.kakao.maps.load(() => {
+    //         const mapContainer = document.getElementById("map");
+    //         const map = new window.kakao.maps.Map(mapContainer, {
+    //             center: new window.kakao.maps.LatLng(latitude, longitude),
+    //             level: 3,
+    //         });
+    //         setMap(map);
+    //     });
+    // }, [latitude, longitude]);
+
     useEffect(() => {
-        mappingList().then((res) => {
-            window.kakao.maps.load(() => {
-                const mapContainer = document.getElementById("map");
-                const map = new window.kakao.maps.Map(mapContainer, {
-                    center: new window.kakao.maps.LatLng(latitude, longitude),
-                    level: 3,
-                });
-                // 좌표로 이동
-                map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
-                // 좌표에 있는 data로 markers에 넣을 배열 생성
-                const position = res.map((item: any, index: number) => ({
-                    key: index,
+        window.kakao.maps.load(() => {
+            const mapContainer = document.getElementById("map");
+
+            // 지도 생성
+            const map = new window.kakao.maps.Map(mapContainer, {
+                center: new window.kakao.maps.LatLng(latitude, longitude),
+                level: level,
+            });
+
+            let swLatlng, neLatlng; // 변수 선언
+
+            // 영역 변경 이벤트 등록
+            window.kakao.maps.event.addListener(map, "bounds_changed", function () {
+                const bounds = map.getBounds();
+                swLatlng = bounds.getSouthWest();
+                neLatlng = bounds.getNorthEast();
+
+                setLatitude(swLatlng.getLat());
+                setLongitude(neLatlng.getLng());
+            });
+            console.log(latitude);
+            console.log(longitude);
+
+            // 줌 컨트롤 생성 및 지도에 추가
+            const zoomControl = new window.kakao.maps.ZoomControl();
+            map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
+
+            // 줌 레벨 변경 시 이벤트 처리
+            window.kakao.maps.event.addListener(map, "zoom_changed", function () {
+                const level = map.getLevel();
+                setLevel(level);
+                console.log("level", level);
+            });
+            setMap(map);
+        });
+    }, [latitude, longitude]);
+
+    // useEffect(() => {
+    //     testMap?.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+    // }, [latitude, longitude])
+
+    // 마커 데이터 업데이트
+    // useEffect(() => {
+    //     mappingList().then((res) => {
+    //         const position = res.map((item: any, index: number) => ({
+    //             key: index,
+    //             title: item.location.placeName,
+    //             latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
+    //         }));
+    //         console.log(position);
+    //         // 마커 추가 로직 호출
+    //         addMarkersToMap(testMap, position);
+    //         if (testMap === null) {
+    //             return;
+    //         }
+    //     });
+    // }, [latitude, longitude, geoLatitude, geoLongitude]);
+
+    // const mappingList = async () => {
+    //     const latlng = { latitude, longitude };
+    //     try {
+    //         const response = await postData(latlng);
+    //         setIsData(response?.data.content);
+    //         return response?.data.content;
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // };
+
+    const mappingCategoryHandler = async (categoryNum: number) => {
+        console.log("categoryId", categoryNum);
+        const latlng = { latitude, longitude };
+        try {
+            const response = await postCategoryData(latlng, categoryNum);
+            console.log("category", response);
+            setIsData(response?.data);
+            console.log("받는 데이터", response?.data);
+
+            const updatedPositions = response?.data
+                .filter((item: any) => item.category === categoryNum)
+                .map((item: any) => ({
+                    key: item.id,
                     title: item.location.placeName,
                     latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
                 }));
-                // 마커 추가 로직 호출
-                addMarkersToMap(map, position);
-            });
-        });
-    }, [latitude, longitude, geoLatitude, geoLongitude]);
+            setUpdatedPosition(updatedPositions);
+            addMarkersToMap(map, updatedPositions);
 
-    const mappingList = async () => {
-        const latlng = { latitude, longitude };
-        try {
-            const response = await postData(latlng);
-            setIsData(response?.data.content);
-            return response?.data.content;
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    const mappingCategoryHandler = async () => {
-        const categoryId = categoryNum;
-        let latlng;
-        if (categoryId !== 0) {
-            latlng = { latitude, longitude };
-        } else {
-            latlng = { geoLatitude, geoLongitude };
-        }
-
-        try {
-            const response = await postCategoryData(latlng, categoryId);
-            setIsData(response?.data.content);
-
-            const updatedPositions = response?.data.content.map((item: any) => ({
-                key: item.id,
-                title: item.location.placeName,
-                latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
-            }));
-
-            // 업데이트된 positions로 addMarkersToMap 호출
-            window.kakao.maps.load(() => {
-                const mapContainer = document.getElementById("map");
-                const map = new window.kakao.maps.Map(mapContainer, {
-                    center: new window.kakao.maps.LatLng(latitude, longitude),
-                    level: 3,
-                });
-                map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
-                addMarkersToMap(map, updatedPositions);
-            });
-
-            return response?.data.content;
+            // return response?.data;
         } catch (error) {
             console.error(error);
         }
@@ -146,6 +200,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
                 setLongitude(selectedLocation.x);
             }
         };
+        console.log(latitude, longitude);
         ps.keywordSearch(searchLocation, placesSearchCB);
     };
 
@@ -162,6 +217,8 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
         setSearchLocation("");
         searchMap();
     };
+
+    console.log("isData", isData);
 
     return (
         <>
@@ -196,10 +253,11 @@ const KakaoMap: React.FC<KakaoProps> = ({ isData, setIsData }) => {
                         setSelectedLocation={setSelectedLocation}
                     />
                 )}
-                <StCategory onClick={mappingCategoryHandler}>
+                <StCategory>
                     <Categories
                         categoryNum={categoryNum}
                         setCategoryNum={setCategoryNum}
+                        mappingCategoryHandler={mappingCategoryHandler}
                     />
                 </StCategory>
                 <StKakaoMapContainer>
