@@ -39,3 +39,15 @@ export const emailDoubleCheck = async (email: string, code: string) => {
     const response = await instance.post(`/auth/check`, { email, code });
     return response;
 }
+
+// 핸드폰 인증 번호 전송 (SMS)
+export const mobileCheck = async (to: string) => {
+    const response = await instance.post(`/sms/send`, { to });
+    return response;
+}
+
+// 핸드폰 인증 번호 검증 (SMS)
+export const mobileDoubleCheck = async (smsConfirmNum: string, to: string) => {
+    const response = await instance.post(`/sms/check`, { smsConfirmNum, to });
+    return response;
+}
