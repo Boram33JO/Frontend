@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
@@ -14,10 +14,12 @@ const BasicSignUp = () => {
   const [code, onChangenumberHandler, resetNumber] = useInput();
 
   const [to, onChangeMobileHandler, resetMobile] = useInput();
-  const [smsConfirmNum, onChangeMobileCodeHandler, resetMobileCode] = useInput();
+  const [smsConfirmNum, onChangeMobileCodeHandler, resetMobileCode] =
+    useInput();
 
   const [password, onChangePasswordHandler, resetPassword] = useInput();
-  const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] = useInput();
+  const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] =
+    useInput();
   const [nickname, onChangeNicknameHandler, resetNickname] = useInput();
 
   const [isEmailVerified, setIsEmailVerified] = useState(false); // 회원가입하기 버튼 전에 이메일 인증여부로 막기
@@ -45,8 +47,56 @@ const BasicSignUp = () => {
 
   const [isNicknameFocused, setIsNicknameFocused] = useState(false);
 
+  // 인증 번호 입력 창을 보여주는 상태 변수.
   const [showCodeInput, setShowCodeInput] = useState(false); // 상태 추가
   const [showMobileInput, setShowMobileInput] = useState(false);
+
+  // 중복확인 버튼 비활성화 여부 상태 변수
+  const [isEmailButtonDisabled, setIsEmailButtonDisabled] = useState(false);
+  const [isMobileButtonDisabled, setIsMobileButtonDisabled] = useState(false);
+
+  // 타이머 상태 변수
+  const [emailVerificationTimer, setEmailVerificationTimer] = useState(0);
+  const [mobileVerificationTimer, setmobileVerificationTimer] = useState(0);
+
+  // 타이머 5분 계산 함수
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
+
+  useEffect(() => {
+    let interval;
+
+    if (emailVerificationTimer > 0) {
+      interval = setInterval(() => {
+        setEmailVerificationTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [emailVerificationTimer]);
+
+  useEffect(() => {
+    let interval;
+
+    if (mobileVerificationTimer > 0) {
+      interval = setInterval(() => {
+        setmobileVerificationTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [mobileVerificationTimer]);
 
   const addNewUserMutation = useMutation(addUsers, {
     onSuccess: () => {
@@ -76,7 +126,6 @@ const BasicSignUp = () => {
       alert("닉네임 인증을 먼저 진행해 주세요.");
       return;
     }
-
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
     const passwordRegex =
@@ -131,7 +180,6 @@ const BasicSignUp = () => {
     }
   };
 
-
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -144,6 +192,7 @@ const BasicSignUp = () => {
     const response = await emailCheck(email);
     alert(response.data);
     setShowCodeInput(true);
+    setEmailVerificationTimer(300); // 5분 타이머 시작
   };
 
   // 이메일 6자리 검증 숫자 검사 (유효기간 5분)
@@ -152,55 +201,61 @@ const BasicSignUp = () => {
 
     if (response.data === true) {
       setIsEmailVerified(true);
+      setIsEmailButtonDisabled(true); // 중복확인 버튼 비활성화
       alert("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.");
       setShowCodeInput(false);
 
       // 3초 후에 숨김 상태 해제
     } else if (response.data === false) {
       setIsEmailVerified(false);
+      setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
       alert("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.");
       resetEmail();
       resetNumber();
     }
   };
 
-
   // 모바일 인증
   const MobilehandleCheckButton = async () => {
     const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
-    
+
     if (!phoneNumberRegex.test(to)) {
       alert("올바른 11자리 숫자로만 입력해주세요.");
       resetMobile(); // 입력 칸 비우기
       return;
     }
-    
+
     const response = await mobileCheck(to);
     console.log(response);
     setShowMobileInput(true);
+    setmobileVerificationTimer(300); // 5분 타이머 시작
     alert("모바일 인증 번호를 발송했습니다.");
   };
-  
 
-// 모바일 6자리 검증 숫자 검사 (유효기간 5분)
-const MobileDoubleCheckhandleButton = async () => {
-  const response = await mobileDoubleCheck(smsConfirmNum, to);
-  // console.log(response, "숫자 확인1");
+  // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
+  const MobileDoubleCheckhandleButton = async () => {
+    const response = await mobileDoubleCheck(smsConfirmNum, to);
+    // console.log(response, "숫자 확인1");
 
-  if (response.data === true) {
-    setIsMobileVerified(true);
-    alert("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.");
-    setShowMobileInput(false);
-    // console.log(response.data, "숫자 확인2");
-  } else if (response.data === false) {
-    setIsMobileVerified(false);
-    // console.log(response.data, "숫자 확인3");
-    alert("모바일 인증에 실패했습니다. 다시 시도해주세요.");
-    resetMobile();
-    resetMobileCode();
-  }
-};
+    if (response.data === true) {
+      setIsMobileVerified(true);
+      alert("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.");
+      setShowMobileInput(false);
 
+      setIsMobileButtonDisabled(true);
+
+      // console.log(response.data, "숫자 확인2");
+    } else if (response.data === false) {
+      setIsMobileVerified(false);
+
+      setIsMobileButtonDisabled(false);
+      // console.log(response.data, "숫자 확인3");
+      alert("모바일 인증에 실패했습니다. 다시 시도해주세요.");
+
+      resetMobile();
+      resetMobileCode();
+    }
+  };
 
   return (
     <InnerContainer>
@@ -217,25 +272,32 @@ const MobileDoubleCheckhandleButton = async () => {
               $isFocused={isEmailFocused}
               $hasValue={email.length > 0}
             />
-            <Stbutton1 onClick={EmailhandleCheckButton}>중복확인</Stbutton1>
+            <Stbutton1
+              onClick={EmailhandleCheckButton}
+              disabled={isEmailButtonDisabled}
+            >
+              {isEmailButtonDisabled ? "확인완료" : "중복확인"}
+            </Stbutton1>
           </Stname>
         </Stnickname>
-{showCodeInput && (
-        <Stnickname>
-          <Stname>
-            <Stinput4
-              type={"text"}
-              value={code}
-              placeholder={"인증번호 6자리"}
-              onChange={onChangenumberHandler}
-              onFocus={() => setIsNumberFocused(true)}
-              onBlur={() => setIsNumberFocused(false)}
-              $isFocused={isNumberFocused}
-              $hasValue={code.length > 0}
-            />
-            <Stbutton1 onClick={DoubleCheckhandleButton}>인증</Stbutton1>
-          </Stname>
-        </Stnickname>
+        {showCodeInput && (
+          <Stnickname>
+            <Stname>
+              <Stinput4
+                type={"text"}
+                value={code}
+                placeholder={`인증번호 6자리 (${formatTime(
+                  emailVerificationTimer
+                )})`}
+                onChange={onChangenumberHandler}
+                onFocus={() => setIsNumberFocused(true)}
+                onBlur={() => setIsNumberFocused(false)}
+                $isFocused={isNumberFocused}
+                $hasValue={code.length > 0}
+              />
+              <Stbutton1 onClick={DoubleCheckhandleButton}>인증</Stbutton1>
+            </Stname>
+          </Stnickname>
         )}
 
         <Stnickname>
@@ -250,25 +312,35 @@ const MobileDoubleCheckhandleButton = async () => {
               $isFocused={isMobileFocused}
               $hasValue={email.length > 0}
             />
-            <Stbutton1 onClick={MobilehandleCheckButton}>중복확인</Stbutton1>
+            <Stbutton1
+              onClick={MobilehandleCheckButton}
+              disabled={isMobileButtonDisabled}
+            >
+              {isMobileButtonDisabled ? "확인완료" : "중복확인"}
+            </Stbutton1>
           </Stname>
         </Stnickname>
-{showMobileInput &&(
-        <Stnickname>
-          <Stname>
-            <Stinput4
-              type={"text"}
-              value={smsConfirmNum}
-              placeholder={"핸드폰 인증번호 6자리"}
-              onChange={onChangeMobileCodeHandler}
-              onFocus={() => setIsMobileNumberFocused(true)}
-              onBlur={() => setIsMobileNumberFocused(false)}
-              $isFocused={isMobileNumberFocused}
-              $hasValue={code.length > 0}
-            />
-            <Stbutton1 onClick={MobileDoubleCheckhandleButton}>인증</Stbutton1>
-          </Stname>
-        </Stnickname>
+
+        {showMobileInput && (
+          <Stnickname>
+            <Stname>
+              <Stinput4
+                type={"text"}
+                value={smsConfirmNum}
+                placeholder={`인증번호 6자리 (${formatTime(
+                  mobileVerificationTimer
+                )})`}
+                onChange={onChangeMobileCodeHandler}
+                onFocus={() => setIsMobileNumberFocused(true)}
+                onBlur={() => setIsMobileNumberFocused(false)}
+                $isFocused={isMobileNumberFocused}
+                $hasValue={code.length > 0}
+              />
+              <Stbutton1 onClick={MobileDoubleCheckhandleButton}>
+                인증
+              </Stbutton1>
+            </Stname>
+          </Stnickname>
         )}
 
         <Stinput2
@@ -317,7 +389,7 @@ const MobileDoubleCheckhandleButton = async () => {
               $isFocused={isNicknameFocused}
               $hasValue={nickname.length > 0}
             />
-            <Stbutton1 onClick={handleCheckButton}>중복체크</Stbutton1>
+            <Stbutton1 onClick={handleCheckButton}>중복확인</Stbutton1>
           </Stname>
           {nicknameServerError && (
             <ErrorMessage>{nicknameServerError}</ErrorMessage>
@@ -358,24 +430,6 @@ const Stbox = styled.div`
   align-items: center;
 `;
 
-// const Stinput1 = styled.input`
-//   width: 229px;
-//   height: 24px;
-//   padding: 10px;
-
-//   font-size: 16px;
-//   font-weight: 500;
-//   color: #85848b;
-
-//   background-color: #252628;
-
-//   border: none;
-//   border-radius: 6px;
-//   outline: none;
-//   border: 1px solid ${(props) => (props.isFocused ? "#8084f4" : "#141414;")};
-//   color: ${(props) => (props.hasValue ? "#d9d9d9" : "#85848b")};
-// `;
-
 const Stinput2 = styled.input`
   width: 329px;
   height: 24px;
@@ -413,7 +467,6 @@ const Stinput3 = styled.input`
 
   font-size: 16px;
   font-weight: 500;
-  color: #85848b;
 
   background-color: #252628;
   border: none;
@@ -451,7 +504,8 @@ const Stinput4 = styled.input`
 
   font-size: 16px;
   font-weight: 500;
-  color: #85848b;
+  color: ${(props) =>
+    props.$isFocused || props.$hasValue ? "#d9d9d9" : "#85848b"};
 
   background-color: #252628;
 
@@ -459,26 +513,27 @@ const Stinput4 = styled.input`
   border-radius: 6px;
   outline: none;
   border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
+  //color: ${(props) => (props.$hasValue ? ": #d9d9d9" : "#85848b")};
 `;
 const Stbutton1 = styled.button`
   width: 90px;
   height: 45px;
   margin-left: 10px;
-  background-color: #d9d9d9;
-  background: #45424e;
-  color: #e7e6f0;
+  background: ${(props) =>
+    props.disabled ? "#45424e" : "linear-gradient(135deg, #8084f4, #c48fed)"};
+  color: ${(props) => (props.disabled ? "#e7e6f0" : "#e7e6f0")};
 
   &:hover {
-    color: #141414;
+    color: ${(props) => (props.disabled ? "#e7e6f0" : "#141414")};
   }
 
   border: none;
   border-radius: 6px;
   font-size: 16px;
   font-weight: 500;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
 `;
+
 const Stbutton2 = styled.button`
   width: 350px;
   height: 45px;
