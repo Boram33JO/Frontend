@@ -66,6 +66,9 @@ const BasicSignUp = () => {
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
+  // 인중 발송중일 때 상태값.
+  const [emailButtonContent, setEmailButtonContent] = useState("중복확인");
+
   useEffect(() => {
     let interval;
 
@@ -182,17 +185,30 @@ const BasicSignUp = () => {
 
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
+    // 이메일 형식 유효성 검사
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert("올바른 이메일 형식이 아닙니다. 다시 입력해주세요.");
-      resetEmail();
+      alert("올바른 이메일 형식이 아닙니다.");
       return;
     }
-    // 이메일 보내기
-    const response = await emailCheck(email);
-    alert(response.data);
-    setShowCodeInput(true);
+
+    // 비활성화 상태로 변경하고 로딩 표시
+    setIsEmailButtonDisabled(true);
+    setEmailButtonContent("발송 중");
+    //setShowCodeInput(false); // 일단 입력 창을 숨김
     setEmailVerificationTimer(300); // 5분 타이머 시작
+
+    try {
+      const response = await emailCheck(email);
+      alert(response.data);
+      setShowCodeInput(true);
+    } catch (error) {
+      alert("서버 에러가 발생했습니다.");
+    } finally {
+      // 응답 처리 후 버튼 활성화 및 로딩 해제
+      setIsEmailButtonDisabled(false);
+      setEmailButtonContent("재전송");
+    }
   };
 
   // 이메일 6자리 검증 숫자 검사 (유효기간 5분)
@@ -204,6 +220,7 @@ const BasicSignUp = () => {
       setIsEmailButtonDisabled(true); // 중복확인 버튼 비활성화
       alert("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.");
       setShowCodeInput(false);
+      setEmailButtonContent("인증완료");
 
       // 3초 후에 숨김 상태 해제
     } else if (response.data === false) {
@@ -229,6 +246,7 @@ const BasicSignUp = () => {
     console.log(response);
     setShowMobileInput(true);
     setmobileVerificationTimer(300); // 5분 타이머 시작
+    setEmailButtonContent("발송 중");
     alert("모바일 인증 번호를 발송했습니다.");
   };
 
@@ -241,8 +259,8 @@ const BasicSignUp = () => {
       setIsMobileVerified(true);
       alert("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.");
       setShowMobileInput(false);
-
       setIsMobileButtonDisabled(true);
+      setEmailButtonContent("인증완료");
 
       // console.log(response.data, "숫자 확인2");
     } else if (response.data === false) {
@@ -251,7 +269,7 @@ const BasicSignUp = () => {
       setIsMobileButtonDisabled(false);
       // console.log(response.data, "숫자 확인3");
       alert("모바일 인증에 실패했습니다. 다시 시도해주세요.");
-
+      setEmailButtonContent("재전송");
       resetMobile();
       resetMobileCode();
     }
@@ -276,7 +294,7 @@ const BasicSignUp = () => {
               onClick={EmailhandleCheckButton}
               disabled={isEmailButtonDisabled}
             >
-              {isEmailButtonDisabled ? "확인완료" : "중복확인"}
+              {emailButtonContent}
             </Stbutton1>
           </Stname>
         </Stnickname>
@@ -316,7 +334,7 @@ const BasicSignUp = () => {
               onClick={MobilehandleCheckButton}
               disabled={isMobileButtonDisabled}
             >
-              {isMobileButtonDisabled ? "확인완료" : "중복확인"}
+              {emailButtonContent}
             </Stbutton1>
           </Stname>
         </Stnickname>
