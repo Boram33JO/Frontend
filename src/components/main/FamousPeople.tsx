@@ -52,12 +52,12 @@ const InnerContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
-    gap: 20px;
+    gap: 16px;
 `
 
 const H3 = styled.h3`
     font-size: 20px;
-    line-height: 24px;
+    line-height: calc(100% + 6px);
     font-weight: 600;
 `
 
