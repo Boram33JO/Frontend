@@ -8,6 +8,15 @@ import { ReactComponent as IconComDel } from "../../assets/images/login_signup/i
 import { deleteComment } from "../../api/comment";
 import { ReactComponent as TitleSVG } from "../../assets/images/login_signup/icon_title.svg";
 import DeleteModal from "../common/DeleteModal";
+import { ReactComponent as Start } from "../../assets/images/page_start.svg"
+import { ReactComponent as End } from "../../assets/images/page_end.svg"
+import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
+import { ReactComponent as Next } from "../../assets/images/page_next.svg"
+import { ReactComponent as Empty } from "../../assets/images/comment_empty.svg"
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/config/configStore";
+
+
 
 type myComment = {
   id: number;
@@ -21,6 +30,13 @@ const AllCommentsList = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+   const [updateTarget, setUpdateTarget] = useState("");
+    const [deleteToggle, setDeleteToggle] = useState(false);
+    const userInfo = useSelector((state: RootState) => state.user);
+    const [page, setPage] = useState<number>(0);
+    const [total, setTotal] = useState<number>(0);
+    const [totalPage, setTotalPage] = useState<number>(0);
+    const [pageButton, setPageButton] = useState<number[]>([]);
 
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null
@@ -31,17 +47,16 @@ const AllCommentsList = () => {
     navigate(`/detail/${postId}`);
   };
 
-  const { data, isLoading, isError } = useQuery(["comments"], async () => {
-    const response = await getCommentsLists(userId);
+  const { data, isLoading, isError } = useQuery(["comments", page], async () => {
+    const response = await getCommentsLists(userId, page);
     return response.data.content;
   });
 
-  const commentMutation = useMutation(
-    (commentId: string) => deleteComment(commentId),
+  const commentMutation = useMutation((commentId: string) => deleteComment(commentId),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["comments"]);
-      },
+      }
     }
   );
 
@@ -113,6 +128,7 @@ const AllCommentsList = () => {
         />
       )}
     </InnerContainer>
+    
   );
 };
 
