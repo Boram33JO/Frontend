@@ -165,7 +165,7 @@ const EditPage = () => {
                 alert("제목과 내용은 필수입니다.");
             }
         } else {
-            alert("노래를 선택해주세요.")
+            alert("노래를 선택해주세요.");
         }
     };
 
@@ -231,7 +231,7 @@ const EditPage = () => {
                         background: "#45424E",
                     }}
                     onClick={BeforeButtonHandler}
-                // disabled={slideIndex === 0}
+                    // disabled={slideIndex === 0}
                 >
                     이전
                 </ButtonComponent>
@@ -309,6 +309,6 @@ const StSlide = styled.div<{ $position: string }>`
 const StButtons = styled.div`
     display: flex;
     flex-direction: row;
-    gap: 20px;
+    gap: 14px;
     padding: 0 10px;
 `;

@@ -7,6 +7,8 @@ import { addUsers, mobileCheck, mobileDoubleCheck } from "../../api/user2";
 import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user2";
 
+
+
 const BasicSignUp = () => {
   const navigate = useNavigate();
 
@@ -68,6 +70,7 @@ const BasicSignUp = () => {
 
   // 인중 발송중일 때 상태값.
   const [emailButtonContent, setEmailButtonContent] = useState("중복확인");
+  const [mobileButtonContent, setmobileButtonContent] = useState("중복확인");
 
   useEffect(() => {
     let interval;
@@ -135,7 +138,7 @@ const BasicSignUp = () => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
     const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
 
-    // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리
+    // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리(비밀번호 항목만 유효할 듯)
     const errors = {};
     if (!emailRegex.test(email)) {
       errors.email = "이메일 형식이 아닙니다.";
@@ -191,7 +194,6 @@ const BasicSignUp = () => {
       alert("올바른 이메일 형식이 아닙니다.");
       return;
     }
-
     // 비활성화 상태로 변경하고 로딩 표시
     setIsEmailButtonDisabled(true);
     setEmailButtonContent("발송 중");
@@ -237,17 +239,26 @@ const BasicSignUp = () => {
     const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
 
     if (!phoneNumberRegex.test(to)) {
-      alert("올바른 11자리 숫자로만 입력해주세요.");
+      alert("11자리 숫자만 입력해주세요.");
       resetMobile(); // 입력 칸 비우기
       return;
     }
-
-    const response = await mobileCheck(to);
-    console.log(response);
-    setShowMobileInput(true);
-    setmobileVerificationTimer(300); // 5분 타이머 시작
-    setEmailButtonContent("발송 중");
-    alert("모바일 인증 번호를 발송했습니다.");
+    setmobileButtonContent("발송 중");
+    setIsMobileButtonDisabled(true);
+    setmobileVerificationTimer(300);
+    try {
+      // 버튼 내용 변경
+      const response = await mobileCheck(to);
+      setmobileButtonContent("재전송");
+      setIsMobileButtonDisabled(false);
+      console.log(response);
+      setShowMobileInput(true);
+      // 5분 타이머 시작
+      alert("모바일 인증 번호를 발송했습니다.");
+    } catch (error) {
+      setmobileButtonContent("재전송");
+      alert("서버 에러가 발생했습니다.");
+    }
   };
 
   // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
@@ -260,7 +271,7 @@ const BasicSignUp = () => {
       alert("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.");
       setShowMobileInput(false);
       setIsMobileButtonDisabled(true);
-      setEmailButtonContent("인증완료");
+      setmobileButtonContent("인증완료");
 
       // console.log(response.data, "숫자 확인2");
     } else if (response.data === false) {
@@ -269,11 +280,12 @@ const BasicSignUp = () => {
       setIsMobileButtonDisabled(false);
       // console.log(response.data, "숫자 확인3");
       alert("모바일 인증에 실패했습니다. 다시 시도해주세요.");
-      setEmailButtonContent("재전송");
+      setmobileButtonContent("재전송");
       resetMobile();
       resetMobileCode();
     }
   };
+  
 
   return (
     <InnerContainer>
@@ -289,6 +301,8 @@ const BasicSignUp = () => {
               onBlur={() => setIsEmailFocused(false)}
               $isFocused={isEmailFocused}
               $hasValue={email.length > 0}
+              disabled={isEmailVerified} // 여기서 disabled 속성을 설정
+             
             />
             <Stbutton1
               onClick={EmailhandleCheckButton}
@@ -329,12 +343,13 @@ const BasicSignUp = () => {
               onBlur={() => setIsMobileFocused(false)}
               $isFocused={isMobileFocused}
               $hasValue={email.length > 0}
+              disabled={isMobileVerified} // 여기서 disabled 속성을 설정
             />
             <Stbutton1
               onClick={MobilehandleCheckButton}
               disabled={isMobileButtonDisabled}
             >
-              {emailButtonContent}
+              {mobileButtonContent}
             </Stbutton1>
           </Stname>
         </Stnickname>
