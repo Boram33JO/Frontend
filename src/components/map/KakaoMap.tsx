@@ -1,10 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
 import { ReactComponent as ReSearchIcon } from "../../assets/images/research.svg";
 import Categories from "../edit/Categories";
-import pinIcon from "../../assets/images/icon_pin_3x.png";
+// import pinIcon from "../../assets/images/icon_pin_3x.png";
+import pinIcon from "../../assets/images/floating_post.svg";
+import pin_cafe from "../../assets/images/pin/01_cafe.svg";
+import { CategoryPinImages } from "../../assets/images/pin/pin";
+
+import pin_transport from "../../assets/images/pin/03_transport.svg";
+import pin_library from "../../assets/images/pin/09_library.svg";
 import SearchModal from "../edit/SearchModal";
+import { debounce, throttle } from "../../utils/common";
 
 import { postCategoryData } from "../../api/map";
 
@@ -17,9 +24,11 @@ interface Location {
 interface KakaoProps {
     updatedPosition: Location[];
     setUpdatedPosition: React.Dispatch<React.SetStateAction<Location[]>>;
+    isData: any;
+    setIsData: any;
 }
 
-const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition }) => {
+const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition, isData, setIsData }) => {
     const [searchLocation, setSearchLocation] = useState<string>("");
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
     const [geoLatitude, setGeoLatitude] = useState<string>("");
@@ -32,10 +41,11 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
     const [categoryNum, setCategoryNum] = useState<number>(0);
     const [modal, setModal] = useState(false);
     const [map, setMap] = useState<any>(null);
-    const [isData, setIsData] = useState<any>([]);
     const [markers, setMarkers] = useState<any[]>([]);
     const [level, setLevel] = useState();
     const [windowMap, setWindowMap] = useState<any>();
+    const [circle, setCircle] = useState<any>(null);
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
     // 지도에 핀 꽂기
     const addMarkersToMap = (map: any, positions: any[]) => {
@@ -45,50 +55,29 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
         }
 
         // 새로운 마커들 추가
-        const imageSrc = pinIcon;
         const newMarkers = [];
         for (let i = 0; i < positions.length; i++) {
-            const imageSize = new window.kakao.maps.Size(36, 42);
-            const markerImage = new window.kakao.maps.MarkerImage(imageSrc, imageSize);
+            const imageSize = new window.kakao.maps.Size(40, 40);
+            const pinImage = CategoryPinImages[positions[i].category];
+            const markerImage = new window.kakao.maps.MarkerImage(pinImage, imageSize, { offset: new window.kakao.maps.Point(19, 41) });
             const marker = new window.kakao.maps.Marker({
                 map: map,
                 position: positions[i].latlng,
-                title: positions[i].title,
+                title: `${positions[i].title} (${categories[positions[i].category - 1]})`,
                 image: markerImage,
+                clickable: true,
             });
             // marker.setMap(map);
             newMarkers.push(marker);
         }
+        // console.log(newMarkers);
         setMarkers(newMarkers); // 새로운 마커들 저장
     };
-
-    // 최초 GPS 위치 설정
-    useEffect(() => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                function (position) {
-                    const lat = String(position.coords.latitude);
-                    const lng = String(position.coords.longitude);
-                    setLatitude(lat);
-                    setLongitude(lng);
-                    setGeoLatitude(lat);
-                    setGeoLongitude(lng);
-                },
-                (error) => {
-                    console.error("error", error);
-                }
-            );
-        } else {
-            console.error("해당 브라우저에서는 gps를 지원하지 않습니다.");
-        }
-    }, []);
-
-    console.log("111", latitude, longitude);
-    console.log("2222", geoLatitude, geoLongitude);
 
     useEffect(() => {
         window.kakao.maps.load(() => {
             const mapContainer = document.getElementById("map");
+            // console.log("지도 생성");
 
             // 지도 생성
             const map = new window.kakao.maps.Map(mapContainer, {
@@ -96,109 +85,138 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
                 level: level,
             });
 
+            // mapRef.current = map; // Ref에 지도 인스턴스 저장
+
             setMap(map);
             setWindowMap(window.kakao.maps);
-            // console.log("map", map);
-            // console.log("window.kakao.maps", window.kakao.maps);
-            // console.log("windowMap", windowMap);
+
+            // 영역 변경 이벤트 등록
+            const boundsChangedHandler = throttle(() => {
+                const bounds = map.getBounds();
+                const swLatlng = bounds.getSouthWest();
+                const neLatlng = bounds.getNorthEast();
+                // console.log("바운드 변경");
+                setLatitude(String((swLatlng.getLat() + neLatlng.getLat()) / 2));
+                setLongitude(String((swLatlng.getLng() + neLatlng.getLng()) / 2));
+            }, 500);
+
+            // bounds_changed 이벤트 리스너 추가
+            window.kakao.maps.event.addListener(map, "bounds_changed", boundsChangedHandler);
+
+            // 줌 컨트롤 생성 및 지도에 추가
+            const zoomControl = new window.kakao.maps.ZoomControl();
+            map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
+
+            // 줌 레벨 변경 시 이벤트 처리
+            const zoomChangedHandler = () => {
+                const level = map.getLevel();
+                setLevel(level);
+                // console.log("level", level);
+            };
+            window.kakao.maps.event.addListener(map, "zoom_changed", zoomChangedHandler);
+
+            // cleanup function for unmounting
+            return () => {
+                window.kakao.maps.event.removeListener(map, "bounds_changed", boundsChangedHandler);
+                window.kakao.maps.event.removeListener(map, "zoom_changed", zoomChangedHandler);
+            };
         });
     }, []);
 
-    // console.log("windowMap", windowMap);
-    // useEffect(() => {
-    //     let swLatlng, neLatlng; // 변수 선언
+    function panTo() {
+        var moveLatLon = new window.kakao.maps.LatLng(latitude, longitude);
+        map.panTo(moveLatLon);
+    }
 
-    //     // 영역 변경 이벤트 등록
-    //     window.kakao.maps.event.addListener(map, "bounds_changed", function () {
-    //         const bounds = map.getBounds();
-    //         swLatlng = bounds.getSouthWest();
-    //         neLatlng = bounds.getNorthEast();
-
-    //         setLatitude(swLatlng.getLat());
-    //         setLongitude(neLatlng.getLng());
-    //     });
-    //     // console.log(latitude);
-    //     // console.log(longitude);
-
-    //     // // 줌 컨트롤 생성 및 지도에 추가
-    //     // const zoomControl = new window.kakao.maps.ZoomControl();
-    //     // map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
-
-    //     // // 줌 레벨 변경 시 이벤트 처리
-    //     // window.kakao.maps.event.addListener(map, "zoom_changed", function () {
-    //     //     const level = map.getLevel();
-    //     //     setLevel(level);
-    //     //     console.log("level", level);
-    //     // });
-    // }, [latitude, longitude]);
-
-    // 마커 데이터 업데이트
     useEffect(() => {
-        const mappingList = async () => {
-            const latlng = { latitude, longitude };
-            try {
-                const response = await postCategoryData(latlng);
-                console.log("res", response?.data);
-                const data = response?.data.map((item: any) => item.location);
-                console.log("data", data);
-                setIsData(data);
-                console.log("isData", data);
+        if (!map) {
+            return;
+        } else {
+            mappingCategoryHandler(categoryNum);
+            panTo();
+        }
+    }, [selectedLocation]);
 
-                const updatedPositions = response?.data.map((item: any) => ({
-                    key: item.id,
-                    title: item.location.placeName,
-                    latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
-                }));
-                setUpdatedPosition(updatedPositions);
-                addMarkersToMap(map, updatedPositions);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    // 최초 GPS 위치 설정
+    // useEffect(() => {
+    //     if (navigator.geolocation) {
+    //         navigator.geolocation.getCurrentPosition(
+    //             function (position) {
+    //                 const lat = String(position.coords.latitude);
+    //                 const lng = String(position.coords.longitude);
 
-        mappingList();
-    }, [latitude, longitude, postCategoryData, map]);
+    //                 console.log("lat,lng", lat, lng);
+    //                 setLatitude(lat);
+    //                 setLongitude(lng);
+    //                 setGeoLatitude(lat);
+    //                 setGeoLongitude(lng);
+    //             },
+    //             (error) => {
+    //                 console.error("error", error);
+    //             }
+    //         );
+    //     } else {
+    //         console.error("해당 브라우저에서는 gps를 지원하지 않습니다.");
+    //     }
+    // }, []);
 
+    const makeCircle = async () => {
+        // 이미 그려진 원이 있다면 삭제
+        if (circle) {
+            circle.setMap(null);
+        }
+        let tempCircle = await new window.kakao.maps.Circle({
+            center: new window.kakao.maps.LatLng(latitude, longitude),
+            radius: 10000, // 반경 10km
+            strokeOpacity: 0, // 선 불투명도 (0 : 투명)
+            fillColor: "#7462E2", // 채우기 색깔
+            fillOpacity: 0.2, // 채우기 불투명도
+        });
+        setCircle(tempCircle); // 현재 원을 circle에 할당
+        tempCircle.setMap(map); // 현재 원 그리기
+    };
+
+    // 카테고리를 눌렀을 때, 데이터를 서버에 요청
     const mappingCategoryHandler = async (categoryNum: number) => {
         const latlng = { latitude, longitude };
-        const geolatlng = { geoLatitude, geoLongitude };
-        console.log("sss", geolatlng);
-        // console.log("categoryId", categoryNum);
+
         if (categoryNum === 0) {
-            console.log("@@@@@@");
             try {
                 const response = await postCategoryData(latlng);
-                console.log("category", response);
+                // console.log("요청 보낼 좌표:", latlng);
                 setIsData(response?.data);
-                console.log("받는 데이터", response?.data);
+                // console.log("받는 데이터", response?.data);
 
                 const updatedPositions = response?.data.map((item: any) => ({
                     key: item.id,
+                    category: item.category,
                     title: item.location.placeName,
                     latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
                 }));
                 setUpdatedPosition(updatedPositions);
                 addMarkersToMap(map, updatedPositions);
+                makeCircle();
             } catch (error) {
                 console.error(error);
             }
         } else {
             try {
                 const response = await postCategoryData(latlng);
-                console.log("category", response);
+                // console.log("category", response);
                 setIsData(response?.data);
-                console.log("받는 데이터", response?.data);
+                // console.log("받는 데이터", response?.data);
 
                 const updatedPositions = response?.data
                     .filter((item: any) => item.category === categoryNum)
                     .map((item: any) => ({
                         key: item.id,
+                        category: item.category,
                         title: item.location.placeName,
                         latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
                     }));
                 setUpdatedPosition(updatedPositions);
                 addMarkersToMap(map, updatedPositions);
-
+                makeCircle();
                 // return response?.data;
             } catch (error) {
                 console.error(error);
@@ -215,7 +233,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
                 setLongitude(selectedLocation.x);
             }
         };
-        console.log(latitude, longitude);
+        // console.log(latitude, longitude);
         ps.keywordSearch(searchLocation, placesSearchCB);
     };
 
@@ -229,11 +247,11 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
             return alert("내용을 입력하세요");
         }
         setModal(true);
-        setSearchLocation("");
         searchMap();
+        setSearchLocation("");
     };
 
-    console.log("isData", isData);
+    // console.log("isData", isData);
 
     return (
         <>
@@ -277,7 +295,9 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
                 </StCategory>
                 <StKakaoMapContainer>
                     <StKakaoMap id="map" />
-                    <StReSearchButton onClick={() => mappingCategoryHandler(categoryNum)}>현재 위치에서 검색</StReSearchButton>
+                    <StReSearchButton onClick={debounce(() => mappingCategoryHandler(categoryNum), 300)}>
+                        현재 위치에서 검색
+                    </StReSearchButton>
                     <p id="result"></p>
                 </StKakaoMapContainer>
             </StMapContainer>
@@ -334,7 +354,25 @@ const StKakaoMap = styled.div`
 `;
 
 const StReSearchButton = styled.div`
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
     position: absolute;
-    z-index: 10000;
-    bottom: -1%;
+    z-index: 2;
+    bottom: 20px;
+
+    border-radius: 20px;
+    background-color: #484461;
+    box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.18);
+
+    color: #fafafa;
+    font-size: 16px;
+    line-height: calc(100% + 6px);
+    font-weight: 600;
+
+    box-sizing: border-box;
+    padding: 7px 14px;
+
+    cursor: pointer;
 `;
