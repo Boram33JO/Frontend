@@ -5,6 +5,8 @@ import { getPopularPosts } from '../../api/post'
 import { ReactComponent as Like } from '../../assets/images/like.svg'
 import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
+import PopularPostsSkeleton from './PopularPostsSkeleton'
+import LoadingSpinner from '../common/LoadingSpinner'
 
 const PopularPosts = () => {
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
@@ -19,7 +21,7 @@ const PopularPosts = () => {
     )
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <PopularPostsSkeleton />
     }
 
     if (isError) {
@@ -83,7 +85,7 @@ const InnerContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
-    gap: 20px;
+    gap: 16px;
 `
 
 const TitleSection = styled.div`
@@ -95,7 +97,7 @@ const TitleSection = styled.div`
 
 const H3 = styled.h3`
     font-size: 20px;
-    line-height: 24px;
+    line-height: calc(100% + 6px);
     font-weight: 600;
 `
 
@@ -251,7 +253,7 @@ const InfoBottom = styled.p`
 const StP = styled.p<{ $color: string, $size: string }>`
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
-    line-height: calc(100% + 2px);
+    line-height: calc(100% + 4px);
 
     & {
         display: -webkit-box;

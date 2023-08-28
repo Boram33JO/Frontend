@@ -30,7 +30,7 @@ const Header = ({ setSideOpen }: Props) => {
                 P.Ple
             </HeaderCenter>
             <HeaderRight>
-                {/* <StSearch /> */}
+                <StSearch />
                 {
                     (userInfo.isLogin) ? (
                         <ProfileImage
@@ -59,7 +59,7 @@ const HeaderContainer = styled.div`
     z-index: 2;
     
     width: inherit;
-    height: 50px;
+    height: 60px;
     background-color: #141414;
     
     box-sizing: border-box;
@@ -96,25 +96,17 @@ const HeaderRight = styled.div`
 `
 
 const ProfileImage = styled.img`
-    width: 24px;
-    height: 24px;
-    background-color: #ECECEC;
+    width: 28px;
+    height: 28px;
+    /* background-color: #ECECEC; */
     border-radius: 50%;
     cursor: pointer;
 `
 
 const StSearch = styled(Search)`
     cursor: pointer;
-    &:hover path{
-        fill: #8084F4;
-        stroke: #8084F4;
-    }
 `
 
 const StLogin = styled(Login)`
     cursor: pointer;
-    &:hover path{
-        fill: #8084F4;
-        stroke: #8084F4;
-    }
 `

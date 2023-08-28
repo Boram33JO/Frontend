@@ -35,12 +35,14 @@ const PostList = () => {
                     전체 보기
                 </P>
             </TitleSection>
-            <Category categoryNum={categoryNum} setCategoryNum={setCategoryNum} />
-            {data[categoryNum].postByCategoryResponseDtoList.map((post: Post) => {
-                return (
-                    <ListItem key={post.postId} post={post} />
-                )
-            })}
+            <ContentSection>
+                <Category categoryNum={categoryNum} setCategoryNum={setCategoryNum} />
+                {data[categoryNum].postByCategoryResponseDtoList.map((post: Post) => {
+                    return (
+                        <ListItem key={post.postId} post={post} />
+                    )
+                })}
+            </ContentSection>
         </InnerContainer>
     )
 }
@@ -53,13 +55,19 @@ const InnerContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
-    gap: 20px;
+    gap: 16px;
 `
 
 const TitleSection = styled.div`
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+`
+
+const ContentSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 `
 
 const H3 = styled.h3`

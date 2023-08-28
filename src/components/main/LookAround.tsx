@@ -54,7 +54,7 @@ const Container = styled.div`
     display: flex;    
     width: 100%;
     box-sizing: border-box;
-    padding: 0px 20px;
+    padding: 20px 20px 0px;
 `
 
 const InnerContainer = styled.div`
@@ -101,15 +101,15 @@ const MapButton = styled.div`
     align-items: center;
     justify-content: center;
     
-    width: 62px;
-    height: 62px;
+    width: 66px;
+    height: 66px;
     border-radius: 6px;
     
     cursor: pointer;
 `
 
 const StMap = styled(Map)`
-    width: 62px;
-    height: 62px;
+    width: 66px;
+    height: 66px;
     border-radius: 6px;
 `
