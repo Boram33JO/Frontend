@@ -7,8 +7,11 @@ import ListItem from "../components/common/ListItem";
 
 const MapPage = () => {
     const [updatedPosition, setUpdatedPosition] = useState<any>([]);
-    console.log("up", updatedPosition);
-    console.log("11", updatedPosition.length);
+    const [isData, setIsData] = useState<any>([]);
+    // console.log("up", updatedPosition);
+    // console.log("11", updatedPosition.length);
+    // console.log("up11", isData);
+    // console.log("1111", isData.length);
 
     return (
         <InnerContainer>
@@ -17,19 +20,21 @@ const MapPage = () => {
                 <KakaoMap
                     updatedPosition={updatedPosition}
                     setUpdatedPosition={setUpdatedPosition}
+                    isData={isData}
+                    setIsData={setIsData}
                 />
             </StMapContainer>
             <StLine />
             <StListContainer>
                 <h1>{updatedPosition.length}의 포스팅 결과</h1>
                 {updatedPosition.length === 0 ? (
-                    <div>해당 위치에 포스팅이 없습니다. 다른 지역을 검색해보세요.</div>
+                    <div>“검색어"에 관련된 포스팅이 없습니다.</div>
                 ) : (
-                    updatedPosition.map((post: Post, index: number) => (
-                        <StMyListItem key={index}>
+                    updatedPosition.map((post: Post) => {
+                        <StMyListItem>
                             <ListItem post={post} />
-                        </StMyListItem>
-                    ))
+                        </StMyListItem>;
+                    })
                 )}
             </StListContainer>
         </InnerContainer>
