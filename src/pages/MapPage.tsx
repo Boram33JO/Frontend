@@ -22,7 +22,7 @@ const MapPage = () => {
             <StLine />
             <StListContainer>
                 <h1>{updatedPosition.length}의 포스팅 결과</h1>
-                {/* {updatedPosition.length === 0 ? (
+                {updatedPosition.length === 0 ? (
                     <div>해당 위치에 포스팅이 없습니다. 다른 지역을 검색해보세요.</div>
                 ) : (
                     updatedPosition.map((post: Post, index: number) => (
@@ -30,7 +30,7 @@ const MapPage = () => {
                             <ListItem post={post} />
                         </StMyListItem>
                     ))
-                )} */}
+                )}
             </StListContainer>
         </InnerContainer>
     );

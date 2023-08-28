@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
+import { ReactComponent as ReSearchIcon } from "../../assets/images/research.svg";
 import Categories from "../edit/Categories";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 import SearchModal from "../edit/SearchModal";
 
-import { postData, postCategoryData } from "../../api/map";
+import { postCategoryData } from "../../api/map";
 
 interface Location {
     placeName: string;
@@ -30,7 +31,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
     const [selectedLocation, setSelectedLocation] = useState<any>({});
     const [categoryNum, setCategoryNum] = useState<number>(0);
     const [modal, setModal] = useState(false);
-    // const [testMapContainer, setTestMapContainer] = useState<any>();
     const [map, setMap] = useState<any>(null);
     const [isData, setIsData] = useState<any>([]);
     const [markers, setMarkers] = useState<any[]>([]);
@@ -85,17 +85,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
     console.log("111", latitude, longitude);
     console.log("2222", geoLatitude, geoLongitude);
 
-    // useEffect(() => {
-    //     window.kakao.maps.load(() => {
-    //         const mapContainer = document.getElementById("map");
-    //         const map = new window.kakao.maps.Map(mapContainer, {
-    //             center: new window.kakao.maps.LatLng(latitude, longitude),
-    //             level: 3,
-    //         });
-    //         setMap(map);
-    //     });
-    // }, [latitude, longitude]);
-
     useEffect(() => {
         window.kakao.maps.load(() => {
             const mapContainer = document.getElementById("map");
@@ -134,60 +123,77 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
         });
     }, [latitude, longitude]);
 
-    // useEffect(() => {
-    //     testMap?.panTo(new window.kakao.maps.LatLng(latitude, longitude));
-    // }, [latitude, longitude])
-
     // 마커 데이터 업데이트
-    // useEffect(() => {
-    //     mappingList().then((res) => {
-    //         const position = res.map((item: any, index: number) => ({
-    //             key: index,
-    //             title: item.location.placeName,
-    //             latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
-    //         }));
-    //         console.log(position);
-    //         // 마커 추가 로직 호출
-    //         addMarkersToMap(testMap, position);
-    //         if (testMap === null) {
-    //             return;
-    //         }
-    //     });
-    // }, [latitude, longitude, geoLatitude, geoLongitude]);
+    useEffect(() => {
+        const mappingList = async () => {
+            const latlng = { latitude, longitude };
+            try {
+                const response = await postCategoryData(latlng);
+                console.log("res", response?.data);
+                const data = response?.data.map((item: any) => item.location);
+                console.log("data", data);
+                setIsData(data);
+                console.log("isData", data);
 
-    // const mappingList = async () => {
-    //     const latlng = { latitude, longitude };
-    //     try {
-    //         const response = await postData(latlng);
-    //         setIsData(response?.data.content);
-    //         return response?.data.content;
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // };
-
-    const mappingCategoryHandler = async (categoryNum: number) => {
-        console.log("categoryId", categoryNum);
-        const latlng = { latitude, longitude };
-        try {
-            const response = await postCategoryData(latlng, categoryNum);
-            console.log("category", response);
-            setIsData(response?.data);
-            console.log("받는 데이터", response?.data);
-
-            const updatedPositions = response?.data
-                .filter((item: any) => item.category === categoryNum)
-                .map((item: any) => ({
+                const updatedPositions = response?.data.map((item: any) => ({
                     key: item.id,
                     title: item.location.placeName,
                     latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
                 }));
-            setUpdatedPosition(updatedPositions);
-            addMarkersToMap(map, updatedPositions);
+                setUpdatedPosition(updatedPositions);
+                addMarkersToMap(map, updatedPositions);
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-            // return response?.data;
-        } catch (error) {
-            console.error(error);
+        mappingList();
+    }, [latitude, longitude, postCategoryData, map]);
+
+    const mappingCategoryHandler = async (categoryNum: number) => {
+        const latlng = { latitude, longitude };
+        const geolatlng = { geoLatitude, geoLongitude };
+        console.log("sss", geolatlng);
+        // console.log("categoryId", categoryNum);
+        if (categoryNum === 0) {
+            console.log("@@@@@@");
+            try {
+                const response = await postCategoryData(latlng);
+                console.log("category", response);
+                setIsData(response?.data);
+                console.log("받는 데이터", response?.data);
+
+                const updatedPositions = response?.data.map((item: any) => ({
+                    key: item.id,
+                    title: item.location.placeName,
+                    latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
+                }));
+                setUpdatedPosition(updatedPositions);
+                addMarkersToMap(map, updatedPositions);
+            } catch (error) {
+                console.error(error);
+            }
+        } else {
+            try {
+                const response = await postCategoryData(latlng);
+                console.log("category", response);
+                setIsData(response?.data);
+                console.log("받는 데이터", response?.data);
+
+                const updatedPositions = response?.data
+                    .filter((item: any) => item.category === categoryNum)
+                    .map((item: any) => ({
+                        key: item.id,
+                        title: item.location.placeName,
+                        latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
+                    }));
+                setUpdatedPosition(updatedPositions);
+                addMarkersToMap(map, updatedPositions);
+
+                // return response?.data;
+            } catch (error) {
+                console.error(error);
+            }
         }
     };
 
@@ -262,6 +268,10 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
                 </StCategory>
                 <StKakaoMapContainer>
                     <StKakaoMap id="map" />
+                    <StReSearchButton onClick={() => mappingCategoryHandler(categoryNum)}>
+                        <ReSearchIcon />
+                    </StReSearchButton>
+                    <p id="result"></p>
                 </StKakaoMapContainer>
             </StMapContainer>
         </>
@@ -303,6 +313,8 @@ const StKakaoMapContainer = styled.div`
     width: 100%;
     height: 0;
     padding-bottom: 100%;
+    display: flex;
+    justify-content: center;
 `;
 
 const StKakaoMap = styled.div`
@@ -312,4 +324,10 @@ const StKakaoMap = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 10px;
+`;
+
+const StReSearchButton = styled.div`
+    position: absolute;
+    z-index: 10000;
+    bottom: -1%;
 `;

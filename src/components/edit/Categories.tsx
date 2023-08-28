@@ -10,9 +10,9 @@ const Categories = ({ categoryNum, setCategoryNum, mappingCategoryHandler }: Pro
     const categories = ["내주변", "카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
     const categoryClickHandler = (index: number) => {
         setCategoryNum(index);
-        if (index !== 0) {
-            mappingCategoryHandler(index);
-        }
+        // if (index !== 0) {
+        mappingCategoryHandler(index);
+        // }
     };
 
     return (
