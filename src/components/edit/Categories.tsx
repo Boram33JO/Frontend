@@ -3,12 +3,16 @@ import { styled } from "styled-components";
 interface Props {
     categoryNum: number;
     setCategoryNum: React.Dispatch<React.SetStateAction<number>>;
+    mappingCategoryHandler: (index: number) => void;
 }
 
-const Categories = ({ categoryNum, setCategoryNum }: Props) => {
+const Categories = ({ categoryNum, setCategoryNum, mappingCategoryHandler }: Props) => {
     const categories = ["내주변", "카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
     const categoryClickHandler = (index: number) => {
         setCategoryNum(index);
+        // if (index !== 0) {
+        mappingCategoryHandler(index);
+        // }
     };
 
     return (
@@ -53,8 +57,8 @@ const CategoryList = styled.div`
 `;
 
 const CategoryListItem = styled.div<{ $active: boolean }>`
-    background: ${(props) => (props.$active === true ? "linear-gradient(135deg, #8084F4, #C48FED)" : "#58468B")};
-    color: ${(props) => (props.$active === true ? "#FAFAFA" : "#9280BA")};
+    background: ${(props) => (props.$active === true ? "#7462E2" : "#3B3A40")};
+    color: ${(props) => (props.$active === true ? "#FAFAFA" : "#63616B")};
     border-radius: 30px;
 
     white-space: nowrap;
@@ -63,9 +67,4 @@ const CategoryListItem = styled.div<{ $active: boolean }>`
 
     box-sizing: border-box;
     cursor: pointer;
-
-    &:hover {
-        background: linear-gradient(135deg, #8084f4, #c48fed);
-        color: #fafafa;
-    }
 `;
