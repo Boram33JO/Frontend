@@ -35,6 +35,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
     const [isData, setIsData] = useState<any>([]);
     const [markers, setMarkers] = useState<any[]>([]);
     const [level, setLevel] = useState();
+    const [windowMap, setWindowMap] = useState<any>();
 
     // 지도에 핀 꽂기
     const addMarkersToMap = (map: any, positions: any[]) => {
@@ -95,33 +96,41 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
                 level: level,
             });
 
-            let swLatlng, neLatlng; // 변수 선언
-
-            // 영역 변경 이벤트 등록
-            window.kakao.maps.event.addListener(map, "bounds_changed", function () {
-                const bounds = map.getBounds();
-                swLatlng = bounds.getSouthWest();
-                neLatlng = bounds.getNorthEast();
-
-                setLatitude(swLatlng.getLat());
-                setLongitude(neLatlng.getLng());
-            });
-            console.log(latitude);
-            console.log(longitude);
-
-            // 줌 컨트롤 생성 및 지도에 추가
-            const zoomControl = new window.kakao.maps.ZoomControl();
-            map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
-
-            // 줌 레벨 변경 시 이벤트 처리
-            window.kakao.maps.event.addListener(map, "zoom_changed", function () {
-                const level = map.getLevel();
-                setLevel(level);
-                console.log("level", level);
-            });
             setMap(map);
+            setWindowMap(window.kakao.maps);
+            // console.log("map", map);
+            // console.log("window.kakao.maps", window.kakao.maps);
+            // console.log("windowMap", windowMap);
         });
-    }, [latitude, longitude]);
+    }, []);
+
+    // console.log("windowMap", windowMap);
+    // useEffect(() => {
+    //     let swLatlng, neLatlng; // 변수 선언
+
+    //     // 영역 변경 이벤트 등록
+    //     window.kakao.maps.event.addListener(map, "bounds_changed", function () {
+    //         const bounds = map.getBounds();
+    //         swLatlng = bounds.getSouthWest();
+    //         neLatlng = bounds.getNorthEast();
+
+    //         setLatitude(swLatlng.getLat());
+    //         setLongitude(neLatlng.getLng());
+    //     });
+    //     // console.log(latitude);
+    //     // console.log(longitude);
+
+    //     // // 줌 컨트롤 생성 및 지도에 추가
+    //     // const zoomControl = new window.kakao.maps.ZoomControl();
+    //     // map.addControl(zoomControl, window.kakao.maps.ControlPosition.RIGHT);
+
+    //     // // 줌 레벨 변경 시 이벤트 처리
+    //     // window.kakao.maps.event.addListener(map, "zoom_changed", function () {
+    //     //     const level = map.getLevel();
+    //     //     setLevel(level);
+    //     //     console.log("level", level);
+    //     // });
+    // }, [latitude, longitude]);
 
     // 마커 데이터 업데이트
     useEffect(() => {
@@ -268,9 +277,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ updatedPosition, setUpdatedPosition })
                 </StCategory>
                 <StKakaoMapContainer>
                     <StKakaoMap id="map" />
-                    <StReSearchButton onClick={() => mappingCategoryHandler(categoryNum)}>
-                        <ReSearchIcon />
-                    </StReSearchButton>
+                    <StReSearchButton onClick={() => mappingCategoryHandler(categoryNum)}>현재 위치에서 검색</StReSearchButton>
                     <p id="result"></p>
                 </StKakaoMapContainer>
             </StMapContainer>
