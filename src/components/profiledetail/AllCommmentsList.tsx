@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { styled } from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -5,8 +6,8 @@ import { getCommentsLists } from "../../api/profile";
 import { getDateNotation } from "../../utils/common";
 import { ReactComponent as IconComDel } from "../../assets/images/login_signup/icon_com_del.svg";
 import { deleteComment } from "../../api/comment";
-import { ReactComponent as TitleSVG } from "../../assets/images/login_signup/icon_title.svg"; // 변경된 부분
-
+import { ReactComponent as TitleSVG } from "../../assets/images/login_signup/icon_title.svg";
+import DeleteModal from "../common/DeleteModal";
 
 type myComment = {
   id: number;
@@ -14,47 +15,49 @@ type myComment = {
   createdAt: string;
   postId: number;
   postTitle: string;
-}
+};
 
 const AllCommentsList = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const handleCommentClick = (postId: number,) => {
-    // 댓글을 클릭했을 때 해당 댓글의 상세 페이지로 이동
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
+    null
+  );
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleCommentClick = (postId: number) => {
     navigate(`/detail/${postId}`);
   };
 
   const { data, isLoading, isError } = useQuery(["comments"], async () => {
     const response = await getCommentsLists(userId);
-    // console.log(response);
     return response.data.content;
   });
 
-  const commentMutation = useMutation(deleteComment, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["comments"]);
-    },
-  });
-
-  const handleCommentDelete = async (postId: number) => {
-    // 사용자의 응답을 받기 위해 await 사용
-    const confirmDelete = await new Promise<boolean>((resolve) => {
-      if (window.confirm('정말로 삭제하시겠습니까?')) {
-        resolve(true);
-      } else {
-        resolve(false);
-      }
-    });
-
-
-
-    if (confirmDelete) {
-      commentMutation.mutate(postId.toString());
+  const commentMutation = useMutation(
+    (commentId: string) => deleteComment(commentId),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(["comments"]);
+      },
     }
+  );
+
+  const handleCommentDelete = (commentId: number) => {
+    setSelectedCommentId(commentId);
+    setDeleteModalOpen(true);
   };
 
+  const deleteCommentAsync = async (commentId: string) => {
+    try {
+      await commentMutation.mutateAsync(commentId);
+    } catch (error) {
+      console.error("An error occurred while deleting the comment:", error);
+    }
+    setDeleteModalOpen(false);
+  };
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -64,49 +67,56 @@ const AllCommentsList = () => {
     return <div>Error...</div>;
   }
 
-
-
   return (
     <InnerContainer>
       <Post>
         <H3>나의 댓글 모아보기</H3>
       </Post>
-      {
-        data && data.length === 0 ? (<NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
-        ) : (
-          data.map((item: myComment) => (
-
-            <CommentList key={item.id}
-            >
-              <CommentListItem>
-                <AllContain>
-                  <TopSection>
-                    <Delete>
-                      <Content onClick={() => handleCommentClick(item.postId)}>{item.content}</Content>
-                      <IconWrapper onClick={() => handleCommentDelete(item.id)}>
-                        <IconComDel key={item.id} />
-                      </IconWrapper>
-                    </Delete>
-                    <Date onClick={() => handleCommentClick(item.postId)} >{getDateNotation(item.createdAt)}</Date>
-                  </TopSection>
-                  <TitleZone>
-                    <TitleSVGWrapper>
-                      <TitleSVG />
-                    </TitleSVGWrapper>
-                    <PostTitle onClick={() => handleCommentClick(item.postId)} >{`${item.postTitle}`}</PostTitle>
-                  </TitleZone>
-                </AllContain>
-              </CommentListItem>
-
-            </CommentList>
-          ))
-        )}
+      {data && data.length === 0 ? (
+        <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
+      ) : (
+        data.map((item: myComment) => (
+          <CommentList key={item.id}>
+            <CommentListItem>
+              <AllContain>
+                <TopSection>
+                  <Delete>
+                    <Content onClick={() => handleCommentClick(item.postId)}>
+                      {item.content}
+                    </Content>
+                    <IconWrapper onClick={() => handleCommentDelete(item.id)}>
+                      <IconComDel key={item.id} />
+                    </IconWrapper>
+                  </Delete>
+                  <Date onClick={() => handleCommentClick(item.postId)}>
+                    {getDateNotation(item.createdAt)}
+                  </Date>
+                </TopSection>
+                <TitleZone>
+                  <TitleSVGWrapper>
+                    <TitleSVG />
+                  </TitleSVGWrapper>
+                  <PostTitle
+                    onClick={() => handleCommentClick(item.postId)}
+                  >{`${item.postTitle}`}</PostTitle>
+                </TitleZone>
+              </AllContain>
+            </CommentListItem>
+          </CommentList>
+        ))
+      )}
+      {isDeleteModalOpen && (
+        <DeleteModal
+          name="댓글"
+          deleteToggle={setDeleteModalOpen}
+          deleteButton={() => deleteCommentAsync(selectedCommentId!.toString())}
+        />
+      )}
     </InnerContainer>
   );
 };
 
 export default AllCommentsList;
-
 
 const NoDataMessage = styled.p`
   font-size: 16px;
@@ -139,7 +149,7 @@ const H3 = styled.h3`
 `;
 
 const CommentList = styled.ol`
-  display: block;  
+  display: block;
 `;
 
 const CommentListItem = styled.li`
@@ -165,10 +175,10 @@ const AllContain = styled.div`
 `;
 
 const TopSection = styled.div`
-  display:flex;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
-`
+`;
 
 const Delete = styled.div`
   width: 100%;
@@ -203,7 +213,6 @@ const Content = styled.div`
   cursor: pointer;
 `;
 
-
 const Date = styled.div`
   font-size: 14px;
   color: #a6a3af;
@@ -214,7 +223,7 @@ const Date = styled.div`
 
 const TitleZone = styled.div`
   display: flex; // 가로로 배치하기 위해
-  gap:4px; // 아이템 간격 설정
+  gap: 4px; // 아이템 간격 설정
   align-items: flex-start; // 수직 가운데 정렬
   /* position: absolute; // 절대적인 위치 설정 */
   /* bottom: 0; // 아래쪽에 위치 */
@@ -222,7 +231,6 @@ const TitleZone = styled.div`
   cursor: pointer;
   width: 100%;
   box-sizing: border-box;
-  
 `;
 
 const TitleSVGWrapper = styled.div`

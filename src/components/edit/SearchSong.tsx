@@ -300,7 +300,7 @@ const StSongList = styled.div`
     h3 {
         width: 130px;
         font-size: 16px;
-
+        color: #fafafa;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -308,7 +308,7 @@ const StSongList = styled.div`
     }
     p {
         font-size: 14px;
-
+        color: #fafafa;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -347,6 +347,8 @@ const StChooseSongListContainer = styled.div`
 
     display: flex;
     flex-direction: column;
+    padding: 8px 0;
+
     &::-webkit-scrollbar {
         width: 4px;
         border-radius: 10px;
@@ -375,9 +377,8 @@ const StChooseSongLists = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-
     box-sizing: border-box;
-    padding: 7px 16px;
+    padding: 3px 16px;
 
     button {
         border: none;
@@ -389,7 +390,7 @@ const StChooseSongLists = styled.div`
 
 const ChooseH3 = styled.h3`
     flex: 0.6 0 0;
-    color: #f1f1f1;
+    color: #fafafa;
     font-size: 14px;
     line-height: calc(100% + 6px);
 
@@ -401,7 +402,9 @@ const ChooseH3 = styled.h3`
 
 const ChooseP = styled.p`
     flex: 0.4 0 0;
-    color: #a6a3af;
+    /* color: #a6a3af; */
+    color: #fafafa;
+
     font-size: 14px;
     line-height: calc(100% + 6px);
 
