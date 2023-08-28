@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-
+import { debounce, throttle } from "../../utils/common";
 interface Props {
     categoryNum: number;
     setCategoryNum: React.Dispatch<React.SetStateAction<number>>;
@@ -8,12 +8,12 @@ interface Props {
 
 const Categories = ({ categoryNum, setCategoryNum, mappingCategoryHandler }: Props) => {
     const categories = ["내주변", "카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
-    const categoryClickHandler = (index: number) => {
+    const categoryClickHandler = debounce((index: number) => {
         setCategoryNum(index);
         // if (index !== 0) {
         mappingCategoryHandler(index);
         // }
-    };
+    }, 300);
 
     return (
         <CategoryList>
