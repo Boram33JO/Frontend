@@ -5,7 +5,7 @@ import { ReactComponent as Arrow } from '../../assets/images/side/02_arrow.svg'
 import { ReactComponent as Map } from '../../assets/images/side/03_map.svg'
 import { ReactComponent as Post } from '../../assets/images/side/04_post.svg'
 import { ReactComponent as PP } from '../../assets/images/side/05_pp.svg'
-import { ReactComponent as Edit } from '../../assets/images/side/edit.svg'
+import { ReactComponent as Edit } from '../../assets/images/floating_post.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,7 +28,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
         { id: 2, name: "피플 포스팅", icon: Post, path: "/list" },
         { id: 3, name: "피플러", icon: PP, path: "/" },
     ]
-    
+
     const handleMenuClick = (path: string) => {
         setSideOpen(false);
         navigate(path);
@@ -49,44 +49,47 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                     <Close />
                 </SideHeader>
                 <SideMiddle>
-                    <LogoSection>
-                        <P $size={"48px"} $weight={"700"} onClick={() => handleMenuClick("/")}>P.Ple</P>
-                    </LogoSection>
-                    {
-                        (LoginUser.isLogin) ? (
-                            <ProfileSection onClick={() => handleMenuClick(`/profile/${LoginUser.userId}`)}>
-                                <ProfileImage src={getProfileImage(LoginUser.userImage)} alt="userImage" />
-                                <P $size={"18px"} $weight={"600"}>{LoginUser.nickname}</P>
-                            </ProfileSection>
-                        ) : (
-                            <ProfileSection onClick={() => handleMenuClick("/login")}>
-                                <StLogin />
-                                <P $size={"18px"} $weight={"600"}>로그인 / 회원가입</P>
-                            </ProfileSection>
-                        )
-                    }
-                    <Hr />
-                    {
-                        menuList.map(menu => {
-                            return (
-                                <MenuItem key={menu.id} onClick={() => handleMenuClick(menu.path)}>
-                                    <MenuItemName>
-                                        <menu.icon />
-                                        <P $size={"18px"} $weight={"600"}>{menu.name}</P>
-                                    </MenuItemName>
-                                    <Arrow />
-                                </MenuItem>
+                    <SideMiddleTop>
+                        <LogoSection>
+                            <P $size={"38px"} $weight={"700"} onClick={() => handleMenuClick("/")}>P.Ple</P>
+                        </LogoSection>
+                        {
+                            (LoginUser.isLogin) ? (
+                                <ProfileSection onClick={() => handleMenuClick(`/profile/${LoginUser.userId}`)}>
+                                    <ProfileImage src={getProfileImage(LoginUser.userImage)} alt="userImage" />
+                                    <P $size={"18px"} $weight={"600"}>{LoginUser.nickname}</P>
+                                </ProfileSection>
+                            ) : (
+                                <ProfileSection onClick={() => handleMenuClick("/login")}>
+                                    <StLogin />
+                                    <P $size={"18px"} $weight={"600"}>로그인 / 회원가입</P>
+                                </ProfileSection>
                             )
-                        })
-                    }
-
+                        }
+                    </SideMiddleTop>
+                    <Hr />
+                    <SideMiddleBottom>
+                        {
+                            menuList.map(menu => {
+                                return (
+                                    <MenuItem key={menu.id} onClick={() => handleMenuClick(menu.path)}>
+                                        <MenuItemName>
+                                            <menu.icon />
+                                            <P $size={"18px"} $weight={"600"}>{menu.name}</P>
+                                        </MenuItemName>
+                                        <Arrow />
+                                    </MenuItem>
+                                )
+                            })
+                        }
+                    </SideMiddleBottom>
                     {
                         (LoginUser.isLogin) && (
                             <>
                                 <Hr />
                                 <MenuItem onClick={() => handleMenuClick("/edit")}>
                                     <MenuItemName>
-                                        <Edit />
+                                        <StEdit />
                                         <P $size={"18px"} $weight={"600"}>작성하기</P>
                                     </MenuItemName>
                                     <Arrow />
@@ -94,7 +97,6 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                             </>
                         )
                     }
-
                 </SideMiddle>
             </SideTop>
             <SideBottom>
@@ -164,13 +166,23 @@ const SideTop = styled.div`
 const SideMiddle = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 40px;
+`
+
+const SideMiddleTop = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 40px;   
+`
+
+const SideMiddleBottom = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;   
 `
 
 const LogoSection = styled.div`
     cursor: pointer;
-    
-    padding: 10px 0px;
 `
 
 const ProfileSection = styled.div`
@@ -178,21 +190,19 @@ const ProfileSection = styled.div`
     align-items: center;
     gap: 20px;
     cursor: pointer;
-    
-    padding: 10px 0px;
 `
 
 const ProfileImage = styled.img`
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     border: none;
     background-color: #ECECEC;
     border-radius: 50%;
 `
 
 const StLogin = styled(Login)`
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
 `
 
 const Hr = styled.hr`
@@ -216,7 +226,7 @@ const MenuItem = styled.div`
 const MenuItemName = styled.div`
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
 `
 
 const SideBottom = styled.div`
@@ -239,4 +249,9 @@ const P = styled.p<{ $size: string, $weight: string, $color?: string }>`
     color: ${(props) => props.$color || "#FAFAFA"};
     font-size: ${(props) => props.$size};
     font-weight: ${(props) => props.$weight};
+`
+
+const StEdit = styled(Edit)`
+    width: 20px;
+    height: 20px;
 `

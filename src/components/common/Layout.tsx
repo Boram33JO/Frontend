@@ -78,6 +78,12 @@ const Layout = () => {
 
 export default Layout;
 
+const Temp = styled.div`
+    width: 100%;
+    height: 50px;
+    background-color: gray;
+`
+
 const Container = styled.div`
     position: relative;
     width: 100%;
@@ -86,7 +92,8 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: hidden;    
+    box-sizing: border-box;
 `;
 
 const InnerContainer = styled.div`
@@ -110,7 +117,7 @@ const InnerContainer = styled.div`
 const ProgressBar = styled.div`
     position: absolute;
     left: 0;
-    top: 50px;
+    top: 60px;
     z-index: 3;
     height: 3px;
     width: 100%;
@@ -131,6 +138,8 @@ const Middle = styled.div`
 const OutletContainer = styled.div`
     width: 100%;
     height: auto;
+    box-sizing: border-box;
+    padding-bottom: 50px;
 `;
 
 const Left = styled.div<{ $open: boolean }>`
@@ -174,7 +183,9 @@ const PostButton = styled.div`
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background-color: #A08DEC;
+    background-color: #B09FF5;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+
     cursor: pointer;
 `;
 
@@ -189,6 +200,7 @@ const TopButton = styled.div`
     height: 44px;
     background-color: #45424E;
     border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
     box-sizing: border-box;
     cursor: pointer;
 `;
@@ -199,9 +211,6 @@ const StPost = styled(Post)`
 `
 
 const StTop = styled(Top)`
-    width: 22px;
-    height: 22px;
-    path {
-        stroke: #A6A3AF;
-    }
+    width: 18px;
+    height: 18px;
 `;

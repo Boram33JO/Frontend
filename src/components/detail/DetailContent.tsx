@@ -137,9 +137,9 @@ const DetailContent = ({ post }: PostProps) => {
                         {post.location?.placeName}
                     </StP>
                 </LocationInfo>
-                <LocationCategory>
-                    {categories[Number(post.category) - 1]}
-                </LocationCategory>
+                {/* <LocationCategory> */}
+                {categories[Number(post.category) - 1]}
+                {/* </LocationCategory> */}
             </LocationSection>
         </DetailContainer>
     )
@@ -165,7 +165,7 @@ const ProfileSection = styled.div`
     justify-content: space-between;
 
     box-sizing: border-box;
-    margin-bottom: 10px;
+    margin-bottom: 24px;
 `
 
 const ProfileArea = styled.div`
@@ -223,7 +223,7 @@ const TitleSection = styled.div`
     justify-content: space-between;
 
     box-sizing: border-box;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 `
 
 const TitleSectionLeft = styled.div`
@@ -309,7 +309,8 @@ const LocationSection = styled.div`
     background-color: #434047;
     border-radius: 6px;
     box-sizing: border-box;
-    padding: 10px;
+    padding: 10px 14px;
+    margin: 2px 0px;
 `
 
 const LocationInfo = styled.div`

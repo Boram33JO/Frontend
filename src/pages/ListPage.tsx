@@ -34,7 +34,7 @@ const ListPage = () => {
         const { data } = await instance.get<PaginationResponse<Post>>(`/posts/category/${categoryId}`, {
             params: { page, size: 10, sortBy, direction },
         })
-        // console.log(data);
+        console.log(data);
         setPosts(posts.concat(data.content))
         setPage(data.number + 1)
         setNextPage(!data.last)

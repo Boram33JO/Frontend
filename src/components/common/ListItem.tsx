@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { css, styled } from "styled-components"
 import { ReactComponent as Expand } from '../../assets/images/expand.svg'
 import { ReactComponent as Contract } from '../../assets/images/contract.svg'
-import { ReactComponent as Headphone } from '../../assets/images/headphone.svg'
+import { ReactComponent as Quaver } from '../../assets/images/quavar_note.svg'
 import { ReactComponent as Like } from '../../assets/images/like.svg'
 import spotify from '../../assets/images/spotify/Spotify_Icon_RGB_Black.svg'
 import { useNavigate } from 'react-router-dom'
@@ -75,7 +75,7 @@ const ListItem = ({ post }: Props) => {
                     </PlaylistLeft>
                     <PlaylistRight>
                         <SvgIcon>
-                            <Headphone />
+                            <Quaver />
                             <StP $color={"#414141"} $size={"14px"}>
                                 {`+${post.songs.length}`}
                             </StP>

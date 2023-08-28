@@ -33,7 +33,7 @@ const SlideBanner = () => {
             id: 1,
             image: onboard2,
             position: "100%",
-            comment1: "감성을 가득한 장소들을\nP.Ple에 모아모아",
+            comment1: "감성이 가득한 장소들을\nP.Ple에 모아모아",
             comment2: "그 때 그 감성 피플에서 함께 공유해 주세요!"
         },
         {
@@ -95,31 +95,31 @@ const SlideBanner = () => {
                     }
                 </Banner>
             </SlideContainer>
-            <Navigation>
+            <Pagination>
                 <NavigationButton onClick={handlePrevSlideButton} type="button" aria-label="slideLeft">
                     <Left />
                 </NavigationButton>
-                <NavigationButton onClick={handleNextSlideButton} type="button" aria-label="slideRight">
-                    <Right />
-                </NavigationButton>
-            </Navigation>
-            <Pagination>
                 <PlayToggleButton onClick={handlePlayToggleButton}>
                     {
                         (play) ? <Pause /> : <Play />
                     }
                 </PlayToggleButton>
-                {
-                    banners.map(item => {
-                        return (
-                            <Bullet
-                                key={item.id}
-                                $current={(slideNum === (item.id))}
-                                onClick={() => handleMoveSlideButton(item.id)}
-                            />
-                        )
-                    })
-                }
+                <BulletButton>
+                    {
+                        banners.map(item => {
+                            return (
+                                <Bullet
+                                    key={item.id}
+                                    $current={(slideNum === (item.id))}
+                                    onClick={() => handleMoveSlideButton(item.id)}
+                                />
+                            )
+                        })
+                    }
+                </BulletButton>
+                <NavigationButton onClick={handleNextSlideButton} type="button" aria-label="slideRight">
+                    <Right />
+                </NavigationButton>
             </Pagination>
         </Container>
     )
@@ -166,7 +166,7 @@ const BannerComment = styled.div`
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    padding: 30px;
+    padding: 26px 20px;
     gap: 10px;
 `
 
@@ -174,8 +174,9 @@ const P = styled.p< { $size?: string, $color?: string } >`
     color: ${props => props.$color ? props.$color : "#FAFAFA"};
     font-size: ${(props) => props.$size ? props.$size : "14px"};
     font-weight: 600;
-    line-height: calc(100% + 6px);
-    white-space: pre-wrap;
+    line-height: calc(130%);
+    /* line-height: calc(100% + 6px); */
+    white-space: pre-wrap; 
 `
 
 const Navigation = styled.div`
@@ -193,8 +194,8 @@ const NavigationButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 24px;
+    height: 30px;
     cursor: pointer;
     z-index: 2px;
     &:hover{
@@ -207,11 +208,18 @@ const Pagination = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 100%;
-    height: 20px;
-    right: 30px;
-    bottom: 30px;
+    height: 18px;
+    right: 20px;
+    bottom: 26px;
+`
+
+const BulletButton = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
     gap: 8px;
+    padding: 0px 8px;
 `
 
 const Bullet = styled.label<{ $current: boolean }>`
@@ -227,7 +235,7 @@ const PlayToggleButton = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 10px;
-    height: 10px;
+    width: 24px;
+    height: 30px;
     cursor: pointer;
 `
