@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
@@ -11,22 +11,54 @@ const Pictures = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
   const queryClient = useQueryClient();
+  const pageSize = 10; // 한 번에 가져올 데이터의 개수
 
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null
   );
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const [page, setPage] = useState<number>(0);
+  const [isFetching, setFetching] = useState(false);
+
   const {
     data: followerData,
     isLoading,
     isError,
   } = useQuery(
-    ["Follow", userId],
-    () => (userId ? getFollowLists(userId) : Promise.resolve([])), // If userId is undefined, return an empty array
-    { enabled: !!userId }
+    ["Follow", userId, page],
+    () => (userId ? getFollowLists(userId) : Promise.resolve([])),
+    { enabled: !!userId , keepPreviousData: true } 
   );
-  // console.log(followerData); // 데이터 구조를 확인
+
+  const fetchMoreData = () => {
+    if (!followerData) return;
+    if (followerData.followList.content.length < pageSize) {
+      // 현재 페이지에 남은 데이터가 pageSize 미만이면 중복 요청 방지
+      return;
+    }
+    //setPage((prevPage) => prevPage + 1);
+   // setFetching(true);
+  };
+
+  useEffect(() => {
+    // 스크롤 이벤트 핸들러와 임계값(threshold) 추가
+    const handleScroll = () => {
+      const threshold = window.innerHeight * 0.8;
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - threshold) {
+        fetchMoreData();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+
+  console.log(followerData); // 데이터 구조를 확인
 
   // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
   const mutation = useMutation(followUser, {
@@ -41,9 +73,9 @@ const Pictures = () => {
     setSelectedCommentId(followerId);
     setDeleteModalOpen(true);
   };
-  const deleteCommentAsync = async (commentId: string) => {
+  const deleteCommentAsync = async (followerId: number) => {
     try {
-      await mutation.mutateAsync(followerData);
+      await mutation.mutateAsync(followerId);
     } catch (error) {
       console.error("An error occurred while deleting the comment:", error);
     }
@@ -63,7 +95,7 @@ const Pictures = () => {
     <InnerContainer>
       <Follower1>
         <H3>{`${followerData.nickname}님의 피플러`}</H3>
-        <Nums>{`${followerData.followList.content.length}명`}</Nums>
+        <Nums>{`${followerData.followList.totalElements}명`}</Nums>
       </Follower1>
 
       {followerData.followList.content.length === 0 ? (
@@ -89,7 +121,7 @@ const Pictures = () => {
         <DeleteModal
           name="피플러"
           deleteToggle={setDeleteModalOpen}
-          deleteButton={() => deleteCommentAsync(selectedCommentId!.toString())}
+          deleteButton={() => deleteCommentAsync(selectedCommentId!)}
         />
       )}
     </InnerContainer>

@@ -93,7 +93,7 @@ const Bt = styled.div`
   cursor: pointer;
 `;
 
-const CommentList = styled.ol`
+const CommentList = styled.div`
   display: block;
   cursor: pointer;
   overflow-x: auto; /* 가로 스크롤 가능한 영역으로 설정 */

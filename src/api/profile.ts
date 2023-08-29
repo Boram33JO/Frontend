@@ -5,23 +5,20 @@ import instance from "./common";
 // 전체 프로필 조회
 export const getProfileLists = async (userId: string | undefined) => {
   try {
-    const response = await instance.get(`/user/${userId}`);
-    // console.log('Response:', response);
+    const response = await instance.get(`/user/${userId}`, {
+      params: { sort: "createdAt,desc" }
+    });
     return response;
   } catch (error) {
-    //   console.error('요청 실패:', error);
     throw error;
   }
 };
 
 // 마이페이지 하위 페이지들
 // 내가 쓴 포스팅 조회
-export const getMyPostLists = async (
-  userId: string | undefined,
-  page: number
-) => {
+export const getMyPostLists = async ( userId: string | undefined, page: number) => {
   const response = await instance.get(`/user/${userId}/posts`, {
-    params: { page, size: 5 },
+    params: { page, size: 6, sort: "createdAt,desc" },
   });
   return response;
 };
@@ -29,7 +26,7 @@ export const getMyPostLists = async (
 // 내가 좋아요한 포스팅 조회
 export const getFavLists = async (userId: string | undefined, page: number) => {
   const response = await instance.get(`/user/${userId}/wishlist`, {
-    params: { page, size: 6 },
+    params: { page, size: 6,sort: "createdAt,desc" },
   });
   return response;
 };
@@ -37,10 +34,8 @@ export const getFavLists = async (userId: string | undefined, page: number) => {
 // 팔로워 조회
 export const getFollowLists = async (
   userId: string,
-  page: number
 ): Promise<any> => {
   const response = await instance.get(`/user/${userId}/follow`, {
-    params: { page, size: 20 },
   });
   return response.data;
 };
@@ -51,7 +46,7 @@ export const getCommentsLists = async (
   page: number
 ) => {
   const response = await instance.get(`/user/${userId}/comments`, {
-    params: { page: 0, size: 10, sort: "createdAt,asc" },
+    params: { page, size: 10, sort: "createdAt,desc" },
   });
   return response;
 };
