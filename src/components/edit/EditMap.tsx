@@ -57,11 +57,40 @@ const EditMap: React.FC<EditMapProps> = ({
     const [modal, setModal] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
+    // useEffect(() => {
+    //     window.kakao.maps.load(function () {
+    //         const mapContainer = document.getElementById("map"); // 지도를 표시할 div
+    //         const mapOption = {
+    //             center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude), // 지도의 중심좌표
+    //             level: 3,
+    //         };
+
+    //         const map = new window.kakao.maps.Map(mapContainer, mapOption);
+
+    //         if (state.isPanto) {
+    //             map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+    //         } else {
+    //             map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
+    //         }
+
+    //         const imageSize = new window.kakao.maps.Size(36, 42);
+    //         const markerImage = new window.kakao.maps.MarkerImage(pinIcon, imageSize);
+
+    //         const markerPosition = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+    //         const marker = new window.kakao.maps.Marker({
+    //             position: markerPosition,
+    //             image: markerImage,
+    //         });
+
+    //         marker.setMap(map); // Add the marker to the map
+    //     });
+    // }, [state, latitude, longitude]);
+
     useEffect(() => {
         window.kakao.maps.load(function () {
-            const mapContainer = document.getElementById("map"); // 지도를 표시할 div
+            const mapContainer = document.getElementById("map");
             const mapOption = {
-                center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude), // 지도의 중심좌표
+                center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude),
                 level: 3,
             };
 
@@ -82,7 +111,34 @@ const EditMap: React.FC<EditMapProps> = ({
                 image: markerImage,
             });
 
-            marker.setMap(map); // Add the marker to the map
+            marker.setMap(map);
+
+            window.kakao.maps.event.addListener(map, "click", function (mouseEvent: any) {
+                const latlng = mouseEvent.latLng;
+                marker.setPosition(latlng);
+
+                console.log("latlng", latlng);
+                console.log("latlng.getLat()", latlng.getLat());
+                console.log("latlng.getLng()", latlng.getLng());
+                console.log(latitude, longitude);
+
+                setState((prevState) => ({
+                    ...prevState,
+                    center: {
+                        latitude: latlng.getLat(),
+                        longitude: latlng.getLng(),
+                    },
+                }));
+                // 지오코더를 사용하여 주소 정보 가져오기
+                const geocoder = new window.kakao.maps.services.Geocoder();
+                const coord = new window.kakao.maps.LatLng(latlng.getLat(), latlng.getLng());
+                const callback = function (result: any, status: any) {
+                    if (status === window.kakao.maps.services.Status.OK) {
+                        console.log("주소 : " + result[0].address.address_name);
+                    }
+                };
+                geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+            });
         });
     }, [state, latitude, longitude]);
 
@@ -124,6 +180,8 @@ const EditMap: React.FC<EditMapProps> = ({
         setSearchLocation("");
         searchMap();
     };
+
+    console.log("searchLocation", searchLocationList);
 
     return (
         <StMapContainer>
@@ -173,6 +231,7 @@ const EditMap: React.FC<EditMapProps> = ({
             </StCategory>
             <StKakaoMapContainer>
                 <StKakaoMap id="map" />
+                <div id="clickLatlng"></div>
             </StKakaoMapContainer>
         </StMapContainer>
     );
