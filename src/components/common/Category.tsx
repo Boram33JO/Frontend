@@ -51,19 +51,17 @@ const CategoryList = styled.div`
 `
 
 const CategoryListItem = styled.div<{ $active: boolean }>`
-    background: ${(props) => (props.$active === true ? "linear-gradient(135deg, #8084F4, #C48FED)" : "#58468B")};
-    color: ${(props) => (props.$active === true ? "#FAFAFA" : "#9280BA")};
+    background: ${(props) => (props.$active === true ? "#7462E2" : "#3B3A40")};
+    color: ${(props) => (props.$active === true ? "#FAFAFA" : "#85838D")};
     border-radius: 30px;
 
     white-space: nowrap;
-    padding: 8px 16px;
     text-align: center;
 
+    font-weight: 600;
+    
     box-sizing: border-box;
-    cursor: pointer;
+    padding: 8px 16px;
 
-    &:hover{
-        background: linear-gradient(135deg, #8084F4, #C48FED);
-        color: #FAFAFA;
-    }
+    cursor: pointer;
 `

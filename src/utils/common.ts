@@ -1,3 +1,5 @@
+import default_profile from '../assets/images/default_profile.svg'
+
 // 작성 시간 (6일 전까지만 표시, 7일 전 부터는 YY.MM.DD로 표시)
 export const displayedAt = (createdAt: string) => {
     const milliSeconds = new Date().getTime() - new Date(createdAt).getTime();
@@ -25,7 +27,7 @@ export const getDateNotation = (input?: string) => {
 
 // 기본 이미지
 export const getProfileImage = (image?: string | null) => {
-    return (image) ? image : "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1"
+    return (image) ? image : default_profile
 }
 
 // Debouncing

@@ -5,6 +5,8 @@ import { getPopularPosts } from '../../api/post'
 import { ReactComponent as Like } from '../../assets/images/like.svg'
 import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
+import PopularPostsSkeleton from './PopularPostsSkeleton'
+import { miniCardBackground } from '../../utils/cardBackground'
 
 const PopularPosts = () => {
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
@@ -19,7 +21,7 @@ const PopularPosts = () => {
     )
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <PopularPostsSkeleton />
     }
 
     if (isError) {
@@ -37,7 +39,7 @@ const PopularPosts = () => {
                         return (
                             <CardListItem key={post.postId} onClick={() => navigate(`/detail/${post.postId}`)}>
                                 <Card>
-                                    <CardBackground src={post.songs[0].thumbnail} alt="postImage" />
+                                    <CardBackground $src={miniCardBackground(post.category, post.postId)} />
                                     <ItemCategory>{categories[Number(post.category) - 1]}</ItemCategory>
                                 </Card>
                                 <PostInfo>
@@ -83,7 +85,7 @@ const InnerContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
-    gap: 20px;
+    gap: 16px;
 `
 
 const TitleSection = styled.div`
@@ -95,7 +97,7 @@ const TitleSection = styled.div`
 
 const H3 = styled.h3`
     font-size: 20px;
-    line-height: 24px;
+    line-height: calc(100% + 6px);
     font-weight: 600;
 `
 
@@ -143,10 +145,12 @@ const Card = styled.div`
     box-sizing: border-box;
 `
 
-const CardBackground = styled.img`
+const CardBackground = styled.div<{ $src?: string }>`
     width: 100%;
     height: 100%;
-    opacity: 0.8;
+    background: ${(props) => props.$src || "#322D2A"};
+    background-size: cover;
+    background-repeat: no-repeat;
 
     border-radius: 8px;
     
@@ -251,7 +255,7 @@ const InfoBottom = styled.p`
 const StP = styled.p<{ $color: string, $size: string }>`
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
-    line-height: calc(100% + 2px);
+    line-height: calc(100% + 4px);
 
     & {
         display: -webkit-box;

@@ -89,7 +89,7 @@ const FormArea: React.FC<FormProps> = ({
                         value={inputForm.content}
                         onChange={handleChange}
                     />
-                    <p>500자 이내</p>
+                    <p>{inputForm.content.length}/500</p>
                 </div>
             </StFormArea>
 
@@ -198,7 +198,6 @@ const StLocation = styled.div`
 
     button {
         height: 26px;
-        background: linear-gradient(135deg, #8084f4, #c48fed);
         color: #fafafa;
         display: flex;
         border-radius: 999px;
@@ -220,6 +219,8 @@ const StChooseSongListContainer = styled.div`
 
     display: flex;
     flex-direction: column;
+    padding: 8px 0;
+
     &::-webkit-scrollbar {
         width: 4px;
         border-radius: 10px;
@@ -250,7 +251,7 @@ const StChooseSongLists = styled.div`
     justify-content: space-between;
 
     box-sizing: border-box;
-    padding: 7px 16px;
+    padding: 3px 16px;
 
     button {
         border: none;

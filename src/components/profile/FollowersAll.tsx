@@ -83,7 +83,7 @@ const Bt = styled.div`
 
 const FamousList = styled.div`
   display: flex;
-  gap: 16px;
+  justify-content: space-between;
 `;
 
 const FamousListItem = styled.div`
@@ -94,7 +94,9 @@ const FamousListItem = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  
   cursor: pointer;
+
 
   &:hover {
     opacity: 0.7;
@@ -102,8 +104,8 @@ const FamousListItem = styled.div`
 `;
 
 const FamousListThumb = styled.img`
-  width: 75px;
-  height: 75px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
 `;
 

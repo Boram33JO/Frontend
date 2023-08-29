@@ -7,15 +7,23 @@ import { getPopularSongs } from '../../api/post'
 import { Song } from '../../models/post'
 import Category from '../common/Category'
 import Preview from '../common/Preview'
+import RecommendSkeleton from './RecommendSkeleton'
 
 const Recommend = () => {
     const [categoryNum, setCategoryNum] = useState<number>(0);
     const [songIndex, setSongIndex] = useState(0);
     const [preview, setPreview] = useState(false);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
     const handleClickListItem = (index: number) => {
         setSongIndex(index);
         setPreview(true);
     }
+
+    const handleButtonClick = () => {
+        setIsOpen(!isOpen);
+    }
+
     const { data, isLoading, isError } = useQuery(["recommend"],
         async () => {
             const response = await getPopularSongs();
@@ -25,7 +33,7 @@ const Recommend = () => {
     )
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <RecommendSkeleton />
     }
 
     if (isError) {
@@ -40,43 +48,45 @@ const Recommend = () => {
                         어디서든 피플 추천 플리
                     </H3>
                     <TitleSectionSub>
-                        <Balloon>
+                        <Balloon $isOpen={isOpen}>
                             음악 선택 시 스포티파이 미리듣기가 제공됩니다.
                         </Balloon>
-                        피플의 플리
+                        <StP style={{ cursor: "pointer" }} onClick={handleButtonClick}>피플의 플리</StP>
                     </TitleSectionSub>
                 </TitleSection>
-                <Category categoryNum={categoryNum} setCategoryNum={setCategoryNum} />
-                <Playlist>
-                    {
-                        data[categoryNum].songResponseDtos.map((song: Song, index: number) => {
-                            return (
-                                <PlaylistItem key={song.id} onClick={() => { handleClickListItem(index) }}>
-                                    <PlaylistItemLeft>
-                                        <MusicThumbnail src={song.thumbnail} alt="albumArt" />
-                                        <MusicRanking>
-                                            <StP $color={"#FFFFFF"} $size={"16px"}>
-                                                {index + 1}
-                                            </StP>
-                                        </MusicRanking>
-                                        <MusicInfo>
-                                            <StP $color={"#FAFAFA"} $size={"16px"}>
-                                                {song.songTitle}
-                                            </StP>
-                                            <StP $color={"#A6A3AF"} $size={"14px"}>
-                                                {song.artistName}
-                                            </StP>
-                                        </MusicInfo>
-                                    </PlaylistItemLeft>
-                                    <PlaylistItemRight>
-                                        <SpotifyIcon src={spotify} alt="spotify" />
-                                    </PlaylistItemRight>
-                                </PlaylistItem>
-                            )
-                        })
-                    }
-                    {preview && <Preview url={data[categoryNum].songResponseDtos[songIndex].audioUrl} song={data[categoryNum].songResponseDtos[songIndex]} setPreview={setPreview} />}
-                </Playlist>
+                <ContentSection>
+                    <Category categoryNum={categoryNum} setCategoryNum={setCategoryNum} />
+                    <Playlist>
+                        {
+                            data[categoryNum].songResponseDtos.map((song: Song, index: number) => {
+                                return (
+                                    <PlaylistItem key={song.id} onClick={() => { handleClickListItem(index) }}>
+                                        <PlaylistItemLeft>
+                                            <MusicThumbnail src={song.thumbnail} alt="albumArt" />
+                                            <MusicRanking>
+                                                <StP $color={"#FFFFFF"} $size={"16px"}>
+                                                    {index + 1}
+                                                </StP>
+                                            </MusicRanking>
+                                            <MusicInfo>
+                                                <StP $color={"#FAFAFA"} $size={"16px"}>
+                                                    {song.songTitle}
+                                                </StP>
+                                                <StP $color={"#FAFAFA"} $size={"14px"}>
+                                                    {song.artistName}
+                                                </StP>
+                                            </MusicInfo>
+                                        </PlaylistItemLeft>
+                                        <PlaylistItemRight>
+                                            <SpotifyIcon src={spotify} alt="spotify" />
+                                        </PlaylistItemRight>
+                                    </PlaylistItem>
+                                )
+                            })
+                        }
+                        {preview && <Preview url={data[categoryNum].songResponseDtos[songIndex].audioUrl} song={data[categoryNum].songResponseDtos[songIndex]} setPreview={setPreview} />}
+                    </Playlist>
+                </ContentSection>
             </InnerContainer>
             <TodayArea>
                 {getDateNotation()} 기준 업데이트
@@ -100,13 +110,19 @@ const InnerContainer = styled.div`
     padding: 40px 20px;
 
     background-color: #202020;
-    gap: 20px;
+    gap: 16px;
 `
 
 const TitleSection = styled.div`
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+`
+
+const ContentSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 `
 
 const TitleSectionSub = styled.div`
@@ -116,7 +132,7 @@ const TitleSectionSub = styled.div`
     line-height: 16px;
 `
 
-const Balloon = styled.div`
+const Balloon = styled.div<{ $isOpen?: boolean }>`
     position: absolute;
     width: 140px;
     height: 44px;
@@ -134,6 +150,7 @@ const Balloon = styled.div`
     box-sizing: border-box;
     padding: 5px 10px;
     margin-bottom: 8px;
+    visibility: ${(props) => props.$isOpen ? "visible" : "hidden"};
 
     &:after {
         content: '';
@@ -165,7 +182,7 @@ const Balloon = styled.div`
 
 const H3 = styled.h3`
     font-size: 20px;
-    line-height: 24px;
+    line-height: calc(100% + 6px);
     font-weight: 600;
 `
 
@@ -213,12 +230,13 @@ const MusicInfo = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 2px;
 `
 
-const StP = styled.p<{ $color: string, $size: string }>`
+const StP = styled.p<{ $color?: string, $size?: string }>`
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
-    line-height: calc(100% + 2px);
+    line-height: calc(100% + 6px);
     word-break: break-all;
 
     & {

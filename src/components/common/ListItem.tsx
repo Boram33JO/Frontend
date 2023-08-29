@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { css, styled } from "styled-components"
 import { ReactComponent as Expand } from '../../assets/images/expand.svg'
 import { ReactComponent as Contract } from '../../assets/images/contract.svg'
-import { ReactComponent as Headphone } from '../../assets/images/headphone.svg'
+import { ReactComponent as Quaver } from '../../assets/images/quavar_note.svg'
 import { ReactComponent as Like } from '../../assets/images/like.svg'
 import spotify from '../../assets/images/spotify/Spotify_Icon_RGB_Black.svg'
 import { useNavigate } from 'react-router-dom'
@@ -21,48 +21,50 @@ const ListItem = ({ post }: Props) => {
     const [isOpen, setIsOpen] = useState(false);
     const [songIndex, setSongIndex] = useState(0);
     const [preview, setPreview] = useState(false);
-    const handleClickListItem = (index: number) => {
+    const handleClickListItem = (e: React.MouseEvent, index: number) => {
+        e.stopPropagation();
         setSongIndex(index);
         setPreview(true);
     }
-    const toggleDropdown = () => {
+    const toggleDropdown = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setIsOpen(!isOpen);
     }
 
     return (
         <ListItemContainer>
-            <ListItemBackground $src={cardBackground(post.category, post.postId)}>
-                <ListItemTop onClick={() => navigate(`/detail/${post.postId}`)}>
+            <ListItemBackground $src={cardBackground(post.category, post.postId)} onClick={() => navigate(`/detail/${post.postId}`)}>
+                <ListItemTop>
                     <ProfileArea>
                         <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" />
                         <ProfileInfo>
-                            <StP $color="#FAFAFA" $size={"14px"}>
+                            <StP $color="#FFFFFF" $size={"14px"}>
                                 {post.nickname}
                             </StP>
-                            <StP $color="#C7C7C7" $size={"14px"}>
+                            <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
                                 {displayedAt(post.createdAt)}
                             </StP>
                         </ProfileInfo>
                     </ProfileArea>
                     <TitleArea>
-                        <StP $color="#FAFAFA" $size={"16px"}>
+                        <StP $color="#FFFFFF" $size={"16px"}>
                             {post.postTitle}
                         </StP>
                         <TitleSubArea>
                             <SvgIcon style={{ marginRight: "4px" }}>
                                 <StLike />
                             </SvgIcon>
-                            <StP $color="#FAFAFA" $size={"14px"}>
+                            <StP $color="#FFFFFF" $size={"14px"}>
                                 {post.wishlistCount}
                             </StP>
                             <Divider />
-                            <StP $color="#FAFAFA" $size={"14px"} $weight={"500"}>
+                            <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>
                                 {categories[Number(post.category) - 1]}
                             </StP>
                         </TitleSubArea>
                     </TitleArea>
                 </ListItemTop>
-                <DropdownToggle onClick={toggleDropdown}>
+                <DropdownToggle onClick={(e) => toggleDropdown(e)}>
                     <PlaylistLeft>
                         <MusicInfo>
                             <StP $color={"#222222"} $size={"16px"}>
@@ -75,7 +77,7 @@ const ListItem = ({ post }: Props) => {
                     </PlaylistLeft>
                     <PlaylistRight>
                         <SvgIcon>
-                            <Headphone />
+                            <Quaver />
                             <StP $color={"#414141"} $size={"14px"}>
                                 {`+${post.songs.length}`}
                             </StP>
@@ -90,7 +92,7 @@ const ListItem = ({ post }: Props) => {
                         <DropdownList>
                             {post.songs.map((song, index) => {
                                 return (
-                                    <DropdownItem key={song.id} onClick={() => { handleClickListItem(index) }}>
+                                    <DropdownItem key={song.id} onClick={(e) => { handleClickListItem(e, index) }}>
                                         <PlaylistLeft>
                                             <MusicThumbnail src={song.thumbnail} />
                                             <MusicInfo>
@@ -109,8 +111,8 @@ const ListItem = ({ post }: Props) => {
                         </DropdownList>
                     )}
                 </DropdownToggle>
-                {preview && <Preview url={post.songs[songIndex].audioUrl} song={post.songs[songIndex]} setPreview={setPreview} />}
             </ListItemBackground>
+            {preview && <Preview url={post.songs[songIndex].audioUrl} song={post.songs[songIndex]} setPreview={setPreview} />}
         </ListItemContainer>
     )
 }
@@ -141,6 +143,8 @@ const ListItemBackground = styled.div<{ $src?: string }>`
     border-radius: 8px;
     box-sizing: border-box;
     padding: 14px;
+    
+    cursor: pointer;
 `
 
 const ListItemTop = styled.div`
@@ -148,7 +152,6 @@ const ListItemTop = styled.div`
     align-items: flex-start;
     justify-content: space-between;
     gap: 5px;
-    cursor: pointer;
 `
 
 const ProfileArea = styled.div`
@@ -177,14 +180,14 @@ const StLike = styled(Like)`
     width: 14px;
     height: 14px;
     path{
-        fill: #FAFAFA;
-        stroke: #FAFAFA
+        fill: #FFFFFF;
+        stroke: #FFFFFF
     }
 `
 
 const ProfileThumnail = styled.img`
-    width: 30px;
-    height: 30px;
+    width: 34px;
+    height: 34px;
     background-color: #ECECEC;
     border-radius: 50%;
 `
@@ -233,7 +236,7 @@ const StP = styled.p<{ $color: string, $size: string, $weight?: string }>`
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
     font-weight: ${(props) => props.$weight || 600};
-    line-height: calc(100% + 2px);
+    line-height: calc(100% + 4px);
 
     & {
         display: -webkit-box;
@@ -320,7 +323,7 @@ const Divider = styled.div`
     height: 10px;
     width: 1.5px;
     border-radius: 1.5px;
-    background-color: #FAFAFA;
+    background-color: #FFFFFF;
     padding: 0;
     margin: 0px 8px;
 `

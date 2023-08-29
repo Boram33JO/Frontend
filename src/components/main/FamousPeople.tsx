@@ -4,6 +4,7 @@ import { getPopularPeople } from '../../api/post';
 import { User2 } from '../../models/user';
 import { getProfileImage } from '../../utils/common';
 import { useNavigate } from 'react-router-dom';
+import FamousPeopleSkeleton from './FamousPeopleSkeleton';
 
 const FamousPeople = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const FamousPeople = () => {
     )
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <FamousPeopleSkeleton />
     }
 
     if (isError) {
@@ -52,12 +53,12 @@ const InnerContainer = styled.div`
     width: 100%;
     box-sizing: border-box;
     padding: 20px;
-    gap: 20px;
+    gap: 16px;
 `
 
 const H3 = styled.h3`
     font-size: 20px;
-    line-height: 24px;
+    line-height: calc(100% + 6px);
     font-weight: 600;
 `
 

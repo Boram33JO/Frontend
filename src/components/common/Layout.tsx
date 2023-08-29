@@ -19,6 +19,7 @@ export const useMiddleRef = () => {
 
 const Layout = () => {
     const [sideOpen, setSideOpen] = useState<boolean>(false);
+    const containerRef = useRef<HTMLDivElement>(null);
     const progressRef = useRef<HTMLDivElement>(null);
     const middleRef = useRef<HTMLDivElement>(null);
     const outletRef = useRef<HTMLDivElement>(null);
@@ -27,13 +28,18 @@ const Layout = () => {
     const navigate = useNavigate();
     const LoginUser = useSelector((state: RootState) => state.user);
 
+    const handleScrollTop = () => {
+        middleRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+
+    }
+
     // Progress 바
     useEffect(() => {
         if (progressRef.current) progressRef.current.style.width = `0%`;
         const handleScroll = throttle(() => {
-            if (middleRef.current && outletRef.current && progressRef.current) {
+            if (middleRef.current && outletRef.current && progressRef.current && containerRef.current) {
                 const scrollTop = middleRef.current.scrollTop;
-                const progress = (scrollTop / (outletRef.current.scrollHeight - document.documentElement.clientHeight)) * 100;
+                const progress = (scrollTop / (outletRef.current.scrollHeight - containerRef.current.clientHeight - 60)) * 100;
                 progressRef.current.style.width = `${progress}%`;
             }
         }, 100);
@@ -50,8 +56,8 @@ const Layout = () => {
 
     return (
         <Container>
-            <InnerContainer>
-                <Header setSideOpen={setSideOpen} />
+            <InnerContainer ref={containerRef}>
+                <Header setSideOpen={setSideOpen} handleScrollTop={handleScrollTop} />
                 <ProgressBar ref={progressRef}></ProgressBar>
                 <MiddleRefContext.Provider value={middleRef}>
                     <Middle ref={middleRef}>
@@ -69,7 +75,7 @@ const Layout = () => {
                 </Left>
                 <Right>
                     {LoginUser.isLogin && !!!id && <PostButton onClick={() => navigate(`/edit`)}><StPost /></PostButton>}
-                    {!!!id && <TopButton onClick={() => { middleRef.current?.scrollTo({ top: 0, behavior: 'smooth' }) }} ><StTop /></TopButton>}
+                    {!!!id && <TopButton onClick={handleScrollTop}><StTop /></TopButton>}
                 </Right>
             </InnerContainer>
         </Container>
@@ -77,6 +83,12 @@ const Layout = () => {
 };
 
 export default Layout;
+
+const Temp = styled.div`
+    width: 100%;
+    height: 50px;
+    background-color: gray;
+`
 
 const Container = styled.div`
     position: relative;
@@ -86,7 +98,8 @@ const Container = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
+    overflow: hidden;    
+    box-sizing: border-box;
 `;
 
 const InnerContainer = styled.div`
@@ -110,7 +123,7 @@ const InnerContainer = styled.div`
 const ProgressBar = styled.div`
     position: absolute;
     left: 0;
-    top: 50px;
+    top: 60px;
     z-index: 3;
     height: 3px;
     width: 100%;
@@ -131,6 +144,8 @@ const Middle = styled.div`
 const OutletContainer = styled.div`
     width: 100%;
     height: auto;
+    box-sizing: border-box;
+    padding-bottom: 50px;
 `;
 
 const Left = styled.div<{ $open: boolean }>`
@@ -159,7 +174,7 @@ const Right = styled.div`
     bottom: 10px;
 
     background-color: transparent;
-    z-index: 3;
+    z-index: 4;
 
     gap: 10px;
 `;
@@ -174,7 +189,9 @@ const PostButton = styled.div`
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background-color: #A08DEC;
+    background-color: #B09FF5;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
+
     cursor: pointer;
 `;
 
@@ -189,6 +206,7 @@ const TopButton = styled.div`
     height: 44px;
     background-color: #45424E;
     border-radius: 50%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
     box-sizing: border-box;
     cursor: pointer;
 `;
@@ -199,9 +217,6 @@ const StPost = styled(Post)`
 `
 
 const StTop = styled(Top)`
-    width: 22px;
-    height: 22px;
-    path {
-        stroke: #A6A3AF;
-    }
+    width: 18px;
+    height: 18px;
 `;

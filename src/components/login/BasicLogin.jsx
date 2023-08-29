@@ -47,9 +47,9 @@ const BasicLogin = () => {
 
   const loginClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!emailRegex.test(email)) {
       setErrorMessage("이메일 형식이 아닙니다.");
+      
       return;
     }
 
@@ -101,6 +101,8 @@ const BasicLogin = () => {
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox>
     </InnerContainer>
+
+    
   );
 };
 
