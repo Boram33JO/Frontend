@@ -22,7 +22,7 @@ export default ButtonComponent;
 
 const StButton = styled.button`
     width: 100%;
-    height: 56px;
+    height: 44px;
     border-radius: 6px;
     border: none;
     font-size: 16px;

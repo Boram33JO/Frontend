@@ -58,9 +58,6 @@ const EditMap: React.FC<EditMapProps> = ({
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
     useEffect(() => {
-        // const script = document.createElement("script");
-        // script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_REST_API_KEY}&libraries=services&autoload=false`;
-        // document.head.appendChild(script);
         window.kakao.maps.load(function () {
             const mapContainer = document.getElementById("map"); // 지도를 표시할 div
             const mapOption = {
@@ -76,11 +73,9 @@ const EditMap: React.FC<EditMapProps> = ({
                 map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
             }
 
-            // const imageSrc = pinIcon;
             const imageSize = new window.kakao.maps.Size(36, 42);
             const markerImage = new window.kakao.maps.MarkerImage(pinIcon, imageSize);
 
-            // Create a marker for the map
             const markerPosition = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
             const marker = new window.kakao.maps.Marker({
                 position: markerPosition,
@@ -90,6 +85,15 @@ const EditMap: React.FC<EditMapProps> = ({
             marker.setMap(map); // Add the marker to the map
         });
     }, [state, latitude, longitude]);
+
+    useEffect(() => {
+        if (isData) {
+            setAddress(isData.location.address);
+            setPlaceName(isData.location.placeName);
+            setLatitude(isData.location.latitude);
+            setLongitude(isData.location.longitude);
+        }
+    }, [isData]);
 
     const searchMap = () => {
         const ps = new window.kakao.maps.services.Places();
@@ -102,8 +106,14 @@ const EditMap: React.FC<EditMapProps> = ({
     };
 
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSearchLocation(event.target.value);
+        const newValue = event.target.value;
+        setSearchLocation(newValue);
+        setPlaceName(newValue); // searchLocation 값을 placeName으로 설정
     };
+
+    // const handleCategoryChange = (newCategoryNum: number) => {
+    //     setCategoryNum(newCategoryNum); // categoryNum 값을 변경하고 저장
+    // };
 
     const searchLocationHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -114,14 +124,6 @@ const EditMap: React.FC<EditMapProps> = ({
         setSearchLocation("");
         searchMap();
     };
-
-    if (isData) {
-        setAddress(isData.location.address);
-        setPlaceName(isData.location.placeName);
-        setLatitude(isData.location.latitude);
-        setLongitude(isData.location.longitude);
-        setCategoryNum(isData.location.category);
-    }
 
     return (
         <StMapContainer>
@@ -136,12 +138,21 @@ const EditMap: React.FC<EditMapProps> = ({
                         }}
                     />
                 </div>
-                <input
-                    placeholder="장소를 입력해보세요"
-                    onChange={changeInputHandler}
-                    value={searchLocation}
-                    id="keyword"
-                />
+                {!isData ? (
+                    <input
+                        placeholder="장소를 입력해보세요"
+                        onChange={changeInputHandler}
+                        value={searchLocation}
+                        id="keyword"
+                    />
+                ) : (
+                    <input
+                        placeholder="장소를 입력해보세요"
+                        onChange={changeInputHandler}
+                        value={placeName || ""}
+                        id="keyword"
+                    />
+                )}
             </StSearchForm>
             {modal && (
                 <SearchModal
