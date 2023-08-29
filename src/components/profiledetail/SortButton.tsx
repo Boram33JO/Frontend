@@ -55,9 +55,9 @@ const SortList = styled.div`
 const SortListItem = styled.div<{ $active: boolean }>`
   background: ${(props) =>
     props.$active
-      ? "linear-gradient(135deg, #8084F4,#C48FED)"
-      : "#58468B"};
-  color: ${(props) => (props.$active ? "#FAFAFA" : "#9280BA")};
+      ? "#7462E2"
+      : "#3B3A40"};
+  color: ${(props) => (props.$active ? "#FAFAFA" : "#85838D")};
   border-radius: 30px;
 
   padding: 8px 16px;
@@ -67,7 +67,7 @@ const SortListItem = styled.div<{ $active: boolean }>`
   cursor: pointer;
 
   &:hover {
-    background: linear-gradient(135deg, #8084F4, #C48FED);
+    background: #7462E2;
     color: #FAFAFA;
   }
 `;

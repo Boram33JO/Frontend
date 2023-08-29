@@ -251,7 +251,7 @@ const BasicSignUp = () => {
       const response = await mobileCheck(to);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-      console.log(response);
+     // console.log(response);
       setShowMobileInput(true);
       // 5분 타이머 시작
       alert("모바일 인증 번호를 발송했습니다.");

@@ -24,7 +24,11 @@ const List = ({ userInfo, postList }: Props) => {
       <InnerContainer>
         <TitleSection>
           <H3>{`${userInfo.nickname}님의 포스팅`}</H3>
-          <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
+          {postList.length === 0 ? (
+ null
+) : (  <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
+  // 또는 아무 내용도 없는 <></> 사용
+)}
         </TitleSection>
         {postList.length === 0 ? (
           <NoDataMessage>아직 포스팅 작성 전이군요!</NoDataMessage>
@@ -42,8 +46,10 @@ export default List;
 
 const NoDataMessage = styled.p`
   font-size: 16px;
-  color: #e7e6f0;
-  /* padding-top: 10px; */
+  color: #8E8D92;
+  text-align: center; /* 가운데 정렬을 추가 */
+  padding-top: 20px;
+  margin-bottom: -20px;
 `;
 
 
@@ -54,7 +60,6 @@ const InnerContainer = styled.div`
     box-sizing: border-box;
     padding: 0 20px;
     padding-top: 52px;
-   
     gap: 20px;
 `
 

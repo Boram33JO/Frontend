@@ -83,12 +83,6 @@ export const getCommentsLists = async (
   return response;
 };
 
-// 유저 팔로우
-// export const followUser = async (userId: number | undefined) => {
-//     const response = await instance.post(`api/profile/${userId}/follow`)
-//     return response;
-// }
-
 // 프로필 수정
 export const updateProfile = async (
   userId: string | undefined,

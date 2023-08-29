@@ -44,8 +44,8 @@ const FavListAll = () => {
 
   const { data, isLoading, isError } = useQuery(["wishList", page, totalPage, activeSort], async () => {
     const response = await getFavLists(userId, page, activeSort);
-    console.log("좋아요함 response:", response); // response를 console에 출력
-     console.log("포스트 response:", response.data.content.nickname);
+    //console.log("좋아요함 response:", response); // response를 console에 출력
+    //console.log("포스트 response:", response.data.content.nickname);
     //console.log("좋아요함 data:", response.data); // 확인용 로그
     // const nicknameFromResponse = response.data?.nickname || "";
   

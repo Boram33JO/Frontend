@@ -59,7 +59,7 @@ const handleSortChange = (sort: SortType) => {
 
   const { data, isLoading, isError } = useQuery(["comments", page, totalPage, activeSort], async () => {
     const response = await getCommentsLists(userId, page, activeSort);
-    console.log(response.data);
+    //console.log(response.data);
  setTotal(response.data.totalElements);
  setTotalPage(response.data.totalPages);  
  if (page === totalPage && page > 0) {
@@ -93,7 +93,7 @@ const handleSortChange = (sort: SortType) => {
     try {
       await commentMutation.mutateAsync(commentId);
     } catch (error) {
-      console.error("An error occurred while deleting the comment:", error);
+      //console.error("댓글을 삭제하는 중에 오류가 발생했습니다.", error);
     }
     setDeleteModalOpen(false);
   };

@@ -39,8 +39,7 @@ const YourPostList = () => {
     ["posts", page, totalPage, activeSort],
     async () => {
       const response = await getMyPostLists(userId, page, activeSort);
-      console.log(" 내가쓴 포스팅 response:", response); // response를 console에 출력
-      //  console.log("포스트 response:", response.data?.nickname);
+     // console.log(" 내가쓴 포스팅 response:", response);
       setNickname(response.data?.nickname);
 
       setTotal(response.data.postList.totalElements);
@@ -59,7 +58,7 @@ const YourPostList = () => {
         { length: pageRange },
         (_, i) => startPage + i + 1
       );
-      console.log(array);
+     // console.log(array);
       setPageButton(array);
 
       return response.data.postList.content;

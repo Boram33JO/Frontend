@@ -23,7 +23,11 @@ const FavList = ({ userInfo, wishList }: Props) => {
       <InnerContainer>
         <TitleSection>
           <H3>{`${userInfo.nickname}님이 좋아한 포스팅`}</H3>
-          <Bt onClick={handleViewAllClick}>전체보기</Bt>
+          {wishList.length === 0 ? (
+ null
+) : (  <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
+  // 또는 아무 내용도 없는 <></> 사용
+)}
         </TitleSection>
         {wishList.length === 0 ? (
           <NoDataMessage>아직 맘에 드는 포스팅이 없나요?</NoDataMessage>
@@ -39,8 +43,12 @@ const FavList = ({ userInfo, wishList }: Props) => {
 
 const NoDataMessage = styled.p`
   font-size: 16px;
-  color: #e7e6f0;
+  color: #8E8D92;
+  text-align: center; /* 가운데 정렬을 추가 */
+  padding-top: 20px;
+  margin-bottom: -20px;
 `;
+
 
 const InnerContainer = styled.div`
   display: flex;
