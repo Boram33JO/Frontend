@@ -6,6 +6,8 @@ import { useMutation } from "react-query";
 import { addUsers, mobileCheck, mobileDoubleCheck } from "../../api/user2";
 import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user2";
+import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
+import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 
 
 
@@ -71,6 +73,20 @@ const BasicSignUp = () => {
   // 인중 발송중일 때 상태값.
   const [emailButtonContent, setEmailButtonContent] = useState("중복확인");
   const [mobileButtonContent, setmobileButtonContent] = useState("중복확인");
+
+ // 비밀번호 토글
+  const [showPassword, setShowPassword] = useState(false);
+ const [showPasswordCheck, setShowPasswordCheck] = useState(false);
+
+  const togglePasswordVisibility_1 = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+    const togglePasswordVisibility_2 = () => {
+    setShowPasswordCheck((prevShowPasswordCheck) => !prevShowPasswordCheck);
+  };
+
+
 
   useEffect(() => {
     let interval;
@@ -375,9 +391,9 @@ const BasicSignUp = () => {
             </Stname>
           </Stnickname>
         )}
-
+<Stinput2Container>
         <Stinput2
-          type={"password"}
+           type={showPassword ? "text" : "password"}
           placeholder={"비밀번호 입력(8~15자 이내)"}
           value={password}
           onChange={onChangePasswordHandler}
@@ -386,11 +402,17 @@ const BasicSignUp = () => {
           $isFocused={isPasswordFocused}
           $hasValue={password.length > 0}
         />
+         <PasswordToggle onClick={togglePasswordVisibility_1}>
+            {showPassword ? <Eye />: <ClosedEye />}
+          </PasswordToggle>
+           </Stinput2Container>
       </Stbox>
       <Stbox>
         <Stnumber>대/소문자, 숫자, 특수문자 각 1개 이상 포함</Stnumber>
+        
+        <Stinput2Container>
         <Stinput3
-          type={"password"}
+           type={showPasswordCheck ? "text" : "password"}
           placeholder={"비밀번호 확인"}
           value={passwordCheck}
           onChange={onChangePasswordCheckHandler}
@@ -399,6 +421,10 @@ const BasicSignUp = () => {
           $isFocused={isPasswordCheckFocused}
           $hasValue={passwordCheck.length > 0}
         />
+        <PasswordToggle onClick={togglePasswordVisibility_2}>
+            {showPasswordCheck ? <Eye />: <ClosedEye />}
+          </PasswordToggle>
+        </Stinput2Container>
       </Stbox>
 
       <ErrorMessageContainer>
@@ -437,6 +463,32 @@ const BasicSignUp = () => {
 };
 
 export default BasicSignUp;
+
+const Stinput2Container = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+const PasswordToggle = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  right: 10px;
+`;
+
+
+const Eye = styled(EyeSVG)`
+width: 24px; /* 원하는 크기로 조정 */
+  height: 24px; /* 원하는 크기로 조정 */
+`;
+
+const ClosedEye = styled(ClosedEyeSVG)`
+width: 24px; /* 원하는 크기로 조정 */
+  height: 24px; /* 원하는 크기로 조정 */
+`;
 
 const InnerContainer = styled.div`
   width: 100%;
