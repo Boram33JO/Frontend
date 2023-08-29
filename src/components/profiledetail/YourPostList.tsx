@@ -9,6 +9,8 @@ import { ReactComponent as End } from "../../assets/images/page_end.svg";
 import { ReactComponent as Prev } from "../../assets/images/page_prev.svg";
 import { ReactComponent as Next } from "../../assets/images/page_next.svg";
 import { useState } from "react";
+import SortButton from "./SortButton";
+import { SortType } from "./SortButton"; 
 
 const YourPostList = () => {
   const { userId } = useParams();
@@ -19,16 +21,24 @@ const YourPostList = () => {
   const [totalPage, setTotalPage] = useState<number>(0);
   const [pageButton, setPageButton] = useState<number[]>([]);
 
+  const [activeSort, setActiveSort] = useState<SortType>(SortType.Newest);
+ 
+
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPage) {
       setPage(newPage);
     }
   };
+  const handleSortChange = (sort: SortType) => {
+    setActiveSort(sort);
+    // Perform the data fetching and sorting based on the selected sort type here
+  };
+
 
   const { data, isLoading, isError } = useQuery(
-    ["posts", page, totalPage],
+    ["posts", page, totalPage, activeSort],
     async () => {
-      const response = await getMyPostLists(userId, page);
+      const response = await getMyPostLists(userId, page, activeSort);
       console.log(" 내가쓴 포스팅 response:", response); // response를 console에 출력
       //  console.log("포스트 response:", response.data?.nickname);
       setNickname(response.data?.nickname);
@@ -55,9 +65,6 @@ const YourPostList = () => {
       return response.data.postList.content;
     }
   );
-  // console.log("state",nickname)
-
-  // console.log("112223333",data)
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -69,12 +76,16 @@ const YourPostList = () => {
 
   return (
     <>
+    
       <InnerContainer>
         <TitleSection>
           <H3>포스팅</H3>
         </TitleSection>
+
+        {data.length > 0 && (
+        <SortButton activeSort={activeSort} onSortChange={handleSortChange} />)}
         {data && data.length === 0 ? (
-          <NoDataMessage>아직 마음에 드는 포스팅이 없나요?</NoDataMessage>
+          <NoDataMessage>아직 포스팅 작성 전이군요!</NoDataMessage>
         ) : (
           data.map((post: Post) => (
             <MyListItem key={post.postId} post={post}></MyListItem>

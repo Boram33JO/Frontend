@@ -1,3 +1,4 @@
+import { SortType } from "../components/profiledetail/SortButton";
 import instance from "./common";
 
 // 마이페이지 관련 api
@@ -15,18 +16,43 @@ export const getProfileLists = async (userId: string | undefined) => {
 };
 
 // 마이페이지 하위 페이지들
+
 // 내가 쓴 포스팅 조회
-export const getMyPostLists = async ( userId: string | undefined, page: number) => {
+export const getMyPostLists = async (
+  userId: string | undefined,
+  page: number,
+  sort: SortType
+) => {
   const response = await instance.get(`/user/${userId}/posts`, {
-    params: { page, size: 6, sort: "createdAt,desc" },
+    params: {
+      page,
+      size: 6,
+      sort: sort === SortType.Newest
+        ? "createdAt,desc"
+        : sort === SortType.Oldest
+        ? "createdAt,asc"
+        : sort === SortType.wishlistCount
+        ? "wishlistCount,desc" // 좋아요순은 likeCount를 기준으로 내림차순 정렬
+        : "",
+    },
   });
   return response;
 };
 
+
+
 // 내가 좋아요한 포스팅 조회
-export const getFavLists = async (userId: string | undefined, page: number) => {
+export const getFavLists = async (userId: string | undefined, page: number, sort: SortType ) => {
   const response = await instance.get(`/user/${userId}/wishlist`, {
-    params: { page, size: 6,sort: "createdAt,desc" },
+    params: {
+      page,
+      size: 6,
+      sort: sort === SortType.Newest
+        ? "createdAt,desc"
+        : sort === SortType.Oldest
+        ? "createdAt,asc"
+        : "wishlistCount,desc", // 좋아요순은 likeCount를 기준으로 내림차순 정렬
+    },
   });
   return response;
 };
@@ -43,10 +69,16 @@ export const getFollowLists = async (
 // 내가 댓글 단 포스팅 조회 (댓글 조회)
 export const getCommentsLists = async (
   userId: string | undefined,
-  page: number
+  page: number,
+  sort: SortType
 ) => {
   const response = await instance.get(`/user/${userId}/comments`, {
-    params: { page, size: 10, sort: "createdAt,desc" },
+    params: { page, size: 10,  sort: sort === SortType.Newest
+        ? "createdAt,desc"
+        : sort === SortType.Oldest
+        ? "createdAt,asc"
+        : "wishlistCount,desc", // 좋아요순은 likeCount를 기준으로 내림차순 정렬
+    },
   });
   return response;
 };
