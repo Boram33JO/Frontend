@@ -4,9 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getCommentsLists } from "../../api/profile";
 import { getDateNotation } from "../../utils/common";
-import { ReactComponent as IconComDel } from "../../assets/images/login_signup/icon_com_del.svg";
+import { ReactComponent as IconComDel } from "../../assets/images/login_signup_profile/icon_com_del.svg";
 import { deleteComment } from "../../api/comment";
-import { ReactComponent as TitleSVG } from "../../assets/images/login_signup/icon_title.svg";
+import { ReactComponent as TitleSVG } from "../../assets/images/login_signup_profile/icon_title.svg";
 import DeleteModal from "../common/DeleteModal";
 import { ReactComponent as Start } from "../../assets/images/page_start.svg"
 import { ReactComponent as End } from "../../assets/images/page_end.svg"
@@ -14,6 +14,7 @@ import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
 import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 import SortButton2 from "./SortButton2";
 import { SortType } from "./SortButton"; 
+import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 
 
 type myComment = {
@@ -116,7 +117,10 @@ const handleSortChange = (sort: SortType) => {
       {data.length > 0 && (
         <SortButton2 activeSort={activeSort} onSortChange={handleSortChange} />)}
       {data && data.length === 0 ? (
-        <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
+        <Pple>
+        <StNodata/>
+                  <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
+                  </Pple>
       ) : (
         data.map((item: myComment) => (
           <CommentList key={item.id}>
@@ -185,10 +189,25 @@ const handleSortChange = (sort: SortType) => {
 
 export default AllCommentsList;
 
+const Pple = styled.div`
+ display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #252427;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+`;
+const StNodata = styled(Nodata)`
+width: 50px; /* 원하는 크기로 조정 */
+  height: 58px; /* 원하는 크기로 조정 */
+`;
+
 const NoDataMessage = styled.p`
+padding-top: 10px;
   font-size: 16px;
-  color: #e7e6f0;
-  padding-top: 6px;
+  color: #8E8D92;
+  text-align: center; /* 가운데 정렬을 추가 */
 `;
 
 const InnerContainer = styled.div`

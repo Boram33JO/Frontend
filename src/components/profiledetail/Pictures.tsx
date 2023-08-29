@@ -6,6 +6,9 @@ import { getFollowLists } from "../../api/profile";
 import { followUser } from "../../api/post";
 import { getProfileImage } from "../../utils/common";
 import DeleteModal from "../common/DeleteModal";
+import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
+
+
 
 const Pictures = () => {
   const navigate = useNavigate();
@@ -99,7 +102,11 @@ const Pictures = () => {
       </Follower1>
 
       {followerData.followList.content.length === 0 ? (
+        <Pple>
+        <StNodata/>
         <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
+                  </Pple>
+       
       ) : (
         followerData.followList.content.map((follower: any) => (
           <MyProfile key={follower.userId}>
@@ -129,23 +136,40 @@ const Pictures = () => {
 };
 export default Pictures;
 
-const NoDataMessage = styled.p`
-  font-size: 16px;
-  color: #e7e6f0;
+const Pple = styled.div`
+ display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #252427;
   padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+`;
+const StNodata = styled(Nodata)`
+width: 50px; /* 원하는 크기로 조정 */
+  height: 58px; /* 원하는 크기로 조정 */
+`;
+
+const NoDataMessage = styled.p`
+padding-top: 10px;
+  font-size: 16px;
+  color: #8E8D92;
+  text-align: center; /* 가운데 정렬을 추가 */
 `;
 
 const InnerContainer = styled.div`
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   box-sizing: border-box;
-  padding: 0px 20px;
-  margin-top: 40px;
-  margin-bottom: 48px;
+  padding: 0 20px;
+  padding-top: 40px;
+  gap: 20px;
 `;
 const Follower1 = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
   align-items: center; // 요소들을 수직 가운데 정렬하기 위해 추가
+
 `;
 const Nums = styled.div`
   margin-left: 10px;
@@ -160,7 +184,7 @@ const H3 = styled.h3`
   line-height: 24px;
   font-weight: 700;
   color: #e7e6f0;
-  margin-bottom: 8px;
+
 `;
 const Bt = styled.button`
   width: 53px;

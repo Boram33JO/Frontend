@@ -2,7 +2,7 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import { ReactComponent as Expand } from "../../assets/images/expand.svg";
 import { ReactComponent as Contract } from "../../assets/images/contract.svg";
-import { ReactComponent as Headphone } from "../../assets/images/headphone.svg";
+import { ReactComponent as Music } from "../../assets/images/icon_music.svg";
 import { ReactComponent as Like } from "../../assets/images/like.svg";
 import spotify from "../../assets/images/Spotify_Icon_RGB_Black.png";
 import { useNavigate } from "react-router-dom";
@@ -100,7 +100,7 @@ const MyListItem = ({ post }: Props) => {
                     </PlaylistLeft>
                     <PlaylistRight>
                         <SvgIcon>
-                            <Headphone />
+                            <Music />
                             <StP
                                 $color={"#414141"}
                                 $size={"14px"}
