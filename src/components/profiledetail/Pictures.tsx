@@ -195,8 +195,8 @@ const Bt = styled.button`
   font-size: 14px;
   font-weight: 600;
   font-family: "Pretendard";
-  color: #e7e6f0;
-  background: linear-gradient(135deg, #8084f4, #c48fed);
+  color: #fafafa;
+  background: #3b3a40;
 
   text-align: center;
 
