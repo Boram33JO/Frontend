@@ -58,7 +58,7 @@ const Pictures = () => {
   }, []);
 
 
-  console.log(followerData); // 데이터 구조를 확인
+  //console.log(followerData); // 데이터 구조를 확인
 
   // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
   const mutation = useMutation(followUser, {
@@ -77,7 +77,7 @@ const Pictures = () => {
     try {
       await mutation.mutateAsync(followerId);
     } catch (error) {
-      console.error("An error occurred while deleting the comment:", error);
+    //  console.error("피플러를 삭제하는 중에 오류가 발생했습니다.", error);
     }
     setDeleteModalOpen(false);
   };
