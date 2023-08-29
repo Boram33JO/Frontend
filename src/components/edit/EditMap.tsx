@@ -196,13 +196,18 @@ const StSearchForm = styled.form`
     height: 40px;
     border: 1px solid #434047;
     background-color: #434047;
+    box-sizing: border-box;
     border-radius: 999px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    box-sizing: border-box;
+
     input {
-        width: 270px;
-        height: 16px;
+        width: 350px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 100%;
         color: #fafafa;
         border: 1px solid #434047;
         background-color: #434047;

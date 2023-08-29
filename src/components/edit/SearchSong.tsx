@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react"; // useEffect는 사용하지 않아서 제거
+import React, { useEffect, useRef, useState } from "react"; // useEffect는 사용하지 않아서 제거
 import { styled } from "styled-components";
 import { ReactComponent as CheckBox } from "../../assets/images/check_slc.svg";
 import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg";
 import { ReactComponent as Search } from "../../assets/images/search.svg";
 import { getPopularSongsList, getSearchSongs } from "../../api/edit";
 import { ReactComponent as Spotify } from "../../assets/images/spotify/Spotify_Icon_RGB_White.svg";
+
 interface SongListType {
     album: string;
     artistName: string;
@@ -49,6 +50,15 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
     const [songList, setSongList] = useState<Array<SongListType>>([]);
     const [popularSongList, setPopularSongList] = useState<Array<PopularSongListType>>([]);
 
+    //-------------------------------------------------- 검색시 스크롤 맨 위로 올림
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollToTop = () => {
+        if (scrollRef.current) {
+            const { scrollHeight, clientHeight } = scrollRef.current;
+            scrollRef.current.scrollTop = clientHeight - scrollHeight;
+        }
+    };
+
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchSong(event.target.value);
     };
@@ -73,10 +83,12 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         event.preventDefault();
         try {
             const response = await getSearchSongs(searchSong);
-            if (response) {
+            console.log("11", response?.data.statusCode);
+            if (response?.data.statusCode === 204) {
+                return alert("다시 검색해주세요.");
+            } else if (response?.data !== undefined) {
                 setSongList(response.data);
-            } else {
-                alert("검색 결과 없음");
+                // console.log(songList);
             }
         } catch (error) {
             console.log(error);
@@ -89,9 +101,12 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         }
     }, [isData]);
 
+    useEffect(() => {
+        scrollToTop();
+    }, [songList]);
+
     const addToChooseSongList = (item: SongListType) => {
         const isAlreadyAdded = chooseSongList.some((addedItem) => addedItem.songNum === item.songNum);
-
         if (isAlreadyAdded) {
             removeFromChooseSongList(item);
         } else if (chooseSongList.length >= 10) {
@@ -149,7 +164,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                     </StSongListContainer>
                 </StPopularContainer>
             ) : (
-                <StContainer>
+                <StContainer ref={scrollRef}>
                     {songList.map((item) => (
                         <StSongList
                             key={item.songNum}
@@ -212,8 +227,8 @@ const StSearchForm = styled.form`
     align-items: center;
 
     input {
-        width: 270px;
-        height: 16px;
+        width: 350px;
+        height: 20px;
         color: #fafafa;
         border: 1px solid #434047;
         background-color: #434047;
