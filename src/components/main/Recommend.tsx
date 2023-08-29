@@ -7,6 +7,7 @@ import { getPopularSongs } from '../../api/post'
 import { Song } from '../../models/post'
 import Category from '../common/Category'
 import Preview from '../common/Preview'
+import RecommendSkeleton from './RecommendSkeleton'
 
 const Recommend = () => {
     const [categoryNum, setCategoryNum] = useState<number>(0);
@@ -32,7 +33,7 @@ const Recommend = () => {
     )
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <RecommendSkeleton />
     }
 
     if (isError) {

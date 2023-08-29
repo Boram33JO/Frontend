@@ -45,8 +45,8 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
     return (
         <SideMenu $open={sideOpen}>
             <SideTop>
-                <SideHeader onClick={() => setSideOpen(false)}>
-                    <Close />
+                <SideHeader>
+                    <StClose onClick={() => setSideOpen(false)} />
                 </SideHeader>
                 <SideMiddle>
                     <SideMiddleTop>
@@ -148,13 +148,13 @@ const SideMenu = styled.div<{ $open: boolean }>`
 const SideHeader = styled.div`
     display: flex;
     align-items: center;
-    height: 50px;
-    cursor: pointer;
+    height: 60px;
+`
 
-    &:hover path{
-        fill: #8084F4;
-        stroke: #8084F4;
-    }
+const StClose = styled(Close)`
+    width: 28px;
+    height: 28px;    
+    cursor: pointer;
 `
 
 const SideTop = styled.div`

@@ -4,7 +4,7 @@ import { ReactComponent as Place } from '../../assets/images/place.svg'
 import { useMutation, useQueryClient } from "react-query"
 import { followUser, likePost } from "../../api/post"
 import { useNavigate, useParams } from "react-router-dom"
-import { debounce, displayedAt } from "../../utils/common"
+import { debounce, displayedAt, getProfileImage } from "../../utils/common"
 import { Post } from "../../models/post"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
@@ -85,7 +85,7 @@ const DetailContent = ({ post }: PostProps) => {
         <DetailContainer>
             <ProfileSection>
                 <ProfileArea onClick={() => { navigate(`/profile/${post.userId}`) }}>
-                    <ProfileImage src={post.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : post.userImage} />
+                    <ProfileImage src={getProfileImage(post.userImage)} />
                     <ProfileInfo>
                         <StP $size={"16px"} $color={"#FAFAFA"}>{post.nickname}</StP>
                     </ProfileInfo>
@@ -137,9 +137,7 @@ const DetailContent = ({ post }: PostProps) => {
                         {post.location?.placeName}
                     </StP>
                 </LocationInfo>
-                {/* <LocationCategory> */}
                 {categories[Number(post.category) - 1]}
-                {/* </LocationCategory> */}
             </LocationSection>
         </DetailContainer>
     )
@@ -329,21 +327,6 @@ const IconContainer = styled.div`
     height: 34px;
     border-radius: 50%;
     background-color: #55505B;
-`
-
-const LocationCategory = styled.div`
-    display: flex;    
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #8084F4, #C48FED);
-    
-    color: #FAFAFA;
-    font-size: 14px;
-    line-height: 26px;
-
-    width: 60px;
-    height: 26px;
-    border-radius: 100px;
 `
 
 const EditSection = styled.div`

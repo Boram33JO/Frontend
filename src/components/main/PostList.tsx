@@ -6,6 +6,7 @@ import Category from "../common/Category";
 import { getNewestPosts } from "../../api/post";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import PostListSkeleton from "./PostListSkeleton";
 
 const PostList = () => {
     const navigate = useNavigate();
@@ -18,7 +19,7 @@ const PostList = () => {
     )
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <PostListSkeleton />
     }
 
     if (isError) {

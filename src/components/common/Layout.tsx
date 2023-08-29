@@ -19,6 +19,7 @@ export const useMiddleRef = () => {
 
 const Layout = () => {
     const [sideOpen, setSideOpen] = useState<boolean>(false);
+    const containerRef = useRef<HTMLDivElement>(null);
     const progressRef = useRef<HTMLDivElement>(null);
     const middleRef = useRef<HTMLDivElement>(null);
     const outletRef = useRef<HTMLDivElement>(null);
@@ -27,13 +28,18 @@ const Layout = () => {
     const navigate = useNavigate();
     const LoginUser = useSelector((state: RootState) => state.user);
 
+    const handleScrollTop = () => {
+        middleRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+
+    }
+
     // Progress 바
     useEffect(() => {
         if (progressRef.current) progressRef.current.style.width = `0%`;
         const handleScroll = throttle(() => {
-            if (middleRef.current && outletRef.current && progressRef.current) {
+            if (middleRef.current && outletRef.current && progressRef.current && containerRef.current) {
                 const scrollTop = middleRef.current.scrollTop;
-                const progress = (scrollTop / (outletRef.current.scrollHeight - document.documentElement.clientHeight)) * 100;
+                const progress = (scrollTop / (outletRef.current.scrollHeight - containerRef.current.clientHeight - 60)) * 100;
                 progressRef.current.style.width = `${progress}%`;
             }
         }, 100);
@@ -50,8 +56,8 @@ const Layout = () => {
 
     return (
         <Container>
-            <InnerContainer>
-                <Header setSideOpen={setSideOpen} />
+            <InnerContainer ref={containerRef}>
+                <Header setSideOpen={setSideOpen} handleScrollTop={handleScrollTop} />
                 <ProgressBar ref={progressRef}></ProgressBar>
                 <MiddleRefContext.Provider value={middleRef}>
                     <Middle ref={middleRef}>
@@ -69,7 +75,7 @@ const Layout = () => {
                 </Left>
                 <Right>
                     {LoginUser.isLogin && !!!id && <PostButton onClick={() => navigate(`/edit`)}><StPost /></PostButton>}
-                    {!!!id && <TopButton onClick={() => { middleRef.current?.scrollTo({ top: 0, behavior: 'smooth' }) }} ><StTop /></TopButton>}
+                    {!!!id && <TopButton onClick={handleScrollTop}><StTop /></TopButton>}
                 </Right>
             </InnerContainer>
         </Container>
@@ -168,7 +174,7 @@ const Right = styled.div`
     bottom: 10px;
 
     background-color: transparent;
-    z-index: 3;
+    z-index: 4;
 
     gap: 10px;
 `;
@@ -184,7 +190,7 @@ const PostButton = styled.div`
     height: 44px;
     border-radius: 50%;
     background-color: #B09FF5;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
 
     cursor: pointer;
 `;
@@ -200,7 +206,7 @@ const TopButton = styled.div`
     height: 44px;
     background-color: #45424E;
     border-radius: 50%;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
     box-sizing: border-box;
     cursor: pointer;
 `;

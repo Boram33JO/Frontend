@@ -38,16 +38,15 @@ const MyListItem = ({ post }: Props) => {
             <ListItemBackground $src={cardBackground(post.category, post.postId)}>
                 <ListItemTop onClick={() => navigate(`/detail/${post.postId}`)}>
                     <ProfileArea>
-                        {/* <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" /> */}
                         <ProfileInfo>
                             <StP
-                                $color="#FAFAFA"
+                                $color="#FFFFFF"
                                 $size={"14px"}
                             >
                                 {post.nickname}
                             </StP>
                             <StP
-                                $color="#C7C7C7"
+                                $color="#E6E6E6"
                                 $size={"14px"}
                             >
                                 {displayedAt(post.createdAt)}
@@ -56,7 +55,7 @@ const MyListItem = ({ post }: Props) => {
                     </ProfileArea>
                     <TitleArea>
                         <StP
-                            $color="#FAFAFA"
+                            $color="#FFFFFF"
                             $size={"16px"}
                         >
                             {post.postTitle}
@@ -66,14 +65,14 @@ const MyListItem = ({ post }: Props) => {
                                 <StLike />
                             </SvgIcon>
                             <StP
-                                $color="#FAFAFA"
+                                $color="#FFFFFF"
                                 $size={"14px"}
                             >
                                 {post.wishlistCount}
                             </StP>
                             <Divider />
                             <StP
-                                $color="#FAFAFA"
+                                $color="#FFFFFF"
                                 $size={"14px"}
                                 $weight={"500"}
                             >
@@ -219,16 +218,9 @@ const StLike = styled(Like)`
     width: 14px;
     height: 14px;
     path {
-        fill: #fafafa;
-        stroke: #fafafa;
+        fill: #FFFFFF;
+        stroke: #FFFFFF;
     }
-`;
-
-const ProfileThumnail = styled.img`
-    width: 30px;
-    height: 30px;
-    background-color: #ececec;
-    border-radius: 50%;
 `;
 
 const ProfileInfo = styled.div`
@@ -275,7 +267,7 @@ const StP = styled.p<{ $color: string; $size: string; $weight?: string }>`
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
     font-weight: ${(props) => props.$weight || 600};
-    line-height: calc(100% + 2px);
+    line-height: calc(100% + 4px);
 
     & {
         display: -webkit-box;
@@ -362,7 +354,7 @@ const Divider = styled.div`
     height: 10px;
     width: 1.5px;
     border-radius: 1.5px;
-    background-color: #fafafa;
+    background-color: #FFFFFF;
     padding: 0;
     margin: 0px 8px;
 `;
