@@ -7,6 +7,9 @@ import useInput from "../../hooks/useInput";
 import { login } from "../../api/user2";
 import { useEffect } from "react";
 import { logIn2, setUserInfo } from "../../redux/modules/userSlice";
+import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
+import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
+
 
 const BasicLogin = () => {
   const navigate = useNavigate();
@@ -16,11 +19,18 @@ const BasicLogin = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
   const handlePasswordKeyDown = (event) => {
     if (event.key === "Enter") {
       loginClickHandler(); // 로그인 버튼 클릭 시뮬레이션
     }
   };
+
 
   // 에러 메시지 표시 후 일정 시간이 지나면 초기화
   useEffect(() => {
@@ -83,17 +93,23 @@ const BasicLogin = () => {
           $isFocused={isEmailFocused}
           $hasValue={sanitizedEmail.length > 0}
         />
-        <Stinput2
-          type={"password"}
-          placeholder={"비밀번호 입력"}
-          value={password}
-          onChange={onChangePasswordHandler}
-          onFocus={() => setIsPasswordFocused(true)}
-          onBlur={() => setIsPasswordFocused(false)}
-          onKeyDown={handlePasswordKeyDown} 
-          $isFocused={isPasswordFocused}
-          $hasValue={sanitizedPassword.length > 0} 
-        />
+        <Stinput2Container>
+          <Stinput2
+            type={showPassword ? "text" : "password"}
+            placeholder={"비밀번호 입력"}
+            value={password}
+            onChange={onChangePasswordHandler}
+            onFocus={() => setIsPasswordFocused(true)}
+            onBlur={() => setIsPasswordFocused(false)}
+            onKeyDown={handlePasswordKeyDown}
+            $isFocused={isPasswordFocused}
+            $hasValue={sanitizedPassword.length > 0}
+          />
+          <PasswordToggle onClick={togglePasswordVisibility}>
+            {showPassword ? <Eye />: <ClosedEye />}
+          </PasswordToggle>
+        </Stinput2Container>
+       
       </Stbox>
 
       <Stbox2>
@@ -118,6 +134,33 @@ const BasicLogin = () => {
 };
 
 export default BasicLogin;
+
+
+const Stinput2Container = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+const PasswordToggle = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  right: 10px;
+`;
+
+
+const Eye = styled(EyeSVG)`
+width: 24px; /* 원하는 크기로 조정 */
+  height: 24px; /* 원하는 크기로 조정 */
+`;
+
+const ClosedEye = styled(ClosedEyeSVG)`
+width: 24px; /* 원하는 크기로 조정 */
+  height: 24px; /* 원하는 크기로 조정 */
+`;
 
 const InnerContainer = styled.div`
   width: 100%;
