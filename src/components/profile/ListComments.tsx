@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getCommentsLists } from "../../api/profile";
 import { getDateNotation } from "../../utils/common";
+import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 
 interface Props {
   commentList: myComment[];
@@ -43,7 +44,12 @@ const ListComments = ({ commentList }: Props) => {
       </Post>
      
         {commentList.length === 0 ? (
-          <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
+          <Pple>
+          <StNodata/>
+                    <NoDataMessage>아직 댓글을 작성하지 않으셨습니다!
+  
+  </NoDataMessage>
+                    </Pple>
         ) : (
           <CommentList>
           <List>
@@ -65,12 +71,25 @@ const ListComments = ({ commentList }: Props) => {
 
 export default ListComments;
 
+const Pple = styled.div`
+ display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #252427;
+  padding-top: 24px;
+  padding-bottom: 24px;
+  border-radius: 8px;
+`;
+const StNodata = styled(Nodata)`
+width: 50px; /* 원하는 크기로 조정 */
+  height: 58px; /* 원하는 크기로 조정 */
+`;
+
 const NoDataMessage = styled.p`
+padding-top: 10px;
   font-size: 16px;
   color: #8E8D92;
   text-align: center; /* 가운데 정렬을 추가 */
-  padding-top: 20px;
-  margin-bottom: -20px;
 `;
 
 
@@ -81,7 +100,6 @@ const InnerContainer = styled.div`
   box-sizing: border-box;
   padding: 0 20px;
   padding-top: 52px;
-
   gap: 20px;
 `;
 
@@ -96,7 +114,6 @@ const H3 = styled.h3`
   line-height: 24px;
   font-weight: 700;
   color: #e7e6f0;
-  margin-bottom: 10px;
 `;
 
 const Bt = styled.div`
