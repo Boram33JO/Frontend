@@ -10,23 +10,27 @@ import { useEffect } from "react";
 
 interface Props {
     setSideOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    handleScrollTop: () => void;
 }
 
-const Header = ({ setSideOpen }: Props) => {
+const Header = ({ setSideOpen, handleScrollTop }: Props) => {
     const navigate = useNavigate();
     const userInfo = useSelector((state: RootState) => state.user);
     const persist = localStorage.getItem("persist:root");
-    
-    useEffect(() => {
 
-    }, [persist])
+    useEffect(() => { }, [persist])
+
+    const handleLogoClick = () => {
+        handleScrollTop();
+        navigate('/')
+    }
 
     return (
         <HeaderContainer>
             <HeaderLeft onClick={() => setSideOpen(true)}>
                 <Menu />
             </HeaderLeft>
-            <HeaderCenter onClick={() => navigate('/')}>
+            <HeaderCenter onClick={handleLogoClick}>
                 P.Ple
             </HeaderCenter>
             <HeaderRight>
@@ -72,10 +76,6 @@ const HeaderLeft = styled.div`
     margin-left: 20px;
 
     cursor: pointer;
-    &:hover path{
-        fill: #8084F4;
-        stroke: #8084F4;
-    }
 `
 
 const HeaderCenter = styled.div`
@@ -98,7 +98,7 @@ const HeaderRight = styled.div`
 const ProfileImage = styled.img`
     width: 28px;
     height: 28px;
-    /* background-color: #ECECEC; */
+    background-color: #ECECEC;
     border-radius: 50%;
     cursor: pointer;
 `

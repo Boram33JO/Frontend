@@ -44,7 +44,7 @@ const SortButton = ({ setSortBy, setDirection }: Props) => {
                         <SortListItem
                             key={item.id}
                             onClick={item.onClick}
-                            $active={(clicked === item.id) ? "true" : "false"}
+                            $active={(clicked === item.id) ? true : false}
                         >
                             {item.name}
                         </SortListItem>
@@ -63,9 +63,10 @@ const SortList = styled.div`
     box-sizing: border-box;
 `
 
-const SortListItem = styled.div<{ $active: string }>`
-    background: ${(props) => (props.$active === "true" ? "linear-gradient(135deg, #8084F4,#C48FED)" : "#58468B")};
-    color: ${(props) => (props.$active === "true" ? "#FAFAFA" : "#9280BA")};
+const SortListItem = styled.div<{ $active: boolean }>`
+    background: ${(props) => (props.$active === true ? "#7462E2" : "#3B3A40")};
+    color: ${(props) => (props.$active === true ? "#FAFAFA" : "#85838D")};
+    font-weight: 600;
     border-radius: 30px;
 
     padding: 8px 16px;
@@ -73,9 +74,4 @@ const SortListItem = styled.div<{ $active: string }>`
 
     box-sizing: border-box;
     cursor: pointer;
-
-    &:hover{
-        background: linear-gradient(135deg, #8084F4,#C48FED);
-        color: #FAFAFA;
-    }
 `

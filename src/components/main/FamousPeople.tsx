@@ -4,6 +4,7 @@ import { getPopularPeople } from '../../api/post';
 import { User2 } from '../../models/user';
 import { getProfileImage } from '../../utils/common';
 import { useNavigate } from 'react-router-dom';
+import FamousPeopleSkeleton from './FamousPeopleSkeleton';
 
 const FamousPeople = () => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const FamousPeople = () => {
     )
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <FamousPeopleSkeleton />
     }
 
     if (isError) {

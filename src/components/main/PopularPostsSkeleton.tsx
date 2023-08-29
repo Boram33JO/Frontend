@@ -1,4 +1,3 @@
-import React from 'react'
 import { styled } from 'styled-components'
 
 const PopularPostsSkeleton = () => {
@@ -47,12 +46,9 @@ const InnerContainer = styled.div`
 `
 
 const TitleSection = styled.div`
-    display: flex;
-    width: 50%;
+    width: 150px;
     height: 26px;
-    align-items: flex-end;
-    justify-content: space-between;
-    background-color: #373737;
+    background-color: #3B3A40;
 `
 
 const CardList = styled.div`
