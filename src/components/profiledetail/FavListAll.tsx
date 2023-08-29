@@ -10,6 +10,8 @@ import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
 import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 import { ReactComponent as Empty } from "../../assets/images/comment_empty.svg"
 import { useState } from "react";
+import SortButton2 from "./SortButton2";
+import { SortType } from "./SortButton"; 
 
 
 
@@ -26,14 +28,22 @@ const FavListAll = () => {
     const [totalPage, setTotalPage] = useState<number>(0);
     const [pageButton, setPageButton] = useState<number[]>([]);
 
+    const [activeSort, setActiveSort] = useState<SortType>(SortType.Newest);
+
     const handlePageChange = (newPage: number) => {
       if (newPage >= 0 && newPage < totalPage) {
         setPage(newPage);
       }
     };
 
-  const { data, isLoading, isError } = useQuery(["wishList", page, totalPage], async () => {
-    const response = await getFavLists(userId, page);
+    const handleSortChange = (sort: SortType) => {
+      setActiveSort(sort);
+      // Perform the data fetching and sorting based on the selected sort type here
+    };
+  
+
+  const { data, isLoading, isError } = useQuery(["wishList", page, totalPage, activeSort], async () => {
+    const response = await getFavLists(userId, page, activeSort);
     console.log("좋아요함 response:", response); // response를 console에 출력
      console.log("포스트 response:", response.data.content.nickname);
     //console.log("좋아요함 data:", response.data); // 확인용 로그
@@ -68,6 +78,8 @@ const FavListAll = () => {
         <TitleSection>
           <H3>좋아요한 포스팅</H3>
         </TitleSection>
+        {data.length > 0 && (
+        <SortButton2 activeSort={activeSort} onSortChange={handleSortChange} />)}
         {data && data.length === 0 ? (
   <NoDataMessage>아직 마음에 드는 포스팅이 없나요?</NoDataMessage>
 ) : (

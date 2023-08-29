@@ -12,8 +12,8 @@ import { ReactComponent as Start } from "../../assets/images/page_start.svg"
 import { ReactComponent as End } from "../../assets/images/page_end.svg"
 import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
 import { ReactComponent as Next } from "../../assets/images/page_next.svg"
-import { ReactComponent as Empty } from "../../assets/images/comment_empty.svg"
-
+import SortButton2 from "./SortButton2";
+import { SortType } from "./SortButton"; 
 
 
 type myComment = {
@@ -38,6 +38,8 @@ const AllCommentsList = () => {
   );
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const [activeSort, setActiveSort] = useState<SortType>(SortType.Newest);
+
   const handleCommentClick = (postId: number) => {
     navigate(`/detail/${postId}`);
   };
@@ -49,9 +51,15 @@ const AllCommentsList = () => {
   }
 };
 
-  const { data, isLoading, isError } = useQuery(["comments", page, totalPage], async () => {
-    const response = await getCommentsLists(userId, page);
- // console.log(response.data);
+const handleSortChange = (sort: SortType) => {
+  setActiveSort(sort);
+  // Perform the data fetching and sorting based on the selected sort type here
+};
+
+
+  const { data, isLoading, isError } = useQuery(["comments", page, totalPage, activeSort], async () => {
+    const response = await getCommentsLists(userId, page, activeSort);
+    console.log(response.data);
  setTotal(response.data.totalElements);
  setTotalPage(response.data.totalPages);  
  if (page === totalPage && page > 0) {
@@ -104,6 +112,9 @@ const AllCommentsList = () => {
       <Post>
         <H3>나의 댓글 모아보기</H3>
       </Post>
+
+      {data.length > 0 && (
+        <SortButton2 activeSort={activeSort} onSortChange={handleSortChange} />)}
       {data && data.length === 0 ? (
         <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
       ) : (
