@@ -83,6 +83,12 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         }
     };
 
+    useEffect(() => {
+        if (isData) {
+            setChooseSongList(isData.songs);
+        }
+    }, [isData]);
+
     const addToChooseSongList = (item: SongListType) => {
         const isAlreadyAdded = chooseSongList.some((addedItem) => addedItem.songNum === item.songNum);
 

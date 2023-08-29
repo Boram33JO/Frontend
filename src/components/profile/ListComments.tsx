@@ -34,12 +34,19 @@ const ListComments = ({ commentList }: Props) => {
     <InnerContainer>
       <Post>
         <H3>나의 댓글 모아보기</H3>
-        <Bt onClick={handleViewAllClick}>전체보기</Bt>
+        {commentList.length === 0 ? (
+ null
+) : (  <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
+  // 또는 아무 내용도 없는 <></> 사용
+)}
+        
       </Post>
-      <CommentList>
+     
         {commentList.length === 0 ? (
           <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
         ) : (
+          <CommentList>
+          <List>
           <CardList>
             {commentList.map((item) => (
               <CommentListItem key={item.id} onClick={() => handleCommentClick(item.postId)}>
@@ -48,8 +55,10 @@ const ListComments = ({ commentList }: Props) => {
               </CommentListItem>
             ))}
           </CardList>
-        )}
+          </List>
+       
       </CommentList>
+       )}
     </InnerContainer>
   );
 };
@@ -58,8 +67,12 @@ export default ListComments;
 
 const NoDataMessage = styled.p`
   font-size: 16px;
-  color: #e7e6f0;
+  color: #8E8D92;
+  text-align: center; /* 가운데 정렬을 추가 */
+  padding-top: 20px;
+  margin-bottom: -20px;
 `;
+
 
 const InnerContainer = styled.div`
   display: flex;
@@ -69,7 +82,7 @@ const InnerContainer = styled.div`
   padding: 0 20px;
   padding-top: 52px;
 
-  gap: 10px;
+  gap: 20px;
 `;
 
 const Post = styled.div`
@@ -93,7 +106,10 @@ const Bt = styled.div`
   cursor: pointer;
 `;
 
-const CommentList = styled.ol`
+const List = styled.div`
+`;
+
+const CommentList = styled.div`
   display: block;
   cursor: pointer;
   overflow-x: auto; /* 가로 스크롤 가능한 영역으로 설정 */

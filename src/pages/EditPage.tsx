@@ -8,7 +8,7 @@ import EditMap from "../components/edit/EditMap";
 import ButtonComponent from "../components/edit/ButtonComponent";
 import FormArea from "../components/edit/FormArea";
 
-import { postData } from "../api/edit";
+import { postData, putData } from "../api/edit";
 import { getDetailPost } from "../api/post";
 
 interface InputForm {
@@ -48,7 +48,6 @@ interface IsData {
 }
 
 const EditPage = () => {
-    // const { postId } = useParams<{ postId: number }>();
     const [slideIndex, setSlideIndex] = useState<number>(0);
     const [inputForm, setInputForm] = useState<InputForm>({ postTitle: "", content: "" });
     const [chooseSongList, setChooseSongList] = useState<Array<ChooseSongListType>>([]);
@@ -60,7 +59,6 @@ const EditPage = () => {
     const { postId } = useParams<{ postId: string }>();
 
     const [isData, setIsData] = useState<IsData | null>(null);
-    const [editedData, setEditedData] = useState<string>("");
 
     const category = categoryNum + 1;
 
@@ -74,6 +72,7 @@ const EditPage = () => {
         postTitle: inputForm.postTitle,
         placeName,
     };
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -90,26 +89,6 @@ const EditPage = () => {
             fixPostData();
         }
     }, [postId]);
-
-    // 클릭 시 슬라이드 번호 이동
-    // const NextButtonHandler = () => {
-    //     if (slideIndex === 0) {
-    //         if (!address) {
-    //             return alert("주소를 입력해주세요.");
-    //         }
-    //         goToSlide(slideIndex + 1);
-    //     } else if (slideIndex === 0) {
-    //         if (chooseSongList.length === 0) {
-    //             return alert("노래를 선택해주세요.");
-    //         }
-    //     } else if (slideIndex === 2) {
-    //         // 업로드
-    //         // return alert("마지막");
-    //         onClickPost();
-    //     }
-
-    //     goToSlide(slideIndex + 1);
-    // };
 
     const getErrorMessage = () => {
         if (slideIndex === 0 && !address) {
@@ -130,8 +109,6 @@ const EditPage = () => {
             alert(errorMessage);
         } else {
             if (slideIndex === 2) {
-                // 업로드 로직을 이곳에 추가
-                // onClickPost();
             }
             goToSlide(slideIndex + 1);
         }
@@ -151,9 +128,34 @@ const EditPage = () => {
             if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
                 if (inputForm.content.length <= 500) {
                     try {
-                        await postData(data);
+                        const response = await postData(data);
                         alert("success");
-                        navigate(`/`);
+                        const postId = response;
+                        navigate(`/detail/${postId}`);
+                    } catch (error) {
+                        console.log(error);
+                        alert("failed");
+                    }
+                } else {
+                    alert("내용은 500자 이하여야 합니다.");
+                }
+            } else {
+                alert("제목과 내용은 필수입니다.");
+            }
+        } else {
+            alert("노래를 선택해주세요.");
+        }
+    };
+
+    const onClickPut = async () => {
+        if (data.songs?.length !== 0) {
+            if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
+                if (inputForm.content.length <= 500) {
+                    try {
+                        console.log("sss", typeof postId);
+                        await putData(data, postId);
+                        alert("success");
+                        navigate(`/detail/${postId}`);
                     } catch (error) {
                         console.log(error);
                         alert("failed");
@@ -235,27 +237,15 @@ const EditPage = () => {
                 >
                     이전
                 </ButtonComponent>
-                {slideIndex === 2 ? (
-                    <ButtonComponent
-                        style={{
-                            color: "#FAFAFA",
-                            background: "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)",
-                        }}
-                        onClick={onClickPost}
-                    >
-                        {slideIndex === 2 ? "완료" : "다음"}
-                    </ButtonComponent>
-                ) : (
-                    <ButtonComponent
-                        style={{
-                            color: "#FAFAFA",
-                            background: "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)",
-                        }}
-                        onClick={NextButtonHandler}
-                    >
-                        {slideIndex === 2 ? "완료" : "다음"}
-                    </ButtonComponent>
-                )}
+                <ButtonComponent
+                    style={{
+                        color: "#FAFAFA",
+                        background: "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)",
+                    }}
+                    onClick={slideIndex === 2 ? (!isData ? onClickPost : onClickPut) : NextButtonHandler}
+                >
+                    {slideIndex === 2 ? "완료" : "다음"}
+                </ButtonComponent>
             </StButtons>
         </StContainer>
     );

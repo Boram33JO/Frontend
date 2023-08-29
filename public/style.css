@@ -1,0 +1,118 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 242px;
+    height: auto;
+    border-radius: 8px;
+    background-color: #3B3A40;
+    color: white;
+    box-sizing: border-box;
+    padding: 16px;
+    gap: 18px;
+}
+
+.overlay-top {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.overlay-bottom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.title-section {
+    flex: 1;
+    overflow: hidden;
+    white-space: no-wrap;
+    text-overflow: ellipsis;
+}
+
+.p1 {
+    color: #EAE9F4;
+    font-size: 14px;
+    line-height: calc(100% + 2px);
+    font-weight: 500;
+    word-break: break-all;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.p2 {
+    color: #A6A3AF;
+    font-size: 14px;
+    line-height: calc(100% + 2px);
+    font-weight: 500;
+    word-break: break-all;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.p3 {
+    color: #EAE9F4;
+    font-size: 14px;
+    line-height: calc(100% + 2px);
+    font-weight: 600;
+    word-break: break-all;
+    white-space: no-wrap;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.profile-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.profile-image {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #EAE9F4;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2px;
+}
+
+.song-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 10px 0px;
+}

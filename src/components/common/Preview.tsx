@@ -11,9 +11,14 @@ interface Props {
 }
 
 const Preview = ({ url, song, setPreview }: Props) => {
+    const handleClickBackground = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setPreview(false)
+    }
+    
     return (
         <>
-            <ModalBackground onClick={() => { setPreview(false) }} />
+            <ModalBackground onClick={handleClickBackground} />
             <ModalContainer>
                 <ModalContent>
                     <ModalContentTop>

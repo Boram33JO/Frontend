@@ -16,6 +16,12 @@ const BasicLogin = () => {
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
 
+  const handlePasswordKeyDown = (event) => {
+    if (event.key === "Enter") {
+      loginClickHandler(); // 로그인 버튼 클릭 시뮬레이션
+    }
+  };
+
   // 에러 메시지 표시 후 일정 시간이 지나면 초기화
   useEffect(() => {
     if (errorMessage) {
@@ -28,6 +34,9 @@ const BasicLogin = () => {
 
   const [email, onChangeEmailHandler] = useInput();
   const [password, onChangePasswordHandler] = useInput();
+
+  const sanitizedEmail = email.trim();
+  const sanitizedPassword = password.trim();
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
@@ -47,18 +56,19 @@ const BasicLogin = () => {
 
   const loginClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(sanitizedEmail)) {
       setErrorMessage("이메일 형식이 아닙니다.");
       return;
     }
 
+
     const loginInformation = {
-      email: email,
-      password: password,
+      email: sanitizedEmail,
+      password: sanitizedPassword,
     };
     loginMutation.mutate(loginInformation);
   };
+
 
   return (
     <InnerContainer>
@@ -71,7 +81,7 @@ const BasicLogin = () => {
           onFocus={() => setIsEmailFocused(true)}
           onBlur={() => setIsEmailFocused(false)}
           $isFocused={isEmailFocused}
-          $hasValue={email.length > 0}
+          $hasValue={sanitizedEmail.length > 0}
         />
         <Stinput2
           type={"password"}
@@ -80,8 +90,9 @@ const BasicLogin = () => {
           onChange={onChangePasswordHandler}
           onFocus={() => setIsPasswordFocused(true)}
           onBlur={() => setIsPasswordFocused(false)}
+          onKeyDown={handlePasswordKeyDown} 
           $isFocused={isPasswordFocused}
-          $hasValue={password.length > 0}
+          $hasValue={sanitizedPassword.length > 0} 
         />
       </Stbox>
 
@@ -101,6 +112,8 @@ const BasicLogin = () => {
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox>
     </InnerContainer>
+
+    
   );
 };
 

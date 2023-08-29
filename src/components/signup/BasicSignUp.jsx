@@ -251,7 +251,7 @@ const BasicSignUp = () => {
       const response = await mobileCheck(to);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-      console.log(response);
+     // console.log(response);
       setShowMobileInput(true);
       // 5분 타이머 시작
       alert("모바일 인증 번호를 발송했습니다.");
@@ -553,13 +553,14 @@ const Stbutton1 = styled.button`
   height: 45px;
   margin-left: 10px;
   background: ${(props) =>
-    props.disabled ? "#45424e" : "linear-gradient(135deg, #8084f4, #c48fed)"};
-  color: ${(props) => (props.disabled ? "#e7e6f0" : "#e7e6f0")};
+    props.disabled ? "#45424e" : "#45424e"};
+  color: ${(props) => (props.disabled ? "#6c6a71" : "#e7e6f0")};
 
   &:hover {
-    color: ${(props) => (props.disabled ? "#e7e6f0" : "#141414")};
+    color: ${(props) => (props.disabled ? "#6c6a71" : "#141414")};
   }
-
+//#6c6a71
+// #f1f1f1
   border: none;
   border-radius: 6px;
   font-size: 16px;

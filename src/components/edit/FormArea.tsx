@@ -55,6 +55,15 @@ const FormArea: React.FC<FormProps> = ({
         });
     }, []);
 
+    useEffect(() => {
+        if (isData) {
+            setInputForm({
+                postTitle: isData.postTitle,
+                content: isData.content,
+            });
+        }
+    }, [isData]);
+
     const removeFromChooseSongList = (song: ChooseSongListType) => {
         const updatedList = chooseSongList.filter((item) => item.songNum !== song.songNum);
         setChooseSongList(updatedList);

@@ -8,6 +8,13 @@ import { ReactComponent as IconComDel } from "../../assets/images/login_signup/i
 import { deleteComment } from "../../api/comment";
 import { ReactComponent as TitleSVG } from "../../assets/images/login_signup/icon_title.svg";
 import DeleteModal from "../common/DeleteModal";
+import { ReactComponent as Start } from "../../assets/images/page_start.svg"
+import { ReactComponent as End } from "../../assets/images/page_end.svg"
+import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
+import { ReactComponent as Next } from "../../assets/images/page_next.svg"
+import SortButton2 from "./SortButton2";
+import { SortType } from "./SortButton"; 
+
 
 type myComment = {
   id: number;
@@ -21,27 +28,59 @@ const AllCommentsList = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+    const [page, setPage] = useState<number>(0);
+    const [total, setTotal] = useState<number>(0);
+    const [totalPage, setTotalPage] = useState<number>(0);
+    const [pageButton, setPageButton] = useState<number[]>([]);
 
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null
   );
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const [activeSort, setActiveSort] = useState<SortType>(SortType.Newest);
+
   const handleCommentClick = (postId: number) => {
     navigate(`/detail/${postId}`);
   };
 
-  const { data, isLoading, isError } = useQuery(["comments"], async () => {
-    const response = await getCommentsLists(userId);
+
+ const handlePageChange = (newPage: number) => {
+  if (newPage >= 0 && newPage < totalPage) {
+    setPage(newPage);
+  }
+};
+
+const handleSortChange = (sort: SortType) => {
+  setActiveSort(sort);
+  // Perform the data fetching and sorting based on the selected sort type here
+};
+
+
+  const { data, isLoading, isError } = useQuery(["comments", page, totalPage, activeSort], async () => {
+    const response = await getCommentsLists(userId, page, activeSort);
+    //console.log(response.data);
+ setTotal(response.data.totalElements);
+ setTotalPage(response.data.totalPages);  
+ if (page === totalPage && page > 0) {
+     setPage(page - 1);
+ }
+ const pageBasicRange = 5; // 기본 페이지 수
+ const pageRange = Math.min(pageBasicRange, totalPage); // 표시될 페이지 수 : 총 페이지 수가 기본 페이지 수보다 작으면 총 페이지 수 만큼만 버튼 보이게
+ const middlePage = Math.floor(pageRange / 2); // 표시될 페이지 수의 중간값
+ const startPage = ((page - middlePage) < totalPage - pageRange + 1) ? Math.max(0, page - middlePage) : totalPage - pageRange; // 표시될 페이지의 시작 번호
+ const array = Array.from({ length: pageRange }, (_, i) => startPage + i + 1);
+ setPageButton(array);
+
+
     return response.data.content;
   });
 
-  const commentMutation = useMutation(
-    (commentId: string) => deleteComment(commentId),
+  const commentMutation = useMutation((commentId: string) => deleteComment(commentId),
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["comments"]);
-      },
+      }
     }
   );
 
@@ -54,7 +93,7 @@ const AllCommentsList = () => {
     try {
       await commentMutation.mutateAsync(commentId);
     } catch (error) {
-      console.error("An error occurred while deleting the comment:", error);
+      //console.error("댓글을 삭제하는 중에 오류가 발생했습니다.", error);
     }
     setDeleteModalOpen(false);
   };
@@ -68,10 +107,14 @@ const AllCommentsList = () => {
   }
 
   return (
+    <>
     <InnerContainer>
       <Post>
         <H3>나의 댓글 모아보기</H3>
       </Post>
+
+      {data.length > 0 && (
+        <SortButton2 activeSort={activeSort} onSortChange={handleSortChange} />)}
       {data && data.length === 0 ? (
         <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
       ) : (
@@ -103,6 +146,9 @@ const AllCommentsList = () => {
               </AllContain>
             </CommentListItem>
           </CommentList>
+
+
+      
         ))
       )}
       {isDeleteModalOpen && (
@@ -113,6 +159,27 @@ const AllCommentsList = () => {
         />
       )}
     </InnerContainer>
+    
+    {data.length > 0 && (
+    <CommentListPagination>
+    <SvgIcon onClick={() => handlePageChange(0)}><Start /></SvgIcon>
+        <SvgIcon onClick={() => handlePageChange(page - 1)}><Prev /></SvgIcon>
+                    <Pagination>
+                        {
+                            pageButton.map((item) => {
+                                return (
+                                    <PageButton key={item} $click={item === page + 1} onClick={() => { handlePageChange(item - 1) }}>
+                                        {item}
+                                    </PageButton>
+                                )
+                            })
+                        }
+                    </Pagination>
+                     <SvgIcon onClick={() => handlePageChange(page + 1)}><Next /></SvgIcon>
+        <SvgIcon onClick={() => handlePageChange(totalPage - 1)}><End /></SvgIcon>
+                </CommentListPagination>
+    )}
+                </>
   );
 };
 
@@ -254,3 +321,39 @@ const PostTitle = styled.div`
   -webkit-line-clamp: 2; /* 최대 3줄 표시 */
   -webkit-box-orient: vertical;
 `;
+
+const CommentListPagination = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    margin: 40px 0px 10px;
+    gap: 10px;
+`
+
+const SvgIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+`
+
+const Pagination = styled.div`
+    display:flex;
+`
+
+const PageButton = styled.div < { $click: boolean }> `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: ${(props) => props.$click ? "#7462E2" : "transparent"};
+    color: ${(props) => props.$click ? "#FAFAFA" : "#535258"};
+    cursor: pointer;
+`
+

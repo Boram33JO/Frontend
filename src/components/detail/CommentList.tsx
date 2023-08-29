@@ -3,7 +3,7 @@ import { styled } from "styled-components"
 import { useMutation, useQuery, useQueryClient } from "react-query"
 import { deleteComment, getComments } from "../../api/comment"
 import CommentForm from "./CommentForm"
-import { displayedAt } from "../../utils/common"
+import { displayedAt, getProfileImage } from "../../utils/common"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
 import { useParams } from "react-router-dom"
@@ -56,7 +56,7 @@ const CommentList = () => {
             const response = await getComments(id, page);
             // console.log(response.data);
             setTotal(response.data.totalElements);
-            setTotalPage(response.data.totalPages);  
+            setTotalPage(response.data.totalPages);
             if (page === totalPage && page > 0) {
                 setPage(page - 1);
             }
@@ -88,7 +88,7 @@ const CommentList = () => {
                     return (
                         <CommentListItem key={item.commentId}>
                             <ListItemTop>
-                                <UserImage src={item.userImage === null ? "https://image.ohou.se/i/bucketplace-v2-development/uploads/default_images/avatar.png?gif=1&w=640&h=640&c=c&webp=1" : item.userImage} />
+                                <UserImage src={getProfileImage(item.userImage)} />
                                 <P $color="#FAFAFA">
                                     {item.nickname}
                                 </P>
