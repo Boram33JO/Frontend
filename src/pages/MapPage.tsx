@@ -6,34 +6,32 @@ import { Post } from "../models/post";
 import ListItem from "../components/common/ListItem";
 
 const MapPage = () => {
-    const [updatedPosition, setUpdatedPosition] = useState<any>([]);
+    const [postList, setPostList] = useState<any>([]);
     const [isData, setIsData] = useState<any>([]);
-    // console.log("up", updatedPosition);
-    // console.log("11", updatedPosition.length);
-    // console.log("up11", isData);
-    // console.log("1111", isData.length);
 
     return (
         <InnerContainer>
             <StMapContainer>
                 <h1>지금 피플러는 뭘 듣고 있을까요?</h1>
                 <KakaoMap
-                    updatedPosition={updatedPosition}
-                    setUpdatedPosition={setUpdatedPosition}
+                    postList={postList}
+                    setPostList={setPostList}
                     isData={isData}
                     setIsData={setIsData}
                 />
             </StMapContainer>
             <StLine />
             <StListContainer>
-                <h1>{updatedPosition.length}의 포스팅 결과</h1>
-                {updatedPosition.length === 0 ? (
+                <h1>{postList.length}개의 포스팅</h1>
+                {postList.length === 0 ? (
                     <div>“검색어"에 관련된 포스팅이 없습니다.</div>
                 ) : (
-                    updatedPosition.map((post: Post) => {
-                        <StMyListItem>
-                            <ListItem post={post} />
-                        </StMyListItem>;
+                    postList?.map((post: Post) => {
+                        return (
+                            <StMyListItem key={post.postId}>
+                                <ListItem post={post} />
+                            </StMyListItem>
+                        )
                     })
                 )}
             </StListContainer>
@@ -62,14 +60,11 @@ export const StMapContainer = styled.div`
 `;
 
 const StLine = styled.div`
-    /* width: 390px; */
     height: 8px;
     background: #242325;
 `;
 
 const StListContainer = styled.div`
-    /* width: 350px; */
-    /* height: 523px; */
     padding: 20px;
     background-color: #141414;
     color: #fafafa;
