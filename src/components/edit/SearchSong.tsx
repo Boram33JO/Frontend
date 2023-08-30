@@ -50,7 +50,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
     const [songList, setSongList] = useState<Array<SongListType>>([]);
     const [popularSongList, setPopularSongList] = useState<Array<PopularSongListType>>([]);
 
-    //-------------------------------------------------- 검색시 스크롤 맨 위로 올림
+    // 검색시 스크롤 맨 위로 올림
     const scrollRef = useRef<HTMLDivElement>(null);
     const scrollToTop = () => {
         if (scrollRef.current) {
@@ -88,7 +88,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                 return alert("다시 검색해주세요.");
             } else if (response?.data !== undefined) {
                 setSongList(response.data);
-                // console.log(songList);
+                console.log(songList);
             }
         } catch (error) {
             console.log(error);

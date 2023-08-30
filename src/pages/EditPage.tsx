@@ -7,7 +7,6 @@ import SearchSong from "../components/edit/SearchSong";
 import EditMap from "../components/edit/EditMap";
 import ButtonComponent from "../components/edit/ButtonComponent";
 import FormArea from "../components/edit/FormArea";
-
 import { postData, putData } from "../api/edit";
 import { getDetailPost } from "../api/post";
 
