@@ -6,6 +6,7 @@ import EditPage from "./pages/EditPage";
 import ListPage from "./pages/ListPage";
 import DetailPage from "./pages/DetailPage";
 import ProfilePage from "./pages/ProfilePage";
+import ProfileDetailPage from "./pages/ProfileDetailPage";
 import MapPage from "./pages/MapPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import Layout from "./components/common/Layout";
@@ -36,6 +37,8 @@ function App() {
           {/* 내 정보 수정하기 */}
           <Route path="/profile/:userId" element={<ProfilePage />} />
           {/* 프로필 전체 보기 */}
+          <Route path="/profile/:userId/detail" element={<ProfileDetailPage />} />
+          {/* 프로필 상세 보기 */}
           <Route path="/profile/:userId/follow" element={<FollowPage />} />
           {/* 팔로워 보기 */}
           <Route path="/profile/:userId/post" element={<MypostPage />} />
