@@ -4,7 +4,7 @@ import { ReactComponent as Place } from '../../assets/images/place.svg'
 import { useMutation, useQueryClient } from "react-query"
 import { followUser, likePost } from "../../api/post"
 import { useNavigate, useParams } from "react-router-dom"
-import { debounce, displayedAt, getProfileImage } from "../../utils/common"
+import { debounce, displayedAt, getProfileImage, showCount } from "../../utils/common"
 import { Post } from "../../models/post"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
@@ -99,26 +99,32 @@ const DetailContent = ({ post }: PostProps) => {
                 }
             </ProfileSection>
             <TitleSection>
-                <TitleSectionLeft>
-                    <StP $size={"18px"} $color={"#FAFAFA"}>
-                        {post.postTitle}
-                    </StP>
-                    <StP $size={"14px"} $color={"#A19FAB"}>
-                        {displayedAt(post.createdAt)} 작성
-                    </StP>
-                </TitleSectionLeft>
-                <TitleSectionRight>
-                    <LikeButton onClick={likeButtonHandler}>
-                        <SvgIcon>
-                            <StLike $yours={post.wishlist} />
-                        </SvgIcon>
-                    </LikeButton>
-                    <LikeCount>
-                        <StP $size={"16px"} $color={"#FAFAFA"}>
-                            {post.wishlistCount}
+                <StP $size={"18px"} $color={"#FAFAFA"}>
+                    {post.postTitle}
+                </StP>
+                <TitleSub>
+                    <TitleSubLeft>
+                        <StP $size={"14px"} $color={"#A19FAB"}>
+                            {displayedAt(post.createdAt)} 작성
                         </StP>
-                    </LikeCount>
-                </TitleSectionRight>
+                        <Divider />
+                        <StP $size={"14px"} $color={"#A19FAB"}>
+                            조회수 {showCount(post.viewCount)}
+                        </StP>
+                    </TitleSubLeft>
+                    <TitleSubRight>
+                        <LikeButton onClick={likeButtonHandler}>
+                            <SvgIcon>
+                                <StLike $yours={post.wishlist} />
+                            </SvgIcon>
+                        </LikeButton>
+                        <LikeCount>
+                            <StP $size={"16px"} $color={"#FAFAFA"}>
+                                {showCount(post.wishlistCount)}
+                            </StP>
+                        </LikeCount>
+                    </TitleSubRight>
+                </TitleSub>
             </TitleSection>
             <ContentSection>
                 <ContentContainer ref={containerRef}>
@@ -191,7 +197,7 @@ const ProfileInfo = styled.div`
 const StP = styled.p< { $size: string, $color: string } >`
     color: ${props => props.$color};
     font-size: ${props => props.$size};
-    line-height: ${props => props.$size};
+    line-height: calc(100% + 6px);
     font-weight: 500;
 `
 
@@ -218,21 +224,34 @@ const FollowBtn = styled.button < { $yours: boolean } >`
 
 const TitleSection = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 
     box-sizing: border-box;
     margin-bottom: 12px;
+    gap: 7px;
 `
 
-const TitleSectionLeft = styled.div`
+const TitleSub = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5px;
+`
+
+const TitleSubLeft = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     gap: 10px;
 `
 
-const TitleSectionRight = styled.div`
+const TitleSubRight = styled.div`
     display: flex;
+    height: auto;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 5px;
 `
 
@@ -249,8 +268,6 @@ const LikeButton = styled.div`
 const LikeCount = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 20px;
 `
 
 const StLike = styled(Like) <{ $yours: boolean }>`
@@ -345,4 +362,11 @@ const EditButton = styled.p`
     margin: none;
 
     cursor: pointer;
+`
+
+const Divider = styled.div`
+    height: 12px;
+    width: 1px;
+    background-color: #A6A3AF;
+    padding: 0;
 `

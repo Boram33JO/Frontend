@@ -5,28 +5,29 @@ import { ReactComponent as Trash } from '../../assets/images/trash.svg'
 interface Props {
     first: string;
     second?: string;
-    deleteToggle: React.Dispatch<React.SetStateAction<boolean>>;
-    deleteButton: () => void;
+    name: string;
+    setToggle: React.Dispatch<React.SetStateAction<boolean>>;
+    clickButton: () => void;
 }
 
-const DeleteModal = ({ first, second, deleteToggle, deleteButton }: Props) => {
+const CommonModal = ({ first, second, name, setToggle, clickButton }: Props) => {
     return (
         <>
-            <ModalBackground onClick={() => deleteToggle(false)} />
+            <ModalBackground onClick={() => setToggle(false)} />
             <ModalContainer>
                 <IconArea>
                     <StTrash />
                 </IconArea>
                 <MessageArea>
                     <P $size={"18px"}>{first}</P>
-                    <P $size={"14px"} $color={"#A6A3AF"}>{second}</P>
+                    <P $size={"18px"}>{second}</P>
                 </MessageArea>
                 <DeleteButtonArea>
-                    <DeleteModalButton onClick={() => deleteToggle(false)}>
+                    <DeleteModalButton onClick={() => setToggle(false)}>
                         취소
                     </DeleteModalButton>
-                    <DeleteModalButton $delete={true} onClick={deleteButton}>
-                        삭제
+                    <DeleteModalButton $delete={true} onClick={clickButton}>
+                        {name}
                     </DeleteModalButton>
                 </DeleteButtonArea>
             </ModalContainer>
@@ -34,7 +35,7 @@ const DeleteModal = ({ first, second, deleteToggle, deleteButton }: Props) => {
     )
 }
 
-export default DeleteModal
+export default CommonModal
 
 const ModalBackground = styled.div`
     position: fixed;
@@ -87,6 +88,7 @@ const MessageArea = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 2px;
 `
 
 const P = styled.p< { $size?: string, $color?: string } >`

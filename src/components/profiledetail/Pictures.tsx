@@ -31,7 +31,7 @@ const Pictures = () => {
   } = useQuery(
     ["Follow", userId, page],
     () => (userId ? getFollowLists(userId) : Promise.resolve([])),
-    { enabled: !!userId , keepPreviousData: true } 
+    { enabled: !!userId, keepPreviousData: true }
   );
 
   const fetchMoreData = () => {
@@ -41,7 +41,7 @@ const Pictures = () => {
       return;
     }
     //setPage((prevPage) => prevPage + 1);
-   // setFetching(true);
+    // setFetching(true);
   };
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const Pictures = () => {
     try {
       await mutation.mutateAsync(followerId);
     } catch (error) {
-    //  console.error("피플러를 삭제하는 중에 오류가 발생했습니다.", error);
+      //  console.error("피플러를 삭제하는 중에 오류가 발생했습니다.", error);
     }
     setDeleteModalOpen(false);
   };
@@ -103,10 +103,10 @@ const Pictures = () => {
 
       {followerData.followList.content.length === 0 ? (
         <Pple>
-        <StNodata/>
-        <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
-                  </Pple>
-       
+          <StNodata />
+          <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
+        </Pple>
+
       ) : (
         followerData.followList.content.map((follower: any) => (
           <MyProfile key={follower.userId}>
@@ -126,7 +126,7 @@ const Pictures = () => {
       )}
       {isDeleteModalOpen && (
         <DeleteModal
-          name="피플러"
+          first="피플러를 삭제하시겠습니까?"
           deleteToggle={setDeleteModalOpen}
           deleteButton={() => deleteCommentAsync(selectedCommentId!)}
         />
