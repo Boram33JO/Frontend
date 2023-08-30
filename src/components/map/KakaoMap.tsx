@@ -26,10 +26,10 @@ interface KakaoProps {
 const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsData }) => {
     const [searchLocation, setSearchLocation] = useState<string>("");
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
-    const [geoLatitude, setGeoLatitude] = useState<string>("");
-    const [geoLongitude, setGeoLongitude] = useState<string>("");
     const [latitude, setLatitude] = useState<string>("37.566826");
     const [longitude, setLongitude] = useState<string>("126.9786567");
+    const [geoLatitude, setGeoLatitude] = useState<string>(latitude);
+    const [geoLongitude, setGeoLongitude] = useState<string>(longitude);
     const [address, setAddress] = useState("");
     const [placeName, setPlaceName] = useState("");
     const [selectedLocation, setSelectedLocation] = useState<any>({});
@@ -71,29 +71,29 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
             });
 
             const overlayContent = `
-            <a href="/detail/${positions[i].postId}">
-                <div class="container">
-                    <div class="overlay-top">
-                        <div class="profile-section">
-                            <img class="profile-image" src="${getProfileImage(positions[i].userImage)}" alt="userImage" />
-                                <div class="profile-info">
-                                    <div class="p1">${positions[i].nickname}</div>
-                                        <div class="p2">${displayedAt(positions[i].createdAt)}</div>
-                                    </div>
+        <a href="/detail/${positions[i].postId}">
+            <div class="container">
+                <div class="overlay-top">
+                    <div class="profile-section">
+                        <img class="profile-image" src="${getProfileImage(positions[i].userImage)}" alt="userImage" />
+                            <div class="profile-info">
+                                <div class="p1">${positions[i].nickname}</div>
+                                    <div class="p2">${displayedAt(positions[i].createdAt)}</div>
                                 </div>
-                            <div class="close-button" title="닫기"><div class="p2"></div></div>
-                        </div>
-                    <div class="overlay-bottom">
-                        <div class="title-section">
-                            <div class="p3">${positions[i].postTitle}</div>
-                        </div>
-                        <div class="song-section">
-                            <img class="quavar" src="${quavar}" alt="quavar" />
-                            <div class="p1">+${positions[i].songCount}</div>
-                        </div>
+                            </div>
+                        <div class="close-button" title="닫기"><div class="p2"></div></div>
+                    </div>
+                <div class="overlay-bottom">
+                    <div class="title-section">
+                        <div class="p3">${positions[i].postTitle}</div>
+                    </div>
+                    <div class="song-section">
+                        <img class="quavar" src="${quavar}" alt="quavar" />
+                        <div class="p1">+${positions[i].songCount}</div>
                     </div>
                 </div>
-            </a>`;
+            </div>
+        </a>`;
 
             const customOverlay = new window.kakao.maps.CustomOverlay({
                 position: positions[i].latlng,
@@ -113,7 +113,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
             newMarkers.push(marker);
         }
 
-        // console.log(newMarkers);
         clusterer.addMarkers(newMarkers);
         setMarkers(newMarkers); // 새로운 마커들 저장
     };
@@ -193,19 +192,14 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
         }
     }, [fetching]);
 
-    function panTo() {
-        var moveLatLon = new window.kakao.maps.LatLng(latitude, longitude);
-        map.panTo(moveLatLon);
-    }
-
     useEffect(() => {
         if (!map) {
             return;
         } else {
             mappingCategoryHandler(categoryNum);
-            panTo();
+            panTo(latitude, longitude);
         }
-    }, [selectedLocation, geoLatitude, geoLongitude]);
+    }, [selectedLocation, geoLatitude, geoLongitude, address]);
 
     // 최초 GPS 위치 설정
     useEffect(() => {
@@ -222,14 +216,13 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                 },
                 (error) => {
                     console.error("error", error);
+                    alert("위치정보동의를 확인해주세요.");
                 }
             );
         } else {
             console.error("해당 브라우저에서는 gps를 지원하지 않습니다.");
         }
     }, []);
-    console.log("lat1,lng1", latitude, longitude);
-    console.log("lat2,lng2", geoLatitude, geoLongitude);
 
     const makeCircle = async () => {
         // 이미 그려진 원이 있다면 삭제
@@ -247,19 +240,30 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
         tempCircle.setMap(map); // 현재 원 그리기
     };
 
+    // // 원하는 위치로 지도 중심 이동
+    function panTo(lat: string, lng: string) {
+        var moveLatLon = new window.kakao.maps.LatLng(lat, lng);
+        map.panTo(moveLatLon);
+    }
+
     // 카테고리를 눌렀을 때, 데이터를 서버에 요청
     const mappingCategoryHandler = async (categoryNum: number) => {
-        const latlng = { latitude, longitude };
-        // const geoLatlng = { geoLatitude, geoLongitude };
-        // if (geoLatlng || categoryNum === 0) {
-        //     console.log("dnkbnfaknek");
         try {
+            const latlng = { latitude, longitude };
             const response = await postCategoryData(latlng);
-            console.log("요청 보낼 좌표:", latlng);
-            setIsData(response?.data);
-            console.log("받는 데이터", response);
-            const updatedPositions = response?.data.map((item: any) => ({
-                postId: item.postId,
+
+            if (!response) {
+                console.error("서버로부터 응답이 없습니다.");
+                return;
+            }
+
+            setIsData(response.data);
+
+            // 카테고리 번호가 0이면 모든 데이터를, 아니면 해당 카테고리만 필터링합니다.
+            const filteredData = categoryNum === 0 ? response.data : response.data.filter((item: any) => item.category === categoryNum);
+
+            const updatedPositions = filteredData.map((item: any) => ({
+                key: item.postId,
                 category: item.category,
                 title: item.location.placeName,
                 nickname: item.nickname,
@@ -269,43 +273,13 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                 createdAt: item.createdAt,
                 latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
             }));
-            setPostList(response?.data);
+
+            setPostList(filteredData);
             addMarkersToMap(map, updatedPositions);
             makeCircle();
         } catch (error) {
             console.error(error);
         }
-        // }
-        // else {
-        //     console.log("123");
-
-        // try {
-        // const response = await postCategoryData(latlng);
-        // console.log("category", response);
-        // console.log("1234");
-        // setIsData(response?.data);
-        // console.log("받는 데이터", response?.data);
-        // const updatedPositions = response?.data
-        //     .filter((item: any) => item.category === categoryNum)
-        //     .map((item: any) => ({
-        //         key: item.postId,
-        //         category: item.category,
-        //         title: item.location.placeName,
-        //         nickname: item.nickname,
-        //         userImage: item.userImage,
-        //         postTitle: item.postTitle,
-        //         songCount: item.songs.length,
-        //         createdAt: item.createdAt,
-        //         latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
-        //     }));
-        // setPostList(response?.data);
-        // addMarkersToMap(map, updatedPositions);
-        // makeCircle();
-        // return response?.data;
-        // } catch (error) {
-        //     console.error(error);
-        // }
-        // }
     };
 
     const searchMap = () => {
