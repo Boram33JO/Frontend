@@ -9,6 +9,7 @@ import { styled } from 'styled-components'
 import { useSelector } from "react-redux"
 import { RootState } from '../redux/config/configStore'
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import DeleteModal from '../components/common/DeleteModal'
 
 const DetailPage = () => {
@@ -22,6 +23,7 @@ const DetailPage = () => {
     const DeleteMutation = useMutation(deletePost, {
         onSuccess: () => {
             queryClient.invalidateQueries(["post"]);
+            toast.success("게시글 삭제 성공");
         }
     })
 
@@ -68,7 +70,12 @@ const DetailPage = () => {
             <StyledHr />
             <CommentList />
             <CommentForm />
-            {(deleteToggle) && <DeleteModal name={"게시글"} deleteToggle={setDeleteToggle} deleteButton={handleDeleteButton} />}
+            {(deleteToggle) &&
+                <DeleteModal
+                    first="정말 해당 게시글을 삭제하시겠어요?"
+                    second="삭제된 게시글은 다시 복구할 수 없습니다."
+                    deleteToggle={setDeleteToggle}
+                    deleteButton={handleDeleteButton} />}
         </>
     )
 }
@@ -111,17 +118,4 @@ const StButton = styled.p`
     margin: none;
 
     cursor: pointer;
-`
-
-const ModalBackground = styled.div`
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 4;
-    width: 100vh;
-    height: 100vh;
-    background-color: gray;
-    opacity: 0.3;
-    /* background-color: rgba(33, 38, 41, 0.3); */
 `

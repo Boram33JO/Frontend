@@ -1,6 +1,6 @@
 import Header from './Header'
 import Footer from './Footer'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { styled } from 'styled-components'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import Side from './Side'
@@ -24,13 +24,20 @@ const Layout = () => {
     const middleRef = useRef<HTMLDivElement>(null);
     const outletRef = useRef<HTMLDivElement>(null);
     const { id } = useParams();
-
     const navigate = useNavigate();
+    const location = useLocation();
     const LoginUser = useSelector((state: RootState) => state.user);
 
     const handleScrollTop = () => {
-        middleRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+        if (middleRef.current) {
+            middleRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+    }
 
+    const sideRender = () => {
+        if (window.location.href.includes("edit")) return true;
+        if (window.location.href.includes("login")) return true;
+        if (window.location.href.includes("signup")) return true;
     }
 
     // Progress 바
@@ -54,6 +61,15 @@ const Layout = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (middleRef.current) {
+            middleRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        if (progressRef.current) {
+            progressRef.current.style.width = `0%`;
+        }
+    }, [location.pathname]);
+
     return (
         <Container>
             <InnerContainer ref={containerRef}>
@@ -73,10 +89,14 @@ const Layout = () => {
                         setSideOpen={setSideOpen}
                     />
                 </Left>
-                <Right>
-                    {LoginUser.isLogin && !!!id && <PostButton onClick={() => navigate(`/edit`)}><StPost /></PostButton>}
-                    {!!!id && <TopButton onClick={handleScrollTop}><StTop /></TopButton>}
-                </Right>
+                {
+                    (!sideRender()) && (
+                        <Right>
+                            {LoginUser.isLogin && !!!id && <PostButton onClick={() => navigate(`/edit`)}><StPost /></PostButton>}
+                            {!!!id && <TopButton onClick={handleScrollTop}><StTop /></TopButton>}
+                        </Right>
+                    )
+                }
             </InnerContainer>
         </Container>
     );
