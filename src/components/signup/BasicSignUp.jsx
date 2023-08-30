@@ -33,10 +33,10 @@ const BasicSignUp = () => {
   const [isNicknameVerified, setIsNicknameVerified] = useState(false); // 회원가입하기 버튼 전에 닉네임 인증여부로 막기
 
   // 에러
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [passwordCheckError, setPasswordCheckError] = useState("");
-  const [nicknameError, setNicknameError] = useState("");
+  // const [emailError, setEmailError] = useState("");
+  // const [passwordError, setPasswordError] = useState("");
+  // const [passwordCheckError, setPasswordCheckError] = useState("");
+  // const [nicknameError, setNicknameError] = useState("");
 
   const [nicknameServerError, setNicknameServerError] = useState(""); // 에러 메시지 저장
 
@@ -155,30 +155,30 @@ const BasicSignUp = () => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
     const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
 
-    // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리(비밀번호 항목만 유효할 듯)
-    const errors = {};
-    if (!emailRegex.test(email)) {
-      errors.email = "이메일 형식이 아닙니다.";
-    }
-    if (!passwordRegex.test(password)) {
-      errors.password = "Password 조건이 충족되지 않았습니다.";
-    }
-    if (password !== passwordCheck) {
-      errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
-    }
-    if (!nicknameRegex.test(nickname)) {
-      errors.nickname = "대/소문자, 한글, 숫자, 2~12자 이하로 입력해 주세요.";
-    }
+    // // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리(비밀번호 항목만 유효할 듯)
+    // const errors = {};
+    // if (!emailRegex.test(email)) {
+    //   errors.email = "이메일 형식이 아닙니다.";
+    // }
+    // if (!passwordRegex.test(password)) {
+    //   errors.password = "Password 조건이 충족되지 않았습니다.";
+    // }
+    // if (password !== passwordCheck) {
+    //   errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
+    // }
+    // if (!nicknameRegex.test(nickname)) {
+    //   errors.nickname = "대/소문자, 한글, 숫자, 2~12자 이하로 입력해 주세요.";
+    // }
 
-    // 에러가 있는 경우 처리
-    if (Object.keys(errors).length > 0) {
-      // 에러 메시지 모두 설정
-      setEmailError(errors.email || "");
-      setPasswordError(errors.password || "");
-      setPasswordCheckError(errors.passwordCheck || "");
-      setNicknameError(errors.nickname || "");
-      return;
-    }
+    // // 에러가 있는 경우 처리
+    // if (Object.keys(errors).length > 0) {
+    //   // 에러 메시지 모두 설정
+    //   setEmailError(errors.email || "");
+    //   setPasswordError(errors.password || "");
+    //   setPasswordCheckError(errors.passwordCheck || "");
+    //   setNicknameError(errors.nickname || "");
+    //   return;
+    // }
 
     const newUser = {
       email: email,
@@ -188,20 +188,6 @@ const BasicSignUp = () => {
     addNewUserMutation.mutate(newUser);
   };
 
-  // 닉네임 검사
-  const handleCheckButton = async () => {
-    const response = await nicknameCheck(nickname);
-    // console.log(response);
-
-    if (response.data.message) {
-      toast.success(`${response.data.message}`, {position: 'top-center'});
-      setIsNicknameVerified(true);
-    } else {
-      // setNicknameServerError(response.data.error);
-      toast.error(`${response.data.error}`, {position: 'top-center'});
-      setIsNicknameVerified(false);
-    }
-  };
 
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
@@ -238,11 +224,10 @@ const BasicSignUp = () => {
       setIsEmailVerified(true);
       setIsEmailButtonDisabled(true); // 중복확인 버튼 비활성화
       toast.success("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
-      setShowCodeInput(true);
+     // setShowCodeInput(true);
       setShowCodeInput(false);
       setEmailButtonContent("인증완료");
 
-      // 3초 후에 숨김 상태 해제
     } else if (response.data === false) {
       setIsEmailVerified(false);
       setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
@@ -304,6 +289,20 @@ const BasicSignUp = () => {
     }
   };
   
+  // 닉네임 검사
+  const handleCheckButton = async () => {
+    const response = await nicknameCheck(nickname);
+    // console.log(response);
+
+    if (response.data.message) {
+      toast.success(`${response.data.message}`, {position: 'top-center'});
+      setIsNicknameVerified(true);
+    } else {
+      // setNicknameServerError(response.data.error);
+      toast.error(`${response.data.error}`, {position: 'top-center'});
+      setIsNicknameVerified(false);
+    }
+  };
 
   return (
     <InnerContainer>
@@ -429,13 +428,13 @@ const BasicSignUp = () => {
         </Stinput2Container>
       </Stbox>
 
-      <ErrorMessageContainer>
+      {/* <ErrorMessageContainer>
         {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
         {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
         {passwordCheckError && (
           <ErrorMessage>{passwordCheckError}</ErrorMessage>
         )}
-      </ErrorMessageContainer>
+      </ErrorMessageContainer> */}
 
       <H3>닉네임</H3>
       <Stbox>

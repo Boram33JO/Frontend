@@ -7,6 +7,8 @@ import { ReactComponent as CameraIcon } from "../../assets/images/profile_camera
 import { useSelector } from "react-redux";
 import { nicknameCheck, updateProfile } from "../../api/profile";
 import { setUserInfo } from "../../redux/modules/userSlice";
+import { toast } from 'react-hot-toast';
+
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -32,7 +34,8 @@ const EditProfile = () => {
     const imgSize = event.target.files?.[0].size;
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (imgSize > maxSize) {
-      alert("이미지 용량은 5MB 이내로 등록 가능합니다.");
+
+      toast.error("이미지 용량은 5MB 이내로 등록 가능합니다.", {position: 'top-center'});
       return;
     }
     if (selectedImage) {
@@ -68,21 +71,17 @@ const EditProfile = () => {
     try {
       const response = await nicknameCheck(nickname);
       console.log(response);
-      if (response.data.statusCode < 300) {
-        alert("사용가능한 닉네임입니다");
+      if (response.data.message){
+        toast.success(`${response.data.message}`, {position: 'top-center'});
         setIsCheck(true);
-      } else if (
-        response.data.statusCode >= 300 &&
-        response.data.statusCode < 400
-      ) {
-        alert("이미 사용중인 닉네임입니다");
-        setIsCheck(false);
       } else {
-        alert(`닉네임은 한글, 영어 또는 숫자로\n2~10글자 사이만 가능합니다`);
+        toast.error(`${response.data.error}`, {position: 'top-center'});
+       console.log(response.data.error)
         setIsCheck(false);
+  
       }
     } catch (error) {
-      console.log(error);
+      toast.error("오류가 발생했습니다. 재시도 해주세요.", {position: 'top-center'});
     }
   };
 
@@ -98,7 +97,7 @@ const EditProfile = () => {
       try {
         const response = await updateProfile(userInfo.userId, formData);
         if (response.status <= 300) {
-          alert("업데이트 성공");
+          toast.success('업데이트 성공했습니다', {position: 'top-center'});
           // console.log("Profile Update:", response);
           const accessToken = response.headers.accesstoken;
           const refreshToken = response.headers.refreshtoken;
