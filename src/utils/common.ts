@@ -60,3 +60,8 @@ export const throttle = (handler: (...args: any[]) => void, timeout = 300) => {
         }
     }
 }
+
+export const showCount = (num: number) => {
+    const showNum = (num >= 1000000) ? `${Math.ceil(num / 1000000)}M` : (num >= 1000) ? `${Math.floor(num / 1000)}K` : num
+    return showNum;
+}

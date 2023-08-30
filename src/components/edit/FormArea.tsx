@@ -133,7 +133,7 @@ const StFormArea = styled.div`
     box-sizing: border-box;
 
     input {
-        width: 235px;
+        width: 380px;
         height: 16px;
         border: none;
         background: #434047;

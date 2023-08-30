@@ -33,9 +33,8 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: center;
     width: 390px;
-    height: 90vh;
+    min-height: 80vh;
     margin: auto;
-    background-color: #141414;
 `
 
 const InnerContainer = styled.div`

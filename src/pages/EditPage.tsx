@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
@@ -7,7 +7,6 @@ import SearchSong from "../components/edit/SearchSong";
 import EditMap from "../components/edit/EditMap";
 import ButtonComponent from "../components/edit/ButtonComponent";
 import FormArea from "../components/edit/FormArea";
-
 import { postData, putData } from "../api/edit";
 import { getDetailPost } from "../api/post";
 
@@ -75,6 +74,14 @@ const EditPage = () => {
 
     const navigate = useNavigate();
 
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollToTop = () => {
+        if (scrollRef.current) {
+            const { scrollHeight, clientHeight } = scrollRef.current;
+            scrollRef.current.scrollTop = clientHeight - scrollHeight;
+        }
+    };
+
     useEffect(() => {
         const fixPostData = async () => {
             try {
@@ -109,6 +116,7 @@ const EditPage = () => {
             alert(errorMessage);
         } else {
             if (slideIndex === 2) {
+                scrollToTop();
             }
             goToSlide(slideIndex + 1);
         }
@@ -119,6 +127,7 @@ const EditPage = () => {
             return;
         } else if (slideIndex === 2) {
             goToSlide(slideIndex - 1);
+            scrollToTop();
         }
         goToSlide(slideIndex - 1);
     };
@@ -177,7 +186,7 @@ const EditPage = () => {
     };
 
     return (
-        <StContainer>
+        <StContainer ref={scrollToTop}>
             <StInnerContainer>
                 <StSlideContainer>
                     <StSlides style={{ transform: `translateX(-${slideIndex}00%)` }}>

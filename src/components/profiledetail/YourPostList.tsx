@@ -11,6 +11,7 @@ import { ReactComponent as Next } from "../../assets/images/page_next.svg";
 import { useState } from "react";
 import SortButton from "./SortButton";
 import { SortType } from "./SortButton"; 
+import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 
 const YourPostList = () => {
   const { userId } = useParams();
@@ -84,7 +85,11 @@ const YourPostList = () => {
         {data.length > 0 && (
         <SortButton activeSort={activeSort} onSortChange={handleSortChange} />)}
         {data && data.length === 0 ? (
+          <Pple>
+          <StNodata/>
           <NoDataMessage>아직 포스팅 작성 전이군요!</NoDataMessage>
+                    </Pple>
+          
         ) : (
           data.map((post: Post) => (
             <MyListItem key={post.postId} post={post}></MyListItem>
@@ -129,10 +134,25 @@ const YourPostList = () => {
 
 export default YourPostList;
 
+const Pple = styled.div`
+ display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #252427;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+`;
+const StNodata = styled(Nodata)`
+width: 50px; /* 원하는 크기로 조정 */
+  height: 58px; /* 원하는 크기로 조정 */
+`;
+
 const NoDataMessage = styled.p`
+padding-top: 10px;
   font-size: 16px;
-  color: #e7e6f0;
-  padding-top: 6px;
+  color: #8E8D92;
+  text-align: center; /* 가운데 정렬을 추가 */
 `;
 
 const InnerContainer = styled.div`

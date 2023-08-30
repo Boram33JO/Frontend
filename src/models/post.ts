@@ -18,6 +18,7 @@ export type Song = {
 
 export type Comment = {
     commentId: string,
+    userId?: number,
     nickname: string,
     userImage: string,
     content: string,
@@ -37,6 +38,7 @@ export type Post = {
     follow: boolean;
     wishlist: boolean;
     wishlistCount: number;
+    viewCount: number;
     songs: Song[];
     comments?: Comment[];
 }

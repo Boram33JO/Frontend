@@ -4,17 +4,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getCommentsLists } from "../../api/profile";
 import { getDateNotation } from "../../utils/common";
-import { ReactComponent as IconComDel } from "../../assets/images/login_signup/icon_com_del.svg";
+import { ReactComponent as IconComDel } from "../../assets/images/login_signup_profile/icon_com_del.svg";
 import { deleteComment } from "../../api/comment";
-import { ReactComponent as TitleSVG } from "../../assets/images/login_signup/icon_title.svg";
+import { ReactComponent as TitleSVG } from "../../assets/images/login_signup_profile/icon_title.svg";
 import DeleteModal from "../common/DeleteModal";
 import { ReactComponent as Start } from "../../assets/images/page_start.svg"
 import { ReactComponent as End } from "../../assets/images/page_end.svg"
 import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
 import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 import SortButton2 from "./SortButton2";
-import { SortType } from "./SortButton"; 
-
+import { SortType } from "./SortButton";
+import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
+import { toast } from 'react-hot-toast';
 
 type myComment = {
   id: number;
@@ -28,10 +29,10 @@ const AllCommentsList = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-    const [page, setPage] = useState<number>(0);
-    const [total, setTotal] = useState<number>(0);
-    const [totalPage, setTotalPage] = useState<number>(0);
-    const [pageButton, setPageButton] = useState<number[]>([]);
+  const [page, setPage] = useState<number>(0);
+  const [total, setTotal] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const [pageButton, setPageButton] = useState<number[]>([]);
 
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null
@@ -45,32 +46,31 @@ const AllCommentsList = () => {
   };
 
 
- const handlePageChange = (newPage: number) => {
-  if (newPage >= 0 && newPage < totalPage) {
-    setPage(newPage);
-  }
-};
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 0 && newPage < totalPage) {
+      setPage(newPage);
+    }
+  };
 
-const handleSortChange = (sort: SortType) => {
-  setActiveSort(sort);
-  // Perform the data fetching and sorting based on the selected sort type here
-};
+  const handleSortChange = (sort: SortType) => {
+    setActiveSort(sort);
+  };
 
 
   const { data, isLoading, isError } = useQuery(["comments", page, totalPage, activeSort], async () => {
     const response = await getCommentsLists(userId, page, activeSort);
     //console.log(response.data);
- setTotal(response.data.totalElements);
- setTotalPage(response.data.totalPages);  
- if (page === totalPage && page > 0) {
-     setPage(page - 1);
- }
- const pageBasicRange = 5; // 기본 페이지 수
- const pageRange = Math.min(pageBasicRange, totalPage); // 표시될 페이지 수 : 총 페이지 수가 기본 페이지 수보다 작으면 총 페이지 수 만큼만 버튼 보이게
- const middlePage = Math.floor(pageRange / 2); // 표시될 페이지 수의 중간값
- const startPage = ((page - middlePage) < totalPage - pageRange + 1) ? Math.max(0, page - middlePage) : totalPage - pageRange; // 표시될 페이지의 시작 번호
- const array = Array.from({ length: pageRange }, (_, i) => startPage + i + 1);
- setPageButton(array);
+    setTotal(response.data.totalElements);
+    setTotalPage(response.data.totalPages);
+    if (page === totalPage && page > 0) {
+      setPage(page - 1);
+    }
+    const pageBasicRange = 5; // 기본 페이지 수
+    const pageRange = Math.min(pageBasicRange, totalPage); // 표시될 페이지 수 : 총 페이지 수가 기본 페이지 수보다 작으면 총 페이지 수 만큼만 버튼 보이게
+    const middlePage = Math.floor(pageRange / 2); // 표시될 페이지 수의 중간값
+    const startPage = ((page - middlePage) < totalPage - pageRange + 1) ? Math.max(0, page - middlePage) : totalPage - pageRange; // 표시될 페이지의 시작 번호
+    const array = Array.from({ length: pageRange }, (_, i) => startPage + i + 1);
+    setPageButton(array);
 
 
     return response.data.content;
@@ -80,6 +80,7 @@ const handleSortChange = (sort: SortType) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["comments"]);
+        toast.success("해당 댓글이 삭제되었습니다.", {position: 'top-center'});
       }
     }
   );
@@ -93,7 +94,7 @@ const handleSortChange = (sort: SortType) => {
     try {
       await commentMutation.mutateAsync(commentId);
     } catch (error) {
-      //console.error("댓글을 삭제하는 중에 오류가 발생했습니다.", error);
+      toast.error("댓글을 삭제하던 중 오류가 발생했습니다.", {position: 'top-center'});
     }
     setDeleteModalOpen(false);
   };
@@ -108,87 +109,106 @@ const handleSortChange = (sort: SortType) => {
 
   return (
     <>
-    <InnerContainer>
-      <Post>
-        <H3>나의 댓글 모아보기</H3>
-      </Post>
+      <InnerContainer>
+        <Post>
+          <H3>나의 댓글 모아보기</H3>
+        </Post>
+
+        {data.length > 0 && (
+          <SortButton2 activeSort={activeSort} onSortChange={handleSortChange} />)}
+        {data && data.length === 0 ? (
+          <Pple>
+            <StNodata />
+            <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
+          </Pple>
+        ) : (
+          data.map((item: myComment) => (
+            <CommentList key={item.id}>
+              <CommentListItem>
+                <AllContain>
+                  <TopSection>
+                    <Delete>
+                      <Content onClick={() => handleCommentClick(item.postId)}>
+                        {item.content}
+                      </Content>
+                      <IconWrapper onClick={() => handleCommentDelete(item.id)}>
+                        <IconComDel key={item.id} />
+                      </IconWrapper>
+                    </Delete>
+                    <Date onClick={() => handleCommentClick(item.postId)}>
+                      {getDateNotation(item.createdAt)}
+                    </Date>
+                  </TopSection>
+                  <TitleZone>
+                    <TitleSVGWrapper>
+                      <TitleSVG />
+                    </TitleSVGWrapper>
+                    <PostTitle
+                      onClick={() => handleCommentClick(item.postId)}
+                    >{`${item.postTitle}`}</PostTitle>
+                  </TitleZone>
+                </AllContain>
+              </CommentListItem>
+            </CommentList>
+
+
+
+          ))
+        )}
+        {isDeleteModalOpen && (
+          <DeleteModal
+            first="정말 해당 댓글을 삭제하시겠어요?"
+            second="삭제된 댓글은 다시 복구할 수 없습니다."
+            deleteToggle={setDeleteModalOpen}
+            deleteButton={() => deleteCommentAsync(selectedCommentId!.toString())}
+          />
+        )}
+      </InnerContainer>
 
       {data.length > 0 && (
-        <SortButton2 activeSort={activeSort} onSortChange={handleSortChange} />)}
-      {data && data.length === 0 ? (
-        <NoDataMessage>아직 댓글을 작성하지 않았습니다!</NoDataMessage>
-      ) : (
-        data.map((item: myComment) => (
-          <CommentList key={item.id}>
-            <CommentListItem>
-              <AllContain>
-                <TopSection>
-                  <Delete>
-                    <Content onClick={() => handleCommentClick(item.postId)}>
-                      {item.content}
-                    </Content>
-                    <IconWrapper onClick={() => handleCommentDelete(item.id)}>
-                      <IconComDel key={item.id} />
-                    </IconWrapper>
-                  </Delete>
-                  <Date onClick={() => handleCommentClick(item.postId)}>
-                    {getDateNotation(item.createdAt)}
-                  </Date>
-                </TopSection>
-                <TitleZone>
-                  <TitleSVGWrapper>
-                    <TitleSVG />
-                  </TitleSVGWrapper>
-                  <PostTitle
-                    onClick={() => handleCommentClick(item.postId)}
-                  >{`${item.postTitle}`}</PostTitle>
-                </TitleZone>
-              </AllContain>
-            </CommentListItem>
-          </CommentList>
-
-
-      
-        ))
+        <CommentListPagination>
+          <SvgIcon onClick={() => handlePageChange(0)}><Start /></SvgIcon>
+          <SvgIcon onClick={() => handlePageChange(page - 1)}><Prev /></SvgIcon>
+          <Pagination>
+            {
+              pageButton.map((item) => {
+                return (
+                  <PageButton key={item} $click={item === page + 1} onClick={() => { handlePageChange(item - 1) }}>
+                    {item}
+                  </PageButton>
+                )
+              })
+            }
+          </Pagination>
+          <SvgIcon onClick={() => handlePageChange(page + 1)}><Next /></SvgIcon>
+          <SvgIcon onClick={() => handlePageChange(totalPage - 1)}><End /></SvgIcon>
+        </CommentListPagination>
       )}
-      {isDeleteModalOpen && (
-        <DeleteModal
-          name="댓글"
-          deleteToggle={setDeleteModalOpen}
-          deleteButton={() => deleteCommentAsync(selectedCommentId!.toString())}
-        />
-      )}
-    </InnerContainer>
-    
-    {data.length > 0 && (
-    <CommentListPagination>
-    <SvgIcon onClick={() => handlePageChange(0)}><Start /></SvgIcon>
-        <SvgIcon onClick={() => handlePageChange(page - 1)}><Prev /></SvgIcon>
-                    <Pagination>
-                        {
-                            pageButton.map((item) => {
-                                return (
-                                    <PageButton key={item} $click={item === page + 1} onClick={() => { handlePageChange(item - 1) }}>
-                                        {item}
-                                    </PageButton>
-                                )
-                            })
-                        }
-                    </Pagination>
-                     <SvgIcon onClick={() => handlePageChange(page + 1)}><Next /></SvgIcon>
-        <SvgIcon onClick={() => handlePageChange(totalPage - 1)}><End /></SvgIcon>
-                </CommentListPagination>
-    )}
-                </>
+    </>
   );
 };
 
 export default AllCommentsList;
 
+const Pple = styled.div`
+ display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #252427;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-radius: 8px;
+`;
+const StNodata = styled(Nodata)`
+width: 50px; /* 원하는 크기로 조정 */
+  height: 58px; /* 원하는 크기로 조정 */
+`;
+
 const NoDataMessage = styled.p`
+padding-top: 10px;
   font-size: 16px;
-  color: #e7e6f0;
-  padding-top: 6px;
+  color: #8E8D92;
+  text-align: center; /* 가운데 정렬을 추가 */
 `;
 
 const InnerContainer = styled.div`
