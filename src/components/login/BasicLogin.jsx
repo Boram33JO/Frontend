@@ -116,7 +116,7 @@ const BasicLogin = () => {
       <Stbox2>
         <Stlink1
           onClick={() => {
-            navigate("/profile/password");
+            navigate("/password");
           }}
         >
           로그인 정보를 잊으셨나요?
