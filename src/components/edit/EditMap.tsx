@@ -59,9 +59,9 @@ const EditMap: React.FC<EditMapProps> = ({
 
     useEffect(() => {
         window.kakao.maps.load(function () {
-            const mapContainer = document.getElementById("map"); // 지도를 표시할 div
+            const mapContainer = document.getElementById("map");
             const mapOption = {
-                center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude), // 지도의 중심좌표
+                center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude),
                 level: 3,
             };
 
@@ -82,7 +82,29 @@ const EditMap: React.FC<EditMapProps> = ({
                 image: markerImage,
             });
 
-            marker.setMap(map); // Add the marker to the map
+            marker.setMap(map);
+
+            window.kakao.maps.event.addListener(map, "click", function (mouseEvent: any) {
+                const latlng = mouseEvent.latLng;
+                marker.setPosition(latlng);
+
+                setState((prevState) => ({
+                    ...prevState,
+                    center: {
+                        latitude: latlng.getLat(),
+                        longitude: latlng.getLng(),
+                    },
+                }));
+                // 지오코더를 사용하여 주소 정보 가져오기
+                const geocoder = new window.kakao.maps.services.Geocoder();
+                const coord = new window.kakao.maps.LatLng(latlng.getLat(), latlng.getLng());
+                const callback = function (result: any, status: any) {
+                    if (status === window.kakao.maps.services.Status.OK) {
+                        console.log("주소 : " + result[0].address.address_name);
+                    }
+                };
+                geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+            });
         });
     }, [state, latitude, longitude]);
 
@@ -173,6 +195,7 @@ const EditMap: React.FC<EditMapProps> = ({
             </StCategory>
             <StKakaoMapContainer>
                 <StKakaoMap id="map" />
+                <div id="clickLatlng"></div>
             </StKakaoMapContainer>
         </StMapContainer>
     );
@@ -196,13 +219,18 @@ const StSearchForm = styled.form`
     height: 40px;
     border: 1px solid #434047;
     background-color: #434047;
+    box-sizing: border-box;
     border-radius: 999px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    box-sizing: border-box;
+
     input {
-        width: 270px;
-        height: 16px;
+        width: 350px;
+        height: 20px;
+        font-size: 16px;
+        line-height: 100%;
         color: #fafafa;
         border: 1px solid #434047;
         background-color: #434047;
