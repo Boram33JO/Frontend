@@ -112,8 +112,7 @@ const Bt = styled.div`
 
 const FamousList = styled.div`
   display: flex;
-  justify-content: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
 `;
 
 const FamousListItem = styled.div`
@@ -133,6 +132,7 @@ const FamousListThumb = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  background-color: #ECECEC;
 `;
 
 const FamousListNickName = styled.div`
@@ -141,4 +141,9 @@ const FamousListNickName = styled.div`
   color: #e7e6f0;
   margin-top: 10px;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70px; 
 `;
+// 뒤로가기 해
