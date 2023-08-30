@@ -4,11 +4,10 @@ import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
 import Categories from "../edit/Categories";
 import { CategoryPinImages } from "../../assets/images/pin/pin";
 import SearchModal from "../edit/SearchModal";
-import clustererImage from "../../assets/images/clusterer.svg"
+import clustererImage from "../../assets/images/clusterer.svg";
 import { debounce, displayedAt, getProfileImage, throttle } from "../../utils/common";
 import { postCategoryData } from "../../api/map";
-import quavar from '../../assets/images/quavar_note2.svg'
-import { useNavigate } from "react-router-dom";
+import quavar from "../../assets/images/quavar_note2.svg";
 import { Post } from "../../models/post";
 
 interface Location {
@@ -71,18 +70,19 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                 clickable: true,
             });
 
-            const overlayContent =
-                `<div class="container">
+            const overlayContent = `
+            <a href="/detail/${positions[i].postId}">
+                <div class="container">
                     <div class="overlay-top">
                         <div class="profile-section">
                             <img class="profile-image" src="${getProfileImage(positions[i].userImage)}" alt="userImage" />
-                            <div class="profile-info">
-                                <div class="p1">${positions[i].nickname}</div>
-                                <div class="p2">${displayedAt(positions[i].createdAt)}</div>
-                            </div>
+                                <div class="profile-info">
+                                    <div class="p1">${positions[i].nickname}</div>
+                                        <div class="p2">${displayedAt(positions[i].createdAt)}</div>
+                                    </div>
+                                </div>
+                            <div class="close-button" title="닫기"><div class="p2"></div></div>
                         </div>
-                        <div class="close-button" title="닫기"><div class="p2"></div></div>
-                    </div>
                     <div class="overlay-bottom">
                         <div class="title-section">
                             <div class="p3">${positions[i].postTitle}</div>
@@ -91,23 +91,24 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                             <img class="quavar" src="${quavar}" alt="quavar" />
                             <div class="p1">+${positions[i].songCount}</div>
                         </div>
-                    </div>                
-                </div>`;
+                    </div>
+                </div>
+            </a>`;
 
             const customOverlay = new window.kakao.maps.CustomOverlay({
                 position: positions[i].latlng,
-                clickable: false,
+                clickable: true,
                 content: overlayContent,
-                yAnchor: 1.5
-            })
+                yAnchor: 1.5,
+            });
 
-            window.kakao.maps.event.addListener(map, 'click', function () {
+            window.kakao.maps.event.addListener(map, "click", function () {
                 customOverlay.setMap(null);
-            })
+            });
 
-            window.kakao.maps.event.addListener(marker, 'click', function () {
+            window.kakao.maps.event.addListener(marker, "click", function () {
                 customOverlay.setMap(map);
-            })
+            });
 
             newMarkers.push(marker);
         }
@@ -133,18 +134,21 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                 map: map,
                 averageCenter: true,
                 minLevel: 6,
-                styles: [{
-                    width: '49px', height: '54px',
-                    background: `url(${clustererImage}) no-repeat`,
-                    color: '#fff',
-                    textAlign: 'center',
-                    lineHeight: '48px'
-                }]
-            })
+                styles: [
+                    {
+                        width: "49px",
+                        height: "54px",
+                        background: `url(${clustererImage}) no-repeat`,
+                        color: "#fff",
+                        textAlign: "center",
+                        lineHeight: "48px",
+                    },
+                ],
+            });
 
             clusterer.setTexts((item: string) => {
-                return `+${item}`
-            })
+                return `+${item}`;
+            });
 
             setMap(map);
             setClusterer(clusterer);
@@ -187,7 +191,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
         if (fetching) {
             mappingCategoryHandler(categoryNum);
         }
-    }, [fetching])
+    }, [fetching]);
 
     function panTo() {
         var moveLatLon = new window.kakao.maps.LatLng(latitude, longitude);
@@ -201,30 +205,31 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
             mappingCategoryHandler(categoryNum);
             panTo();
         }
-    }, [selectedLocation]);
+    }, [selectedLocation, geoLatitude, geoLongitude]);
 
     // 최초 GPS 위치 설정
-    // useEffect(() => {
-    //     if (navigator.geolocation) {
-    //         navigator.geolocation.getCurrentPosition(
-    //             function (position) {
-    //                 const lat = String(position.coords.latitude);
-    //                 const lng = String(position.coords.longitude);
+    useEffect(() => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    const lat = String(position.coords.latitude);
+                    const lng = String(position.coords.longitude);
 
-    //                 console.log("lat,lng", lat, lng);
-    //                 setLatitude(lat);
-    //                 setLongitude(lng);
-    //                 setGeoLatitude(lat);
-    //                 setGeoLongitude(lng);
-    //             },
-    //             (error) => {
-    //                 console.error("error", error);
-    //             }
-    //         );
-    //     } else {
-    //         console.error("해당 브라우저에서는 gps를 지원하지 않습니다.");
-    //     }
-    // }, []);
+                    setLatitude(lat);
+                    setLongitude(lng);
+                    setGeoLatitude(lat);
+                    setGeoLongitude(lng);
+                },
+                (error) => {
+                    console.error("error", error);
+                }
+            );
+        } else {
+            console.error("해당 브라우저에서는 gps를 지원하지 않습니다.");
+        }
+    }, []);
+    console.log("lat1,lng1", latitude, longitude);
+    console.log("lat2,lng2", geoLatitude, geoLongitude);
 
     const makeCircle = async () => {
         // 이미 그려진 원이 있다면 삭제
@@ -245,59 +250,62 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
     // 카테고리를 눌렀을 때, 데이터를 서버에 요청
     const mappingCategoryHandler = async (categoryNum: number) => {
         const latlng = { latitude, longitude };
-
-        if (categoryNum === 0) {
-            try {
-                const response = await postCategoryData(latlng);
-                // console.log("요청 보낼 좌표:", latlng);
-                setIsData(response?.data);
-                // console.log("받는 데이터", response?.data);
-
-                const updatedPositions = response?.data.map((item: any) => ({
-                    postId: item.postId,
-                    category: item.category,
-                    title: item.location.placeName,
-                    nickname: item.nickname,
-                    userImage: item.userImage,
-                    postTitle: item.postTitle,
-                    songCount: item.songs.length,
-                    createdAt: item.createdAt,
-                    latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
-                }));
-                setPostList(response?.data);
-                addMarkersToMap(map, updatedPositions);
-                makeCircle();
-            } catch (error) {
-                console.error(error);
-            }
-        } else {
-            try {
-                const response = await postCategoryData(latlng);
-                // console.log("category", response);
-                setIsData(response?.data);
-                // console.log("받는 데이터", response?.data);
-
-                const updatedPositions = response?.data
-                    .filter((item: any) => item.category === categoryNum)
-                    .map((item: any) => ({
-                        key: item.postId,
-                        category: item.category,
-                        title: item.location.placeName,
-                        nickname: item.nickname,
-                        userImage: item.userImage,
-                        postTitle: item.postTitle,
-                        songCount: item.songs.length,
-                        createdAt: item.createdAt,
-                        latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
-                    }));
-                setPostList(response?.data);
-                addMarkersToMap(map, updatedPositions);
-                makeCircle();
-                // return response?.data;
-            } catch (error) {
-                console.error(error);
-            }
+        // const geoLatlng = { geoLatitude, geoLongitude };
+        // if (geoLatlng || categoryNum === 0) {
+        //     console.log("dnkbnfaknek");
+        try {
+            const response = await postCategoryData(latlng);
+            console.log("요청 보낼 좌표:", latlng);
+            setIsData(response?.data);
+            console.log("받는 데이터", response);
+            const updatedPositions = response?.data.map((item: any) => ({
+                postId: item.postId,
+                category: item.category,
+                title: item.location.placeName,
+                nickname: item.nickname,
+                userImage: item.userImage,
+                postTitle: item.postTitle,
+                songCount: item.songs.length,
+                createdAt: item.createdAt,
+                latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
+            }));
+            setPostList(response?.data);
+            addMarkersToMap(map, updatedPositions);
+            makeCircle();
+        } catch (error) {
+            console.error(error);
         }
+        // }
+        // else {
+        //     console.log("123");
+
+        // try {
+        // const response = await postCategoryData(latlng);
+        // console.log("category", response);
+        // console.log("1234");
+        // setIsData(response?.data);
+        // console.log("받는 데이터", response?.data);
+        // const updatedPositions = response?.data
+        //     .filter((item: any) => item.category === categoryNum)
+        //     .map((item: any) => ({
+        //         key: item.postId,
+        //         category: item.category,
+        //         title: item.location.placeName,
+        //         nickname: item.nickname,
+        //         userImage: item.userImage,
+        //         postTitle: item.postTitle,
+        //         songCount: item.songs.length,
+        //         createdAt: item.createdAt,
+        //         latlng: new window.kakao.maps.LatLng(item.location.latitude, item.location.longitude),
+        //     }));
+        // setPostList(response?.data);
+        // addMarkersToMap(map, updatedPositions);
+        // makeCircle();
+        // return response?.data;
+        // } catch (error) {
+        //     console.error(error);
+        // }
+        // }
     };
 
     const searchMap = () => {
@@ -327,11 +335,13 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
         setSearchLocation("");
     };
 
-    // console.log("isData", isData);
-
     return (
         <>
-            <link href="./style.css" rel="stylesheet" type="text/css" />
+            <link
+                href="./style.css"
+                rel="stylesheet"
+                type="text/css"
+            />
             <StMapContainer>
                 <StSearchForm onSubmit={searchLocationHandler}>
                     <div>
@@ -442,7 +452,7 @@ const StReSearchButton = styled.div`
     background-color: #484461;
     box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.18);
 
-    color: #FAFAFA;
+    color: #fafafa;
     font-size: 14px;
     line-height: calc(100% + 6px);
     font-weight: 500;
@@ -452,4 +462,3 @@ const StReSearchButton = styled.div`
 
     cursor: pointer;
 `;
-
