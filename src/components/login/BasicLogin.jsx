@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import { logIn2, setUserInfo } from "../../redux/modules/userSlice";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
-
+import { toast } from 'react-hot-toast';
 
 const BasicLogin = () => {
   const navigate = useNavigate();
@@ -33,14 +33,14 @@ const BasicLogin = () => {
 
 
   // 에러 메시지 표시 후 일정 시간이 지나면 초기화
-  useEffect(() => {
-    if (errorMessage) {
-      const timeoutId = setTimeout(() => {
-        setErrorMessage("");
-      }, 5000); // 5초 후에 에러 메시지 초기화
-      return () => clearTimeout(timeoutId); // 컴포넌트 언마운트 시 타임아웃 클리어
-    }
-  }, [errorMessage]);
+  // useEffect(() => {
+  //   if (errorMessage) {
+  //     const timeoutId = setTimeout(() => {
+  //       setErrorMessage("");
+  //     }, 5000); // 5초 후에 에러 메시지 초기화
+  //     return () => clearTimeout(timeoutId); // 컴포넌트 언마운트 시 타임아웃 클리어
+  //   }
+  // }, [errorMessage]);
 
   const [email, onChangeEmailHandler] = useInput();
   const [password, onChangePasswordHandler] = useInput();
@@ -50,24 +50,25 @@ const BasicLogin = () => {
 
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
-      // console.log(response);
-      alert("로그인 했습니다!");
       dispatch(logIn2());
       dispatch(setUserInfo(response.data));
       navigate("/");
+      toast.success('로그인 되었습니다!', {position: 'top-center'});
     },
     onError: (error) => {
       // 에러 발생 시 에러 메시지 표시
       //console.log("Error response from server:", error?.response?.data);
       //console.log(error.response);
-      setErrorMessage("로그인 정보를 찾을 수 없습니다.");
+      toast.error('로그인 정보를 찾을 수 없습니다.', {position: 'top-center'});
+     // setErrorMessage(".");
     },
   });
 
   const loginClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(sanitizedEmail)) {
-      setErrorMessage("이메일 형식이 아닙니다.");
+     // setErrorMessage("이메일 형식이 아닙니다.");
+      toast.error('이메일 형식으로 입력해주세요.', {position: 'top-center'});
       return;
     }
 
@@ -124,7 +125,6 @@ const BasicLogin = () => {
 
       <Stbox>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}{" "}
-        {/* 추가: 에러 메시지 표시 */}
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox>
     </InnerContainer>
