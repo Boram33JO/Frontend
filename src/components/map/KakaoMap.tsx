@@ -11,12 +11,6 @@ import quavar from "../../assets/images/quavar_note2.svg";
 import { Post } from "../../models/post";
 import { toast } from "react-hot-toast";
 
-interface Location {
-    placeName: string;
-    latitude: string;
-    longitude: string;
-}
-
 interface KakaoProps {
     postList: Post[];
     setPostList: React.Dispatch<React.SetStateAction<Post[]>>;
@@ -98,7 +92,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
 
             const customOverlay = new window.kakao.maps.CustomOverlay({
                 position: positions[i].latlng,
-                clickable: true,
+                clickable: false,
                 content: overlayContent,
                 yAnchor: 1.5,
             });
@@ -325,7 +319,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                                 width: "16px",
                                 height: "16px",
                                 marginLeft: "16px",
-                                marginRight: "12px",
+                                marginRight: "8px",
                             }}
                         />
                     </div>

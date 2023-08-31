@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 import KakaoMap from "../components/map/KakaoMap";
@@ -8,6 +8,20 @@ import ListItem from "../components/common/ListItem";
 const MapPage = () => {
     const [postList, setPostList] = useState<any>([]);
     const [isData, setIsData] = useState<any>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const perPage = 10; // 한 페이지에 보여줄 아이템 수
+
+    // 페이지 버튼 클릭 시 호출될 함수
+    const handlePageClick = (pageNumber: number) => {
+        setCurrentPage(pageNumber);
+    };
+
+    // 현재 페이지에 해당하는 포스트만 필터링
+    const currentPosts = postList.slice((currentPage - 1) * perPage, currentPage * perPage);
+
+    useEffect(() => {
+        handlePageClick(1);
+    }, []);
 
     return (
         <InnerContainer>
@@ -22,11 +36,11 @@ const MapPage = () => {
             </StMapContainer>
             <StLine />
             <StListContainer>
-                <h1>{postList.length}개의 포스팅</h1>
-                {postList.length === 0 ? (
+                <h1>{currentPosts.length}개의 포스팅</h1>
+                {currentPosts.length === 0 ? (
                     <div>“검색어"에 관련된 포스팅이 없습니다.</div>
                 ) : (
-                    postList?.map((post: Post) => {
+                    currentPosts.map((post: Post) => {
                         return (
                             <StMyListItem key={post.postId}>
                                 <ListItem post={post} />
@@ -34,6 +48,17 @@ const MapPage = () => {
                         );
                     })
                 )}
+                {/* Pagination */}
+                <StButtonContainer>
+                    {[...Array(Math.ceil(postList.length / perPage))].map((_, index) => (
+                        <StPagenationButton
+                            key={index + 1}
+                            onClick={() => handlePageClick(index + 1)}
+                        >
+                            {index + 1}
+                        </StPagenationButton>
+                    ))}
+                </StButtonContainer>
             </StListContainer>
         </InnerContainer>
     );
@@ -78,4 +103,15 @@ const StListContainer = styled.div`
 
 const StMyListItem = styled.div`
     margin-bottom: 14px;
+`;
+
+const StButtonContainer = styled.div`
+    display: flex;
+    justify-content: center;
+`;
+
+const StPagenationButton = styled.button`
+    color: #fafafa;
+    margin: 10px;
+    cursor: pointer;
 `;
