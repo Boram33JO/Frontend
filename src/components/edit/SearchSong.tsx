@@ -229,7 +229,7 @@ const StSearchForm = styled.form`
     align-items: center;
 
     input {
-        width: 350px;
+        width: 85%;
         height: 20px;
         color: #fafafa;
         border: 1px solid #434047;
@@ -242,13 +242,15 @@ const StSearchForm = styled.form`
 
 const StPopularContainer = styled.div`
     color: #fafafa;
+    line-height: 100%;
+
     h2 {
         font-size: 18px;
     }
     h3 {
         width: 130px;
         font-size: 16px;
-
+        line-height: 100%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -276,6 +278,7 @@ const StContainer = styled.div`
     border-radius: 6px;
     border: 1px solid #524d58;
     background: #434047;
+    line-height: 100%;
 
     box-sizing: border-box;
     gap: 10px;
@@ -316,6 +319,7 @@ const StSongList = styled.div`
     justify-content: space-between;
     width: 100%;
     color: #fafafa;
+    line-height: 100%;
 
     div {
     }

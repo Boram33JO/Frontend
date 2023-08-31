@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
 import Category from "./Category";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
+
+import { ReactComponent as Pin } from "../../assets/images/icon_pin_map.svg";
+
 import SearchModal from "./SearchModal";
 import { toast } from "react-hot-toast";
 
@@ -57,6 +60,8 @@ const EditMap: React.FC<EditMapProps> = ({
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
     const [modal, setModal] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
+
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
     type MapRefType = {
         map: any;
@@ -218,6 +223,13 @@ const EditMap: React.FC<EditMapProps> = ({
                 <StKakaoMap id="map" />
                 <div id="clickLatlng"></div>
             </StKakaoMapContainer>
+            <StLocation>
+                <div>
+                    <Pin style={{ marginRight: "8px" }} />
+                    {placeName}
+                </div>
+                <button>{categories[categoryNum]}</button>
+            </StLocation>
         </StMapContainer>
     );
 };
@@ -248,7 +260,7 @@ const StSearchForm = styled.form`
     box-sizing: border-box;
 
     input {
-        width: 350px;
+        width: 85%;
         height: 20px;
         font-size: 16px;
         line-height: 100%;
@@ -276,4 +288,35 @@ const StKakaoMap = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 10px;
+`;
+
+const StLocation = styled.div`
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    background: #434047;
+    box-sizing: border-box;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button {
+        height: 26px;
+        color: #fafafa;
+        display: flex;
+        border-radius: 999px;
+        padding: 6px 16px;
+        justify-content: center;
+        align-items: center;
+    }
 `;

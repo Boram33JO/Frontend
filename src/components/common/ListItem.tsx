@@ -36,7 +36,7 @@ const ListItem = ({ post }: Props) => {
             <ListItemBackground $src={cardBackground(post.category, post.postId)} onClick={() => navigate(`/detail/${post.postId}`)}>
                 <ListItemTop>
                     <ProfileArea>
-                        <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" />
+                        <ProfileThumbnail $src={getProfileImage(post.userImage)} />
                         <ProfileInfo>
                             <StP $color="#FFFFFF" $size={"14px"}>
                                 {post.nickname}
@@ -78,9 +78,7 @@ const ListItem = ({ post }: Props) => {
                     <PlaylistRight>
                         <SvgIcon>
                             <Quaver />
-                            <StP $color={"#414141"} $size={"14px"}>
-                                {`+${post.songs.length}`}
-                            </StP>
+                            {`+${post.songs.length}`}
                         </SvgIcon>
                         <SvgIcon>
                             {
@@ -156,7 +154,7 @@ const ListItemTop = styled.div`
 
 const ProfileArea = styled.div`
     display: inline-flex;
-    flex: 0.46 0 0;
+    flex: 0.46 1 0;
     align-items: center;
     gap: 10px;
 `
@@ -164,7 +162,7 @@ const ProfileArea = styled.div`
 const TitleArea = styled.div`
     display: inline-flex;
     flex-direction: column;
-    flex: 0.54 0 0;
+    flex: 0.54 1 0;
     align-items: flex-end;
 `
 
@@ -184,9 +182,13 @@ const StLike = styled(Like)`
     }
 `
 
-const ProfileThumnail = styled.img`
-    width: 34px;
-    height: 34px;
+const ProfileThumbnail = styled.div<{ $src?: string }>`
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    background: url(${({ $src }) => $src});
+    background-size: cover;
+    background-repeat: no-repeat;
     background-color: #ECECEC;
     border-radius: 50%;
 `
@@ -221,8 +223,8 @@ const PlaylistLeft = styled.div`
 `
 
 const MusicThumbnail = styled.img`
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
 `
 
 const MusicInfo = styled.div`
@@ -269,6 +271,10 @@ const SvgIcon = styled.span`
     align-items: center;
     justify-content: center;
     gap: 5px;
+    color: #414141;
+    font-size: 14px;
+    line-height: calc(150%);
+    font-weight: 600;
 `
 
 const DropdownList = styled.div`
@@ -286,8 +292,8 @@ const DropdownList = styled.div`
     overflow-y: scroll;
 
     box-sizing: border-box;
-    padding: 14px 20px;
-    gap: 14px;
+    padding: 12px 20px;
+    gap: 12px;
 
     &::-webkit-scrollbar {
         width: 6px;

@@ -105,9 +105,9 @@ const DetailContent = ({ post }: PostProps) => {
                 }
             </ProfileSection>
             <TitleSection>
-                <StP $size={"18px"} $color={"#FAFAFA"}>
+                <TitleMain>
                     {post.postTitle}
-                </StP>
+                </TitleMain>
                 <TitleSub>
                     <TitleSubLeft>
                         <StP $size={"14px"} $color={"#A19FAB"}>
@@ -151,8 +151,7 @@ const DetailContent = ({ post }: PostProps) => {
                         </StP>
                     </LocationInfoLeft>
                     <LocationInfoRight>
-                        문화공간
-                        {/* {categories[Number(post.category) - 1]} */}
+                        {categories[Number(post.category) - 1]}
                     </LocationInfoRight>
                 </LocationInfo>
             </LocationSection>
@@ -256,6 +255,14 @@ const TitleSection = styled.div`
     box-sizing: border-box;
     margin-bottom: 12px;
     gap: 7px;
+`
+
+const TitleMain = styled.div`
+    width: 100%;
+    color: #FAFAFA;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 500;
 `
 
 const TitleSub = styled.div`
@@ -371,10 +378,15 @@ const LocationInfoLeft = styled.div`
 `
 
 const LocationInfoRight = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     width: 56px;
     white-space: nowrap;
 `
+
 const IconContainer = styled.div`
+    flex: 0 0 34px;
     display: flex;
     align-items: center;
     justify-content: center;
