@@ -65,8 +65,8 @@ const PlaylistSection = styled.div`
     overflow-y: scroll;
 
     box-sizing: border-box;
-    padding: 14px 20px;
-    gap: 14px;
+    padding: 12px 20px;
+    gap: 12px;
 
     &::-webkit-scrollbar {
         width: 6px;
@@ -103,8 +103,8 @@ const PlaylistLeft = styled.div`
 `
 
 const MusicThumbnail = styled.img`
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
 `
 
 const MusicInfo = styled.div`

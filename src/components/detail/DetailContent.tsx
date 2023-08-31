@@ -151,8 +151,7 @@ const DetailContent = ({ post }: PostProps) => {
                         </StP>
                     </LocationInfoLeft>
                     <LocationInfoRight>
-                        문화공간
-                        {/* {categories[Number(post.category) - 1]} */}
+                        {categories[Number(post.category) - 1]}
                     </LocationInfoRight>
                 </LocationInfo>
             </LocationSection>
@@ -371,9 +370,13 @@ const LocationInfoLeft = styled.div`
 `
 
 const LocationInfoRight = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     width: 56px;
     white-space: nowrap;
 `
+
 const IconContainer = styled.div`
     display: flex;
     align-items: center;
