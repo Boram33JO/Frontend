@@ -15,7 +15,7 @@ import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 import SortButton2 from "./SortButton2";
 import { SortType } from "./SortButton";
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
-import { toast } from 'react-hot-toast';
+
 
 type myComment = {
   id: number;
@@ -54,6 +54,7 @@ const AllCommentsList = () => {
 
   const handleSortChange = (sort: SortType) => {
     setActiveSort(sort);
+    // Perform the data fetching and sorting based on the selected sort type here
   };
 
 
@@ -80,7 +81,6 @@ const AllCommentsList = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["comments"]);
-        toast.success("해당 댓글이 삭제되었습니다.", {position: 'top-center'});
       }
     }
   );
@@ -94,7 +94,7 @@ const AllCommentsList = () => {
     try {
       await commentMutation.mutateAsync(commentId);
     } catch (error) {
-      toast.error("댓글을 삭제하던 중 오류가 발생했습니다.", {position: 'top-center'});
+      //console.error("댓글을 삭제하는 중에 오류가 발생했습니다.", error);
     }
     setDeleteModalOpen(false);
   };
@@ -237,6 +237,7 @@ const H3 = styled.h3`
 
 const CommentList = styled.ol`
   display: block;
+  padding-top: 7px;;
 `;
 
 const CommentListItem = styled.li`

@@ -46,7 +46,7 @@ const SortList = styled.div`
   display: flex;
   gap: 10px;
   box-sizing: border-box;
-  margin-bottom: 10px;
+  /* margin-bottom: 10px; */
 `;
 
 const SortListItem = styled.div<{ $active: boolean }>`
