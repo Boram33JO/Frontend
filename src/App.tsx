@@ -19,6 +19,7 @@ import PasswordPage from "./pages/PasswordPage";
 import ProfileEditPage from "./pages/ProfileEditPage ";
 import IntroPage from "./pages/IntroPage";
 import { Toaster } from 'react-hot-toast'
+import WithdrawalPage from "./pages/WithdrawalpPage";
 
 function App() {
   return (
@@ -47,8 +48,10 @@ function App() {
           {/* 내가 댓글 단 게시물만 보기 */}
           <Route path="/profile/:userId/wishlist" element={<WishlistPage />} />
           {/* 내가 좋아요한 게시물만 보기 */}
-          <Route path="/profile/:userId/password" element={<PasswordPage />} />
+          <Route path="/password" element={<PasswordPage />} />
           {/* 비번찾기 페이지 */}
+          <Route path="/withdrawal" element={<WithdrawalPage />} />
+          {/* 탈퇴 페이지 */}
           <Route path="/map" element={<MapPage />} />
           <Route path="/*" element={<NotFoundPage />} />
         </Route>

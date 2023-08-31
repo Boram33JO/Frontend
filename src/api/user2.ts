@@ -45,3 +45,28 @@ export const mobileDoubleCheck = async (smsConfirmNum: string, to: string) => {
     const response = await instance.post(`/sms/check`, { smsConfirmNum, to });
     return response;
 };
+
+// 비번 찾기용 이메일 인증 번호 전송
+export const emailCheckTofindPassword = async (email: string) => {
+    const response = await instance.post(`/auth/email`, { email });
+    return response;
+};
+
+// 임시비번 체크와 확인용
+export const TempPassword = async (email: string, code: string) => {
+    const response = await instance.post(`/auth/check`, { email, code });
+    return response;
+};
+
+// 임시비번 체크와 확인용
+// export const deleteUser = async (email: string, code: string) => {
+//     const response = await instance.delete(`/auth/check`, { email, code });
+//     return response;
+// };
+
+// 회원탈퇴
+export const  deleteUser = async (loginFormat: LoginFormat) => {
+    const response = await instance.delete(`/user/login`);
+    // console.log("로그인", response);
+    return response.data;
+};
