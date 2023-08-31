@@ -29,7 +29,6 @@ const FollowersAll = ({ userInfo, followList }: Props) => {
         {followList.length === 0 ? (
  null
 ) : (  <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
-  // 또는 아무 내용도 없는 <></> 사용
 )}
       </Follower1>
       {followList.length === 0 ? (
@@ -40,7 +39,7 @@ const FollowersAll = ({ userInfo, followList }: Props) => {
 </NoDataMessage>
                   </Pple>
       ) : (
-        <FamousList>
+        <FamousList $followers ={followList.length !== 4}>
           {followList.map((item) => (
             <FamousListItem
               key={item.userId}
@@ -110,9 +109,10 @@ const Bt = styled.div`
   cursor: pointer;
 `;
 
-const FamousList = styled.div`
+const FamousList = styled.div<{$followers: boolean}>`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: ${(props) => props.$followers ? "flex-start" : "space-between"};
+  gap: 30px;
 `;
 
 const FamousListItem = styled.div`
