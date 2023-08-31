@@ -5,6 +5,7 @@ import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg
 import { ReactComponent as Search } from "../../assets/images/search.svg";
 import { getPopularSongsList, getSearchSongs } from "../../api/edit";
 import { ReactComponent as Spotify } from "../../assets/images/spotify/Spotify_Icon_RGB_White.svg";
+import { toast } from "react-hot-toast";
 
 interface SongListType {
     album: string;
@@ -39,7 +40,7 @@ interface ChooseSongListType {
 }
 
 interface SearchSongProps {
-    chooseSongList: ChooseSongListType[]; // Props 타입 수정
+    chooseSongList: ChooseSongListType[];
     setChooseSongList: React.Dispatch<React.SetStateAction<ChooseSongListType[]>>;
     isData: any;
     setIsData: any;
@@ -70,7 +71,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                 if (response) {
                     setPopularSongList(response);
                 } else {
-                    alert("검색 결과 없음");
+                    toast.error("검색 결과 없음", { position: "top-center" });
                 }
             } catch (error) {
                 console.log(error);
@@ -83,12 +84,13 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         event.preventDefault();
         try {
             const response = await getSearchSongs(searchSong);
-            console.log("11", response?.data.statusCode);
             if (response?.data.statusCode === 204) {
-                return alert("다시 검색해주세요.");
-            } else if (response?.data !== undefined) {
+                return toast.error("다시 검색해주세요", { position: "top-center" });
+            } else if (response?.data !== undefined && Array.isArray(response.data)) {
                 setSongList(response.data);
-                console.log(songList);
+            } else {
+                setSongList([]);
+                return toast.error("내용을 입력해주세요.", { position: "top-center" });
             }
         } catch (error) {
             console.log(error);
@@ -110,7 +112,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         if (isAlreadyAdded) {
             removeFromChooseSongList(item);
         } else if (chooseSongList.length >= 10) {
-            return alert("한 번에 추가 할 수 있는 곡의 수는 10개 입니다.");
+            return toast.error("한 번에 추가할 수 있는 곡의 수는 10개 입니다.", { position: "top-center" });
         } else {
             setChooseSongList((prevList) => {
                 const newList = [...prevList, item];
@@ -128,7 +130,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         <Container>
             <StSearchForm onSubmit={getSearchSongHandler}>
                 <div>
-                    <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
+                    <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "8px" }} />
                 </div>
                 <input
                     placeholder="음악을 입력해보세요"

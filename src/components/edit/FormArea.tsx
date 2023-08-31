@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-// import ButtonComponent from "./ButtonComponent";
 
 interface InputForm {
     postTitle: string;
@@ -133,9 +132,10 @@ const StFormArea = styled.div`
     box-sizing: border-box;
 
     input {
-        width: 380px;
+        width: 90%;
         height: 16px;
         border: none;
+        border-radius: 8px;
         background: #434047;
         padding: 16px 13px;
         color: #d9d8df;
