@@ -28,6 +28,9 @@ const EditProfile = () => {
   const [isNicknameFocused, setNicknameFocused] = useState(false);
   const [isIntroduceFocused, setIsFocused] = useState(false);
 
+  const INTRODUCE_MAX_LENGTH = 38; // 필요한 대로 조정
+
+
   // 이미지 선택 시 처리
   const handleImageChange = (event) => {
     const selectedImage = event.target.files?.[0];
@@ -68,8 +71,12 @@ const EditProfile = () => {
   };
 
   const handleIntroduceChange = (e) => {
-    setIntroduce(e.target.value);
+    const newIntroduce = e.target.value;
+    if (newIntroduce.length <= INTRODUCE_MAX_LENGTH) {
+      setIntroduce(newIntroduce);
+    }
   };
+  
 
   const handleCheckButton = async () => {
     try {
@@ -126,8 +133,11 @@ const EditProfile = () => {
     }
   };
 
+ 
+
   return (
     <>
+     <InnerContainer>
       <H1>프로필 관리</H1>
       <Stbox>
         <ImageUpload>
@@ -176,7 +186,7 @@ const EditProfile = () => {
         </Stnickname>
       </Stbox>
 
-      <H3>자기소개</H3>
+      <HH3>자기소개</HH3>
       <Stbox>
         <Stinput1
           type={"text"}
@@ -188,32 +198,39 @@ const EditProfile = () => {
           $isFocused={isIntroduceFocused}
           $hasValue={introduce.length > 0}
         />
+        <CharacterCount>
+  {introduce.length}/{INTRODUCE_MAX_LENGTH}
+</CharacterCount>
       </Stbox>
 
       <Stbox>
-        <Stbutton2 onClick={handleSubmitButton}>변경하기</Stbutton2>
+        <Stbutton2 onClick={handleSubmitButton}>변경완료</Stbutton2>
       </Stbox>
+      </InnerContainer>
+      <StLine></StLine>
     </>
   );
 };
 
 export default EditProfile;
 
-// 오류 코드
-const ErrorMessageContainer = styled.div`
-  display: flex;
+const InnerContainer = styled.div`
+  display: block;
+
   flex-direction: column;
-  align-items: left;
-  padding-left: 48px;
-
-  /* align-items: center; */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  padding-top: 40px;
+  gap: 20px;
 `;
 
-const ErrorMessage = styled.div`
-  color: #e7e6f0;
-  margin-top: 10px;
-  font-size: 14px;
-`;
+const CharacterCount = styled.div`
+padding-left: 300px;
+font-size: 16px;
+font-weight: 500;
+color: #a6a3af;
+`
 
 // 이미지
 const ImageUpload = styled.div`
@@ -273,15 +290,15 @@ const CameraIconWrapper = styled.div`
 
 // 프로필 수정
 const H1 = styled.h1`
-  font-size: 16px;
+  font-size: 20px;
   color: #e7e6f0;
-  font-weight: 500;
-
+  font-weight: 600;
   line-height: 24px;
-  padding-left: 20px;
-  margin-bottom: 40px;
-  padding-top: 50px;
+  /* padding-left: 20px; */
+  margin-bottom: 44px;
+  /* padding-top: 50px; */
 `;
+
 const Stbox = styled.div`
   display: flex;
   flex-direction: column;
@@ -294,7 +311,7 @@ const Stinput1 = styled.input`
   height: 18px;
   padding: 10px;
 
-  font-size: 14px;
+  font-size: 16px;
   color: #85848b;
 
   background-color: #252628;
@@ -318,9 +335,20 @@ const H3 = styled.h3`
   line-height: 24px;
   font-weight: 500;
   margin-bottom: 10px;
-  padding-left: 20px;
-  padding-top: 50px;
+  /* padding-left: 50px; */
+  padding-top: 44px;
 `;
+
+const HH3 = styled.h3`
+  font-size: 16px;
+  color: #e7e6f0;
+  line-height: 24px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  /* padding-left: 50px; */
+  padding-top: 20px;
+`;
+
 const Stname = styled.div`
   display: flex; /* 가로 정렬을 위해 추가 */
   justify-content: center; /*요소들을 수평 가운데 정렬하기 위해 변경  */
@@ -333,7 +361,7 @@ const Stinput4 = styled.input`
   height: 18px;
   padding: 10px;
 
-  font-size: 14px;
+  font-size: 16px;
   color: #85848b;
 
   background-color: #252628;
@@ -361,7 +389,7 @@ const Stbutton1 = styled.button`
 
   border: none;
   border-radius: 6px;
-  font-size: 14px; //16
+  font-size: 16px; 
   font-weight: 500;
   cursor: pointer;
 
@@ -388,10 +416,16 @@ const Stbutton2 = styled.button`
   border: none;
   border-radius: 6px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
 
   cursor: pointer;
 
-  margin-top: 20px;
-  margin-bottom: 100%;
+  margin-top: 38px;
+  /* margin-bottom: 100%; */
+`;
+
+const StLine = styled.div`
+  background-color: #242325;
+  height: 8px;
+  margin-top: 32px;
 `;
