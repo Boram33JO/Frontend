@@ -4,12 +4,24 @@ import styled from "styled-components";
 import KakaoMap from "../components/map/KakaoMap";
 import { Post } from "../models/post";
 import ListItem from "../components/common/ListItem";
+import Loading from "../components/map/Loading";
 
 const MapPage = () => {
     const [postList, setPostList] = useState<any>([]);
     const [isData, setIsData] = useState<any>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState<boolean>(false);
     const perPage = 10; // 한 페이지에 보여줄 아이템 수
+
+    useEffect(() => {
+        setLoading(true);
+
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 4000);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     // 페이지 버튼 클릭 시 호출될 함수
     const handlePageClick = (pageNumber: number) => {
@@ -19,12 +31,13 @@ const MapPage = () => {
     // 현재 페이지에 해당하는 포스트만 필터링
     const currentPosts = postList.slice((currentPage - 1) * perPage, currentPage * perPage);
 
-    useEffect(() => {
-        handlePageClick(1);
-    }, []);
-
     return (
         <InnerContainer>
+            {loading && (
+                <StLoading>
+                    <Loading />
+                </StLoading>
+            )}
             <StMapContainer>
                 <h1>지금 피플러는 뭘 듣고 있을까요?</h1>
                 <KakaoMap
@@ -70,6 +83,10 @@ const InnerContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
+`;
+
+const StLoading = styled.div`
+    background-color: #141414;
 `;
 
 export const StMapContainer = styled.div`
