@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import { Song } from '../../models/post';
 import spotify from '../../assets/images/spotify/Spotify_Logo_RGB_White.svg'
 import external from '../../assets/images/external.svg'
+import { ReactComponent as NoPreviewImage } from "../../assets/images/no_preview.svg"
 
 interface Props {
     url: string;
@@ -15,7 +16,7 @@ const Preview = ({ url, song, setPreview }: Props) => {
         e.stopPropagation();
         setPreview(false)
     }
-    
+
     return (
         <>
             <ModalBackground onClick={handleClickBackground} />
@@ -26,7 +27,7 @@ const Preview = ({ url, song, setPreview }: Props) => {
                     </ModalContentTop>
                     <PlaylistItem key={song.id} onClick={() => { window.open(song.externalUrl) }}>
                         <PlaylistLeft>
-                            <MusicThumbnail src={song.thumbnail} />
+                            <MusicThumbnail src={song.thumbnail} alt="thumbnail" />
                             <MusicInfo>
                                 <StP $color={"#FAFAFA"} $size={"16px"}>
                                     {song.songTitle}
@@ -39,7 +40,7 @@ const Preview = ({ url, song, setPreview }: Props) => {
                         <Icon src={external} alt="external" $height='20px' />
                     </PlaylistItem>
                 </ModalContent>
-                {url ? (<iframe title="External Content" src={url} />) : <NoPreview><NoPreviewMessage>해당 곡은 미리듣기가 제공되지 않습니다.</NoPreviewMessage></NoPreview>}
+                {url ? (<StIframe title="External Content" src={url} />) : <NoPreview><NoPreviewImage /><NoPreviewMessage>해당 곡은 미리듣기가 제공되지 않습니다.</NoPreviewMessage></NoPreview>}
             </ModalContainer>
         </>
     )
@@ -52,11 +53,11 @@ const ModalBackground = styled.div`
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 4;
+    z-index: 9;
     width: 100vh;
     height: 100vh;
-    background-color: gray;
-    opacity: 0.3;
+    background-color: black;
+    opacity: 0.7;
 `
 
 const ModalContainer = styled.div`
@@ -67,25 +68,21 @@ const ModalContainer = styled.div`
     position: fixed;
     top: 50%;
     left: 50%;
+    width: 340px;
     transform: translateX(-50%) translateY(-50%);
-    z-index: 5;
-    background-color: black;
+    z-index: 10;
+    background-color: #2A282C;
     color: #FAFAFA;
-    border-radius: 25px;
+    border-radius: 10px;
     box-sizing: border-box;
     padding: 20px;
+    gap: 14px;
 `
 
 const ModalContent = styled.div`
     display: flex;
     flex-direction: column;
-    position: absolute;
-    background-color: black;
-    top: 20px;
     width: 100%;
-    height: 85px;
-    box-sizing: border-box;
-    padding: 0px 20px;
     gap: 14px;
 `
 
@@ -102,6 +99,7 @@ const PlaylistItem = styled.div`
     &:hover {
         opacity: 0.7;
     }
+    gap: 10px;
 `
 
 const PlaylistLeft = styled.div`
@@ -124,7 +122,7 @@ const StP = styled.p<{ $color: string, $size: string }>`
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
     font-weight: 600;
-    line-height: calc(100% + 2px);
+    line-height: calc(100% + 6px);
     & {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -133,30 +131,27 @@ const StP = styled.p<{ $color: string, $size: string }>`
     }
 `
 
+const StIframe = styled.iframe`
+    border-radius: 10px;
+    box-sizing: border-box;
+`
+
 const NoPreview = styled.div`
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     width: 300px;
     height: 150px;
+    gap: 10px;
 `
 
 const NoPreviewMessage = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px;
 `
 
 const Icon = styled.img<{ $height?: string }>`
     height: ${(props) => props.$height || "24px"};
-`
-
-const TestDiv = styled.div`
-    position: absolute;
-    background-color: #F1F3F4;
-    right: 30px;
-    bottom: 30px;
-    width: 32px;
-    height: 34px;
 `

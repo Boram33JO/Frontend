@@ -1,4 +1,4 @@
-import { styled } from 'styled-components'
+import { keyframes, styled } from 'styled-components'
 
 const PopularPostsSkeleton = () => {
     const dummy = Array.from({ length: 3 }, (_, i) => i);
@@ -35,6 +35,11 @@ const PopularPostsSkeleton = () => {
 
 export default PopularPostsSkeleton
 
+const loadingAnimation = keyframes`
+    0% { opacity: 1 }
+    50% { opacity: 0.5 }
+    100% { opacity: 1 }
+`;
 
 const InnerContainer = styled.div`
     display: flex;
@@ -48,7 +53,19 @@ const InnerContainer = styled.div`
 const TitleSection = styled.div`
     width: 150px;
     height: 26px;
-    background-color: #3B3A40;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #3B3A40;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const CardList = styled.div`
@@ -172,5 +189,17 @@ const ProfileInfo = styled.div`
 const InfoTemp = styled.div`
     width: 100%;
     height: 16px;
-    background-color: #414141;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #414141;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `

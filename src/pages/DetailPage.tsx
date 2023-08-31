@@ -11,6 +11,8 @@ import { RootState } from '../redux/config/configStore'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import DeleteModal from '../components/common/DeleteModal'
+import NotFoundPage from './NotFoundPage'
+import DetailSkeleton from '../components/detail/DetailSkeleton'
 
 const DetailPage = () => {
     const { id } = useParams();
@@ -45,11 +47,11 @@ const DetailPage = () => {
     )
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <DetailSkeleton />
     }
 
     if (isError) {
-        return <div>Error...</div>
+        return <NotFoundPage />
     }
 
     return (
