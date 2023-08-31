@@ -46,7 +46,7 @@ const Layout = () => {
         const handleScroll = throttle(() => {
             if (middleRef.current && outletRef.current && progressRef.current && containerRef.current) {
                 const scrollTop = middleRef.current.scrollTop;
-                const progress = (scrollTop / (outletRef.current.scrollHeight - containerRef.current.clientHeight - 60)) * 100;
+                const progress = (scrollTop / (outletRef.current.scrollHeight - middleRef.current.clientHeight)) * 100;
                 progressRef.current.style.width = `${progress}%`;
             }
         }, 100);
@@ -143,15 +143,24 @@ const ProgressBar = styled.div`
     width: 100%;
     transition: width 0.2s;
     background-color: #7462e2;
+
+    @media (max-width: 480px) {
+        position: fixed;
+    }
 `;
 
 const Middle = styled.div`
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
     overflow-y: scroll;
+    box-sizing: border-box;
 
     &::-webkit-scrollbar {
         width: 0px;
+    }
+
+    @media (max-width: 480px) {
+        margin-top: 60px;
     }
 `;
 
@@ -191,6 +200,12 @@ const Right = styled.div`
     z-index: 4;
 
     gap: 10px;
+
+    @media (max-width: 480px) {
+        position: fixed;
+        right: 5%;
+        bottom: 5%;
+    }
 `;
 
 const PostButton = styled.div`

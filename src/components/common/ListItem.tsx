@@ -236,7 +236,7 @@ const StP = styled.p<{ $color: string, $size: string, $weight?: string }>`
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
     font-weight: ${(props) => props.$weight || 600};
-    line-height: calc(100% + 4px);
+    line-height: calc(100% + 6px);
 
     & {
         display: -webkit-box;
