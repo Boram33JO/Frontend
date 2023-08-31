@@ -4,6 +4,8 @@ import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
 import Category from "./Category";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 
+import { ReactComponent as Pin } from "../../assets/images/icon_pin_map.svg";
+
 import SearchModal from "./SearchModal";
 import { toast } from "react-hot-toast";
 
@@ -222,7 +224,10 @@ const EditMap: React.FC<EditMapProps> = ({
                 <div id="clickLatlng"></div>
             </StKakaoMapContainer>
             <StLocation>
-                <div>{placeName}</div>
+                <div>
+                    <Pin style={{ marginRight: "8px" }} />
+                    {placeName}
+                </div>
                 <button>{categories[categoryNum]}</button>
             </StLocation>
         </StMapContainer>
@@ -289,7 +294,6 @@ const StLocation = styled.div`
     width: 100%;
     height: auto;
     border-radius: 6px;
-    border: 1px solid #524d58;
     background: #434047;
     box-sizing: border-box;
     color: #f1f1f1;
@@ -299,6 +303,12 @@ const StLocation = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-top: 16px;
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
 
     button {
         height: 26px;
