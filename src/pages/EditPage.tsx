@@ -55,7 +55,7 @@ const EditPage = () => {
     const [placeName, setPlaceName] = useState("");
     const [latitude, setLatitude] = useState("37.566826");
     const [longitude, setLongitude] = useState("126.9786567");
-    const [categoryNum, setCategoryNum] = useState<number>(0);
+    const [categoryNum, setCategoryNum] = useState<any>();
     const { postId } = useParams<{ postId: string }>();
 
     const [isData, setIsData] = useState<IsData | null>(null);
@@ -101,6 +101,9 @@ const EditPage = () => {
     const getErrorMessage = () => {
         if (slideIndex === 0 && !address) {
             return "주소를 입력해주세요.";
+        }
+        if (slideIndex === 0 && !category) {
+            return "카테고리를 선택해주세요.";
         }
 
         if (slideIndex === 1 && chooseSongList.length === 0) {
@@ -266,7 +269,7 @@ const StContainer = styled.div`
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 10px;
 `;
 
 const StInnerContainer = styled.div`
