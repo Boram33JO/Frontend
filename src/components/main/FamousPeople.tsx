@@ -64,8 +64,9 @@ const H3 = styled.h3`
 
 const FamousList = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
+    gap: 4%;
 `
 
 const FamousListItem = styled.div`

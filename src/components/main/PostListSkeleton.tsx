@@ -72,7 +72,7 @@ const CategoryListItem = styled.div`
         left: 0;
         width: 100%;
         height: 100%;        
-        background: #3B3A40;
+        background: #515151;
         animation: ${loadingAnimation} 2s infinite ease-in-out;
     }
 `
@@ -90,7 +90,7 @@ const SkeletonDiv = styled.div<{ $width?: string, $height?: string }>`
         left: 0;
         width: 100%;
         height: 100%;        
-        background: #3B3A40;
+        background: #515151;
         animation: ${loadingAnimation} 2s infinite ease-in-out;
     }
 `

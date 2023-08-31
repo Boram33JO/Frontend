@@ -89,7 +89,7 @@ const ProfileThumnail = styled.div`
         left: 0;
         width: 100%;
         height: 100%;        
-        background: #414141;
+        background: #515151;
         animation: ${loadingAnimation} 2s infinite ease-in-out;
     }
 `
@@ -107,16 +107,27 @@ const DropdownToggle = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    
+    overflow: hidden;
+
     width: 100%;
     height: 58px;
 
-    background-color: #414141;
     border-radius: 6px;
 
     box-sizing: border-box;
     padding: 14px;
     cursor: pointer;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const SkeletonDiv = styled.div<{ $width?: string, $height?: string }>`
@@ -132,7 +143,7 @@ const SkeletonDiv = styled.div<{ $width?: string, $height?: string }>`
         left: 0;
         width: 100%;
         height: 100%;        
-        background: #414141;
+        background: #515151;
         animation: ${loadingAnimation} 2s infinite ease-in-out;
     }
 `

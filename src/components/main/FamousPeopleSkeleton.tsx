@@ -42,8 +42,9 @@ const InnerContainer = styled.div`
 
 const FamousList = styled.div`
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
+    gap: 4%;
 `
 
 const FamousListItem = styled.div`
@@ -66,8 +67,19 @@ const FamousListItemThumb = styled.div`
     height: 100%;
     top: 0;
     left: 0;
-    background-color: #3B3A40;
-    border-radius: 50%;
+    overflow: hidden;
+    
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;        
+        border-radius: 50%;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const FamousListItemNickname = styled.div`
@@ -95,7 +107,7 @@ const SkeletonDiv = styled.div<{ $width?: string, $height?: string }>`
         left: 0;
         width: 100%;
         height: 100%;        
-        background: #3B3A40;
+        background: #515151;
         animation: ${loadingAnimation} 2s infinite ease-in-out;
     }
 `
