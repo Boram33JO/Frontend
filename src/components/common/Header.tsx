@@ -34,7 +34,7 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
                 P.Ple
             </HeaderCenter>
             <HeaderRight>
-                <StSearch />
+                {/* <StSearch /> */}
                 {
                     (userInfo.isLogin) ? (
                         <ProfileImage

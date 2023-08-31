@@ -111,7 +111,7 @@ const DetailContent = ({ post }: PostProps) => {
                 <TitleSub>
                     <TitleSubLeft>
                         <StP $size={"14px"} $color={"#A19FAB"}>
-                            {displayedAt(post.createdAt)} 작성
+                            {displayedAt(post.createdAt)}
                         </StP>
                         <Divider />
                         <StP $size={"14px"} $color={"#A19FAB"}>
@@ -140,16 +140,21 @@ const DetailContent = ({ post }: PostProps) => {
             </ContentSection>
             <LocationSection>
                 <LocationInfo>
-                    <IconContainer>
-                        <SvgIcon>
-                            <Place />
-                        </SvgIcon>
-                    </IconContainer>
-                    <StP $size={"16px"} $color={"#F1F1F1"}>
-                        {post.location?.placeName}
-                    </StP>
+                    <LocationInfoLeft>
+                        <IconContainer>
+                            <SvgIcon>
+                                <Place />
+                            </SvgIcon>
+                        </IconContainer>
+                        <StP $size={"16px"} $color={"#F1F1F1"}>
+                            {post.location?.placeName}
+                        </StP>
+                    </LocationInfoLeft>
+                    <LocationInfoRight>
+                        문화공간
+                        {/* {categories[Number(post.category) - 1]} */}
+                    </LocationInfoRight>
                 </LocationInfo>
-                {categories[Number(post.category) - 1]}
             </LocationSection>
             {modalToggle &&
                 <CommonModal
@@ -208,6 +213,14 @@ const ProfileInfo = styled.div`
 `
 
 const StP = styled.p< { $size: string, $color: string } >`
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+    overflow: hidden;
+
     color: ${props => props.$color};
     font-size: ${props => props.$size};
     line-height: calc(100% + 6px);
@@ -343,11 +356,24 @@ const LocationSection = styled.div`
 
 const LocationInfo = styled.div`
     display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    
+    gap: 10px;
+`
+
+const LocationInfoLeft = styled.div`
+    display: flex;
     align-items: center;
     
     gap: 10px;
 `
 
+const LocationInfoRight = styled.div`
+    width: 56px;
+    white-space: nowrap;
+`
 const IconContainer = styled.div`
     display: flex;
     align-items: center;

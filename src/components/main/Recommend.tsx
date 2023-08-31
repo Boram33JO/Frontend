@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { styled } from 'styled-components'
+import { keyframes, styled } from 'styled-components'
 import { getDateNotation } from '../../utils/common'
 import spotify from '../../assets/images/spotify/Spotify_Icon_RGB_White.svg'
 import { useQuery } from 'react-query'
@@ -89,7 +89,7 @@ const Recommend = () => {
                 {preview && <Preview url={data[categoryNum].songResponseDtos[songIndex].audioUrl} song={data[categoryNum].songResponseDtos[songIndex]} setPreview={setPreview} />}
             </InnerContainer>
             <TodayArea>
-                {getDateNotation()} 기준 업데이트
+                실시간 업데이트
             </TodayArea>
         </Container>
     )
@@ -99,7 +99,6 @@ export default Recommend
 
 const Container = styled.div`
     display: block;
-
 `
 
 const InnerContainer = styled.div`
@@ -182,7 +181,7 @@ const Balloon = styled.div<{ $isOpen?: boolean }>`
 
 const H3 = styled.h3`
     font-size: 20px;
-    line-height: calc(100% + 6px);
+    line-height: calc(150%);
     font-weight: 600;
 `
 
@@ -195,7 +194,8 @@ const Playlist = styled.ol`
 const PlaylistItem = styled.li`
     display: flex;
     align-items: center;
-    gap: 28px;
+    justify-content: space-between;
+    gap: 26px;
     cursor: pointer;
 
     &:hover {
@@ -208,11 +208,11 @@ const PlaylistItemLeft = styled.div`
     flex-direction: row;
     align-items: center;
     gap: 28px;
-    flex: 1 0 0;
+    width: 100%;
 `
 
 const PlaylistItemRight = styled.div`
-    flex: 0.1 0 0;   
+
 `
 
 const MusicThumbnail = styled.img`
@@ -230,20 +230,23 @@ const MusicInfo = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2px;
+    width: 100%;
 `
 
 const StP = styled.p<{ $color?: string, $size?: string }>`
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+    overflow: hidden;
+
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
-    line-height: calc(100% + 6px);
-    word-break: break-all;
-
-    & {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        overflow: hidden;
+    line-height: calc(150%);
+    &::before {
+        vertical-align: -0.25em;
     }
 `
 
