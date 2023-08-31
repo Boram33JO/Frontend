@@ -113,7 +113,7 @@ const BasicLogin = () => {
        
       </Stbox>
 
-      <Stbox2>
+      {/* <Stbox2>
         <Stlink1
           onClick={() => {
             navigate("/password");
@@ -121,7 +121,7 @@ const BasicLogin = () => {
         >
           로그인 정보를 잊으셨나요?
         </Stlink1>
-      </Stbox2>
+      </Stbox2> */}
 
       <Stbox>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}{" "}
