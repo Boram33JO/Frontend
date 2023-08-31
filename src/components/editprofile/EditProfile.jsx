@@ -118,7 +118,7 @@ const EditProfile = () => {
         }
       } catch (error) {
        // console.log(error);
-       toast.error(`${error}`)
+       toast.error(`${error}`, {position: 'top-center'});
       }
     } else {
       toast.error("먼저 닉네임 중복체크를 완료해주세요.", {position: 'top-center'});
