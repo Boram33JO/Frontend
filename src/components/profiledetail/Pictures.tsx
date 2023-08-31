@@ -218,7 +218,7 @@ const MyProfile = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
   align-items: center;
   /* justify-content: space-between; */
-  margin-top: 20px; //
+  /* padding-top: 20px;  */
 `;
 
 const MyProfile1 = styled.div`
@@ -232,6 +232,7 @@ const MyThumb = styled.img`
   width: 62px;
   height: 62px;
   border-radius: 50%;
+  background-color: #e7e6f0;;
 `;
 
 const MyProfile2 = styled.div`

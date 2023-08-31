@@ -35,7 +35,7 @@ const EditProfile = () => {
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (imgSize > maxSize) {
 
-      toast.error("이미지 용량은 5MB 이내로 등록 가능합니다.", {position: 'top-center'});
+      toast.error("이미지 용량은 5MB 이내로 등록 가능합니다.");
       return;
     }
     if (selectedImage) {
@@ -76,16 +76,16 @@ const EditProfile = () => {
       const response = await nicknameCheck(nickname);
      // console.log(response);
       if (response.data.message){
-        toast.success(`${response.data.message}`, {position: 'top-center'});
+        toast.success(`${response.data.message}`);
         setIsCheck(true);
       } else {
-        toast.error(`${response.data.error}`, {position: 'top-center'});
+        toast.error(`${response.data.error}`);
       // console.log(response.data.error)
         setIsCheck(false);
   
       }
     } catch (error) {
-      toast.error("오류가 발생했습니다. 재시도 해주세요.", {position: 'top-center'});
+      toast.error("오류가 발생했습니다. 재시도 해주세요.");
     }
   };
 
@@ -101,7 +101,7 @@ const EditProfile = () => {
       try {
         const response = await updateProfile(userInfo.userId, formData);
         if (response.status <= 300) {
-          toast.success('업데이트 성공했습니다', {position: 'top-center'});
+          toast.success('업데이트 성공했습니다');
           // console.log("Profile Update:", response);
           const accessToken = response.headers.accesstoken;
           const refreshToken = response.headers.refreshtoken;
@@ -118,10 +118,10 @@ const EditProfile = () => {
         }
       } catch (error) {
        // console.log(error);
-       toast.error(`${error}`, {position: 'top-center'});
+       toast.error(`${error}`);
       }
     } else {
-      toast.error("먼저 닉네임 중복체크를 완료해주세요.", {position: 'top-center'});
+      toast.error("먼저 닉네임 중복체크를 완료해주세요.");
       return;
     }
   };
