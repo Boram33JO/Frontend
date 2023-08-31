@@ -63,14 +63,10 @@ const MainPage = () => {
         <Container>
             <SlideBanner />
             <LookAround />
-            {/* <PopularPosts /> */}
-            <PopularPostsSkeleton />
-            <RecommendSkeleton />
-            <FamousPeopleSkeleton />
-            <PostListSkeleton />
-            {/* <div ref={recommendRef}>{renderRecommend ? <Recommend /> : <RecommendSkeleton />}</div>
+            <PopularPosts />
+            <div ref={recommendRef}>{renderRecommend ? <Recommend /> : <RecommendSkeleton />}</div>
             <div ref={famousPeopleRef}>{renderFamousPeople ? <FamousPeople /> : <FamousPeopleSkeleton />}</div>
-            <div ref={postListRef}>{renderPostList ? <PostList /> : <PostListSkeleton />}</div> */}
+            <div ref={postListRef}>{renderPostList ? <PostList /> : <PostListSkeleton />}</div>
         </Container>
     )
 }
