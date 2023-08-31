@@ -169,8 +169,7 @@ const DetailContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: inherit;
-    margin-top: 26px;
-    padding: 10px 20px;
+    padding: 36px 20px 10px;
     box-sizing: border-box;
     background-color: #141414;
     color: #FAFAFA;
