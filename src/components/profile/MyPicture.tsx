@@ -141,6 +141,8 @@ const MyProfile1 = styled.div`
 const MyProfile2 = styled.div`
   padding-left: 12px;
   /* width: 240px; */
+    justify-content: space-between;
+    padding-right: 40px;
 `;
 
 const Nickname = styled.div`
@@ -149,13 +151,18 @@ const Nickname = styled.div`
   color: #e7e6f0;
 `;
 const Produce = styled.div`
- width: 240px;
-/* height: 200px; */
+  /* max-width: 200px; */
   font-size: 14px;
   font-weight: 400;
   line-height: 1.3;
   padding-top: 5px;
-  color: #A6A3AF;
+  color: #a6a3af;
+
+  @media (max-width: 768px) {
+    /* Adjust styles for smaller screens */
+    max-width: 100%; /* Take up full width on smaller screens */
+    font-size: 12px;
+  }
 `;
 
 const StLine = styled.div`

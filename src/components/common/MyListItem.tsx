@@ -29,13 +29,14 @@ const MyListItem = ({ post }: Props) => {
         setSongIndex(index);
         setPreview(true);
     };
-    const toggleDropdown = () => {
+    const toggleDropdown = (e: React.MouseEvent) => {
+        e.stopPropagation();
         setIsOpen(!isOpen);
-    };
+    }
 
     return (
         <ListItemContainer>
-            <ListItemBackground $src={cardBackground(post.category, post.postId)}>
+             <ListItemBackground $src={cardBackground(post.category, post.postId)} onClick={() => navigate(`/detail/${post.postId}`)}>
                 <ListItemTop onClick={() => navigate(`/detail/${post.postId}`)}>
                     <ProfileArea>
                         <ProfileInfo>
@@ -48,7 +49,8 @@ const MyListItem = ({ post }: Props) => {
                             <StP
                                 $color="#E6E6E6"
                                 $size={"14px"}
-                            >
+                                $weight={"500"}>
+
                                 {displayedAt(post.createdAt)}
                             </StP>
                         </ProfileInfo>
@@ -80,8 +82,9 @@ const MyListItem = ({ post }: Props) => {
                             </StP>
                         </TitleSubArea>
                     </TitleArea>
-                </ListItemTop>
-                <DropdownToggle onClick={toggleDropdown}>
+                    </ListItemTop>
+
+                    <DropdownToggle onClick={(e) => toggleDropdown(e)}>
                     <PlaylistLeft>
                         <MusicInfo>
                             <StP
@@ -189,7 +192,7 @@ const ListItemTop = styled.div`
     align-items: flex-start;
     justify-content: space-between;
     gap: 5px;
-    cursor: pointer;
+    
 `;
 
 const ProfileArea = styled.div`
@@ -204,7 +207,7 @@ const TitleArea = styled.div`
     flex-direction: column;
     flex: 0.54 0 0;
     align-items: flex-end;
-    gap: 4px;
+   
 `;
 
 const TitleSubArea = styled.div`
@@ -264,18 +267,19 @@ const MusicInfo = styled.div`
 `;
 
 const StP = styled.p<{ $color: string; $size: string; $weight?: string }>`
+   display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+    overflow: hidden;
+
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
     font-weight: ${(props) => props.$weight || 600};
-    line-height: calc(100% + 4px);
-
-    & {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        overflow: hidden;
-    }
-`;
+    line-height: calc(150%);
+`
 
 const PlaylistRight = styled.div`
     display: inline-flex;
