@@ -62,12 +62,19 @@ const HeaderContainer = styled.div`
     top: 0;
     z-index: 2;
     
-    width: inherit;
+    min-width: 390px;
+    width: 100%;
     height: 60px;
     background-color: #141414;
     
     box-sizing: border-box;
     padding-right: 20px;
+
+    @media (max-width: 480px) {
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 `
 
 const HeaderLeft = styled.div`
