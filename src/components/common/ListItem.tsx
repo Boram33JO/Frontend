@@ -36,7 +36,7 @@ const ListItem = ({ post }: Props) => {
             <ListItemBackground $src={cardBackground(post.category, post.postId)} onClick={() => navigate(`/detail/${post.postId}`)}>
                 <ListItemTop>
                     <ProfileArea>
-                        <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" />
+                        <ProfileThumbnail $src={getProfileImage(post.userImage)} />
                         <ProfileInfo>
                             <StP $color="#FFFFFF" $size={"14px"}>
                                 {post.nickname}
@@ -154,7 +154,7 @@ const ListItemTop = styled.div`
 
 const ProfileArea = styled.div`
     display: inline-flex;
-    flex: 0.46 0 0;
+    flex: 0.46 1 0;
     align-items: center;
     gap: 10px;
 `
@@ -162,7 +162,7 @@ const ProfileArea = styled.div`
 const TitleArea = styled.div`
     display: inline-flex;
     flex-direction: column;
-    flex: 0.54 0 0;
+    flex: 0.54 1 0;
     align-items: flex-end;
 `
 
@@ -182,9 +182,13 @@ const StLike = styled(Like)`
     }
 `
 
-const ProfileThumnail = styled.img`
-    width: 34px;
-    height: 34px;
+const ProfileThumbnail = styled.div<{ $src?: string }>`
+    flex: 0 0 42px;
+    width: 42px;
+    height: 42px;
+    background: url(${({ $src }) => $src});
+    background-size: cover;
+    background-repeat: no-repeat;
     background-color: #ECECEC;
     border-radius: 50%;
 `

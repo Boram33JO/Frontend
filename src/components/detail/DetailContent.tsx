@@ -105,9 +105,9 @@ const DetailContent = ({ post }: PostProps) => {
                 }
             </ProfileSection>
             <TitleSection>
-                <StP $size={"18px"} $color={"#FAFAFA"}>
+                <TitleMain>
                     {post.postTitle}
-                </StP>
+                </TitleMain>
                 <TitleSub>
                     <TitleSubLeft>
                         <StP $size={"14px"} $color={"#A19FAB"}>
@@ -257,6 +257,14 @@ const TitleSection = styled.div`
     gap: 7px;
 `
 
+const TitleMain = styled.div`
+    width: 100%;
+    color: #FAFAFA;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 500;
+`
+
 const TitleSub = styled.div`
     display: flex;
     flex-direction: row;
@@ -378,6 +386,7 @@ const LocationInfoRight = styled.div`
 `
 
 const IconContainer = styled.div`
+    flex: 0 0 34px;
     display: flex;
     align-items: center;
     justify-content: center;
