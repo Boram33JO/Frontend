@@ -78,9 +78,7 @@ const ListItem = ({ post }: Props) => {
                     <PlaylistRight>
                         <SvgIcon>
                             <Quaver />
-                            <StP $color={"#414141"} $size={"14px"}>
-                                {`+${post.songs.length}`}
-                            </StP>
+                            {`+${post.songs.length}`}
                         </SvgIcon>
                         <SvgIcon>
                             {
@@ -221,8 +219,8 @@ const PlaylistLeft = styled.div`
 `
 
 const MusicThumbnail = styled.img`
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
 `
 
 const MusicInfo = styled.div`
@@ -269,6 +267,10 @@ const SvgIcon = styled.span`
     align-items: center;
     justify-content: center;
     gap: 5px;
+    color: #414141;
+    font-size: 14px;
+    line-height: calc(150%);
+    font-weight: 600;
 `
 
 const DropdownList = styled.div`
@@ -286,8 +288,8 @@ const DropdownList = styled.div`
     overflow-y: scroll;
 
     box-sizing: border-box;
-    padding: 14px 20px;
-    gap: 14px;
+    padding: 12px 20px;
+    gap: 12px;
 
     &::-webkit-scrollbar {
         width: 6px;
