@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
-import Category from "../common/Category";
+import Category from "./Category";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 import SearchModal from "./SearchModal";
 import { toast } from "react-hot-toast";
@@ -138,6 +138,7 @@ const EditMap: React.FC<EditMapProps> = ({
             setPlaceName(isData.location.placeName);
             setLatitude(isData.location.latitude);
             setLongitude(isData.location.longitude);
+            setCategoryNum(isData.category);
         }
     }, [isData]);
 

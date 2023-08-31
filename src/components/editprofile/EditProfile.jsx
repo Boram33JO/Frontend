@@ -74,13 +74,13 @@ const EditProfile = () => {
   const handleCheckButton = async () => {
     try {
       const response = await nicknameCheck(nickname);
-      console.log(response);
+     // console.log(response);
       if (response.data.message){
         toast.success(`${response.data.message}`, {position: 'top-center'});
         setIsCheck(true);
       } else {
         toast.error(`${response.data.error}`, {position: 'top-center'});
-       console.log(response.data.error)
+      // console.log(response.data.error)
         setIsCheck(false);
   
       }
@@ -117,10 +117,11 @@ const EditProfile = () => {
           navigate(-1);
         }
       } catch (error) {
-        console.log(error);
+       // console.log(error);
+       toast.error(`${error}`)
       }
     } else {
-      toast.error("먼저 닉네임 중복체크를 해주세요");
+      toast.error("먼저 닉네임 중복체크를 완료해주세요.", {position: 'top-center'});
       return;
     }
   };

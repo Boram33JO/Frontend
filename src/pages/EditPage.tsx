@@ -114,7 +114,7 @@ const EditPage = () => {
         const errorMessage = getErrorMessage();
 
         if (errorMessage) {
-            toast.error("내용을 입력해주세요.", { position: "top-center" });
+            toast.error(errorMessage, { position: "top-center" });
         } else {
             if (slideIndex === 2) {
                 scrollToTop();
@@ -162,7 +162,6 @@ const EditPage = () => {
             if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
                 if (inputForm.content.length <= 500) {
                     try {
-                        console.log("sss", typeof postId);
                         await putData(data, postId);
                         toast.success("게시물 수정이 완료되었습니다.", { position: "top-center" });
 
