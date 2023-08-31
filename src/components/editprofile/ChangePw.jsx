@@ -10,7 +10,7 @@ import { setUserInfo } from "../../redux/modules/userSlice";
 import { toast } from 'react-hot-toast';
 
 
-const EditProfile = () => {
+const ChagePassword= () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -196,7 +196,7 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default ChagePassword;
 
 // 오류 코드
 const ErrorMessageContainer = styled.div`

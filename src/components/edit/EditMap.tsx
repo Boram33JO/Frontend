@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
 import Category from "../common/Category";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 import SearchModal from "./SearchModal";
+import { toast } from "react-hot-toast";
 
 declare global {
     interface Window {
@@ -57,6 +58,13 @@ const EditMap: React.FC<EditMapProps> = ({
     const [modal, setModal] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
+    type MapRefType = {
+        map: any;
+        marker: any;
+    } | null;
+
+    const mapRef = useRef<MapRefType>(null); // 지도 객체와 마커 객체를 저장할 ref 생성
+
     useEffect(() => {
         window.kakao.maps.load(function () {
             const mapContainer = document.getElementById("map");
@@ -67,46 +75,62 @@ const EditMap: React.FC<EditMapProps> = ({
 
             const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-            if (state.isPanto) {
-                map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
-            } else {
-                map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
-            }
-
             const imageSize = new window.kakao.maps.Size(36, 42);
             const markerImage = new window.kakao.maps.MarkerImage(pinIcon, imageSize);
 
             const markerPosition = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+
+            // 마커를 생성하고 이미지를 설정합니다
             const marker = new window.kakao.maps.Marker({
                 position: markerPosition,
                 image: markerImage,
             });
 
+            // 만들어진 마커 객체를 지도에 추가합니다.
             marker.setMap(map);
 
+            // 클릭 이벤트 리스너 등록
             window.kakao.maps.event.addListener(map, "click", function (mouseEvent: any) {
-                const latlng = mouseEvent.latLng;
-                marker.setPosition(latlng);
+                // 클릭한 위치의 위경도 정보 가져오기
+                var latlng = mouseEvent.latLng;
 
                 setState((prevState) => ({
                     ...prevState,
-                    center: {
-                        latitude: latlng.getLat(),
-                        longitude: latlng.getLng(),
-                    },
+                    center: { latitude: latlng.getLat(), longitude: latlng.getLng() },
                 }));
-                // 지오코더를 사용하여 주소 정보 가져오기
-                const geocoder = new window.kakao.maps.services.Geocoder();
-                const coord = new window.kakao.maps.LatLng(latlng.getLat(), latlng.getLng());
-                const callback = function (result: any, status: any) {
+
+                setLatitude(latlng.getLat());
+                setLongitude(latlng.getLng());
+
+                // 지오코더 인스턴스 생성
+                var geocoder = new window.kakao.maps.services.Geocoder();
+
+                var coord2AddressCallbackFunc = function (result: any, status: any) {
                     if (status === window.kakao.maps.services.Status.OK) {
-                        console.log("주소 : " + result[0].address.address_name);
+                        setSearchLocation(result[0].address.address_name);
                     }
                 };
-                geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
+
+                geocoder.coord2Address(latlng.getLng(), latlng.getLat(), coord2AddressCallbackFunc);
             });
+
+            // 만들어진 지도와 마커 객체를 ref에 저장
+            mapRef.current = { map, marker };
         });
-    }, [state, latitude, longitude]);
+    }, []);
+
+    useEffect(() => {
+        if (mapRef.current) {
+            if (state.isPanto) {
+                mapRef.current.map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+            } else {
+                mapRef.current.map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
+            }
+
+            // 새로운 위경도로 마커표시 이동
+            mapRef.current.marker.setPosition(new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude)));
+        }
+    }, [latitude, longitude]);
 
     useEffect(() => {
         if (isData) {
@@ -130,21 +154,17 @@ const EditMap: React.FC<EditMapProps> = ({
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         setSearchLocation(newValue);
-        setPlaceName(newValue); // searchLocation 값을 placeName으로 설정
+        setPlaceName(newValue);
     };
-
-    // const handleCategoryChange = (newCategoryNum: number) => {
-    //     setCategoryNum(newCategoryNum); // categoryNum 값을 변경하고 저장
-    // };
 
     const searchLocationHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (searchLocation.trim().length === 0) {
-            return alert("내용을 입력하세요");
+            return toast.error("내용을 입력하세요", { position: "top-center" });
         }
         setModal(true);
-        setSearchLocation("");
         searchMap();
+        setSearchLocation("");
     };
 
     return (
@@ -156,7 +176,7 @@ const EditMap: React.FC<EditMapProps> = ({
                             width: "16px",
                             height: "16px",
                             marginLeft: "16px",
-                            marginRight: "12px",
+                            marginRight: "8px",
                         }}
                     />
                 </div>
@@ -171,7 +191,7 @@ const EditMap: React.FC<EditMapProps> = ({
                     <input
                         placeholder="장소를 입력해보세요"
                         onChange={changeInputHandler}
-                        value={placeName || ""}
+                        value={placeName || searchLocation || ""}
                         id="keyword"
                     />
                 )}

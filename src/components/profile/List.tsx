@@ -25,9 +25,10 @@ const List = ({ userInfo, postList }: Props) => {
     <>
       <InnerContainer>
         <TitleSection>
-          <H3>{`${userInfo.nickname}님의 포스팅`}</H3>
-          {postList.length === 0 ? (
- null
+        {userInfo && userInfo.nickname && (
+          <H3>{`${userInfo.nickname}님의 포스팅`}</H3>)}
+{postList.length === 0 ? (
+null
 ) : (  <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
   // 또는 아무 내용도 없는 <></> 사용
 )}

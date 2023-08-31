@@ -346,24 +346,6 @@ const IconContainer = styled.div`
     background-color: #55505B;
 `
 
-const EditSection = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-`
-
-const EditButton = styled.p`
-    font-size: 16px;
-    line-height: 22px;
-    color: #A6A3AF;
-    background: none;
-    border: none;
-    padding: none;
-    margin: none;
-
-    cursor: pointer;
-`
-
 const Divider = styled.div`
     height: 12px;
     width: 1px;

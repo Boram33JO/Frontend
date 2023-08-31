@@ -5,22 +5,22 @@ import { styled } from "styled-components";
 import Password from "../components/UserInformation/Password";
 
 
-const PasswordPage = () => {
+const WithdrawalPage = () => {
   const navigate = useNavigate();
   return (
     <>
     <Container>
       <InnerContainer>
-        <H3>비밀번호를 잊으셨나요?</H3>
-        <Ment>가입하신 이메일을 통해 임시 비밀번호를 발급 받을 수 있습니다.</Ment>
+        <H3>피플을 떠나시나요?</H3>
+        <Ment>가지마세요!</Ment>
         <LoginSection>
           <Password />
         </LoginSection>
 
           <SignUp>
-          <div>재발급을 완료하셨나요?</div>
+          <div>피플과 더 시간을 보내실래요?</div>
           &nbsp;
-          <Stlink2 onClick={() => { navigate('/login') }}>로그인</Stlink2>
+          <Stlink2 onClick={() => { navigate('/') }}>돌아가기</Stlink2>
         </SignUp>
 
       </InnerContainer>
@@ -29,7 +29,7 @@ const PasswordPage = () => {
   );
 };
 
-export default PasswordPage;
+export default WithdrawalPage
 
 const Container = styled.div`
     position: relative;

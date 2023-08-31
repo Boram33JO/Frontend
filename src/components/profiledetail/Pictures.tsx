@@ -72,7 +72,7 @@ const Pictures = () => {
     },
   });
 
-  // "삭제" 버튼을 클릭했을 때 호출되는 함수입니다.
+ 
   const handleDelete = (followerId: number) => {
     setSelectedCommentId(followerId);
     setDeleteModalOpen(true);

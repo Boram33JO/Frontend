@@ -1,6 +1,6 @@
 import React from 'react'
 import { styled } from 'styled-components'
-import { ReactComponent as Trash } from '../../assets/images/trash.svg'
+import { ReactComponent as Alert } from '../../assets/images/alert.svg'
 
 interface Props {
     first: string;
@@ -16,7 +16,7 @@ const CommonModal = ({ first, second, name, setToggle, clickButton }: Props) => 
             <ModalBackground onClick={() => setToggle(false)} />
             <ModalContainer>
                 <IconArea>
-                    <StTrash />
+                    <StAlert />
                 </IconArea>
                 <MessageArea>
                     <P $size={"18px"}>{first}</P>
@@ -79,7 +79,7 @@ const IconArea = styled.div`
     background-color: #45424E;
 `
 
-const StTrash = styled(Trash)`
+const StAlert = styled(Alert)`
     width: 30px;
     height: 30px;
 `

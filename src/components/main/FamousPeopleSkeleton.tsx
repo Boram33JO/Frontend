@@ -1,27 +1,35 @@
-import { styled } from 'styled-components'
+import { keyframes, styled } from 'styled-components'
 
 const FamousPeopleSkeleton = () => {
     const dummy = Array.from({ length: 4 }, (_, i) => i);
     return (
         <InnerContainer>
-            <SkeletonDiv $width={"170px"} $height={"26px"}/>
+            <SkeletonDiv $width={"170px"} $height={"26px"} />
             <FamousList>
                 {
                     dummy.map((_, index) => {
                         return (
                             <FamousListItem key={index}>
                                 <FamousListItemThumb />
-                                <FamousListItemNickname><SkeletonDiv $width={"40px"} $height={"16px"}/></FamousListItemNickname>
+                                <FamousListItemNickname>
+                                    <SkeletonDiv $width={"40px"} $height={"16px"} />
+                                </FamousListItemNickname>
                             </FamousListItem>
                         )
                     })
                 }
             </FamousList>
-        </InnerContainer>
+        </InnerContainer >
     )
 }
 
 export default FamousPeopleSkeleton
+
+const loadingAnimation = keyframes`
+    0% { opacity: 1 }
+    50% { opacity: 0.5 }
+    100% { opacity: 1 }
+`;
 
 const InnerContainer = styled.div`
     display: flex;
@@ -30,12 +38,6 @@ const InnerContainer = styled.div`
     box-sizing: border-box;
     padding: 20px;
     gap: 16px;
-`
-
-const H3 = styled.h3`
-    font-size: 20px;
-    line-height: calc(100% + 6px);
-    font-weight: 600;
 `
 
 const FamousList = styled.div`
@@ -80,23 +82,20 @@ const FamousListItemNickname = styled.div`
     justify-content: center;
 `
 
-const P = styled.div`
-    flex: 1 1 auto;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    word-break: break-all;
-    text-align: center;
-    cursor: pointer;
-    background-color: #3B3A40;
-    width: 50px;
-       
-    font-size: 14px;
-    line-height: calc(100% + 6px);
-`
-
 const SkeletonDiv = styled.div<{ $width?: string, $height?: string }>`
-    background-color: #3B3A40;
     width: ${({ $width }) => $width};
     height: ${({ $height }) => $height};
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #3B3A40;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `

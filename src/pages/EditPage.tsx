@@ -9,6 +9,7 @@ import ButtonComponent from "../components/edit/ButtonComponent";
 import FormArea from "../components/edit/FormArea";
 import { postData, putData } from "../api/edit";
 import { getDetailPost } from "../api/post";
+import { toast } from "react-hot-toast";
 
 interface InputForm {
     postTitle: string;
@@ -113,7 +114,7 @@ const EditPage = () => {
         const errorMessage = getErrorMessage();
 
         if (errorMessage) {
-            alert(errorMessage);
+            toast.error("내용을 입력해주세요.", { position: "top-center" });
         } else {
             if (slideIndex === 2) {
                 scrollToTop();
@@ -138,21 +139,21 @@ const EditPage = () => {
                 if (inputForm.content.length <= 500) {
                     try {
                         const response = await postData(data);
-                        alert("success");
+                        toast.success("게시물이 등록되었습니다", { position: "top-center" });
                         const postId = response;
                         navigate(`/detail/${postId}`);
                     } catch (error) {
-                        console.log(error);
-                        alert("failed");
+                        toast.error("게시물 등록에 실패하였습니다", { position: "top-center" });
+                        navigate(`/`);
                     }
                 } else {
-                    alert("내용은 500자 이하여야 합니다.");
+                    toast.error("내용은 500자 이하여야 합니다.", { position: "top-center" });
                 }
             } else {
-                alert("제목과 내용은 필수입니다.");
+                toast.error("제목과 내용은 필수입니다.", { position: "top-center" });
             }
         } else {
-            alert("노래를 선택해주세요.");
+            toast.error("노래를 선택해주세요.", { position: "top-center" });
         }
     };
 
@@ -163,20 +164,20 @@ const EditPage = () => {
                     try {
                         console.log("sss", typeof postId);
                         await putData(data, postId);
-                        alert("success");
+                        toast.success("게시물 수정이 완료되었습니다.", { position: "top-center" });
+
                         navigate(`/detail/${postId}`);
                     } catch (error) {
-                        console.log(error);
-                        alert("failed");
+                        toast.error("게시물 수정에 실패하였습니다.", { position: "top-center" });
                     }
                 } else {
-                    alert("내용은 500자 이하여야 합니다.");
+                    toast.error("내용은 500자 이하여야 합니다.", { position: "top-center" });
                 }
             } else {
-                alert("제목과 내용은 필수입니다.");
+                toast.error("제목과 내용은 필수입니다.", { position: "top-center" });
             }
         } else {
-            alert("노래를 선택해주세요.");
+            toast.error("노래를 선택해주세요.", { position: "top-center" });
         }
     };
 
