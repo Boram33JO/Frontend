@@ -250,5 +250,6 @@ const Produce = styled.div`
   padding-top: 5px;
   color: #626262;
   font-weight: 500; //미디엄
-  width: 280px;
+  max-width: 200px;
+  max-height: 46px;
 `;
