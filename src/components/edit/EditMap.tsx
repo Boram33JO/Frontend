@@ -4,6 +4,7 @@ import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
 import Category from "../common/Category";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 import SearchModal from "./SearchModal";
+import { toast } from "react-hot-toast";
 
 declare global {
     interface Window {
@@ -56,10 +57,7 @@ const EditMap: React.FC<EditMapProps> = ({
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
     const [modal, setModal] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
-    const [clickedMarker, setClickedMarker] = useState<any>();
 
-    // const mapRef = useRef(null); // 지도 객체와 마커 객체를 저장할 ref 생성
-    // TypeScript에서 사용할 수 있는 타입을 지정합니다.
     type MapRefType = {
         map: any;
         marker: any;
@@ -121,7 +119,6 @@ const EditMap: React.FC<EditMapProps> = ({
         });
     }, []);
 
-    // 두 번째 useEffect: 상태값 변경에 따른 로직 (지도 및 마커 업데이트)
     useEffect(() => {
         if (mapRef.current) {
             if (state.isPanto) {
@@ -134,73 +131,6 @@ const EditMap: React.FC<EditMapProps> = ({
             mapRef.current.marker.setPosition(new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude)));
         }
     }, [latitude, longitude]);
-
-    // useEffect(() => {
-    //     window.kakao.maps.load(function () {
-    //         const mapContainer = document.getElementById("map");
-    //         const mapOption = {
-    //             center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude),
-    //             level: 3,
-    //         };
-
-    //         const map = new window.kakao.maps.Map(mapContainer, mapOption);
-
-    //         if (state.isPanto) {
-    //             map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
-    //         } else {
-    //             map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
-    //         }
-
-    //         const imageSize = new window.kakao.maps.Size(36, 42);
-    //         const markerImage = new window.kakao.maps.MarkerImage(pinIcon, imageSize);
-
-    //         const markerPosition = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
-
-    //         // 마커를 생성하고 이미지를 설정합니다
-    //         const marker = new window.kakao.maps.Marker({
-    //             position: markerPosition,
-    //             image: markerImage,
-    //         });
-
-    //         // 마커를 지도에 표시합니다
-    //         marker.setMap(map);
-
-    //         // 지도 클릭 이벤트 리스너
-    //         window.kakao.maps.event.addListener(map, "click", function (mouseEvent: any) {
-    //             // mouseEvent에서 latlng을 가져옵니다
-    //             const latlng = mouseEvent.latLng;
-
-    //             // 마커의 위치를 설정합니다
-    //             marker.setPosition(latlng);
-
-    //             setState((prevState) => ({
-    //                 ...prevState,
-    //                 center: {
-    //                     latitude: latlng.getLat(),
-    //                     longitude: latlng.getLng(),
-    //                 },
-    //             }));
-
-    //             // 지오코더를 사용하여 주소 정보를 가져옵니다
-    //             const geocoder = new window.kakao.maps.services.Geocoder();
-
-    //             // 클릭한 위도와 경도로 coord를 설정합니다
-    //             const coord = new window.kakao.maps.LatLng(latlng.getLat(), latlng.getLng());
-
-    //             // 주소 정보를 성공적으로 가져왔을 때의 콜백 함수
-    //             const callback = function (result: any, status: any) {
-    //                 if (status === window.kakao.maps.services.Status.OK) {
-    //                     setClickedMarker(result[0].address.address_name);
-
-    //                     // clickedMarker 값을 searchLocation으로 설정합니다.
-    //                     setSearchLocation(result[0].address.address_name);
-    //                 }
-    //             };
-
-    //             geocoder.coord2Address(coord.getLng(), coord.getLat(), callback);
-    //         });
-    //     });
-    // }, [latitude, longitude]);
 
     useEffect(() => {
         if (isData) {
@@ -230,7 +160,7 @@ const EditMap: React.FC<EditMapProps> = ({
     const searchLocationHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (searchLocation.trim().length === 0) {
-            return alert("내용을 입력하세요");
+            return toast.success("내용을 입력하세요", { position: "top-center" });
         }
         setModal(true);
         searchMap();

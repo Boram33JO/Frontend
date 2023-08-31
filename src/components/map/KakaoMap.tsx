@@ -9,6 +9,7 @@ import { debounce, displayedAt, getProfileImage, throttle } from "../../utils/co
 import { postCategoryData } from "../../api/map";
 import quavar from "../../assets/images/quavar_note2.svg";
 import { Post } from "../../models/post";
+import { toast } from "react-hot-toast";
 
 interface Location {
     placeName: string;
@@ -216,7 +217,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                 },
                 (error) => {
                     console.error("error", error);
-                    alert("위치정보동의를 확인해주세요.");
+                    toast.success("위치정보동의를 확인해주세요.", { position: "top-center" });
                 }
             );
         } else {
@@ -302,7 +303,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
     const searchLocationHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (searchLocation.trim().length === 0) {
-            return alert("내용을 입력하세요");
+            return toast.success("내용을 입력하세요.", { position: "top-center" });
         }
         setModal(true);
         searchMap();

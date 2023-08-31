@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { debounce, throttle } from "../../utils/common";
+import { debounce } from "../../utils/common";
 interface Props {
     categoryNum: number;
     setCategoryNum: React.Dispatch<React.SetStateAction<number>>;
