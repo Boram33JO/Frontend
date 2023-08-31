@@ -38,12 +38,12 @@ const Mypicture = ({ follow, userInfo }: Props) => {
       <InnerContainer>
         {/* <MyPic><H3>나의 프로필</H3></MyPic> */}
         <MyProfile>
-        {userInfo && userInfo.userImage && (
+        
           <MyThumb
             src={getProfileImage(userInfo.userImage)}
             alt="기본이미지" // alt 속성 추가
           />
-        )}
+        
           <MyProfile1>
             <MyProfile2>
             {userInfo && userInfo.nickname && (
