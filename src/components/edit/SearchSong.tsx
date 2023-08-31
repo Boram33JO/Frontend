@@ -40,7 +40,7 @@ interface ChooseSongListType {
 }
 
 interface SearchSongProps {
-    chooseSongList: ChooseSongListType[]; // Props 타입 수정
+    chooseSongList: ChooseSongListType[];
     setChooseSongList: React.Dispatch<React.SetStateAction<ChooseSongListType[]>>;
     isData: any;
     setIsData: any;
@@ -84,12 +84,13 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         event.preventDefault();
         try {
             const response = await getSearchSongs(searchSong);
-            console.log("11", response?.data.statusCode);
             if (response?.data.statusCode === 204) {
                 return toast.error("다시 검색해주세요", { position: "top-center" });
-            } else if (response?.data !== undefined) {
+            } else if (response?.data !== undefined && Array.isArray(response.data)) {
                 setSongList(response.data);
-                console.log(songList);
+            } else {
+                setSongList([]);
+                return toast.error("내용을 입력해주세요.", { position: "top-center" });
             }
         } catch (error) {
             console.log(error);
@@ -129,7 +130,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         <Container>
             <StSearchForm onSubmit={getSearchSongHandler}>
                 <div>
-                    <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
+                    <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "8px" }} />
                 </div>
                 <input
                     placeholder="음악을 입력해보세요"

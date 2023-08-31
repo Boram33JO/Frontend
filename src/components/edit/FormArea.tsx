@@ -135,6 +135,7 @@ const StFormArea = styled.div`
         width: 90%;
         height: 16px;
         border: none;
+        border-radius: 8px;
         background: #434047;
         padding: 16px 13px;
         color: #d9d8df;

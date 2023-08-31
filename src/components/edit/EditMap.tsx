@@ -160,7 +160,7 @@ const EditMap: React.FC<EditMapProps> = ({
     const searchLocationHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (searchLocation.trim().length === 0) {
-            return toast.success("내용을 입력하세요", { position: "top-center" });
+            return toast.error("내용을 입력하세요", { position: "top-center" });
         }
         setModal(true);
         searchMap();
@@ -176,7 +176,7 @@ const EditMap: React.FC<EditMapProps> = ({
                             width: "16px",
                             height: "16px",
                             marginLeft: "16px",
-                            marginRight: "12px",
+                            marginRight: "8px",
                         }}
                     />
                 </div>

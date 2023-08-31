@@ -31,7 +31,7 @@ const MapPage = () => {
                             <StMyListItem key={post.postId}>
                                 <ListItem post={post} />
                             </StMyListItem>
-                        )
+                        );
                     })
                 )}
             </StListContainer>
