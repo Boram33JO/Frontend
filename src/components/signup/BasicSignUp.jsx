@@ -150,10 +150,10 @@ const BasicSignUp = () => {
       return;
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
-    const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
+    // const passwordRegex =
+    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
+    // const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
 
     // // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리(비밀번호 항목만 유효할 듯)
     // const errors = {};
@@ -451,9 +451,9 @@ const BasicSignUp = () => {
             />
             <Stbutton1 onClick={handleCheckButton}>중복확인</Stbutton1>
           </Stname>
-          {nicknameServerError && (
+          {/* {nicknameServerError && (
             <ErrorMessage>{nicknameServerError}</ErrorMessage>
-          )}
+          )} */}
           {/* {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>} */}
         </Stnickname>
 
@@ -477,38 +477,38 @@ const PasswordToggle = styled.button`
   cursor: pointer;
   outline: none;
   position: absolute;
-  right: 10px;
+  right: 12px;
 `;
 
 
 const Eye = styled(EyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
-  height: 24px; /* 원하는 크기로 조정 */
+width: 23px; /* 원하는 크기로 조정 */
+  height: 23px; /* 원하는 크기로 조정 */
 `;
 
 const ClosedEye = styled(ClosedEyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
-  height: 24px; /* 원하는 크기로 조정 */
+width: 23px; /* 원하는 크기로 조정 */
+  height: 23px; /* 원하는 크기로 조정 */
 `;
 
 const InnerContainer = styled.div`
   width: 100%;
 `;
 
-const ErrorMessageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  padding-left: 48px;
+// const ErrorMessageContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: left;
+//   padding-left: 48px;
 
-  /* align-items: center; */
-`;
+//   /* align-items: center; */
+// `;
 
-const ErrorMessage = styled.div`
-  color: #e7e6f0;
-  margin-top: 10px;
-  font-size: 14px;
-`;
+// const ErrorMessage = styled.div`
+//   color: #e7e6f0;
+//   margin-top: 10px;
+//   font-size: 14px;
+// `;
 
 const Stbox = styled.div`
   display: flex;

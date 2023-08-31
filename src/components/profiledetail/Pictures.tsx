@@ -10,6 +10,7 @@ import { ReactComponent as Nodata } from "../../assets/images/login_signup_profi
 import { toast } from 'react-hot-toast';
 
 
+
 const Pictures = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
@@ -69,6 +70,11 @@ const Pictures = () => {
       // 삭제 후 데이터를 다시 불러오기 위해 팔로워 정보 캐시를 무효화합니다.
       queryClient.invalidateQueries(["Follow", userId]);
       toast.success("해당 피플러를 삭제했습니다.", {position: 'top-center'});
+     // console.log(response);
+    },
+    onError: (error) => {
+     // console.error("피플러 삭제 오류:", error);
+      toast.error("피플러를 삭제하는 중에 오류가 발생했습니다.", { position: 'top-center' });
     },
   });
 
@@ -120,7 +126,7 @@ const Pictures = () => {
                 <Nickname>{follower.nickname}</Nickname>
                 <Produce>{follower.introduce}</Produce>
               </MyProfile2>
-              <Bt onClick={() => handleDelete(follower.userId)}>삭제</Bt>
+                <Bt onClick={() => handleDelete(follower.userId)}>삭제</Bt>
             </MyProfile1>
           </MyProfile>
         ))
