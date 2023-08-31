@@ -112,7 +112,7 @@ const Bt = styled.div`
 const FamousList = styled.div<{$followers: boolean}>`
   display: flex;
   justify-content: ${(props) => props.$followers ? "flex-start" : "space-between"};
-  gap: 30px;
+  gap: ${(props) => props.$followers ? "20px" : ""};
 `;
 
 const FamousListItem = styled.div`

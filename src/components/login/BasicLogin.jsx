@@ -113,18 +113,9 @@ const BasicLogin = () => {
        
       </Stbox>
 
-      {/* <Stbox2>
-        <Stlink1
-          onClick={() => {
-            navigate("/password");
-          }}
-        >
-          로그인 정보를 잊으셨나요?
-        </Stlink1>
-      </Stbox2> */}
-
+    
       <Stbox>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}{" "}
+     
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox>
     </InnerContainer>
@@ -185,7 +176,7 @@ const Stbox2 = styled.div`
   justify-content: flex-end;
   align-items: flex-end;
   margin-right: 23px;
-`;
+`; 
 
 const Stinput1 = styled.input`
   width: 329px;

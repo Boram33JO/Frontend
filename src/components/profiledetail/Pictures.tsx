@@ -194,8 +194,8 @@ const H3 = styled.h3`
 
 `;
 const Bt = styled.button`
-  width: 53px;
-  height: 30px;
+  min-width: 53px;
+  min-height: 30px;
   border: none;
   border-radius: 20px;
 
@@ -250,4 +250,5 @@ const Produce = styled.div`
   padding-top: 5px;
   color: #626262;
   font-weight: 500; //미디엄
+  width: 280px;
 `;

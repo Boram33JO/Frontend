@@ -91,8 +91,8 @@ const H3 = styled.h3`
 `;
 
 const Bt = styled.button<{ $follow?: boolean }>`
-  width: 92px;
-  height: 33px;
+  min-width: 92px;
+  min-height: 33px;
   border: none;
   border-radius: 24px;
 
@@ -127,6 +127,8 @@ const MyThumb = styled.img`
   height: 66px;
   background-color: #ECECEC;
   border-radius: 50%;
+  
+  
 `;
 
 const MyProfile1 = styled.div`
@@ -138,6 +140,7 @@ const MyProfile1 = styled.div`
 
 const MyProfile2 = styled.div`
   padding-left: 12px;
+  /* width: 240px; */
 `;
 
 const Nickname = styled.div`
@@ -146,8 +149,11 @@ const Nickname = styled.div`
   color: #e7e6f0;
 `;
 const Produce = styled.div`
+ width: 240px;
+/* height: 200px; */
   font-size: 14px;
   font-weight: 400;
+  line-height: 1.3;
   padding-top: 5px;
   color: #A6A3AF;
 `;
