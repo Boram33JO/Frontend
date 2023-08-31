@@ -13,6 +13,8 @@ import { RootState } from '../../redux/config/configStore'
 import { getProfileImage } from '../../utils/common'
 import { logout } from '../../redux/modules/userSlice'
 import { logout2 } from '../../api/user2'
+import { useMutation } from 'react-query'
+import { toast } from 'react-hot-toast'
 
 interface Props {
     sideOpen: boolean;
@@ -26,7 +28,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
     const menuList = [
         { id: 1, name: "피플 맵핑", icon: Map, path: "/map" },
         { id: 2, name: "피플 포스팅", icon: Post, path: "/list" },
-        { id: 3, name: "피플러", icon: PP, path: "/" },
+        // { id: 3, name: "피플러", icon: PP, path: "/" },
     ]
 
     const handleMenuClick = (path: string) => {
@@ -34,12 +36,20 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
         navigate(path);
     }
 
-    const handleLogout = async () => {
-        setSideOpen(false); // 왼쪽 사이드바 다시 닫기
-        const response = await logout2(); // 로그아웃 서버 요청 보내기
-        // console.log(response); // 출력
-        dispatch(logout()); // userSlice.ts user정보를 초기화 하는 것
-        alert("로그아웃 되었습니다.");
+    const LogoutMutation = useMutation(logout2, {
+        onSuccess: () => {
+            toast.success("로그아웃 완료")
+            dispatch(logout());
+            navigate('/');
+        },
+        onError: () => {
+            toast.error("로그아웃 실패")
+        }
+    })
+
+    const handleLogoutButton = () => {
+        setSideOpen(false);
+        LogoutMutation.mutate();
     }
 
     return (
@@ -101,7 +111,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
             </SideTop>
             <SideBottom>
                 {
-                    (LoginUser.isLogin) && <P $color={"#A6A3AF"} $size={"16px"} $weight={"500"} onClick={handleLogout}>로그아웃</P>
+                    (LoginUser.isLogin) && <P $color={"#A6A3AF"} $size={"16px"} $weight={"500"} onClick={handleLogoutButton}>로그아웃</P>
                 }
             </SideBottom>
             <Label onClick={() => setSideOpen(false)} />

@@ -9,6 +9,8 @@ import { Post } from "../../models/post"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
 import { useEffect, useRef, useState } from "react"
+import { toast } from "react-hot-toast"
+import CommonModal from "../common/CommonModal"
 
 type PostProps = {
     post: Post
@@ -25,6 +27,8 @@ const DetailContent = ({ post }: PostProps) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const [fold, setFold] = useState<boolean>(true);
     const [contentHeight, setContentHeight] = useState<number>(0);
+    const [target, setTarget] = useState<string>("");
+    const [modalToggle, setModalToggle] = useState<boolean>(false);
 
     const handleContentResizeHeight = () => {
         if (containerRef.current) {
@@ -38,11 +42,12 @@ const DetailContent = ({ post }: PostProps) => {
     }
 
     const LikeMutation = useMutation(likePost, {
-        onSuccess: () => {
+        onSuccess: (response) => {
             queryClient.invalidateQueries(["post"]);
+            toast.success(response.data.message);
         },
-        onError: (error) => {
-            console.log(error);
+        onError: () => {
+            toast.error("좋아요 실패")
         }
     })
 
@@ -50,18 +55,19 @@ const DetailContent = ({ post }: PostProps) => {
         if (LoginUser.isLogin) {
             LikeMutation.mutate(id);
         } else {
-            if (window.confirm(`로그인 후 좋아요 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
-                navigate(`/login`);
-            } else return
+            setTarget("좋아요");
+            setModalToggle(true);
+            return
         }
     }, 300);
 
     const FollowMutation = useMutation(followUser, {
-        onSuccess: () => {
+        onSuccess: (response) => {
             queryClient.invalidateQueries(["post"]);
+            toast.success(response.data.message);
         },
-        onError: (error) => {
-            console.log(error);
+        onError: () => {
+            toast.error("좋아요 실패")
         }
     })
 
@@ -69,9 +75,9 @@ const DetailContent = ({ post }: PostProps) => {
         if (LoginUser.isLogin) {
             FollowMutation.mutate(userId);
         } else {
-            if (window.confirm(`로그인 후 팔로우 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
-                navigate(`/login`);
-            } else return
+            setTarget("팔로우");
+            setModalToggle(true);
+            return
         }
     }, 300);
 
@@ -145,6 +151,14 @@ const DetailContent = ({ post }: PostProps) => {
                 </LocationInfo>
                 {categories[Number(post.category) - 1]}
             </LocationSection>
+            {modalToggle &&
+                <CommonModal
+                    first={`로그인 후 ${target} 하실 수 있습니다.`}
+                    second={`로그인 하시겠습니까?`}
+                    name={"확인"}
+                    setToggle={setModalToggle}
+                    clickButton={() => navigate('/login')}
+                />}
         </DetailContainer>
     )
 }

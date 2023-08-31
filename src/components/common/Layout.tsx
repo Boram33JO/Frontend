@@ -170,7 +170,7 @@ const Left = styled.div<{ $open: boolean }>`
 
     overflow: hidden;
     top: 0;
-    z-index: 4;
+    z-index: 5;
     visibility: ${(props) => (props.$open ? "visible" : "hidden")};
 
     @media (max-width: 480px) {
@@ -198,8 +198,6 @@ const PostButton = styled.div`
     align-items: center;
     justify-content: center;
 
-    bottom: 110px;
-    left: 90%;
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -214,8 +212,6 @@ const TopButton = styled.div`
     align-items: center;
     justify-content: center;
 
-    bottom: 40px;
-    left: 90%;
     width: 44px;
     height: 44px;
     background-color: #45424E;

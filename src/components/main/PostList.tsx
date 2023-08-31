@@ -7,6 +7,7 @@ import { getNewestPosts } from "../../api/post";
 import { useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
 import PostListSkeleton from "./PostListSkeleton";
+import NotFoundPage from "../../pages/NotFoundPage";
 
 const PostList = () => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ const PostList = () => {
     }
 
     if (isError) {
-        return <div>Error...</div>
+        return <NotFoundPage />
     }
 
     return (

@@ -45,6 +45,9 @@ const CommentForm: React.FC<Comment> = ({ setTarget, setIsEdit, commentId, comme
         onSuccess: () => {
             queryClient.invalidateQueries("comment");
             toast.success('댓글 작성 완료');
+        },
+        onError: () => {
+            toast.success('댓글 작성 실패');
         }
     });
 
@@ -52,6 +55,9 @@ const CommentForm: React.FC<Comment> = ({ setTarget, setIsEdit, commentId, comme
         onSuccess: () => {
             queryClient.invalidateQueries("comment");
             toast.success('댓글 수정 완료');
+        },
+        onError: () => {
+            toast.error('댓글 수정 실패');
         }
     });
 
