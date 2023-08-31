@@ -2,12 +2,12 @@ import { styled } from "styled-components";
 import ListItemSkeleton from "../common/ListItemSkeleton";
 
 const PostListSkeleton = () => {
-    const dummy = Array.from({ length: 4 }, (_, i) => i);
+    const dummy = Array.from({ length: 3 }, (_, i) => i);
 
     return (
         <InnerContainer>
             <TitleSection>
-                <SkeletonDiv $width={"206px"} $height={"24px"}/>
+                <SkeletonDiv $width={"206px"} $height={"24px"} />
             </TitleSection>
             <ContentSection>
                 <CategoryList>
@@ -61,12 +61,6 @@ const CategoryListItem = styled.div`
     box-sizing: border-box;
 
     cursor: pointer;
-`
-
-const H3 = styled.h3`
-    font-size: 20px;
-    line-height: 26px;
-    font-weight: 600;
 `
 
 const SkeletonDiv = styled.div<{ $width?: string, $height?: string }>`

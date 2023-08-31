@@ -104,12 +104,6 @@ const Layout = () => {
 
 export default Layout;
 
-const Temp = styled.div`
-    width: 100%;
-    height: 50px;
-    background-color: gray;
-`
-
 const Container = styled.div`
     position: relative;
     width: 100%;
@@ -190,8 +184,8 @@ const Right = styled.div`
     flex-direction: column;
 
     position: absolute;
-    right: 20px;
-    bottom: 10px;
+    right: 5%;
+    bottom: 5%;
 
     background-color: transparent;
     z-index: 4;

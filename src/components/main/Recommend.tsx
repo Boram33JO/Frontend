@@ -84,9 +84,9 @@ const Recommend = () => {
                                 )
                             })
                         }
-                        {preview && <Preview url={data[categoryNum].songResponseDtos[songIndex].audioUrl} song={data[categoryNum].songResponseDtos[songIndex]} setPreview={setPreview} />}
                     </Playlist>
                 </ContentSection>
+                {preview && <Preview url={data[categoryNum].songResponseDtos[songIndex].audioUrl} song={data[categoryNum].songResponseDtos[songIndex]} setPreview={setPreview} />}
             </InnerContainer>
             <TodayArea>
                 {getDateNotation()} 기준 업데이트

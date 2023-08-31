@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { css, styled } from "styled-components"
+import { styled } from "styled-components"
 import { ReactComponent as Expand } from '../../assets/images/expand.svg'
 import { ReactComponent as Contract } from '../../assets/images/contract.svg'
 import { ReactComponent as Quaver } from '../../assets/images/quavar_note.svg'
