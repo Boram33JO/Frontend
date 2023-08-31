@@ -9,7 +9,7 @@ const LookAround = () => {
     const navigate = useNavigate();
     return (
         <Container>
-            <InnerContainer>
+            <InnerContainer onClick={() => navigate(`/map`)}>
                 <Wrapper>
                     <LeftSection>
                         {(userInfo.userId) ? (
@@ -38,7 +38,7 @@ const LookAround = () => {
                         }
                     </LeftSection>
                     <RightSection>
-                        <MapButton onClick={() => navigate(`/map`)}>
+                        <MapButton>
                             <StMap />
                         </MapButton>
                     </RightSection>
@@ -63,7 +63,9 @@ const InnerContainer = styled.div`
     background-color: #373737;
     border-radius: 10px;
     box-sizing: border-box;
-    padding: 25px 15px;
+    padding: 25px 15px;        
+
+    cursor: pointer;
 `
 
 const Wrapper = styled.div`
@@ -104,8 +106,6 @@ const MapButton = styled.div`
     width: 66px;
     height: 66px;
     border-radius: 6px;
-    
-    cursor: pointer;
 `
 
 const StMap = styled(Map)`

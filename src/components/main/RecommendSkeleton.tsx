@@ -1,4 +1,4 @@
-import { styled } from 'styled-components'
+import { keyframes, styled } from 'styled-components'
 
 const RecommendSkeleton = () => {
     const dummy = Array.from({ length: 4 }, (_, i) => i);
@@ -24,7 +24,7 @@ const RecommendSkeleton = () => {
                                                 <SkeletonDiv $width={"7px"} $height={"20px"} />
                                             </MusicRanking>
                                             <MusicInfo>
-                                                <SkeletonDiv $width={"200px"} $height={"20px"} />
+                                                <SkeletonDiv $width={"140px"} $height={"20px"} />
                                                 <SkeletonDiv $width={"70px"} $height={"20px"} />
                                             </MusicInfo>
                                         </PlaylistItemLeft>
@@ -46,6 +46,12 @@ const RecommendSkeleton = () => {
 }
 
 export default RecommendSkeleton
+
+const loadingAnimation = keyframes`
+    0% { opacity: 1 }
+    50% { opacity: 0.5 }
+    100% { opacity: 1 }
+`
 
 const Container = styled.div`
     display: block;
@@ -82,20 +88,40 @@ const CategoryList = styled.div`
 `
 
 const CategoryListItem = styled.div`
-    background: #3B3A40;
     width: 50px;
     height: 32px;
     border-radius: 30px;
-    
-    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
 
-    cursor: pointer;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const SkeletonDiv = styled.div<{ $width?: string, $height?: string }>`
-    background-color: #3B3A40;
     width: ${({ $width }) => $width};
     height: ${({ $height }) => $height};
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const Playlist = styled.ol`
@@ -108,11 +134,6 @@ const PlaylistItem = styled.li`
     display: flex;
     align-items: center;
     gap: 28px;
-    cursor: pointer;
-
-    &:hover {
-        opacity: 0.7;
-    }
 `
 
 const PlaylistItemLeft = styled.div`
@@ -130,7 +151,19 @@ const PlaylistItemRight = styled.div`
 const MusicThumbnail = styled.div`
     width: 76px;
     height: 76px;
-    background-color: #3B3A40;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const MusicRanking = styled.div`
@@ -149,8 +182,20 @@ const MusicInfo = styled.div`
 const SpotifyIcon = styled.div`
     width: 24px;
     height: 24px;
-    background-color: #3B3A40;
     border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const TodayArea = styled.div`

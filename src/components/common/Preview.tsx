@@ -122,13 +122,12 @@ const StP = styled.p<{ $color: string, $size: string }>`
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
     font-weight: 600;
-    line-height: calc(100% + 6px);
-    & {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        overflow: hidden;
-    }
+    line-height: calc(150%);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `
 
 const StIframe = styled.iframe`

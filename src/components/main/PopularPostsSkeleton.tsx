@@ -52,7 +52,7 @@ const InnerContainer = styled.div`
 
 const TitleSection = styled.div`
     width: 150px;
-    height: 26px;
+    height: 23px;
     position: relative;
     overflow: hidden;
 
@@ -63,7 +63,7 @@ const TitleSection = styled.div`
         left: 0;
         width: 100%;
         height: 100%;        
-        background: #3B3A40;
+        background: #515151;
         animation: ${loadingAnimation} 2s infinite ease-in-out;
     }
 `
@@ -131,18 +131,22 @@ const ItemCategory = styled.div`
     top: 10px;
     left: 10px;
     height: 30px;
-    min-width: 40px;
-    background-color: #383549;
+    width: 50px;
 
-    border: 1px solid #70609B;
+    border: 1px solid transparent;
     border-radius: 30px;
-    
-    color: #EFEDFF;
-    font-size: 14px;
-    line-height: 16px;
+    overflow: hidden;
 
-    box-sizing: border-box;
-    padding: 10px;
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 
     pointer-events: none;
 `
@@ -174,9 +178,20 @@ const ProfileThumnail = styled.div`
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background-color: #383549;
-    border: 1px solid #70609B;
-    box-sizing: border-box;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const ProfileInfo = styled.div`
@@ -199,7 +214,7 @@ const InfoTemp = styled.div`
         left: 0;
         width: 100%;
         height: 100%;        
-        background: #414141;
+        background: #515151;
         animation: ${loadingAnimation} 2s infinite ease-in-out;
     }
 `
