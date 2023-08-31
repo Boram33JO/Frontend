@@ -27,8 +27,8 @@ const List = ({ userInfo, postList }: Props) => {
         <TitleSection>
         {userInfo && userInfo.nickname && (
           <H3>{`${userInfo.nickname}님의 포스팅`}</H3>)}
-{postList && postList.length > 0 ? (
- null
+{postList.length === 0 ? (
+null
 ) : (  <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
   // 또는 아무 내용도 없는 <></> 사용
 )}
