@@ -269,11 +269,11 @@ const Produce = styled.div`
   padding-top: 5px;
   color: #626262;
   font-weight: 500; 
-  max-width: 180px;
+  max-width: 230px;
   max-height: 40px; /* 3줄로 제한하려면 3줄 높이에 맞게 설정 */
   line-height: 1.2; /* 줄 간격 조절 */
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 3줄로 제한 */
+  -webkit-line-clamp: 2; /* 2줄로 제한 */
   -webkit-box-orient: vertical;
   overflow: hidden;
   box-sizing: border-box;

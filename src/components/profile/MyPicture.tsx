@@ -157,7 +157,7 @@ const Nickname = styled.div`
   color: #e7e6f0;
 `;
 const Produce = styled.div`
-  max-width: 180px;
+  max-width: 220px;
 
   font-size: 14px;
   font-weight: 400;
@@ -165,9 +165,9 @@ const Produce = styled.div`
   padding-top: 5px;
   color: #a6a3af;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 3줄로 제한 */
+  -webkit-line-clamp: 3; /* 3줄로 제한 */
   -webkit-box-orient: vertical;
-  
+  overflow: hidden;
   box-sizing: border-box;
 
 
