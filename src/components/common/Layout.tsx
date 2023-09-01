@@ -1,6 +1,6 @@
 import Header from './Header'
 import Footer from './Footer'
-import { Outlet, useNavigate, useParams } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { styled } from 'styled-components'
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import Side from './Side'
@@ -24,13 +24,20 @@ const Layout = () => {
     const middleRef = useRef<HTMLDivElement>(null);
     const outletRef = useRef<HTMLDivElement>(null);
     const { id } = useParams();
-
     const navigate = useNavigate();
+    const location = useLocation();
     const LoginUser = useSelector((state: RootState) => state.user);
 
     const handleScrollTop = () => {
-        middleRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+        if (middleRef.current) {
+            middleRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+        }
+    }
 
+    const sideRender = () => {
+        if (window.location.href.includes("edit")) return true;
+        if (window.location.href.includes("login")) return true;
+        if (window.location.href.includes("signup")) return true;
     }
 
     // Progress 바
@@ -39,7 +46,7 @@ const Layout = () => {
         const handleScroll = throttle(() => {
             if (middleRef.current && outletRef.current && progressRef.current && containerRef.current) {
                 const scrollTop = middleRef.current.scrollTop;
-                const progress = (scrollTop / (outletRef.current.scrollHeight - containerRef.current.clientHeight - 60)) * 100;
+                const progress = (scrollTop / (outletRef.current.scrollHeight - middleRef.current.clientHeight)) * 100;
                 progressRef.current.style.width = `${progress}%`;
             }
         }, 100);
@@ -53,6 +60,15 @@ const Layout = () => {
             }
         };
     }, []);
+
+    useEffect(() => {
+        if (middleRef.current) {
+            middleRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        if (progressRef.current) {
+            progressRef.current.style.width = `0%`;
+        }
+    }, [location.pathname]);
 
     return (
         <Container>
@@ -73,22 +89,20 @@ const Layout = () => {
                         setSideOpen={setSideOpen}
                     />
                 </Left>
-                <Right>
-                    {LoginUser.isLogin && !!!id && <PostButton onClick={() => navigate(`/edit`)}><StPost /></PostButton>}
-                    {!!!id && <TopButton onClick={handleScrollTop}><StTop /></TopButton>}
-                </Right>
+                {
+                    (!sideRender()) && (
+                        <Right>
+                            {LoginUser.isLogin && !!!id && <PostButton onClick={() => navigate(`/edit`)}><StPost /></PostButton>}
+                            {!!!id && <TopButton onClick={handleScrollTop}><StTop /></TopButton>}
+                        </Right>
+                    )
+                }
             </InnerContainer>
         </Container>
     );
 };
 
 export default Layout;
-
-const Temp = styled.div`
-    width: 100%;
-    height: 50px;
-    background-color: gray;
-`
 
 const Container = styled.div`
     position: relative;
@@ -129,15 +143,24 @@ const ProgressBar = styled.div`
     width: 100%;
     transition: width 0.2s;
     background-color: #7462e2;
+
+    @media (max-width: 480px) {
+        position: fixed;
+    }
 `;
 
 const Middle = styled.div`
     width: 100%;
-    height: calc(100% - 50px);
+    height: calc(100% - 60px);
     overflow-y: scroll;
+    box-sizing: border-box;
 
     &::-webkit-scrollbar {
         width: 0px;
+    }
+
+    @media (max-width: 480px) {
+        margin-top: 60px;
     }
 `;
 
@@ -156,7 +179,7 @@ const Left = styled.div<{ $open: boolean }>`
 
     overflow: hidden;
     top: 0;
-    z-index: 4;
+    z-index: 5;
     visibility: ${(props) => (props.$open ? "visible" : "hidden")};
 
     @media (max-width: 480px) {
@@ -170,13 +193,19 @@ const Right = styled.div`
     flex-direction: column;
 
     position: absolute;
-    right: 20px;
-    bottom: 10px;
+    right: 5%;
+    bottom: 5%;
 
     background-color: transparent;
     z-index: 4;
 
     gap: 10px;
+
+    @media (max-width: 480px) {
+        position: fixed;
+        right: 5%;
+        bottom: 5%;
+    }
 `;
 
 const PostButton = styled.div`
@@ -184,8 +213,6 @@ const PostButton = styled.div`
     align-items: center;
     justify-content: center;
 
-    bottom: 110px;
-    left: 90%;
     width: 44px;
     height: 44px;
     border-radius: 50%;
@@ -200,8 +227,6 @@ const TopButton = styled.div`
     align-items: center;
     justify-content: center;
 
-    bottom: 40px;
-    left: 90%;
     width: 44px;
     height: 44px;
     background-color: #45424E;

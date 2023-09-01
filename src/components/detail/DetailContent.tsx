@@ -4,11 +4,13 @@ import { ReactComponent as Place } from '../../assets/images/place.svg'
 import { useMutation, useQueryClient } from "react-query"
 import { followUser, likePost } from "../../api/post"
 import { useNavigate, useParams } from "react-router-dom"
-import { debounce, displayedAt, getProfileImage } from "../../utils/common"
+import { debounce, displayedAt, getProfileImage, showCount } from "../../utils/common"
 import { Post } from "../../models/post"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
 import { useEffect, useRef, useState } from "react"
+import { toast } from "react-hot-toast"
+import CommonModal from "../common/CommonModal"
 
 type PostProps = {
     post: Post
@@ -25,6 +27,8 @@ const DetailContent = ({ post }: PostProps) => {
     const contentRef = useRef<HTMLDivElement>(null);
     const [fold, setFold] = useState<boolean>(true);
     const [contentHeight, setContentHeight] = useState<number>(0);
+    const [target, setTarget] = useState<string>("");
+    const [modalToggle, setModalToggle] = useState<boolean>(false);
 
     const handleContentResizeHeight = () => {
         if (containerRef.current) {
@@ -38,11 +42,12 @@ const DetailContent = ({ post }: PostProps) => {
     }
 
     const LikeMutation = useMutation(likePost, {
-        onSuccess: () => {
+        onSuccess: (response) => {
             queryClient.invalidateQueries(["post"]);
+            toast.success(response.data.message);
         },
-        onError: (error) => {
-            console.log(error);
+        onError: () => {
+            toast.error("좋아요 실패")
         }
     })
 
@@ -50,18 +55,19 @@ const DetailContent = ({ post }: PostProps) => {
         if (LoginUser.isLogin) {
             LikeMutation.mutate(id);
         } else {
-            if (window.confirm(`로그인 후 좋아요 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
-                navigate(`/login`);
-            } else return
+            setTarget("좋아요");
+            setModalToggle(true);
+            return
         }
     }, 300);
 
     const FollowMutation = useMutation(followUser, {
-        onSuccess: () => {
+        onSuccess: (response) => {
             queryClient.invalidateQueries(["post"]);
+            toast.success(response.data.message);
         },
-        onError: (error) => {
-            console.log(error);
+        onError: () => {
+            toast.error("좋아요 실패")
         }
     })
 
@@ -69,9 +75,9 @@ const DetailContent = ({ post }: PostProps) => {
         if (LoginUser.isLogin) {
             FollowMutation.mutate(userId);
         } else {
-            if (window.confirm(`로그인 후 팔로우 하실 수 있습니다.\n로그인 하시겠습니까?`)) {
-                navigate(`/login`);
-            } else return
+            setTarget("팔로우");
+            setModalToggle(true);
+            return
         }
     }, 300);
 
@@ -99,26 +105,32 @@ const DetailContent = ({ post }: PostProps) => {
                 }
             </ProfileSection>
             <TitleSection>
-                <TitleSectionLeft>
-                    <StP $size={"18px"} $color={"#FAFAFA"}>
-                        {post.postTitle}
-                    </StP>
-                    <StP $size={"14px"} $color={"#A19FAB"}>
-                        {displayedAt(post.createdAt)} 작성
-                    </StP>
-                </TitleSectionLeft>
-                <TitleSectionRight>
-                    <LikeButton onClick={likeButtonHandler}>
-                        <SvgIcon>
-                            <StLike $yours={post.wishlist} />
-                        </SvgIcon>
-                    </LikeButton>
-                    <LikeCount>
-                        <StP $size={"16px"} $color={"#FAFAFA"}>
-                            {post.wishlistCount}
+                <TitleMain>
+                    {post.postTitle}
+                </TitleMain>
+                <TitleSub>
+                    <TitleSubLeft>
+                        <StP $size={"14px"} $color={"#A19FAB"}>
+                            {displayedAt(post.createdAt)}
                         </StP>
-                    </LikeCount>
-                </TitleSectionRight>
+                        <Divider />
+                        <StP $size={"14px"} $color={"#A19FAB"}>
+                            조회수 {showCount(post.viewCount)}
+                        </StP>
+                    </TitleSubLeft>
+                    <TitleSubRight>
+                        <LikeButton onClick={likeButtonHandler}>
+                            <SvgIcon>
+                                <StLike $yours={post.wishlist} />
+                            </SvgIcon>
+                        </LikeButton>
+                        <LikeCount>
+                            <StP $size={"16px"} $color={"#FAFAFA"}>
+                                {showCount(post.wishlistCount)}
+                            </StP>
+                        </LikeCount>
+                    </TitleSubRight>
+                </TitleSub>
             </TitleSection>
             <ContentSection>
                 <ContentContainer ref={containerRef}>
@@ -128,17 +140,29 @@ const DetailContent = ({ post }: PostProps) => {
             </ContentSection>
             <LocationSection>
                 <LocationInfo>
-                    <IconContainer>
-                        <SvgIcon>
-                            <Place />
-                        </SvgIcon>
-                    </IconContainer>
-                    <StP $size={"16px"} $color={"#F1F1F1"}>
-                        {post.location?.placeName}
-                    </StP>
+                    <LocationInfoLeft>
+                        <IconContainer>
+                            <SvgIcon>
+                                <Place />
+                            </SvgIcon>
+                        </IconContainer>
+                        <StP $size={"16px"} $color={"#F1F1F1"}>
+                            {post.location?.placeName}
+                        </StP>
+                    </LocationInfoLeft>
+                    <LocationInfoRight>
+                        {categories[Number(post.category) - 1]}
+                    </LocationInfoRight>
                 </LocationInfo>
-                {categories[Number(post.category) - 1]}
             </LocationSection>
+            {modalToggle &&
+                <CommonModal
+                    first={`로그인 후 ${target} 하실 수 있습니다.`}
+                    second={`로그인 하시겠습니까?`}
+                    name={"확인"}
+                    setToggle={setModalToggle}
+                    clickButton={() => navigate('/login')}
+                />}
         </DetailContainer>
     )
 }
@@ -149,8 +173,7 @@ const DetailContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: inherit;
-    margin-top: 26px;
-    padding: 10px 20px;
+    padding: 36px 20px 10px;
     box-sizing: border-box;
     background-color: #141414;
     color: #FAFAFA;
@@ -189,9 +212,17 @@ const ProfileInfo = styled.div`
 `
 
 const StP = styled.p< { $size: string, $color: string } >`
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+    overflow: hidden;
+
     color: ${props => props.$color};
     font-size: ${props => props.$size};
-    line-height: ${props => props.$size};
+    line-height: calc(100% + 6px);
     font-weight: 500;
 `
 
@@ -218,21 +249,42 @@ const FollowBtn = styled.button < { $yours: boolean } >`
 
 const TitleSection = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
 
     box-sizing: border-box;
     margin-bottom: 12px;
+    gap: 7px;
 `
 
-const TitleSectionLeft = styled.div`
+const TitleMain = styled.div`
+    width: 100%;
+    color: #FAFAFA;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 500;
+`
+
+const TitleSub = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5px;
+`
+
+const TitleSubLeft = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     gap: 10px;
 `
 
-const TitleSectionRight = styled.div`
+const TitleSubRight = styled.div`
     display: flex;
+    height: auto;
+    flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 5px;
 `
 
@@ -249,8 +301,6 @@ const LikeButton = styled.div`
 const LikeCount = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 20px;
 `
 
 const StLike = styled(Like) <{ $yours: boolean }>`
@@ -313,12 +363,30 @@ const LocationSection = styled.div`
 
 const LocationInfo = styled.div`
     display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    
+    gap: 10px;
+`
+
+const LocationInfoLeft = styled.div`
+    display: flex;
     align-items: center;
     
     gap: 10px;
 `
 
+const LocationInfoRight = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 56px;
+    white-space: nowrap;
+`
+
 const IconContainer = styled.div`
+    flex: 0 0 34px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -329,20 +397,9 @@ const IconContainer = styled.div`
     background-color: #55505B;
 `
 
-const EditSection = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-`
-
-const EditButton = styled.p`
-    font-size: 16px;
-    line-height: 22px;
-    color: #A6A3AF;
-    background: none;
-    border: none;
-    padding: none;
-    margin: none;
-
-    cursor: pointer;
+const Divider = styled.div`
+    height: 12px;
+    width: 1px;
+    background-color: #A6A3AF;
+    padding: 0;
 `

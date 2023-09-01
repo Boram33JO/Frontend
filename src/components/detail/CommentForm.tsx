@@ -5,20 +5,29 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/config/configStore';
+import CommonModal from '../common/CommonModal';
+import { toast } from 'react-hot-toast';
 
 interface Comment {
     setTarget?: any;
+    setIsEdit?: any;
     commentId?: string;
     comment?: string;
 }
 
-const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
+const CommentForm: React.FC<Comment> = ({ setTarget, setIsEdit, commentId, comment }) => {
     const { id } = useParams();
     const [content, setContent] = useState('' || comment);
+    const [toggle, setToggle] = useState<boolean>(false);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const LoginUser = useSelector((state: RootState) => state.user);
     const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const handleClickOKButton = () => {
+        navigate(`/login`);
+        return
+    }
 
     const handleResizeHeight = () => {
         if (textareaRef.current) {
@@ -35,12 +44,20 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
     const commentMutation = useMutation((postId: string) => postComment(postId, { content: content }), {
         onSuccess: () => {
             queryClient.invalidateQueries("comment");
+            toast.success('댓글 작성 완료');
+        },
+        onError: () => {
+            toast.success('댓글 작성 실패');
         }
     });
 
     const updateMutation = useMutation((commentId: string) => updateComment(commentId, { content: content }), {
         onSuccess: () => {
             queryClient.invalidateQueries("comment");
+            toast.success('댓글 수정 완료');
+        },
+        onError: () => {
+            toast.error('댓글 수정 실패');
         }
     });
 
@@ -50,13 +67,12 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
                 commentMutation.mutate(id);
                 setContent("");
             } else {
-                alert("내용을 입력해주세요.");
+                toast.error('댓글 내용을 입력하세요');
                 return
             }
         } else {
-            if (window.confirm(`로그인 후 댓글을 작성할 수 있습니다.\n로그인 하시겠습니까?`)) {
-                navigate('/login')
-            } else return
+            setToggle(true);
+            return
         }
         if (textareaRef.current) {
             textareaRef.current.style.height = "auto";
@@ -67,8 +83,9 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
         if (commentId && content) {
             updateMutation.mutate(commentId);
             setTarget("");
+            setIsEdit(false);
         } else {
-            alert("내용을 입력해주세요.");
+            toast.error('댓글 내용을 입력하세요');
             return
         }
     }
@@ -90,15 +107,24 @@ const CommentForm: React.FC<Comment> = ({ setTarget, commentId, comment }) => {
                 />
                 <CommentButtonArea>
                     {(comment)
-                        ? <CommentButton onClick={handleUpdateButtonClick}>
+                        ? <CommentButton $fill={!!content} onClick={handleUpdateButtonClick}>
                             수정
                         </CommentButton>
-                        : <CommentButton onClick={handlePostButtonClick}>
+                        : <CommentButton $fill={!!content} onClick={handlePostButtonClick}>
                             입력
                         </CommentButton>
                     }
                 </CommentButtonArea>
             </CommentContent>
+            {toggle &&
+                <CommonModal
+                    first={`로그인 후 댓글을 작성할 수 있습니다.`}
+                    second={`로그인 하시겠습니까?`}
+                    name={"확인"}
+                    setToggle={setToggle}
+                    clickButton={handleClickOKButton}
+                />
+            }
         </Container>
     )
 }
@@ -125,7 +151,7 @@ const CommentTextArea = styled.textarea`
     flex: 1 0 0;
     min-height: 20px;
 
-    color: #797582;
+    color: #FAFAFA;
     font-family: "Pretendard";
     font-size: 14px;
     line-height: 20px;
@@ -153,12 +179,12 @@ const CommentButtonArea = styled.div`
     padding-left: 0px;
 `
 
-const CommentButton = styled.div`
+const CommentButton = styled.div<{ $fill?: boolean }>`
     display: inline-block;
     border: none;
     background: none transparent;
     
-    color: #797582;
+    color: ${(props) => props.$fill ? "#FAFAFA" : "#797582"};
     font-size: 14px;
     line-height: 20px;
     cursor: pointer;

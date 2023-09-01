@@ -8,6 +8,7 @@ import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
+import { toast } from 'react-hot-toast';
 
 
 
@@ -32,12 +33,12 @@ const BasicSignUp = () => {
   const [isNicknameVerified, setIsNicknameVerified] = useState(false); // 회원가입하기 버튼 전에 닉네임 인증여부로 막기
 
   // 에러
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [passwordCheckError, setPasswordCheckError] = useState("");
-  const [nicknameError, setNicknameError] = useState("");
+  // const [emailError, setEmailError] = useState("");
+  // const [passwordError, setPasswordError] = useState("");
+  // const [passwordCheckError, setPasswordCheckError] = useState("");
+  // const [nicknameError, setNicknameError] = useState("");
 
-  const [nicknameServerError, setNicknameServerError] = useState(""); // 에러 메시지 저장 상태 변수
+  const [nicknameServerError, setNicknameServerError] = useState(""); // 에러 메시지 저장
 
   // 포커스
   const [isEmailFocused, setIsEmailFocused] = useState(false);
@@ -77,6 +78,10 @@ const BasicSignUp = () => {
  // 비밀번호 토글
   const [showPassword, setShowPassword] = useState(false);
  const [showPasswordCheck, setShowPasswordCheck] = useState(false);
+
+ //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
+ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
+ //const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
 
   const togglePasswordVisibility_1 = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -122,63 +127,42 @@ const BasicSignUp = () => {
 
   const addNewUserMutation = useMutation(addUsers, {
     onSuccess: () => {
-      alert("회원가입 되었습니다!");
+      toast.success('회원가입 되었습니다!', {position: 'top-center'});
       navigate("/login");
     },
 
     onError: (error) => {
       if (error.response && error.response.data) {
-        alert(error.response.data); // 서버로부터의 에러 메시지를 보여줍니다.
+       toast.error(`${error.response.data}`, {position: 'top-center'});
       } else {
-        alert("서버 에러가 발생했습니다.");
+        toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
       }
     },
   });
 
   const onSignUpClickHandler = () => {
     if (!isEmailVerified) {
-      alert("이메일 인증을 먼저 진행해 주세요.");
+      toast.error("이메일 인증을 먼저 진행해 주세요.", {position: 'top-center'});
       return;
     }
     if (!isMobileVerified) {
-      alert("핸드폰 인증을 먼저 진행해 주세요.");
+      toast.error("핸드폰 인증을 먼저 진행해 주세요.", {position: 'top-center'});
+      return;
+    }
+    if(password!==passwordCheck)
+    {
+      toast.error("비밀번호를 다시 확인해주세요.", {position: 'top-center'});
+      return;
+    }
+    if (!passwordRegex.test(password)) {
+      toast.error('비밀번호의 필수 요소를 확인해주세요.', {position: 'top-center'});
       return;
     }
     if (!isNicknameVerified) {
-      alert("닉네임 인증을 먼저 진행해 주세요.");
+      toast.error("닉네임 인증을 먼저 진행해 주세요.", {position: 'top-center'});
       return;
     }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
-    const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
-
-    // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리(비밀번호 항목만 유효할 듯)
-    const errors = {};
-    if (!emailRegex.test(email)) {
-      errors.email = "이메일 형식이 아닙니다.";
-    }
-    if (!passwordRegex.test(password)) {
-      errors.password = "Password 조건이 충족되지 않았습니다.";
-    }
-    if (password !== passwordCheck) {
-      errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
-    }
-    if (!nicknameRegex.test(nickname)) {
-      errors.nickname = "대/소문자, 한글, 숫자, 2~12자 이하로 입력해 주세요.";
-    }
-
-    // 에러가 있는 경우 처리
-    if (Object.keys(errors).length > 0) {
-      // 에러 메시지 모두 설정
-      setEmailError(errors.email || "");
-      setPasswordError(errors.password || "");
-      setPasswordCheckError(errors.passwordCheck || "");
-      setNicknameError(errors.nickname || "");
-      return;
-    }
-
+   
     const newUser = {
       email: email,
       password: password,
@@ -187,27 +171,13 @@ const BasicSignUp = () => {
     addNewUserMutation.mutate(newUser);
   };
 
-  // 닉네임 검사
-  const handleCheckButton = async () => {
-    const response = await nicknameCheck(nickname);
-    // console.log(response);
-
-    if (response.data.message) {
-      alert(response.data.message);
-      setIsNicknameVerified(true);
-    } else {
-      // setNicknameServerError(response.data.error);
-      alert(response.data.error);
-      setIsNicknameVerified(false);
-    }
-  };
 
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
     // 이메일 형식 유효성 검사
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert("올바른 이메일 형식이 아닙니다.");
+      toast.error("올바른 이메일 형식이 아닙니다.", {position: 'top-center'});
       return;
     }
     // 비활성화 상태로 변경하고 로딩 표시
@@ -218,10 +188,10 @@ const BasicSignUp = () => {
 
     try {
       const response = await emailCheck(email);
-      alert(response.data);
+      toast.success(`${response.data}`, {position: 'top-center'});
       setShowCodeInput(true);
     } catch (error) {
-      alert("서버 에러가 발생했습니다.");
+      toast.error(('서버 에러가 발생했습니다.'), {position: 'top-center'});
     } finally {
       // 응답 처리 후 버튼 활성화 및 로딩 해제
       setIsEmailButtonDisabled(false);
@@ -236,15 +206,15 @@ const BasicSignUp = () => {
     if (response.data === true) {
       setIsEmailVerified(true);
       setIsEmailButtonDisabled(true); // 중복확인 버튼 비활성화
-      alert("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.");
+      toast.success("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
+     // setShowCodeInput(true);
       setShowCodeInput(false);
       setEmailButtonContent("인증완료");
 
-      // 3초 후에 숨김 상태 해제
     } else if (response.data === false) {
       setIsEmailVerified(false);
       setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
-      alert("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.");
+      toast.error("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.", {position: 'top-center'});
       resetEmail();
       resetNumber();
     }
@@ -255,7 +225,7 @@ const BasicSignUp = () => {
     const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
 
     if (!phoneNumberRegex.test(to)) {
-      alert("11자리 숫자만 입력해주세요.");
+      toast.error("11자리 숫자만 입력해주세요.", {position: 'top-center'});
       resetMobile(); // 입력 칸 비우기
       return;
     }
@@ -270,10 +240,10 @@ const BasicSignUp = () => {
      // console.log(response);
       setShowMobileInput(true);
       // 5분 타이머 시작
-      alert("모바일 인증 번호를 발송했습니다.");
+      toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
     } catch (error) {
       setmobileButtonContent("재전송");
-      alert("서버 에러가 발생했습니다.");
+      toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
     }
   };
 
@@ -284,7 +254,7 @@ const BasicSignUp = () => {
 
     if (response.data === true) {
       setIsMobileVerified(true);
-      alert("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.");
+      toast.success("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
       setShowMobileInput(false);
       setIsMobileButtonDisabled(true);
       setmobileButtonContent("인증완료");
@@ -295,13 +265,27 @@ const BasicSignUp = () => {
 
       setIsMobileButtonDisabled(false);
       // console.log(response.data, "숫자 확인3");
-      alert("모바일 인증에 실패했습니다. 다시 시도해주세요.");
+      toast.error("모바일 인증에 실패했습니다. 다시 시도해주세요.", {position: 'top-center'});
       setmobileButtonContent("재전송");
       resetMobile();
       resetMobileCode();
     }
   };
   
+  // 닉네임 검사
+  const handleCheckButton = async () => {
+    const response = await nicknameCheck(nickname);
+    // console.log(response);
+
+    if (response.data.message) {
+      toast.success(`${response.data.message}`, {position: 'top-center'});
+      setIsNicknameVerified(true);
+    } else {
+      // setNicknameServerError(response.data.error);
+      toast.error(`${response.data.error}`, {position: 'top-center'});
+      setIsNicknameVerified(false);
+    }
+  };
 
   return (
     <InnerContainer>
@@ -334,7 +318,7 @@ const BasicSignUp = () => {
               <Stinput4
                 type={"text"}
                 value={code}
-                placeholder={`인증번호 6자리 (${formatTime(
+                placeholder={`인증번호 8자리 (${formatTime(
                   emailVerificationTimer
                 )})`}
                 onChange={onChangenumberHandler}
@@ -376,7 +360,7 @@ const BasicSignUp = () => {
               <Stinput4
                 type={"text"}
                 value={smsConfirmNum}
-                placeholder={`인증번호 6자리 (${formatTime(
+                placeholder={`인증번호 5자리 (${formatTime(
                   mobileVerificationTimer
                 )})`}
                 onChange={onChangeMobileCodeHandler}
@@ -427,13 +411,13 @@ const BasicSignUp = () => {
         </Stinput2Container>
       </Stbox>
 
-      <ErrorMessageContainer>
+      {/* <ErrorMessageContainer>
         {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
         {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
         {passwordCheckError && (
           <ErrorMessage>{passwordCheckError}</ErrorMessage>
         )}
-      </ErrorMessageContainer>
+      </ErrorMessageContainer> */}
 
       <H3>닉네임</H3>
       <Stbox>
@@ -450,9 +434,9 @@ const BasicSignUp = () => {
             />
             <Stbutton1 onClick={handleCheckButton}>중복확인</Stbutton1>
           </Stname>
-          {nicknameServerError && (
+          {/* {nicknameServerError && (
             <ErrorMessage>{nicknameServerError}</ErrorMessage>
-          )}
+          )} */}
           {/* {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>} */}
         </Stnickname>
 
@@ -476,38 +460,38 @@ const PasswordToggle = styled.button`
   cursor: pointer;
   outline: none;
   position: absolute;
-  right: 10px;
+  right: 12px;
 `;
 
 
 const Eye = styled(EyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
-  height: 24px; /* 원하는 크기로 조정 */
+width: 23px; /* 원하는 크기로 조정 */
+  height: 23px; /* 원하는 크기로 조정 */
 `;
 
 const ClosedEye = styled(ClosedEyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
-  height: 24px; /* 원하는 크기로 조정 */
+width: 23px; /* 원하는 크기로 조정 */
+  height: 23px; /* 원하는 크기로 조정 */
 `;
 
 const InnerContainer = styled.div`
   width: 100%;
 `;
 
-const ErrorMessageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: left;
-  padding-left: 48px;
+// const ErrorMessageContainer = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   align-items: left;
+//   padding-left: 48px;
 
-  /* align-items: center; */
-`;
+//   /* align-items: center; */
+// `;
 
-const ErrorMessage = styled.div`
-  color: #e7e6f0;
-  margin-top: 10px;
-  font-size: 14px;
-`;
+// const ErrorMessage = styled.div`
+//   color: #e7e6f0;
+//   margin-top: 10px;
+//   font-size: 14px;
+// `;
 
 const Stbox = styled.div`
   display: flex;

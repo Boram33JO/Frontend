@@ -65,8 +65,8 @@ const PlaylistSection = styled.div`
     overflow-y: scroll;
 
     box-sizing: border-box;
-    padding: 14px 20px;
-    gap: 14px;
+    padding: 12px 20px;
+    gap: 12px;
 
     &::-webkit-scrollbar {
         width: 6px;
@@ -103,8 +103,8 @@ const PlaylistLeft = styled.div`
 `
 
 const MusicThumbnail = styled.img`
-    width: 42px;
-    height: 42px;
+    width: 45px;
+    height: 45px;
 `
 
 const MusicInfo = styled.div`
@@ -114,17 +114,18 @@ const MusicInfo = styled.div`
 `
 
 const StP = styled.p<{ $color: string, $size: string }>`
-    font-family: "Pretendard";
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+    overflow: hidden;
+
     color: ${(props) => props.$color};
     font-size: ${(props) => props.$size};
     font-weight: 600;
-    line-height: calc(100% + 2px);
-    & {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        overflow: hidden;
-    }
+    line-height: calc(150%);
 `
 
 const SpotifyIcon = styled.img`

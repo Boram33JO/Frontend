@@ -6,6 +6,10 @@ import Recommend from '../components/main/Recommend'
 import FamousPeople from '../components/main/FamousPeople'
 import PostList from '../components/main/PostList'
 import { useEffect, useRef, useState } from 'react'
+import RecommendSkeleton from '../components/main/RecommendSkeleton'
+import FamousPeopleSkeleton from '../components/main/FamousPeopleSkeleton'
+import PopularPostsSkeleton from '../components/main/PopularPostsSkeleton'
+import PostListSkeleton from '../components/main/PostListSkeleton'
 
 const MainPage = () => {
     const [renderRecommend, setRenderRecommend] = useState<boolean>(false);
@@ -60,9 +64,9 @@ const MainPage = () => {
             <SlideBanner />
             <LookAround />
             <PopularPosts />
-            <div ref={recommendRef}>{renderRecommend && <Recommend />}</div>
-            <div ref={famousPeopleRef}>{renderFamousPeople && <FamousPeople />}</div>
-            <div ref={postListRef}>{renderPostList && <PostList />}</div>
+            <div ref={recommendRef}>{renderRecommend ? <Recommend /> : <RecommendSkeleton />}</div>
+            <div ref={famousPeopleRef}>{renderFamousPeople ? <FamousPeople /> : <FamousPeopleSkeleton />}</div>
+            <div ref={postListRef}>{renderPostList ? <PostList /> : <PostListSkeleton />}</div>
         </Container>
     )
 }

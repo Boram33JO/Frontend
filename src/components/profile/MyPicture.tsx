@@ -38,21 +38,33 @@ const Mypicture = ({ follow, userInfo }: Props) => {
       <InnerContainer>
         {/* <MyPic><H3>나의 프로필</H3></MyPic> */}
         <MyProfile>
+        
           <MyThumb
-            src={getProfileImage(userInfo.userImage)}
+            src={getProfileImage(userInfo.userImage)} style={{minWidth:"66px", minHeight:"66px"}}
             alt="기본이미지" // alt 속성 추가
           />
+        
           <MyProfile1>
             <MyProfile2>
+            {userInfo && userInfo.nickname && (
               <Nickname>{userInfo.nickname}</Nickname>
+            )}
+            {userInfo && userInfo.introduce && (
               <Produce>{userInfo.introduce}</Produce>
+            )}
             </MyProfile2>
-            {isMyProfile
-              ? (<Bt onClick={EditMyProfileHandler}>프로필 수정</Bt>)
-              : (<Bt $follow={follow} onClick={() => followButtonHandler(userInfo.userId)}>
+            {LoginUser.userId ? ( // 사용자가 로그인되어 있는지 확인
+            isMyProfile ? (
+              <Bt onClick={EditMyProfileHandler}>프로필 수정</Bt>
+            ) : (
+              <Bt
+                $follow={follow}
+                onClick={() => followButtonHandler(userInfo.userId)}
+              >
                 {follow ? "언팔로우" : "팔로우"}
-              </Bt>)
-            }
+              </Bt>
+            )
+          ) : null}
           </MyProfile1>
         </MyProfile>
       </InnerContainer>
@@ -85,8 +97,8 @@ const H3 = styled.h3`
 `;
 
 const Bt = styled.button<{ $follow?: boolean }>`
-  width: 92px;
-  height: 33px;
+  min-width: 92px;
+  min-height: 33px;
   border: none;
   border-radius: 24px;
 
@@ -121,6 +133,8 @@ const MyThumb = styled.img`
   height: 66px;
   background-color: #ECECEC;
   border-radius: 50%;
+  object-fit: cover;
+  
 `;
 
 const MyProfile1 = styled.div`
@@ -132,6 +146,9 @@ const MyProfile1 = styled.div`
 
 const MyProfile2 = styled.div`
   padding-left: 12px;
+  /* width: 240px; */
+    justify-content: space-between;
+    padding-right: 40px;
 `;
 
 const Nickname = styled.div`
@@ -140,10 +157,20 @@ const Nickname = styled.div`
   color: #e7e6f0;
 `;
 const Produce = styled.div`
+  max-width: 220px;
+
   font-size: 14px;
   font-weight: 400;
+  line-height: 1.3;
   padding-top: 5px;
-  color: #A6A3AF;
+  color: #a6a3af;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* 3줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  box-sizing: border-box;
+
+
 `;
 
 const StLine = styled.div`

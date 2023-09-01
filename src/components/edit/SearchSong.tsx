@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react"; // useEffect는 사용하지 않아서 제거
+import React, { useEffect, useRef, useState } from "react"; // useEffect는 사용하지 않아서 제거
 import { styled } from "styled-components";
 import { ReactComponent as CheckBox } from "../../assets/images/check_slc.svg";
 import { ReactComponent as NonCheckBox } from "../../assets/images/check_non.svg";
 import { ReactComponent as Search } from "../../assets/images/search.svg";
 import { getPopularSongsList, getSearchSongs } from "../../api/edit";
 import { ReactComponent as Spotify } from "../../assets/images/spotify/Spotify_Icon_RGB_White.svg";
+import { toast } from "react-hot-toast";
+
 interface SongListType {
     album: string;
     artistName: string;
@@ -38,7 +40,7 @@ interface ChooseSongListType {
 }
 
 interface SearchSongProps {
-    chooseSongList: ChooseSongListType[]; // Props 타입 수정
+    chooseSongList: ChooseSongListType[];
     setChooseSongList: React.Dispatch<React.SetStateAction<ChooseSongListType[]>>;
     isData: any;
     setIsData: any;
@@ -48,6 +50,15 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
     const [searchSong, setSearchSong] = useState<string>("");
     const [songList, setSongList] = useState<Array<SongListType>>([]);
     const [popularSongList, setPopularSongList] = useState<Array<PopularSongListType>>([]);
+
+    // 검색시 스크롤 맨 위로 올림
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollToTop = () => {
+        if (scrollRef.current) {
+            const { scrollHeight, clientHeight } = scrollRef.current;
+            scrollRef.current.scrollTop = clientHeight - scrollHeight;
+        }
+    };
 
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearchSong(event.target.value);
@@ -60,7 +71,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                 if (response) {
                     setPopularSongList(response);
                 } else {
-                    alert("검색 결과 없음");
+                    toast.error("검색 결과 없음", { position: "top-center" });
                 }
             } catch (error) {
                 console.log(error);
@@ -73,10 +84,13 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         event.preventDefault();
         try {
             const response = await getSearchSongs(searchSong);
-            if (response) {
+            if (response?.data.statusCode === 204) {
+                return toast.error("다시 검색해주세요", { position: "top-center" });
+            } else if (response?.data !== undefined && Array.isArray(response.data)) {
                 setSongList(response.data);
             } else {
-                alert("검색 결과 없음");
+                setSongList([]);
+                return toast.error("내용을 입력해주세요.", { position: "top-center" });
             }
         } catch (error) {
             console.log(error);
@@ -89,13 +103,16 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         }
     }, [isData]);
 
+    useEffect(() => {
+        scrollToTop();
+    }, [songList]);
+
     const addToChooseSongList = (item: SongListType) => {
         const isAlreadyAdded = chooseSongList.some((addedItem) => addedItem.songNum === item.songNum);
-
         if (isAlreadyAdded) {
             removeFromChooseSongList(item);
         } else if (chooseSongList.length >= 10) {
-            return alert("한 번에 추가 할 수 있는 곡의 수는 10개 입니다.");
+            return toast.error("한 번에 추가할 수 있는 곡의 수는 10개 입니다.", { position: "top-center" });
         } else {
             setChooseSongList((prevList) => {
                 const newList = [...prevList, item];
@@ -113,7 +130,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
         <Container>
             <StSearchForm onSubmit={getSearchSongHandler}>
                 <div>
-                    <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
+                    <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "8px" }} />
                 </div>
                 <input
                     placeholder="음악을 입력해보세요"
@@ -123,7 +140,10 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
             </StSearchForm>
             {songList.length === 0 ? (
                 <StPopularContainer>
-                    <h2>이 노래는 어때요?</h2>
+                    <StTopTen>
+                        <h2>이 노래는 어때요?</h2>
+                        <span>피플 top10</span>
+                    </StTopTen>
                     <StSongListContainer>
                         {popularSongList.map((item) => (
                             <StSongList
@@ -149,7 +169,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                     </StSongListContainer>
                 </StPopularContainer>
             ) : (
-                <StContainer>
+                <StContainer ref={scrollRef}>
                     {songList.map((item) => (
                         <StSongList
                             key={item.songNum}
@@ -212,8 +232,8 @@ const StSearchForm = styled.form`
     align-items: center;
 
     input {
-        width: 270px;
-        height: 16px;
+        width: 85%;
+        height: 20px;
         color: #fafafa;
         border: 1px solid #434047;
         background-color: #434047;
@@ -225,9 +245,8 @@ const StSearchForm = styled.form`
 
 const StPopularContainer = styled.div`
     color: #fafafa;
-    h2 {
-        font-size: 18px;
-    }
+    line-height: 100%;
+
     h3 {
         width: 130px;
         font-size: 16px;
@@ -248,6 +267,25 @@ const StPopularContainer = styled.div`
     }
 `;
 
+const StTopTen = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+        color: #a19fab;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 100%;
+    }
+
+    h2 {
+        font-size: 18px;
+        font-weight: 500;
+    }
+`;
+
 const StContainer = styled.div`
     overflow-y: scroll;
     overflow-x: hidden;
@@ -259,6 +297,7 @@ const StContainer = styled.div`
     border-radius: 6px;
     border: 1px solid #524d58;
     background: #434047;
+    line-height: 100%;
 
     box-sizing: border-box;
     gap: 10px;
@@ -285,11 +324,32 @@ const StContainer = styled.div`
 `;
 
 const StSongListContainer = styled.div`
+    height: 280px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     box-sizing: border-box;
-    padding-top: 20px;
+    /* padding-top: 20px; */
+    padding: 20px 10px 0 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #dddddd;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: #3a3a3a;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-button:vertical:start:decrement,
+    &::-webkit-scrollbar-button:vertical:end:decrement {
+        height: 10px;
+    }
 `;
 
 const StSongList = styled.div`
@@ -299,6 +359,7 @@ const StSongList = styled.div`
     justify-content: space-between;
     width: 100%;
     color: #fafafa;
+    line-height: 100%;
 
     h3 {
         width: 130px;

@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { styled } from 'styled-components'
 import { ReactComponent as Trash } from '../../assets/images/trash.svg'
 
 interface Props {
-    name: string;
+    first: string;
+    second?: string;
     deleteToggle: React.Dispatch<React.SetStateAction<boolean>>;
     deleteButton: () => void;
 }
 
-const DeleteModal = ({ name, deleteToggle, deleteButton }: Props) => {
+const DeleteModal = ({ first, second, deleteToggle, deleteButton }: Props) => {
     return (
         <>
             <ModalBackground onClick={() => deleteToggle(false)} />
@@ -17,8 +18,8 @@ const DeleteModal = ({ name, deleteToggle, deleteButton }: Props) => {
                     <StTrash />
                 </IconArea>
                 <MessageArea>
-                    <P $size={"18px"}>{`정말 해당 ${name}을 삭제하시겠어요?`}</P>
-                    <P $size={"14px"} $color={"#A6A3AF"}>{`삭제된 ${name}은 다시 복구할 수 없습니다.`}</P>
+                    <P $size={"18px"}>{first}</P>
+                    <P $size={"14px"} $color={"#A6A3AF"}>{second}</P>
                 </MessageArea>
                 <DeleteButtonArea>
                     <DeleteModalButton onClick={() => deleteToggle(false)}>

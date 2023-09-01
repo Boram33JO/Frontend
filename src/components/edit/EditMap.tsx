@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
-import Category from "../common/Category";
+import Category from "./Category";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
+
+import { ReactComponent as Pin } from "../../assets/images/icon_pin_map.svg";
+
 import SearchModal from "./SearchModal";
+import { toast } from "react-hot-toast";
 
 declare global {
     interface Window {
@@ -57,34 +61,81 @@ const EditMap: React.FC<EditMapProps> = ({
     const [modal, setModal] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
+
+    type MapRefType = {
+        map: any;
+        marker: any;
+    } | null;
+
+    const mapRef = useRef<MapRefType>(null); // 지도 객체와 마커 객체를 저장할 ref 생성
+
     useEffect(() => {
         window.kakao.maps.load(function () {
-            const mapContainer = document.getElementById("map"); // 지도를 표시할 div
+            const mapContainer = document.getElementById("map");
             const mapOption = {
-                center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude), // 지도의 중심좌표
+                center: new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude),
                 level: 3,
             };
 
             const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-            if (state.isPanto) {
-                map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
-            } else {
-                map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
-            }
-
             const imageSize = new window.kakao.maps.Size(36, 42);
             const markerImage = new window.kakao.maps.MarkerImage(pinIcon, imageSize);
 
             const markerPosition = new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
+
+            // 마커를 생성하고 이미지를 설정합니다
             const marker = new window.kakao.maps.Marker({
                 position: markerPosition,
                 image: markerImage,
             });
 
-            marker.setMap(map); // Add the marker to the map
+            // 만들어진 마커 객체를 지도에 추가합니다.
+            marker.setMap(map);
+
+            // 클릭 이벤트 리스너 등록
+            window.kakao.maps.event.addListener(map, "click", function (mouseEvent: any) {
+                // 클릭한 위치의 위경도 정보 가져오기
+                var latlng = mouseEvent.latLng;
+
+                setState((prevState) => ({
+                    ...prevState,
+                    center: { latitude: latlng.getLat(), longitude: latlng.getLng() },
+                }));
+
+                setLatitude(latlng.getLat());
+                setLongitude(latlng.getLng());
+
+                // 지오코더 인스턴스 생성
+                var geocoder = new window.kakao.maps.services.Geocoder();
+
+                var coord2AddressCallbackFunc = function (result: any, status: any) {
+                    if (status === window.kakao.maps.services.Status.OK) {
+                        setSearchLocation(result[0].address.address_name);
+                    }
+                };
+
+                geocoder.coord2Address(latlng.getLng(), latlng.getLat(), coord2AddressCallbackFunc);
+            });
+
+            // 만들어진 지도와 마커 객체를 ref에 저장
+            mapRef.current = { map, marker };
         });
-    }, [state, latitude, longitude]);
+    }, []);
+
+    useEffect(() => {
+        if (mapRef.current) {
+            if (state.isPanto) {
+                mapRef.current.map.panTo(new window.kakao.maps.LatLng(latitude, longitude));
+            } else {
+                mapRef.current.map.setCenter(new window.kakao.maps.LatLng(state.center.latitude, state.center.longitude));
+            }
+
+            // 새로운 위경도로 마커표시 이동
+            mapRef.current.marker.setPosition(new window.kakao.maps.LatLng(parseFloat(latitude), parseFloat(longitude)));
+        }
+    }, [latitude, longitude]);
 
     useEffect(() => {
         if (isData) {
@@ -92,6 +143,7 @@ const EditMap: React.FC<EditMapProps> = ({
             setPlaceName(isData.location.placeName);
             setLatitude(isData.location.latitude);
             setLongitude(isData.location.longitude);
+            setCategoryNum(isData.category - 1);
         }
     }, [isData]);
 
@@ -104,25 +156,20 @@ const EditMap: React.FC<EditMapProps> = ({
         };
         ps.keywordSearch(searchLocation, placesSearchCB);
     };
-
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         setSearchLocation(newValue);
-        setPlaceName(newValue); // searchLocation 값을 placeName으로 설정
+        setPlaceName(newValue);
     };
-
-    // const handleCategoryChange = (newCategoryNum: number) => {
-    //     setCategoryNum(newCategoryNum); // categoryNum 값을 변경하고 저장
-    // };
 
     const searchLocationHandler = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (searchLocation.trim().length === 0) {
-            return alert("내용을 입력하세요");
+            return toast.error("내용을 입력하세요", { position: "top-center" });
         }
         setModal(true);
-        setSearchLocation("");
         searchMap();
+        setSearchLocation("");
     };
 
     return (
@@ -134,7 +181,7 @@ const EditMap: React.FC<EditMapProps> = ({
                             width: "16px",
                             height: "16px",
                             marginLeft: "16px",
-                            marginRight: "12px",
+                            marginRight: "8px",
                         }}
                     />
                 </div>
@@ -149,7 +196,7 @@ const EditMap: React.FC<EditMapProps> = ({
                     <input
                         placeholder="장소를 입력해보세요"
                         onChange={changeInputHandler}
-                        value={placeName || ""}
+                        value={placeName || searchLocation || ""}
                         id="keyword"
                     />
                 )}
@@ -158,6 +205,7 @@ const EditMap: React.FC<EditMapProps> = ({
                 <SearchModal
                     setModal={setModal}
                     searchLocationList={searchLocationList}
+                    address={address}
                     setAddress={setAddress}
                     setPlaceName={setPlaceName}
                     setLatitude={setLatitude}
@@ -173,7 +221,15 @@ const EditMap: React.FC<EditMapProps> = ({
             </StCategory>
             <StKakaoMapContainer>
                 <StKakaoMap id="map" />
+                <div id="clickLatlng"></div>
             </StKakaoMapContainer>
+            <StLocation>
+                <div>
+                    <Pin style={{ marginRight: "8px" }} />
+                    {placeName}
+                </div>
+                <button>{categories[categoryNum]}</button>
+            </StLocation>
         </StMapContainer>
     );
 };
@@ -196,13 +252,18 @@ const StSearchForm = styled.form`
     height: 40px;
     border: 1px solid #434047;
     background-color: #434047;
+    box-sizing: border-box;
     border-radius: 999px;
     display: flex;
     flex-direction: row;
     align-items: center;
+    box-sizing: border-box;
+
     input {
-        width: 270px;
-        height: 16px;
+        width: 85%;
+        height: 20px;
+        font-size: 16px;
+        line-height: 100%;
         color: #fafafa;
         border: 1px solid #434047;
         background-color: #434047;
@@ -227,4 +288,35 @@ const StKakaoMap = styled.div`
     width: 100%;
     height: 100%;
     border-radius: 10px;
+`;
+
+const StLocation = styled.div`
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    background: #434047;
+    box-sizing: border-box;
+    color: #f1f1f1;
+    padding: 10px 16px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+    div {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+
+    button {
+        height: 26px;
+        color: #fafafa;
+        display: flex;
+        border-radius: 999px;
+        padding: 6px 16px;
+        justify-content: center;
+        align-items: center;
+    }
 `;

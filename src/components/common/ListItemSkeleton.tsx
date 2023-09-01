@@ -1,4 +1,4 @@
-import { styled } from "styled-components"
+import { keyframes, styled } from "styled-components"
 
 const ListItemSkeleton = () => {
     return (
@@ -24,6 +24,12 @@ const ListItemSkeleton = () => {
 }
 
 export default ListItemSkeleton
+
+const loadingAnimation = keyframes`
+    0% { opacity: 1 }
+    50% { opacity: 0.5 }
+    100% { opacity: 1 }
+`;
 
 const ListItemContainer = styled.div`
     position: relative;
@@ -72,8 +78,20 @@ const TitleArea = styled.div`
 const ProfileThumnail = styled.div`
     width: 34px;
     height: 34px;
-    background-color: #414141;
     border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const ProfileInfo = styled.div`
@@ -89,20 +107,43 @@ const DropdownToggle = styled.div`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    
+    overflow: hidden;
+
     width: 100%;
     height: 58px;
 
-    background-color: #414141;
     border-radius: 6px;
 
     box-sizing: border-box;
     padding: 14px;
     cursor: pointer;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `
 
 const SkeletonDiv = styled.div<{ $width?: string, $height?: string }>`
-    background-color: #414141;
     width: ${({ $width }) => $width};
     height: ${({ $height }) => $height};
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;        
+        background: #515151;
+        animation: ${loadingAnimation} 2s infinite ease-in-out;
+    }
 `

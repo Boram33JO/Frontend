@@ -6,13 +6,15 @@ import CommentForm from "./CommentForm"
 import { displayedAt, getProfileImage } from "../../utils/common"
 import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { Comment } from "../../models/post"
 import { ReactComponent as Start } from "../../assets/images/page_start.svg"
 import { ReactComponent as End } from "../../assets/images/page_end.svg"
 import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
 import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 import { ReactComponent as Empty } from "../../assets/images/comment_empty.svg"
+import toast from 'react-hot-toast'
+import DeleteModal from "../common/DeleteModal"
 
 interface Comments {
     content: Comment[];
@@ -29,20 +31,26 @@ const CommentList = () => {
     const [total, setTotal] = useState<number>(0);
     const [totalPage, setTotalPage] = useState<number>(0);
     const [pageButton, setPageButton] = useState<number[]>([]);
+    const [isEdit, setIsEdit] = useState<boolean>(false);
+    const navigate = useNavigate();
 
     const deleteMutation = useMutation((commentId: string) => deleteComment(commentId), {
         onSuccess: () => {
             queryClient.invalidateQueries(["comment", page, totalPage]);
+            toast.success("댓글 삭제 완료");
+        },
+        onError: () => {
+            toast.error("댓글 삭제 실패");
         }
     });
 
-    const CommentButtonHandler = () => { }
-
     const CommentUpdateButtonHandler = (id: string) => {
+        setIsEdit(true);
         setUpdateTarget(id);
     }
 
-    const CommentDeleteToggleHandler = () => {
+    const CommentDeleteToggleHandler = (id: string) => {
+        setUpdateTarget(id);
         setDeleteToggle(true);
     }
 
@@ -88,12 +96,16 @@ const CommentList = () => {
                     return (
                         <CommentListItem key={item.commentId}>
                             <ListItemTop>
-                                <UserImage src={getProfileImage(item.userImage)} />
-                                <P $color="#FAFAFA">
-                                    {item.nickname}
-                                </P>
+                                <UserInfo onClick={() => navigate(`/profile/${item.userId}`)}>
+                                    <UserImage src={getProfileImage(item.userImage)} />
+                                    <P $color="#FAFAFA">
+                                        {item.nickname}
+                                    </P>
+                                </UserInfo>
                             </ListItemTop>
-                            {(updateTarget !== item.commentId) ?
+                            {(updateTarget === item.commentId && isEdit) ?
+                                <CommentForm setTarget={setUpdateTarget} setIsEdit={setIsEdit} commentId={item.commentId} comment={item.content} />
+                                :
                                 <>
                                     <ListItemMiddle>
                                         <P $color="#DEDCE7">
@@ -104,10 +116,6 @@ const CommentList = () => {
                                         <P $size="14px" $color="#A6A3AF">
                                             {displayedAt(item.createdAt)}
                                         </P>
-                                        {/* <Divider />
-                                            <CommentP>
-                                                댓글 달기
-                                            </CommentP> */}
                                         {(userInfo.nickname === item.nickname) &&
                                             <>
                                                 <Divider />
@@ -115,36 +123,12 @@ const CommentList = () => {
                                                     수정
                                                 </CommentP>
                                                 <Divider />
-                                                <CommentP onClick={CommentDeleteToggleHandler}>
+                                                <CommentP onClick={() => CommentDeleteToggleHandler(item.commentId)}>
                                                     삭제
                                                 </CommentP>
                                             </>
                                         }
                                     </ListItemBottom>
-                                    {
-                                        (deleteToggle) && (
-                                            <>
-                                                <ModalBackground onClick={() => setDeleteToggle(false)} />
-                                                <DeleteModal>
-                                                    <P>
-                                                        {`댓글을 삭제하시겠습니까?\n삭제한 댓글은 되돌릴 수 없습니다.`}
-                                                    </P>
-                                                    <DeleteButtonArea>
-                                                        <DeleteModalButton onClick={() => setDeleteToggle(false)} >
-                                                            취소
-                                                        </DeleteModalButton>
-                                                        <DeleteModalButton $delete={true} onClick={() => CommentDeleteButtonHandler(item.commentId)}>
-                                                            삭제
-                                                        </DeleteModalButton>
-                                                    </DeleteButtonArea>
-                                                </DeleteModal>
-                                            </>
-                                        )
-                                    }
-                                </>
-                                :
-                                <>
-                                    <CommentForm setTarget={setUpdateTarget} commentId={item.commentId} comment={item.content} />
                                 </>}
                         </CommentListItem>
                     )
@@ -173,6 +157,15 @@ const CommentList = () => {
                     <SvgIcon onClick={() => { if (page < totalPage - 1) setPage(page + 1) }}><Next /></SvgIcon>
                     <SvgIcon onClick={() => { setPage(totalPage - 1) }}><End /></SvgIcon>
                 </CommentListPagination>
+            }
+            {
+                (deleteToggle) && (
+                    <DeleteModal
+                        first="정말 해당 댓글을 삭제하시겠어요?"
+                        second="삭제된 댓글은 다시 복구할 수 없습니다."
+                        deleteToggle={setDeleteToggle}
+                        deleteButton={() => CommentDeleteButtonHandler(updateTarget)}
+                    />)
             }
         </CommentListContainer>
     )
@@ -204,7 +197,13 @@ const UserImage = styled.img`
 const ListItemTop = styled.div`
     display: flex;
     align-items: center;
+`
+
+const UserInfo = styled.div`
+    display: flex;
+    align-items: center;
     gap: 8px;
+    cursor: pointer;
 `
 
 const ListItemMiddle = styled.div`
@@ -248,73 +247,13 @@ const Divider = styled.div`
     padding: 0;
 `
 
-const ModalBackground = styled.div`
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 4;
-    width: 100vh;
-    height: 100vh;
-    background-color: gray;
-    opacity: 0.3;
-`
-
-const DeleteModal = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    z-index: 5;
-    width: 300px;
-    background-color: #141414;
-    color: #FAFAFA;
-    border-radius: 10px;
-    box-sizing: border-box;
-    padding: 20px;
-    gap: 20px;
-`
-
-const DeleteButtonArea = styled.div`
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    align-items: center;
-    gap: 10px;
-`
-
-const DeleteModalButton = styled.div<{ $delete?: boolean }>`
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    
-    flex: 1 0 0;
-    background: ${(props) => props.$delete ? "linear-gradient(135deg, #8084F4, #C48FED)" : "#2C2A30"};
-    
-    font-size: 16px;
-    line-height: 22px;
-    font-weight: 600;
-    color: ${(props) => props.$delete ? "#FAFAFA" : "#797582"};
-    border-radius: 6px;
-    box-sizing: border-box;
-    padding: 10px;
-    cursor: pointer;
-    &:hover {
-        color: ${(props) => props.$delete ? "#141414" : "#FAFAFA"};
-    }
-`
-
 const CommentEmpty = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-    padding: 60px 0px;
-    gap: 20px;
+    padding: 25px 0px;
+    gap: 21px;
 `
 
 const StEmpty = styled(Empty)`

@@ -25,15 +25,15 @@ const ProfileNav: React.FC = () => {
       <StBox1 $active={activeTab === 'post'} onClick={() => handleTabClick('post')}>
         내 포스팅
       </StBox1>
-      <StBox2 $active={activeTab === 'wishlist'} onClick={() => handleTabClick('wishlist')}>
+      <StBox1 $active={activeTab === 'wishlist'} onClick={() => handleTabClick('wishlist')}>
         피플포스팅
-      </StBox2>
-      <StBox3 $active={activeTab === 'follow'} onClick={() => handleTabClick('follow')}>
+      </StBox1>
+      <StBox1 $active={activeTab === 'follow'} onClick={() => handleTabClick('follow')}>
         피플러
-      </StBox3>
-      <StBox4 $active={activeTab === 'comments'} onClick={() => handleTabClick('comments')}>
+      </StBox1>
+      <StBox1 $active={activeTab === 'comments'} onClick={() => handleTabClick('comments')}>
         댓글관리
-      </StBox4>
+      </StBox1>
   
     </StBox>
   );
@@ -61,32 +61,6 @@ const StBox1 = styled.div<StBoxProps>`
   border-bottom: ${(props) => (props.$active ? '2px solid #8084f3' : 'none')};
 `;
 
-const StBox2 = styled.div<StBoxProps>`
-  text-align: center;
-  padding-bottom: 5px;
-  margin-bottom: -2px;
-  cursor: pointer;
-  color: ${(props) => (props.$active ? ' #E7E6F0;' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.$active ? '2px solid #8084f3' : 'none')};
-`;
-
-const StBox3 = styled.div<StBoxProps>`
-  text-align: center;
-  padding-bottom: 5px;
-  margin-bottom: -2px;
-  cursor: pointer;
-  color: ${(props) => (props.$active ? ' #E7E6F0;' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.$active ? '2px solid #8084f3' : 'none')};
-`;
-
-const StBox4 = styled.div<StBoxProps>`
-  text-align: center;
-  padding-bottom: 5px;
-  margin-bottom: -2px;
-  cursor: pointer;
-  color: ${(props) => (props.$active ? '#E7E6F0;' : '#5b5b5b')};
-  border-bottom: ${(props) => (props.$active ? '2px solid #8084f3' : 'none')};
-`;
 
 
 export default ProfileNav;

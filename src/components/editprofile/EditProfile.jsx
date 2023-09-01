@@ -7,6 +7,8 @@ import { ReactComponent as CameraIcon } from "../../assets/images/profile_camera
 import { useSelector } from "react-redux";
 import { nicknameCheck, updateProfile } from "../../api/profile";
 import { setUserInfo } from "../../redux/modules/userSlice";
+import { toast } from 'react-hot-toast';
+
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -26,21 +28,29 @@ const EditProfile = () => {
   const [isNicknameFocused, setNicknameFocused] = useState(false);
   const [isIntroduceFocused, setIsFocused] = useState(false);
 
+  const INTRODUCE_MAX_LENGTH = 38; // 필요한 대로 조정
+
+
   // 이미지 선택 시 처리
   const handleImageChange = (event) => {
     const selectedImage = event.target.files?.[0];
     const imgSize = event.target.files?.[0].size;
     const maxSize = 5 * 1024 * 1024; // 5MB
     if (imgSize > maxSize) {
-      alert("이미지 용량은 5MB 이내로 등록 가능합니다.");
+
+      toast.error("이미지 용량은 5MB 이내로 등록 가능합니다.");
       return;
     }
     if (selectedImage) {
-      setProfileImage(URL.createObjectURL(selectedImage));
-      setUploadimage(selectedImage);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfileImage(e.target.result); // Use the result as the image source
+        setUploadimage(selectedImage);
+      };
+      reader.readAsDataURL(selectedImage); // Read the image as a data URL
     }
   };
-
+  
   useEffect(() => {
     setNickname(userInfo.nickname);
     if (userInfo.introduce) {
@@ -61,28 +71,28 @@ const EditProfile = () => {
   };
 
   const handleIntroduceChange = (e) => {
-    setIntroduce(e.target.value);
+    const newIntroduce = e.target.value;
+    if (newIntroduce.length <= INTRODUCE_MAX_LENGTH) {
+      setIntroduce(newIntroduce);
+    }
   };
+  
 
   const handleCheckButton = async () => {
     try {
       const response = await nicknameCheck(nickname);
-      console.log(response);
-      if (response.data.statusCode < 300) {
-        alert("사용가능한 닉네임입니다");
+     // console.log(response);
+      if (response.data.message){
+        toast.success(`${response.data.message}`);
         setIsCheck(true);
-      } else if (
-        response.data.statusCode >= 300 &&
-        response.data.statusCode < 400
-      ) {
-        alert("이미 사용중인 닉네임입니다");
-        setIsCheck(false);
       } else {
-        alert(`닉네임은 한글, 영어 또는 숫자로\n2~10글자 사이만 가능합니다`);
+        toast.error(`${response.data.error}`);
+      // console.log(response.data.error)
         setIsCheck(false);
+  
       }
     } catch (error) {
-      console.log(error);
+      toast.error("오류가 발생했습니다. 재시도 해주세요.");
     }
   };
 
@@ -98,7 +108,7 @@ const EditProfile = () => {
       try {
         const response = await updateProfile(userInfo.userId, formData);
         if (response.status <= 300) {
-          alert("업데이트 성공");
+          toast.success('업데이트 성공했습니다.');
           // console.log("Profile Update:", response);
           const accessToken = response.headers.accesstoken;
           const refreshToken = response.headers.refreshtoken;
@@ -114,17 +124,21 @@ const EditProfile = () => {
           navigate(-1);
         }
       } catch (error) {
-        console.log(error);
+       // console.log(error);
+       toast.error(`${error}`);
       }
     } else {
-      alert("먼저 닉네임 중복체크를 해주세요");
+      toast.error("먼저 닉네임 중복체크를 완료해주세요.");
       return;
     }
   };
 
+ 
+
   return (
     <>
-      <H1>프로필 수정</H1>
+     <InnerContainer>
+      <H1>프로필 관리</H1>
       <Stbox>
         <ImageUpload>
           <ImagePreview
@@ -139,7 +153,7 @@ const EditProfile = () => {
             }}
           >
             {profileImage ? (
-              <img src={profileImage} alt="미리보기" />
+              <img src={profileImage} alt="" />
             ) : (
               <DefaultImage>
                 <CameraIconWrapper>
@@ -172,7 +186,7 @@ const EditProfile = () => {
         </Stnickname>
       </Stbox>
 
-      <H3>자기소개</H3>
+      <HH3>자기소개</HH3>
       <Stbox>
         <Stinput1
           type={"text"}
@@ -184,32 +198,39 @@ const EditProfile = () => {
           $isFocused={isIntroduceFocused}
           $hasValue={introduce.length > 0}
         />
+        <CharacterCount>
+  {introduce.length}/{INTRODUCE_MAX_LENGTH}
+</CharacterCount>
       </Stbox>
 
       <Stbox>
-        <Stbutton2 onClick={handleSubmitButton}>변경하기</Stbutton2>
+        <Stbutton2 onClick={handleSubmitButton}>변경완료</Stbutton2>
       </Stbox>
+      </InnerContainer>
+      <StLine></StLine>
     </>
   );
 };
 
 export default EditProfile;
 
-// 오류 코드
-const ErrorMessageContainer = styled.div`
-  display: flex;
+const InnerContainer = styled.div`
+  display: block;
+
   flex-direction: column;
-  align-items: left;
-  padding-left: 48px;
-
-  /* align-items: center; */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 20px;
+  padding-top: 40px;
+  gap: 20px;
 `;
 
-const ErrorMessage = styled.div`
-  color: #e7e6f0;
-  margin-top: 10px;
-  font-size: 14px;
-`;
+const CharacterCount = styled.div`
+padding-left: 300px;
+font-size: 16px;
+font-weight: 500;
+color: #a6a3af;
+`
 
 // 이미지
 const ImageUpload = styled.div`
@@ -259,6 +280,7 @@ const CameraIconWrapper = styled.div`
   align-items: center;
   width: 30px;
   height: 30px;
+  
 
   svg {
     fill: white;
@@ -269,15 +291,15 @@ const CameraIconWrapper = styled.div`
 
 // 프로필 수정
 const H1 = styled.h1`
-  font-size: 16px;
+  font-size: 20px;
   color: #e7e6f0;
-  font-weight: 500;
-
+  font-weight: 600;
   line-height: 24px;
-  padding-left: 20px;
-  margin-bottom: 40px;
-  padding-top: 50px;
+  /* padding-left: 20px; */
+  margin-bottom: 44px;
+  /* padding-top: 50px; */
 `;
+
 const Stbox = styled.div`
   display: flex;
   flex-direction: column;
@@ -290,7 +312,7 @@ const Stinput1 = styled.input`
   height: 18px;
   padding: 10px;
 
-  font-size: 14px;
+  font-size: 16px;
   color: #85848b;
 
   background-color: #252628;
@@ -314,9 +336,20 @@ const H3 = styled.h3`
   line-height: 24px;
   font-weight: 500;
   margin-bottom: 10px;
-  padding-left: 20px;
-  padding-top: 50px;
+  /* padding-left: 50px; */
+  padding-top: 44px;
 `;
+
+const HH3 = styled.h3`
+  font-size: 16px;
+  color: #e7e6f0;
+  line-height: 24px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  /* padding-left: 50px; */
+  padding-top: 20px;
+`;
+
 const Stname = styled.div`
   display: flex; /* 가로 정렬을 위해 추가 */
   justify-content: center; /*요소들을 수평 가운데 정렬하기 위해 변경  */
@@ -329,7 +362,7 @@ const Stinput4 = styled.input`
   height: 18px;
   padding: 10px;
 
-  font-size: 14px;
+  font-size: 16px;
   color: #85848b;
 
   background-color: #252628;
@@ -357,7 +390,7 @@ const Stbutton1 = styled.button`
 
   border: none;
   border-radius: 6px;
-  font-size: 14px; //16
+  font-size: 16px; 
   font-weight: 500;
   cursor: pointer;
 
@@ -384,10 +417,16 @@ const Stbutton2 = styled.button`
   border: none;
   border-radius: 6px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
 
   cursor: pointer;
 
-  margin-top: 20px;
-  margin-bottom: 100%;
+  margin-top: 38px;
+ margin-bottom: 100%; 
+`;
+
+const StLine = styled.div`
+  background-color: #242325;
+  height: 8px;
+  margin-top: 46px;
 `;

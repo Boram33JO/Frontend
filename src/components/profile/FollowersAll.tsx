@@ -29,7 +29,6 @@ const FollowersAll = ({ userInfo, followList }: Props) => {
         {followList.length === 0 ? (
  null
 ) : (  <Bt onClick={handleViewAllClick}>{`전체보기`}</Bt>
-  // 또는 아무 내용도 없는 <></> 사용
 )}
       </Follower1>
       {followList.length === 0 ? (
@@ -40,7 +39,7 @@ const FollowersAll = ({ userInfo, followList }: Props) => {
 </NoDataMessage>
                   </Pple>
       ) : (
-        <FamousList>
+        <FamousList $followers ={followList.length !== 4}>
           {followList.map((item) => (
             <FamousListItem
               key={item.userId}
@@ -67,7 +66,7 @@ const Pple = styled.div`
   border-radius: 8px;
 `;
 const StNodata = styled(Nodata)`
-width: 50px; /* 원하는 크기로 조정 */
+  width: 50px; /* 원하는 크기로 조정 */
   height: 58px; /* 원하는 크기로 조정 */
 `;
 
@@ -110,10 +109,10 @@ const Bt = styled.div`
   cursor: pointer;
 `;
 
-const FamousList = styled.div`
+const FamousList = styled.div<{$followers: boolean}>`
   display: flex;
-  justify-content: center;
-  justify-content: space-between;
+  justify-content: ${(props) => props.$followers ? "flex-start" : "space-between"};
+  gap: ${(props) => props.$followers ? "20px" : ""};
 `;
 
 const FamousListItem = styled.div`
@@ -133,6 +132,8 @@ const FamousListThumb = styled.img`
   width: 80px;
   height: 80px;
   border-radius: 50%;
+  background-color: #ECECEC;
+object-fit: cover;
 `;
 
 const FamousListNickName = styled.div`
@@ -141,4 +142,9 @@ const FamousListNickName = styled.div`
   color: #e7e6f0;
   margin-top: 10px;
   text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70px; 
 `;
+// 뒤로가기 해

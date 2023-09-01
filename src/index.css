@@ -19,6 +19,7 @@ time, mark, audio, video {
 	font-family: "Pretendard";
 	vertical-align: baseline;
     background: transparent;
+	text-decoration: none;
 }
 body {
 	background-color: #141414;

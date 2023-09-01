@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import styled from "styled-components";
@@ -7,9 +7,9 @@ import SearchSong from "../components/edit/SearchSong";
 import EditMap from "../components/edit/EditMap";
 import ButtonComponent from "../components/edit/ButtonComponent";
 import FormArea from "../components/edit/FormArea";
-
 import { postData, putData } from "../api/edit";
 import { getDetailPost } from "../api/post";
+import { toast } from "react-hot-toast";
 
 interface InputForm {
     postTitle: string;
@@ -55,7 +55,7 @@ const EditPage = () => {
     const [placeName, setPlaceName] = useState("");
     const [latitude, setLatitude] = useState("37.566826");
     const [longitude, setLongitude] = useState("126.9786567");
-    const [categoryNum, setCategoryNum] = useState<number>(0);
+    const [categoryNum, setCategoryNum] = useState<any>();
     const { postId } = useParams<{ postId: string }>();
 
     const [isData, setIsData] = useState<IsData | null>(null);
@@ -74,6 +74,14 @@ const EditPage = () => {
     };
 
     const navigate = useNavigate();
+
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const scrollToTop = () => {
+        if (scrollRef.current) {
+            const { scrollHeight, clientHeight } = scrollRef.current;
+            scrollRef.current.scrollTop = clientHeight - scrollHeight;
+        }
+    };
 
     useEffect(() => {
         const fixPostData = async () => {
@@ -94,6 +102,9 @@ const EditPage = () => {
         if (slideIndex === 0 && !address) {
             return "주소를 입력해주세요.";
         }
+        if (slideIndex === 0 && !category) {
+            return "카테고리를 선택해주세요.";
+        }
 
         if (slideIndex === 1 && chooseSongList.length === 0) {
             return "노래를 선택해주세요.";
@@ -106,9 +117,10 @@ const EditPage = () => {
         const errorMessage = getErrorMessage();
 
         if (errorMessage) {
-            alert(errorMessage);
+            toast.error(errorMessage, { position: "top-center" });
         } else {
             if (slideIndex === 2) {
+                scrollToTop();
             }
             goToSlide(slideIndex + 1);
         }
@@ -119,6 +131,7 @@ const EditPage = () => {
             return;
         } else if (slideIndex === 2) {
             goToSlide(slideIndex - 1);
+            scrollToTop();
         }
         goToSlide(slideIndex - 1);
     };
@@ -129,21 +142,21 @@ const EditPage = () => {
                 if (inputForm.content.length <= 500) {
                     try {
                         const response = await postData(data);
-                        alert("success");
+                        toast.success("게시물이 등록되었습니다", { position: "top-center" });
                         const postId = response;
                         navigate(`/detail/${postId}`);
                     } catch (error) {
-                        console.log(error);
-                        alert("failed");
+                        toast.error("게시물 등록에 실패하였습니다", { position: "top-center" });
+                        navigate(`/`);
                     }
                 } else {
-                    alert("내용은 500자 이하여야 합니다.");
+                    toast.error("내용은 500자 이하여야 합니다.", { position: "top-center" });
                 }
             } else {
-                alert("제목과 내용은 필수입니다.");
+                toast.error("제목과 내용은 필수입니다.", { position: "top-center" });
             }
         } else {
-            alert("노래를 선택해주세요.");
+            toast.error("노래를 선택해주세요.", { position: "top-center" });
         }
     };
 
@@ -152,22 +165,21 @@ const EditPage = () => {
             if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
                 if (inputForm.content.length <= 500) {
                     try {
-                        console.log("sss", typeof postId);
                         await putData(data, postId);
-                        alert("success");
+                        toast.success("게시물 수정이 완료되었습니다.", { position: "top-center" });
+
                         navigate(`/detail/${postId}`);
                     } catch (error) {
-                        console.log(error);
-                        alert("failed");
+                        toast.error("게시물 수정에 실패하였습니다.", { position: "top-center" });
                     }
                 } else {
-                    alert("내용은 500자 이하여야 합니다.");
+                    toast.error("내용은 500자 이하여야 합니다.", { position: "top-center" });
                 }
             } else {
-                alert("제목과 내용은 필수입니다.");
+                toast.error("제목과 내용은 필수입니다.", { position: "top-center" });
             }
         } else {
-            alert("노래를 선택해주세요.");
+            toast.error("노래를 선택해주세요.", { position: "top-center" });
         }
     };
 
@@ -177,7 +189,7 @@ const EditPage = () => {
     };
 
     return (
-        <StContainer>
+        <StContainer ref={scrollToTop}>
             <StInnerContainer>
                 <StSlideContainer>
                     <StSlides style={{ transform: `translateX(-${slideIndex}00%)` }}>
@@ -257,7 +269,7 @@ const StContainer = styled.div`
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    padding: 20px;
+    padding: 10px;
 `;
 
 const StInnerContainer = styled.div`
@@ -275,7 +287,7 @@ const StSlides = styled.div`
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 150%;
+    padding-bottom: 160%;
     transition: transform 0.5s ease;
 `;
 

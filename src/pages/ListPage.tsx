@@ -44,7 +44,7 @@ const ListPage = () => {
     useEffect(() => {
         const handleScroll = throttle(() => {
             if (middleRef?.current) {
-                if (window.innerHeight + middleRef.current.scrollTop >= middleRef.current.scrollHeight) {
+                if (window.innerHeight + middleRef.current.scrollTop + 100 >= middleRef.current.scrollHeight) {
                     setFetching(true)
                 }
             }
@@ -82,7 +82,7 @@ const ListPage = () => {
                         <ListItem key={post.postId} post={post} />
                     )
                 })}
-                {isFetching && <LoadingSkeleton />}
+                {(isFetching && hasNextPage) && <LoadingSkeleton />}
             </InnerContainer>
         </>
     )
