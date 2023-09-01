@@ -53,12 +53,18 @@ const Mypicture = ({ follow, userInfo }: Props) => {
               <Produce>{userInfo.introduce}</Produce>
             )}
             </MyProfile2>
-            {isMyProfile
-              ? (<Bt onClick={EditMyProfileHandler}>프로필 수정</Bt>)
-              : (<Bt $follow={follow} onClick={() => followButtonHandler(userInfo.userId)}>
+            {LoginUser.userId ? ( // 사용자가 로그인되어 있는지 확인
+            isMyProfile ? (
+              <Bt onClick={EditMyProfileHandler}>프로필 수정</Bt>
+            ) : (
+              <Bt
+                $follow={follow}
+                onClick={() => followButtonHandler(userInfo.userId)}
+              >
                 {follow ? "언팔로우" : "팔로우"}
-              </Bt>)
-            }
+              </Bt>
+            )
+          ) : null}
           </MyProfile1>
         </MyProfile>
       </InnerContainer>
