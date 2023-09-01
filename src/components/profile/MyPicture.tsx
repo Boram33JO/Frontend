@@ -157,18 +157,20 @@ const Nickname = styled.div`
   color: #e7e6f0;
 `;
 const Produce = styled.div`
-  /* max-width: 200px; */
+  max-width: 180px;
+
   font-size: 14px;
   font-weight: 400;
   line-height: 1.3;
   padding-top: 5px;
   color: #a6a3af;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 3줄로 제한 */
+  -webkit-box-orient: vertical;
+  
+  box-sizing: border-box;
 
-  @media (max-width: 768px) {
-    /* Adjust styles for smaller screens */
-    max-width: 100%; /* Take up full width on smaller screens */
-    font-size: 12px;
-  }
+
 `;
 
 const StLine = styled.div`
