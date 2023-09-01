@@ -209,12 +209,11 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                     setGeoLongitude(lng);
                 },
                 (error) => {
-                    console.error("error", error);
                     toast.success("위치정보동의를 확인해주세요.", { position: "top-center" });
                 }
             );
         } else {
-            console.error("해당 브라우저에서는 gps를 지원하지 않습니다.");
+            toast.success("해당 브라우저에서는 gps를 지원하지 않습니다.", { position: "top-center" });
         }
     }, []);
 
@@ -379,7 +378,7 @@ const StSearchForm = styled.form`
     flex-direction: row;
     align-items: center;
     input {
-        width: 270px;
+        width: 85%;
         height: 16px;
         color: #fafafa;
         border: 1px solid #434047;

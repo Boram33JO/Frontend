@@ -428,5 +428,5 @@ const Stbutton2 = styled.button`
 const StLine = styled.div`
   background-color: #242325;
   height: 8px;
-  margin-top: 32px;
+  margin-top: 46px;
 `;
