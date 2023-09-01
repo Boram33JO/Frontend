@@ -25,7 +25,7 @@ const MapPage = () => {
         setLoading(true);
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 4000);
+        }, 3000);
 
         return () => clearTimeout(timer);
     }, []);
