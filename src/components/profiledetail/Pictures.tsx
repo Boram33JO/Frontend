@@ -13,22 +13,22 @@ import { useSelector } from "react-redux";
 
 
 
+
 const Pictures = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
+  const queryClient = useQueryClient();
   const LoginUser = useSelector((state: RootState) => state.user);
   const isMyProfile = Number(userId) === LoginUser.userId;
-
-  const queryClient = useQueryClient();
-  // const pageSize = 10; // 한 번에 가져올 데이터의 개수
+  //const pageSize = 10; // 한 번에 가져올 데이터의 개수
 
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null
   );
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  //const [page, setPage] = useState<number>(0);
-  //const [isFetching, setFetching] = useState(false);
+  // const [page, setPage] = useState<number>(0);
+  // const [isFetching, setFetching] = useState(false);
 
   const {
     data: followerData,
@@ -45,7 +45,7 @@ const Pictures = () => {
   //   if (followerData.followList.content.length < pageSize) {
   //     // 현재 페이지에 남은 데이터가 pageSize 미만이면 중복 요청 방지
   //     return;
-   // }
+  //   }
     //setPage((prevPage) => prevPage + 1);
     // setFetching(true);
   //};
@@ -67,7 +67,7 @@ const Pictures = () => {
   // }, []);
 
 
-  console.log(followerData); // 데이터 구조를 확인
+  //console.log(followerData); // 데이터 구조를 확인
 
   // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
   const mutation = useMutation(followUser, {
@@ -243,6 +243,7 @@ const MyThumb = styled.img`
   background-color: #e7e6f0;
   background-position: center;
   object-fit: cover;
+  cursor: pointer;
   img {
     width: 100%;
     height: 100%;
@@ -259,6 +260,8 @@ const Nickname = styled.div`
   font-size: 16px;
   font-weight: 600;
   color: #e7e6f0;
+  max-width: 210px;
+  max-height: 40px;
 `;
 
 const Produce = styled.div`
@@ -266,7 +269,12 @@ const Produce = styled.div`
   padding-top: 5px;
   color: #626262;
   font-weight: 500; 
-  max-width: 210px;
-  max-height: 40px;
+  max-width: 180px;
+  max-height: 40px; /* 3줄로 제한하려면 3줄 높이에 맞게 설정 */
   line-height: 1.2; /* 줄 간격 조절 */
-  `;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 3줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  box-sizing: border-box;
+`;
