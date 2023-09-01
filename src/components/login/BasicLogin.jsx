@@ -115,13 +115,13 @@ const BasicLogin = () => {
 
     
       <Stbox2>
-      <Stlink1
+      {/* <Stlink1
           onClick={() => {
             navigate("/password");
           }}
         >
           로그인 정보를 잊으셨나요?
-        </Stlink1>
+        </Stlink1> */}
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox2>
     </InnerContainer>
