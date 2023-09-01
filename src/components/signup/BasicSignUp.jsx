@@ -141,15 +141,14 @@ const BasicSignUp = () => {
   });
 
   const onSignUpClickHandler = () => {
-    // if (!isEmailVerified) {
-    //   toast.error("이메일 인증을 먼저 진행해 주세요.", {position: 'top-center'});
-    //   return;
-    // }
-    // if (!isMobileVerified) {
-    //   toast.error("핸드폰 인증을 먼저 진행해 주세요.", {position: 'top-center'});
-    //   return;
-    // }
-   
+    if (!isEmailVerified) {
+      toast.error("이메일 인증을 먼저 진행해 주세요.", {position: 'top-center'});
+      return;
+    }
+    if (!isMobileVerified) {
+      toast.error("핸드폰 인증을 먼저 진행해 주세요.", {position: 'top-center'});
+      return;
+    }
     if(password!==passwordCheck)
     {
       toast.error("비밀번호를 다시 확인해주세요.", {position: 'top-center'});
@@ -164,30 +163,6 @@ const BasicSignUp = () => {
       return;
     }
    
-
-
-    // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리(비밀번호 항목만 유효할 듯)
-    const errors = {};
-    
-    if (!passwordRegex.test(password)) {
-      // errors.password = "Password 조건이 충족되지 않았습니다.";
-      toast.error("Password 조건이 충족되지 않았습니다.");
-    }
-    if (password !== passwordCheck) {
-      toast.error("비밀번호와 비밀번호 확인이 일치하지 않습니다.")
-    }
-    
-
-    // // 에러가 있는 경우 처리
-    // if (Object.keys(errors).length > 0) {
-    //   // 에러 메시지 모두 설정
-    //   setEmailError(errors.email || "");
-    //   setPasswordError(errors.password || "");
-    //   setPasswordCheckError(errors.passwordCheck || "");
-    //   setNicknameError(errors.nickname || "");
-    //   return;
-    // }
-
     const newUser = {
       email: email,
       password: password,
