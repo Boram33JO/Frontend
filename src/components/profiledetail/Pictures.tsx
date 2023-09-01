@@ -8,12 +8,17 @@ import { getProfileImage } from "../../utils/common";
 import DeleteModal from "../common/DeleteModal";
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 import { toast } from 'react-hot-toast';
+import { RootState } from "../../redux/config/configStore";
+import { useSelector } from "react-redux";
 
 
 
 const Pictures = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
+  const LoginUser = useSelector((state: RootState) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
+
   const queryClient = useQueryClient();
   const pageSize = 10; // 한 번에 가져올 데이터의 개수
 
@@ -126,7 +131,9 @@ const Pictures = () => {
                 <Nickname>{follower.nickname}</Nickname>
                 <Produce>{follower.introduce}</Produce>
               </MyProfile2>
+              {isMyProfile && (
                 <Bt onClick={() => handleDelete(follower.userId)}>삭제</Bt>
+                )}
             </MyProfile1>
           </MyProfile>
         ))
@@ -235,6 +242,7 @@ const MyThumb = styled.img`
   border-radius: 50%;
   background-color: #e7e6f0;
   background-position: center;
+  object-fit: cover;
   img {
     width: 100%;
     height: 100%;
@@ -258,6 +266,7 @@ const Produce = styled.div`
   padding-top: 5px;
   color: #626262;
   font-weight: 500; 
-  max-width: 200px;
-  max-height: 46px;
-`;
+  max-width: 210px;
+  max-height: 40px;
+  line-height: 1.2; /* 줄 간격 조절 */
+  `;
