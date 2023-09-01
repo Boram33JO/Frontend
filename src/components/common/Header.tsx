@@ -108,6 +108,7 @@ const ProfileImage = styled.img`
     background-color: #ECECEC;
     border-radius: 50%;
     cursor: pointer;
+    object-fit: cover;
 `
 
 const StSearch = styled(Search)`

@@ -108,7 +108,7 @@ const EditProfile = () => {
       try {
         const response = await updateProfile(userInfo.userId, formData);
         if (response.status <= 300) {
-          toast.success('업데이트 성공했습니다');
+          toast.success('업데이트 성공했습니다.');
           // console.log("Profile Update:", response);
           const accessToken = response.headers.accesstoken;
           const refreshToken = response.headers.refreshtoken;
@@ -153,7 +153,7 @@ const EditProfile = () => {
             }}
           >
             {profileImage ? (
-              <img src={profileImage} alt="미리보기" />
+              <img src={profileImage} alt="" />
             ) : (
               <DefaultImage>
                 <CameraIconWrapper>
@@ -280,6 +280,7 @@ const CameraIconWrapper = styled.div`
   align-items: center;
   width: 30px;
   height: 30px;
+  
 
   svg {
     fill: white;
@@ -421,7 +422,7 @@ const Stbutton2 = styled.button`
   cursor: pointer;
 
   margin-top: 38px;
-  /* margin-bottom: 100%; */
+ margin-bottom: 100%; 
 `;
 
 const StLine = styled.div`
