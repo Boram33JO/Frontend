@@ -143,7 +143,7 @@ const EditMap: React.FC<EditMapProps> = ({
             setPlaceName(isData.location.placeName);
             setLatitude(isData.location.latitude);
             setLongitude(isData.location.longitude);
-            setCategoryNum(isData.category);
+            setCategoryNum(isData.category - 1);
         }
     }, [isData]);
 
