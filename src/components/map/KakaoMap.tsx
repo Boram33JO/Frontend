@@ -333,6 +333,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                     <SearchModal
                         setModal={setModal}
                         searchLocationList={searchLocationList}
+                        address={address}
                         setAddress={setAddress}
                         setPlaceName={setPlaceName}
                         setLatitude={setLatitude}
