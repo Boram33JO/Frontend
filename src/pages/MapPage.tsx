@@ -16,8 +16,6 @@ const MapPage = () => {
     const [isData, setIsData] = useState<any>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState<boolean>(false);
-    // const [page, setPage] = useState<number>(0);
-    // const [totalPage, setTotalPage] = useState<number>(0);
     const [startPage, setStartPage] = useState(1);
     const pageLimit = 5; // 한 번에 보여줄 페이지 번호 수
     const perPage = 10; // 한 페이지에 보여줄 아이템 수
@@ -49,8 +47,7 @@ const MapPage = () => {
         if (currentPage < totalPage) {
             setCurrentPage(currentPage + 1);
             if (currentPage % pageLimit === 0) {
-                // If we're at the end of the current page range
-                setStartPage(startPage + pageLimit); // Move to the next range of pages
+                setStartPage(startPage + pageLimit);
             }
         }
     };
