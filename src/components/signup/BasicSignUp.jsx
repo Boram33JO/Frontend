@@ -79,6 +79,10 @@ const BasicSignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
  const [showPasswordCheck, setShowPasswordCheck] = useState(false);
 
+ //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
+ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
+ //const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
+
   const togglePasswordVisibility_1 = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
@@ -145,41 +149,20 @@ const BasicSignUp = () => {
       toast.error("핸드폰 인증을 먼저 진행해 주세요.", {position: 'top-center'});
       return;
     }
+    if(password!==passwordCheck)
+    {
+      toast.error("비밀번호를 다시 확인해주세요.", {position: 'top-center'});
+      return;
+    }
+    if (!passwordRegex.test(password)) {
+      toast.error('비밀번호의 필수 요소를 확인해주세요.', {position: 'top-center'});
+      return;
+    }
     if (!isNicknameVerified) {
       toast.error("닉네임 인증을 먼저 진행해 주세요.", {position: 'top-center'});
       return;
     }
-
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
-    // const passwordRegex =
-    //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
-    // const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
-
-    // // 각 조건에 대한 검사 후 에러 메시지를 모아서 처리(비밀번호 항목만 유효할 듯)
-    // const errors = {};
-    // if (!emailRegex.test(email)) {
-    //   errors.email = "이메일 형식이 아닙니다.";
-    // }
-    // if (!passwordRegex.test(password)) {
-    //   errors.password = "Password 조건이 충족되지 않았습니다.";
-    // }
-    // if (password !== passwordCheck) {
-    //   errors.passwordCheck = "비밀번호와 비밀번호 확인이 일치하지 않습니다.";
-    // }
-    // if (!nicknameRegex.test(nickname)) {
-    //   errors.nickname = "대/소문자, 한글, 숫자, 2~12자 이하로 입력해 주세요.";
-    // }
-
-    // // 에러가 있는 경우 처리
-    // if (Object.keys(errors).length > 0) {
-    //   // 에러 메시지 모두 설정
-    //   setEmailError(errors.email || "");
-    //   setPasswordError(errors.password || "");
-    //   setPasswordCheckError(errors.passwordCheck || "");
-    //   setNicknameError(errors.nickname || "");
-    //   return;
-    // }
-
+   
     const newUser = {
       email: email,
       password: password,
@@ -335,7 +318,7 @@ const BasicSignUp = () => {
               <Stinput4
                 type={"text"}
                 value={code}
-                placeholder={`인증번호 6자리 (${formatTime(
+                placeholder={`인증번호 8자리 (${formatTime(
                   emailVerificationTimer
                 )})`}
                 onChange={onChangenumberHandler}
@@ -377,7 +360,7 @@ const BasicSignUp = () => {
               <Stinput4
                 type={"text"}
                 value={smsConfirmNum}
-                placeholder={`인증번호 6자리 (${formatTime(
+                placeholder={`인증번호 5자리 (${formatTime(
                   mobileVerificationTimer
                 )})`}
                 onChange={onChangeMobileCodeHandler}
