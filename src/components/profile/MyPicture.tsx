@@ -40,7 +40,7 @@ const Mypicture = ({ follow, userInfo }: Props) => {
         <MyProfile>
         
           <MyThumb
-            src={getProfileImage(userInfo.userImage)}
+            src={getProfileImage(userInfo.userImage)} style={{minWidth:"66px", minHeight:"66px"}}
             alt="기본이미지" // alt 속성 추가
           />
         
@@ -127,7 +127,7 @@ const MyThumb = styled.img`
   height: 66px;
   background-color: #ECECEC;
   border-radius: 50%;
-  
+  object-fit: cover;
   
 `;
 
