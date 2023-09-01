@@ -118,7 +118,7 @@ const Pictures = () => {
         followerData.followList.content.map((follower: any) => (
           <MyProfile key={follower.userId}>
             <MyThumb
-              src={getProfileImage(follower.userImage)} style={{minWidth:"62px", minHeight:"62px"}}
+              src={getProfileImage(follower.userImage)} style={{minWidth:"62px", minHeight:"62px", objectFit: "cover"}}
               onClick={() => navigate(`/profile/${follower.userId}`)}
             />
             <MyProfile1>
@@ -235,6 +235,7 @@ const MyThumb = styled.img`
   border-radius: 50%;
   background-color: #e7e6f0;
   background-position: center;
+  object-fit: cover;
   img {
     width: 100%;
     height: 100%;
@@ -258,6 +259,7 @@ const Produce = styled.div`
   padding-top: 5px;
   color: #626262;
   font-weight: 500; 
-  max-width: 200px;
-  max-height: 46px;
-`;
+  max-width: 210px;
+  max-height: 40px;
+  line-height: 1.2; /* 줄 간격 조절 */
+  `;
