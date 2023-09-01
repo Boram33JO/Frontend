@@ -5,6 +5,7 @@ import { ReactComponent as UnionIcon } from "../../assets/images/Union.svg";
 interface SearchModalProps {
     setModal: (value: boolean) => void;
     searchLocationList: any;
+    address: any;
     setAddress: any;
     setPlaceName: any;
     setLatitude: any;
@@ -16,6 +17,7 @@ const SearchModal: React.FC<SearchModalProps> = ({
     // selectedLocation,
     setModal,
     searchLocationList,
+    address,
     setAddress,
     setPlaceName,
     setLatitude,
@@ -56,7 +58,7 @@ const SearchModal: React.FC<SearchModalProps> = ({
                             key={index}
                             onClick={() => chooseLocationHandler(index)}
                         >
-                            <div>{item.place_name}</div>
+                            <StPlaceName>{`${item.place_name} (${item.address_name})`}</StPlaceName>
                             <div>
                                 <UnionIcon style={{ color: "#6B6770" }} />
                             </div>
@@ -77,6 +79,7 @@ const StModalOverlay = styled.div`
     width: 100%;
     margin-top: 12px;
     box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+
     z-index: 9999;
 `;
 
@@ -115,4 +118,12 @@ const StSearchLocation = styled.div`
     justify-content: space-between;
     margin-bottom: 16px;
     cursor: pointer;
+`;
+
+const StPlaceName = styled.div`
+    width: 90%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    word-break: break-all;
 `;
