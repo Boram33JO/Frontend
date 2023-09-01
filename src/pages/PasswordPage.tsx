@@ -39,6 +39,7 @@ const Container = styled.div`
     width: 390px;
     min-height: 80vh;
     margin: auto;
+    margin-top: 32px;
 `
 
 const InnerContainer = styled.div`
