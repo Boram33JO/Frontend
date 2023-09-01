@@ -231,7 +231,7 @@ const StPopularContainer = styled.div`
     h3 {
         width: 130px;
         font-size: 16px;
-
+        line-height: 120%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -240,7 +240,7 @@ const StPopularContainer = styled.div`
     p {
         color: #a6a3af;
         font-size: 14px;
-
+        line-height: 120%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -299,9 +299,6 @@ const StSongList = styled.div`
     justify-content: space-between;
     width: 100%;
     color: #fafafa;
-
-    div {
-    }
 
     h3 {
         width: 130px;
