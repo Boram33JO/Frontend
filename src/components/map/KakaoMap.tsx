@@ -379,7 +379,7 @@ const StSearchForm = styled.form`
     flex-direction: row;
     align-items: center;
     input {
-        width: 270px;
+        width: 85%;
         height: 16px;
         color: #fafafa;
         border: 1px solid #434047;

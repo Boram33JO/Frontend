@@ -23,7 +23,6 @@ const MapPage = () => {
 
     useEffect(() => {
         setLoading(true);
-
         const timer = setTimeout(() => {
             setLoading(false);
         }, 4000);
