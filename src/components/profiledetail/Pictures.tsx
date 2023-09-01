@@ -118,7 +118,7 @@ const Pictures = () => {
         followerData.followList.content.map((follower: any) => (
           <MyProfile key={follower.userId}>
             <MyThumb
-              src={getProfileImage(follower.userImage)}
+              src={getProfileImage(follower.userImage)} style={{minWidth:"62px", minHeight:"62px"}}
               onClick={() => navigate(`/profile/${follower.userId}`)}
             />
             <MyProfile1>
@@ -158,7 +158,7 @@ width: 50px; /* 원하는 크기로 조정 */
 `;
 
 const NoDataMessage = styled.p`
-padding-top: 10px;
+  padding-top: 10px;
   font-size: 16px;
   color: #8E8D92;
   text-align: center; /* 가운데 정렬을 추가 */
@@ -214,6 +214,7 @@ const Bt = styled.button`
     color: #141414;
   }
 `;
+
 const MyProfile = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
   align-items: center;
@@ -232,16 +233,23 @@ const MyThumb = styled.img`
   width: 62px;
   height: 62px;
   border-radius: 50%;
-  background-color: #e7e6f0;;
+  background-color: #e7e6f0;
+  background-position: center;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
 `;
 
+
 const MyProfile2 = styled.div`
-  padding-left: 10px; // 원래 5정도?
+  padding-left: 10px; 
 `;
 
 const Nickname = styled.div`
   font-size: 16px;
-  font-weight: 600; //세미볼드
+  font-weight: 600;
   color: #e7e6f0;
 `;
 
@@ -249,7 +257,7 @@ const Produce = styled.div`
   font-size: 14px;
   padding-top: 5px;
   color: #626262;
-  font-weight: 500; //미디엄
+  font-weight: 500; 
   max-width: 200px;
   max-height: 46px;
 `;

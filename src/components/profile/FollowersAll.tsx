@@ -66,7 +66,7 @@ const Pple = styled.div`
   border-radius: 8px;
 `;
 const StNodata = styled(Nodata)`
-width: 50px; /* 원하는 크기로 조정 */
+  width: 50px; /* 원하는 크기로 조정 */
   height: 58px; /* 원하는 크기로 조정 */
 `;
 
@@ -133,6 +133,7 @@ const FamousListThumb = styled.img`
   height: 80px;
   border-radius: 50%;
   background-color: #ECECEC;
+object-fit: cover;
 `;
 
 const FamousListNickName = styled.div`
