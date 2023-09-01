@@ -422,7 +422,7 @@ const Stbutton2 = styled.button`
   cursor: pointer;
 
   margin-top: 38px;
- /* margin-bottom: 100%;  */
+ margin-bottom: 100%; 
 `;
 
 const StLine = styled.div`

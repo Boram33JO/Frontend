@@ -1,14 +1,14 @@
 import React from "react";
 import EditProfile from "../components/editprofile/EditProfile";
 import { styled } from "styled-components";
-import DirectingButton from "../components/editprofile/DirectingButton";
+// import DirectingButton from "../components/editprofile/DirectingButton";
 
 const ProfileEditPage = () => {
   return (
     <>
      <Container>
       <EditProfile />
-      <DirectingButton />
+      {/* <DirectingButton /> */}
       </Container>
     </>
   );
