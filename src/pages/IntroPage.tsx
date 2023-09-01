@@ -52,7 +52,7 @@ const IntroPage = () => {
         <Container>
             <InnerContainer>
                 <Header>
-                    <P $size={true}>P.Ple</P>
+                    P.Ple
                 </Header>
                 <Middle>
                     <SlideContainer ref={slideRef}>
@@ -72,21 +72,22 @@ const IntroPage = () => {
                             }
                         </Banner>
                     </SlideContainer>
-                    <NavigationButton type="button" $left="10px" aria-label="slideLeft" onClick={handlePrevSlideButton}><Left /></NavigationButton>
-                    <NavigationButton type="button" $right="10px" aria-label="slideRight" onClick={handleNextSlideButton}><Right /></NavigationButton>
-                    <Pagination>
-                        {
-                            banners.map(item => {
-                                return (
-                                    <Bullet
-                                        key={item.id}
-                                        $current={(item.id === currentPage)}
-                                    />
-                                )
-                            })
-                        }
-                    </Pagination>
+                    <NavigationButton type="button" $left={true} aria-label="slideLeft" onClick={handlePrevSlideButton}><Left /></NavigationButton>
+                    <NavigationButton type="button" $left={false} aria-label="slideRight" onClick={handleNextSlideButton}><Right /></NavigationButton>
                 </Middle>
+                <Pagination>
+                    {
+                        banners.map(item => {
+                            return (
+                                <Bullet
+                                    key={item.id}
+                                    $current={(item.id === currentPage)}
+                                    onClick={() => handleMoveSlideButton(item.id)}
+                                />
+                            )
+                        })
+                    }
+                </Pagination>
                 <ButtonSection>
                     {currentPage === 0
                         ? <>
@@ -140,17 +141,27 @@ const InnerContainer = styled.div`
 `
 
 const Header = styled.div`
+    /* position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; */
+    
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 50px;
+    min-height: 50px;
     
     color: #FAFAFA;
+    font-size: 26px;
+    line-height: calc(150%);
+    font-weight: 700;
 `
 
 const Middle = styled.div`
     display: flex;
     flex-direction: column;
+    /* box-sizing: border-box;
+    margin-top: 50px; */
 `
 
 const SlideContainer = styled.div`
@@ -164,6 +175,9 @@ const Banner = styled.div`
     width: 100%;
     height: 0;
     padding-bottom: 120%;
+    @media (max-height: 567px) {
+        padding-bottom: 100%;
+    }
 `
 
 const BannerContent = styled.div<{ $position: string }>`
@@ -178,7 +192,7 @@ const BannerContent = styled.div<{ $position: string }>`
     left: ${(props) => props.$position};
 
     box-sizing: border-box;
-    gap: 30px;
+    gap: 3vh;
     padding: 0px 30px;
 `
 
@@ -218,13 +232,12 @@ const P = styled.p< { $size?: boolean, $color?: string } >`
     }    
 `
 
-const NavigationButton = styled.button<{ $left?: string, $right?: string }>`
+const NavigationButton = styled.button<{ $left?: boolean }>`
     position: absolute;
     display: flex;
     align-items: center;
     justify-content: center;
-    left: ${(props) => props.$left};
-    right: ${(props) => props.$right};
+    left: ${(props) => props.$left ? "0" : "calc(100% - 40px)"};
     width: 40px;
     height: 40px;
     top: 50%;
@@ -234,6 +247,10 @@ const NavigationButton = styled.button<{ $left?: string, $right?: string }>`
     
     &:hover{
         opacity: 0.7;
+    }
+
+    @media (max-width: 480px) {
+        position: fixed;
     }
 `
 
@@ -245,7 +262,7 @@ const Pagination = styled.div`
     height: 20px;
     gap: 8px;
     box-sizing: border-box;
-    margin-top: 40px;
+    margin-top: 3vh;
 `
 
 const Bullet = styled.label<{ $current: boolean }>`
@@ -266,7 +283,7 @@ const ButtonSection = styled.div`
     transition: all 0.5s ease-in-out;
 
     box-sizing: border-box;
-    padding: 30px 20px;
+    padding: 20px;
 `
 
 const LoginButton = styled.div<{ $visible?: boolean }>`

@@ -118,7 +118,7 @@ const Pictures = () => {
         followerData.followList.content.map((follower: any) => (
           <MyProfile key={follower.userId}>
             <MyThumb
-              src={getProfileImage(follower.userImage)} style={{minWidth:"62px", minHeight:"62px"}}
+              src={getProfileImage(follower.userImage)} style={{minWidth:"62px", minHeight:"62px", objectFit: "cover"}}
               onClick={() => navigate(`/profile/${follower.userId}`)}
             />
             <MyProfile1>
