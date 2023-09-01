@@ -4,27 +4,72 @@ import styled from "styled-components";
 import KakaoMap from "../components/map/KakaoMap";
 import { Post } from "../models/post";
 import ListItem from "../components/common/ListItem";
+import Loading from "../components/map/Loading";
+
+import { ReactComponent as Start } from "../assets/images/page_start.svg";
+import { ReactComponent as End } from "../assets/images/page_end.svg";
+import { ReactComponent as Prev } from "../assets/images/page_prev.svg";
+import { ReactComponent as Next } from "../assets/images/page_next.svg";
 
 const MapPage = () => {
     const [postList, setPostList] = useState<any>([]);
     const [isData, setIsData] = useState<any>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [startPage, setStartPage] = useState(1);
+    const pageLimit = 5; // 한 번에 보여줄 페이지 번호 수
     const perPage = 10; // 한 페이지에 보여줄 아이템 수
+    const totalPage = Math.ceil(postList.length / perPage);
 
-    // 페이지 버튼 클릭 시 호출될 함수
-    const handlePageClick = (pageNumber: number) => {
+    useEffect(() => {
+        setLoading(true);
+
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 4000);
+
+        return () => clearTimeout(timer);
+    }, []);
+
+    const FirstClickHandler = () => {
+        setCurrentPage(1);
+        setStartPage(1);
+    };
+    const PrevClickHandler = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+            if (startPage > 1) {
+                setStartPage(startPage - 1);
+            }
+        }
+    };
+    const NextClickHandler = () => {
+        if (currentPage < totalPage) {
+            setCurrentPage(currentPage + 1);
+            if (currentPage % pageLimit === 0) {
+                setStartPage(startPage + pageLimit);
+            }
+        }
+    };
+
+    const LastClickHandler = () => {
+        const lastPageIndex = Math.ceil(postList.length / perPage);
+        setCurrentPage(lastPageIndex);
+    };
+
+    const CurrentClickHandler = (pageNumber: number) => {
         setCurrentPage(pageNumber);
     };
 
-    // 현재 페이지에 해당하는 포스트만 필터링
     const currentPosts = postList.slice((currentPage - 1) * perPage, currentPage * perPage);
-
-    useEffect(() => {
-        handlePageClick(1);
-    }, []);
 
     return (
         <InnerContainer>
+            {loading && (
+                <StLoading>
+                    <Loading />
+                </StLoading>
+            )}
             <StMapContainer>
                 <h1>지금 피플러는 뭘 듣고 있을까요?</h1>
                 <KakaoMap
@@ -49,16 +94,29 @@ const MapPage = () => {
                     })
                 )}
                 {/* Pagination */}
-                <StButtonContainer>
-                    {[...Array(Math.ceil(postList.length / perPage))].map((_, index) => (
-                        <StPagenationButton
-                            key={index + 1}
-                            onClick={() => handlePageClick(index + 1)}
+                <CommentListPagination>
+                    <SvgIcon>
+                        <Start onClick={FirstClickHandler} />
+                    </SvgIcon>
+                    <SvgIcon>
+                        <Prev onClick={PrevClickHandler} />
+                    </SvgIcon>
+                    {[...Array(Math.min(pageLimit, Math.ceil(postList.length / perPage)))].map((_, index) => (
+                        <PageButton
+                            key={index}
+                            $click={currentPage === startPage + index}
+                            onClick={() => CurrentClickHandler(startPage + index)}
                         >
-                            {index + 1}
-                        </StPagenationButton>
+                            {startPage + index}
+                        </PageButton>
                     ))}
-                </StButtonContainer>
+                    <SvgIcon>
+                        <Next onClick={NextClickHandler} />
+                    </SvgIcon>
+                    <SvgIcon>
+                        <End onClick={LastClickHandler} />
+                    </SvgIcon>
+                </CommentListPagination>
             </StListContainer>
         </InnerContainer>
     );
@@ -70,6 +128,10 @@ const InnerContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
+`;
+
+const StLoading = styled.div`
+    background-color: #141414;
 `;
 
 export const StMapContainer = styled.div`
@@ -105,13 +167,37 @@ const StMyListItem = styled.div`
     margin-bottom: 14px;
 `;
 
-const StButtonContainer = styled.div`
+const CommentListPagination = styled.div`
     display: flex;
     justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    margin: 40px 0px 10px;
+    gap: 10px;
 `;
 
-const StPagenationButton = styled.button`
-    color: #fafafa;
-    margin: 10px;
+const SvgIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+`;
+
+const Pagination = styled.div`
+    display: flex;
+`;
+
+const PageButton = styled.div<{ $click: boolean }>`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 100%;
+    background-color: ${(props) => (props.$click ? "#7462E2" : "transparent")};
+    color: ${(props) => (props.$click ? "#FAFAFA" : "#535258")};
     cursor: pointer;
 `;

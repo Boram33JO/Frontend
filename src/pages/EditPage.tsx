@@ -287,7 +287,7 @@ const StSlides = styled.div`
     position: relative;
     width: 100%;
     height: 0;
-    padding-bottom: 150%;
+    padding-bottom: 160%;
     transition: transform 0.5s ease;
 `;
 

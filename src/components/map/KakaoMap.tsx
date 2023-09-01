@@ -10,7 +10,6 @@ import { postCategoryData } from "../../api/map";
 import quavar from "../../assets/images/quavar_note2.svg";
 import { Post } from "../../models/post";
 import { toast } from "react-hot-toast";
-import Loading from "./Loading";
 
 interface KakaoProps {
     postList: Post[];
@@ -29,7 +28,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
     const [address, setAddress] = useState("");
     const [placeName, setPlaceName] = useState("");
     const [selectedLocation, setSelectedLocation] = useState<any>({});
-    const [categoryNum, setCategoryNum] = useState<number>(0);
+    const [categoryNum, setCategoryNum] = useState<any>(0);
     const [modal, setModal] = useState(false);
     const [map, setMap] = useState<any>(null);
     const [markers, setMarkers] = useState<any[]>([]);
@@ -39,8 +38,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
     const [clusterer, setClusterer] = useState<any>();
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
     const [fetching, setFetching] = useState<boolean>(false);
-
-    const [loading, setLoading] = useState<boolean>(false);
 
     // 지도에 핀 꽂기
     const addMarkersToMap = (map: any, positions: any[]) => {
@@ -206,7 +203,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                 function (position) {
                     const lat = String(position.coords.latitude);
                     const lng = String(position.coords.longitude);
-
                     setLatitude(lat);
                     setLongitude(lng);
                     setGeoLatitude(lat);
@@ -246,7 +242,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
 
     // 카테고리를 눌렀을 때, 데이터를 서버에 요청
     const mappingCategoryHandler = async (categoryNum: number) => {
-        setLoading(true);
         try {
             const latlng = { latitude, longitude };
             const response = await postCategoryData(latlng);
@@ -279,7 +274,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
         } catch (error) {
             console.error(error);
         }
-        setLoading(false);
     };
 
     const searchMap = () => {
@@ -317,7 +311,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                 type="text/css"
             />
             <StMapContainer>
-                {loading && <Loading />}
+                {/* {loading && <Loading />} */}
                 <StSearchForm onSubmit={searchLocationHandler}>
                     <div>
                         <SearchIcon

@@ -1,26 +1,39 @@
 import React from "react";
-import FadeLoader from "react-spinners/FadeLoader";
+import BeatLoader from "react-spinners/BeatLoader";
+import styled from "styled-components";
+import { ReactComponent as Pple } from "../../assets/images/spinn_2.svg";
+
+const StLoadinContainer = styled.div`
+    position: absolute;
+    width: 100vw;
+    height: 100%;
+    top: 0;
+    left: 0;
+    /* background: #141414; */
+    background: rgba(20, 20, 20, 0.9);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+`;
 
 function Loading() {
     return (
-        <div>
-            <div
-                style={{
-                    position: "fixed",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                }}
-            >
-                <FadeLoader
-                    color="#C63DEE"
-                    height={15}
-                    width={5}
-                    radius={2}
-                    margin={2}
+        <StLoadinContainer>
+            <div>
+                <Pple
+                    width={100}
+                    height={100}
                 />
+                <BeatLoader
+                    color="#CEC5EF"
+                    size={15}
+                    margin={9}
+                />
+                {/* <p>현재 위치를 찾고 있어요</p> */}
             </div>
-        </div>
+        </StLoadinContainer>
     );
 }
 
