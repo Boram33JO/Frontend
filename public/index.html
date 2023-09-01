@@ -4,9 +4,13 @@
         <meta charset="utf-8" />
         <link
             rel="icon"
-            href="%PUBLIC_URL%/favicon.ico"
+            href="%PUBLIC_URL%/logo.svg"
         />
-        <link href="./style.css" rel="stylesheet" type="text/css" />
+        <link
+            href="./style.css"
+            rel="stylesheet"
+            type="text/css"
+        />
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1"
@@ -31,7 +35,10 @@
     </head>
     <body>
         <!-- `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.REACT_APP_KAKAO_REST_API_KEY}&libraries=services&autoload=false` -->
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_JAVASCRIPT_KEY%&libraries=services,clusterer&autoload=false"></script>
+        <script
+            type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAO_JAVASCRIPT_KEY%&libraries=services,clusterer&autoload=false"
+        ></script>
         <!-- <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=%REACT_APP_KAKAOMAP_KEY%"></script> -->
         <div id="root"></div>
     </body>
