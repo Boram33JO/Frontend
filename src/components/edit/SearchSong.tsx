@@ -140,7 +140,10 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
             </StSearchForm>
             {songList.length === 0 ? (
                 <StPopularContainer>
-                    <h2>이 노래는 어때요?</h2>
+                    <StTopTen>
+                        <h2>이 노래는 어때요?</h2>
+                        <span>피플 top10</span>
+                    </StTopTen>
                     <StSongListContainer>
                         {popularSongList.map((item) => (
                             <StSongList
@@ -244,13 +247,10 @@ const StPopularContainer = styled.div`
     color: #fafafa;
     line-height: 100%;
 
-    h2 {
-        font-size: 18px;
-    }
     h3 {
         width: 130px;
         font-size: 16px;
-        line-height: 100%;
+        line-height: 120%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -259,11 +259,30 @@ const StPopularContainer = styled.div`
     p {
         color: #a6a3af;
         font-size: 14px;
-
+        line-height: 120%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
         word-break: break-all;
+    }
+`;
+
+const StTopTen = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    span {
+        color: #a19fab;
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 100%;
+    }
+
+    h2 {
+        font-size: 18px;
+        font-weight: 500;
     }
 `;
 
@@ -305,11 +324,32 @@ const StContainer = styled.div`
 `;
 
 const StSongListContainer = styled.div`
+    height: 280px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     box-sizing: border-box;
-    padding-top: 20px;
+    /* padding-top: 20px; */
+    padding: 20px 10px 0 0;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #dddddd;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-track {
+        background-color: #3a3a3a;
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-button:vertical:start:decrement,
+    &::-webkit-scrollbar-button:vertical:end:decrement {
+        height: 10px;
+    }
 `;
 
 const StSongList = styled.div`
@@ -320,9 +360,6 @@ const StSongList = styled.div`
     width: 100%;
     color: #fafafa;
     line-height: 100%;
-
-    div {
-    }
 
     h3 {
         width: 130px;

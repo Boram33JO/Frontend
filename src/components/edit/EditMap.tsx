@@ -156,7 +156,6 @@ const EditMap: React.FC<EditMapProps> = ({
         };
         ps.keywordSearch(searchLocation, placesSearchCB);
     };
-
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         setSearchLocation(newValue);
@@ -206,6 +205,7 @@ const EditMap: React.FC<EditMapProps> = ({
                 <SearchModal
                     setModal={setModal}
                     searchLocationList={searchLocationList}
+                    address={address}
                     setAddress={setAddress}
                     setPlaceName={setPlaceName}
                     setLatitude={setLatitude}
