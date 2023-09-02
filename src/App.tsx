@@ -20,6 +20,7 @@ import ProfileEditPage from "./pages/ProfileEditPage ";
 import IntroPage from "./pages/IntroPage";
 import { Toaster } from 'react-hot-toast'
 import WithdrawalPage from "./pages/WithdrawalpPage";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/list" element={<ListPage />} />
           <Route path="/detail/:id" element={<DetailPage />} />
           <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
+          <Route path="search" element={<SearchPage />} />
           {/* 내 정보 수정하기 */}
           <Route path="/profile/:userId" element={<ProfilePage />} />
           {/* 프로필 전체 보기 */}
