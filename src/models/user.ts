@@ -29,6 +29,7 @@ export type SignupFormat = {
     email: string;
     password: string;
     nickname: string;
+    to: number;
 }
 
 export type LoginFormat = {
