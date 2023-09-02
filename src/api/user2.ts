@@ -4,7 +4,7 @@ import { LoginFormat, SignupFormat } from "../models/user";
 // 회원가입
 export const addUsers = async (newUser: SignupFormat) => {
     const response = await instance.post(`/user/signup`, newUser);
-    // console.log("회원가입", response)
+    console.log("회원가입", response)
     return response.data;
 };
 

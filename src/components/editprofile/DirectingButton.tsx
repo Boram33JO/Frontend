@@ -10,7 +10,7 @@ const DirectingButton: React.FC = () => {
 
     const handlePwPageClick = () => {
         // 여기에 이동할 경로를 지정해주세요.
-        navigate("/password");
+        navigate("/");
       };
       return (
         <>
