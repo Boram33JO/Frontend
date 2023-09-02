@@ -58,7 +58,7 @@ const IntroPage = () => {
     // 버튼 클릭
     const handleClickButton = () => {
         const dragSpaceX = Math.abs(startX - endX);
-        if (dragSpaceX <= 10) {
+        if (dragSpaceX <= 70) {
             if (currentPage === 0) {
                 handleNextSlideButton();
             } else {
@@ -72,7 +72,7 @@ const IntroPage = () => {
 
     useEffect(() => {
         const dragSpaceX = Math.abs(startX - endX);
-        if (startX !== 0 && dragSpaceX > 10) {
+        if (startX !== 0 && dragSpaceX > 70) {
             if (endX < startX) {
                 if (currentPage < totalPage) handleNextSlideButton();
             } else if (endX > startX) {
@@ -97,7 +97,7 @@ const IntroPage = () => {
                             banners.map(item => {
                                 return (
                                     <BannerContent key={item.id} $position={item.position}>
-                                        <BannerImage src={item.image} alt="onboard" />
+                                        <BannerImage data={item.image} aria-label="onboard" />
                                         <BannerComment>
                                             <P $big={true}>{item.comment1}</P>
                                             <P>{item.comment2}</P>
@@ -194,7 +194,7 @@ const BannerContent = styled.div<{ $position: string }>`
     padding: 0px 30px;
 `
 
-const BannerImage = styled.img`
+const BannerImage = styled.object`
     width: 80%;
     height: 80%;
     pointer-events: none;
