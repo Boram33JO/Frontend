@@ -53,7 +53,7 @@ function App() {
           {/* 내가 좋아요한 게시물만 보기 */}
           <Route path="/findpassword" element={<PasswordPage />} />
            {/* 비번찾기 페이지 */}
-          <Route path="/findeamil" element={<EmailPage />} />
+          <Route path="/findemail" element={<EmailPage />} />
            {/* 이메일 찾기 페이지 */}
           <Route path="/withdrawal" element={<WithdrawalPage />} />
           {/* 탈퇴 페이지 */}

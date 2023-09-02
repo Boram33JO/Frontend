@@ -10,29 +10,29 @@ interface StBoxProps {
 const FindNav: React.FC = () => {
   const location = useLocation();
   const [activeTab, setActiveTab] = useState<string>(
-    location.pathname.split('/').pop() || 'email'
+    location.pathname.split('/').pop() || 'findemail'
   );
 
   const navigate = useNavigate();
-  const { userId } = useParams();
+
 
   const handleTabClick1 = (tab: string) => {
     setActiveTab(tab);
-    navigate(`/email`);
+    navigate(`/findemail`);
   };
 
   const handleTabClick2 = (tab: string) => {
     setActiveTab(tab);
-    navigate(`/password`);
+    navigate(`/findpassword`);
   };
 
   return (
     <StBox>
-      <StBox1 $active={activeTab === 'email' } onClick={() => handleTabClick1('')}>
+      <StBox1 $active={activeTab === 'findemail' } onClick={() => handleTabClick1('findemail')}>
         {/* {nickname} */}
         {`이메일 계정 찾기`}
       </StBox1>
-      <StBox3 $active={activeTab === 'password'} onClick={() => handleTabClick2('follow')}>
+      <StBox3 $active={activeTab === 'findpassword'} onClick={() => handleTabClick2('findpassword')}>
         {`비밀번호 찾기`}
       </StBox3>
     </StBox>
