@@ -57,12 +57,17 @@ const BasicLogin = () => {
     },
     onError: (error) => {
       // 에러 발생 시 에러 메시지 표시
-      //console.log("Error response from server:", error?.response?.data);
-      //console.log(error.response);
-      toast.error('로그인 정보를 찾을 수 없습니다.', {position: 'top-center'});
+      // console.log("Error response from server:", error?.response?.data);
+       console.log(error.response.status);
+      if (error.response.status===401){
+        toast.error('로그인 정보를 찾을 수 없습니다.', {position: 'top-center'});
+      }
+      else
+      toast.error('에러가 발생했습니다. 다시 시도해 주세요.', {position: 'top-center'});
      // setErrorMessage(".");
     },
   });
+
 
   const loginClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
