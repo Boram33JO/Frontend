@@ -40,11 +40,11 @@ const IntroPage = () => {
     // 드래그 동작
     const onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         setStartX(e.nativeEvent.offsetX);
-        console.log("클릭 시작 X:", e.nativeEvent.offsetX);
+        // console.log("클릭 시작 X:", e.nativeEvent.offsetX);
     };
     const onMouseUp = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         setEndX(e.nativeEvent.offsetX);
-        console.log("클릭 끝　 X:", e.nativeEvent.offsetX);
+        // console.log("클릭 끝　 X:", e.nativeEvent.offsetX);
     };
     const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
         setStartX(e.changedTouches[0].pageX);
