@@ -30,12 +30,8 @@ const PostList = () => {
     return (
         <InnerContainer>
             <TitleSection>
-                <H3>
-                    피플러는 여기서 포스팅 중
-                </H3>
-                <P onClick={() => navigate(`/list`)}>
-                    전체 보기
-                </P>
+                <H3>피플러는 여기서 포스팅 중</H3>
+                <P onClick={() => navigate(`/list`)}>전체 보기</P>
             </TitleSection>
             <ContentSection>
                 <Category categoryNum={categoryNum} setCategoryNum={setCategoryNum} />
@@ -79,12 +75,9 @@ const H3 = styled.h3`
 `
 
 const P = styled.p`
-    color: #CCCCCC;
+    color: #A19FAB;
     font-size: 14px;
-    line-height: 20px;
+    line-height: calc(150%);
     font-weight: 500;
     cursor: pointer;
-    &:hover {
-        color: #FAFAFA;
-    }
 `

@@ -47,7 +47,7 @@ const ListItem = ({ post }: Props) => {
                         </ProfileInfo>
                     </ProfileArea>
                     <TitleArea>
-                        <StP $color="#FFFFFF" $size={"16px"}>
+                        <StP style={{ textAlign: "right" }} $color="#FFFFFF" $size={"16px"}>
                             {post.postTitle}
                         </StP>
                         <TitleSubArea>
@@ -56,6 +56,10 @@ const ListItem = ({ post }: Props) => {
                             </SvgIcon>
                             <StP $color="#FFFFFF" $size={"14px"}>
                                 {post.wishlistCount}
+                            </StP>
+                            <Divider />
+                            <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>
+                                조회수 {post.viewCount}
                             </StP>
                             <Divider />
                             <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>

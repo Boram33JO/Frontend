@@ -13,8 +13,8 @@ const ListItemSkeleton = () => {
                         </ProfileInfo>
                     </ProfileArea>
                     <TitleArea>
-                        <SkeletonDiv $width={"130px"} $height={"18px"} />
-                        <SkeletonDiv $width={"70px"} $height={"16px"} />
+                        <SkeletonDiv $width={"135px"} $height={"18px"} />
+                        <SkeletonDiv $width={"135px"} $height={"16px"} />
                     </TitleArea>
                 </ListItemTop>
                 <DropdownToggle />
