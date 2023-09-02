@@ -73,6 +73,10 @@ const MyListItem = ({ post }: Props) => {
                                 {post.wishlistCount}
                             </StP>
                             <Divider />
+                            <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>
+                                조회수 {post.viewCount}
+                            </StP>
+                            <Divider />
                             <StP
                                 $color="#FFFFFF"
                                 $size={"14px"}
