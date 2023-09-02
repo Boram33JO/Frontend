@@ -12,6 +12,7 @@ import { useState } from "react";
 import SortButton from "./SortButton";
 import { SortType } from "./SortButton"; 
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
+import Loading from "../map/Loading";
 
 const YourPostList = () => {
   const { userId } = useParams();
@@ -67,7 +68,7 @@ const YourPostList = () => {
   );
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>< Loading /></div>
   }
 
   if (isError) {

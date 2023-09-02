@@ -10,6 +10,7 @@ import { ReactComponent as Nodata } from "../../assets/images/login_signup_profi
 import { toast } from 'react-hot-toast';
 import { RootState } from "../../redux/config/configStore";
 import { useSelector } from "react-redux";
+import Loading from "../map/Loading";
 
 
 
@@ -98,7 +99,7 @@ const Pictures = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>< Loading /></div>
   }
 
   if (isError) {

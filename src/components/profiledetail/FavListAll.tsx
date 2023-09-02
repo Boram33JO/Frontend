@@ -13,6 +13,7 @@ import { useState } from "react";
 import SortButton2 from "./SortButton2";
 import { SortType } from "./SortButton"; 
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
+import Loading from "../map/Loading";
 
 
 
@@ -65,7 +66,7 @@ const FavListAll = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>< Loading /></div>
   }
 
   if (isError) {

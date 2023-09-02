@@ -9,6 +9,7 @@ import { RootState } from "../redux/config/configStore";
 import { getProfileLists } from "../api/profile";
 import { useQuery } from "react-query";
 import { useEffect } from "react";
+import Loading from "../components/map/Loading";
 
 const ProfilePage = () => {
   const { userId } = useParams();
@@ -29,7 +30,7 @@ const ProfilePage = () => {
   )
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>< Loading /></div>
   }
 
   if (isError) {
