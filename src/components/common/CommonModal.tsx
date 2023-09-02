@@ -112,7 +112,7 @@ const DeleteModalButton = styled.div<{ $delete?: boolean }>`
     align-items: center;
     
     flex: 1 0 0;
-    background: ${(props) => props.$delete ? "linear-gradient(135deg, #8084F4, #C48FED)" : "#45424E"};
+    background: ${(props) => props.$delete ? "#A08DEC" : "#45424E"};
     
     font-size: 16px;
     line-height: 22px;

@@ -2,7 +2,7 @@ import instance from "./common"
 
 // 메인 페이지 인기 포스팅 조회
 export const getPopularPosts = async () => {
-    const response = await instance.get(`posts/top-wishlists`)
+    const response = await instance.get(`posts/top-lists`)
     return response;
 }
 

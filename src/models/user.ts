@@ -8,6 +8,7 @@ export type User2 = {
     id?: number;
     nickname?: string;
     userImage?: string;
+    followCount: number;
 }
 
 export type UserInfo = {
@@ -29,6 +30,7 @@ export type SignupFormat = {
     email: string;
     password: string;
     nickname: string;
+    to: string;
 }
 
 export type LoginFormat = {

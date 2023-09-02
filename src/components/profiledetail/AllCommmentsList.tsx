@@ -15,6 +15,7 @@ import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 import SortButton2 from "./SortButton2";
 import { SortType } from "./SortButton";
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
+import Loading from "../map/Loading";
 
 
 type myComment = {
@@ -100,7 +101,7 @@ const AllCommentsList = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>< Loading /></div>
   }
 
   if (isError) {
