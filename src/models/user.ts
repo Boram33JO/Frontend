@@ -8,6 +8,7 @@ export type User2 = {
     id?: number;
     nickname?: string;
     userImage?: string;
+    followCount: number;
 }
 
 export type UserInfo = {

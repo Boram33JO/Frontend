@@ -6,7 +6,7 @@ export const cardBackground = (category: number, postId: number) => {
     const images = categoryImages[category];
 
     if (images) {
-        const selectedImage = images[Math.floor(postId % images.length)];
+        const selectedImage = images[postId % images.length];
         return `url(${selectedImage})`
     }
 
@@ -17,7 +17,7 @@ export const miniCardBackground = (category: number, postId: number) => {
     const images = miniCategoryImages[category];
 
     if (images) {
-        const selectedImage = images[Math.floor(postId % images.length)];
+        const selectedImage = images[postId % images.length];
         return `url(${selectedImage})`
     }
 

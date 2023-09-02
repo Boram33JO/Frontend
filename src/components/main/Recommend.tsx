@@ -51,7 +51,7 @@ const Recommend = () => {
                         <Balloon $isOpen={isOpen}>
                             음악 선택 시 스포티파이 미리듣기가 제공됩니다.
                         </Balloon>
-                        <StP style={{ cursor: "pointer" }} onClick={handleButtonClick}>피플의 플리</StP>
+                        <StP $color="#A19FAB" style={{ cursor: "pointer", userSelect: "none" }} onClick={handleButtonClick}>피플의 플리</StP>
                     </TitleSectionSub>
                 </TitleSection>
                 <ContentSection>
@@ -77,9 +77,7 @@ const Recommend = () => {
                                                 </StP>
                                             </MusicInfo>
                                         </PlaylistItemLeft>
-                                        <PlaylistItemRight>
-                                            <SpotifyIcon src={spotify} alt="spotify" />
-                                        </PlaylistItemRight>
+                                        <SpotifyIcon src={spotify} alt="spotify" />
                                     </PlaylistItem>
                                 )
                             })
@@ -183,6 +181,7 @@ const H3 = styled.h3`
     font-size: 20px;
     line-height: calc(150%);
     font-weight: 600;
+    user-select: none;
 `
 
 const Playlist = styled.ol`
@@ -211,11 +210,9 @@ const PlaylistItemLeft = styled.div`
     width: 100%;
 `
 
-const PlaylistItemRight = styled.div`
-
-`
-
 const MusicThumbnail = styled.img`
+    min-width: 76px;
+    min-height: 76px;
     width: 76px;
     height: 76px;
 `
@@ -259,7 +256,7 @@ const TodayArea = styled.div`
     display: flex;
     justify-content: flex-end;
 
-    color: #827E86;
+    color: #A19FAB;
     font-size: 14px;
     line-height: 16px;
 
