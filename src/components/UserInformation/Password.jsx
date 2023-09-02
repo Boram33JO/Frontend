@@ -155,7 +155,7 @@ const Password = () => {
           <Stname>
             <Stinput4
               type={"text"}
-              placeholder={"이메일 계정"}
+              placeholder={"가입한 이메일 계정을 입력해주세요."}
               value={email}
               onChange={onChangeEmailHandler}
               onFocus={() => setIsEmailFocused(true)}
