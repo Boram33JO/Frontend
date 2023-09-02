@@ -72,8 +72,8 @@ const BasicSignUp = () => {
   };
 
   // 인중 발송중일 때 상태값.
-  const [emailButtonContent, setEmailButtonContent] = useState("중복확인");
-  const [mobileButtonContent, setmobileButtonContent] = useState("중복확인");
+  const [emailButtonContent, setEmailButtonContent] = useState("메일인증");
+  const [mobileButtonContent, setmobileButtonContent] = useState("번호인증");
 
  // 비밀번호 토글
   const [showPassword, setShowPassword] = useState(false);
@@ -162,11 +162,14 @@ const BasicSignUp = () => {
       toast.error("닉네임 인증을 먼저 진행해 주세요.", {position: 'top-center'});
       return;
     }
-   
+    const validPhoneNumber = to;
+    onSignUpClickHandler(validPhoneNumber);
+
     const newUser = {
       email: email,
       password: password,
       nickname: nickname,
+      phoneNumber: to,
     };
     addNewUserMutation.mutate(newUser);
   };
@@ -241,6 +244,8 @@ const BasicSignUp = () => {
       setShowMobileInput(true);
       // 5분 타이머 시작
       toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
+      //  const validPhoneNumber = to; // 유효한 핸드폰 번호로 설정
+      //  await onSignUpClickHandler(validPhoneNumber);
     } catch (error) {
       setmobileButtonContent("재전송");
       toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
@@ -255,6 +260,7 @@ const BasicSignUp = () => {
     if (response.data === true) {
       setIsMobileVerified(true);
       toast.success("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
+      
       setShowMobileInput(false);
       setIsMobileButtonDisabled(true);
       setmobileButtonContent("인증완료");
@@ -396,7 +402,7 @@ const BasicSignUp = () => {
         
         <Stinput2Container>
         <Stinput3
-           type={showPasswordCheck ? "text" : "password"}
+          type={showPasswordCheck ? "text" : "password"}
           placeholder={"비밀번호 확인"}
           value={passwordCheck}
           onChange={onChangePasswordCheckHandler}
@@ -595,8 +601,7 @@ const Stbutton1 = styled.button`
   &:hover {
     color: ${(props) => (props.disabled ? "#6c6a71" : "#141414")};
   }
-//#6c6a71
-// #f1f1f1
+
   border: none;
   border-radius: 6px;
   font-size: 16px;
@@ -622,3 +627,4 @@ const Stbutton2 = styled.button`
   cursor: pointer;
   margin-top: 60px;
 `;
+
