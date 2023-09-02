@@ -3,6 +3,7 @@ import { styled } from 'styled-components';
 import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg";
 import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
 
 const DirectingButton: React.FC = () => {
 
@@ -10,21 +11,30 @@ const DirectingButton: React.FC = () => {
 
     const handlePwPageClick = () => {
         // 여기에 이동할 경로를 지정해주세요.
-        navigate("/");
+        toast.success("이 기능은 개발 중 입니다!");
+        //navigate("/");
+      };
+
+      const handleWdPageClick = () => {
+        // 여기에 이동할 경로를 지정해주세요.
+        toast.success("이 기능은 개발 중 입니다!");
+        //navigate("/");
+        
       };
       return (
         <>
           <StInfoContainer>
             <Container onClick={handlePwPageClick}>
               <PwChange>
+              <Wrapper>
                 <StyledPwSVG />
                 <ArrowWrapper>비밀번호 변경</ArrowWrapper>
-                <Wrapper>
-                <ArrowSVG />
                 </Wrapper>
+                <ArrowSVG />
+               
               </PwChange>
             </Container>
-            <WithD>P.PLE을 탈퇴하시겠어요?</WithD>
+            <WithD onClick={handleWdPageClick}>P.PLE을 탈퇴하시겠어요?</WithD>
           </StInfoContainer>
         </>
       );
@@ -40,8 +50,10 @@ const StInfoContainer = styled.div`
     width: 390px;
     margin: auto;
     background-color: #141414;
-    padding-top: 38px;
-    padding-left: 20px;
+    /* padding-top: 38px; */
+    padding: 38px 20px;
+    box-sizing: border-box; // 중요하다...!
+    
     
 `;
 
@@ -49,21 +61,24 @@ const PwChange = styled.div`
   color: #E7E6F0;
   display: flex;
   align-items: center;
-  /* padding-right: px;  */
+  box-sizing: border-box;
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; 
   
 `;
 const Wrapper = styled.div`
-  
-`;
-const Wrapper2 = styled.div`
-padding-left: 10px;
-align-items: center;
+  display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  align-items: center;
 `;
 
 const Container = styled.div`
   cursor: pointer;
   display: flex; /* Make the container a flex container */
   align-items: center; /* Center align its children vertically */
+ 
 `;
 
 const StyledPwSVG = styled(PwSVG)`
@@ -74,7 +89,6 @@ const StyledPwSVG = styled(PwSVG)`
  
 `;
 const ArrowWrapper = styled.div`
-  padding-right: 228px; /* Add spacing between text and ArrowSVG */
   padding-left: 10px;
 `;
 
@@ -83,4 +97,5 @@ const WithD = styled.div`
   color: #8E8D92;
   font-size: 14px;
   font-weight: 500;
+  cursor: pointer;
 `;
