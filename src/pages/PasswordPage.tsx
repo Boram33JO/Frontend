@@ -12,7 +12,7 @@ const PasswordPage = () => {
     <Container>
       <InnerContainer>
         <H3>비밀번호를 잊으셨나요?</H3>
-        <Ment>가입 당시 이메일 계정을 입력하시면, 비밀번호 변경을 위한  <br />인증코드를 이메일로 발송해 드립니다.</Ment>
+        <Ment>가입한 이메일 계정을 입력하시면, <br />인증코드를 발송해 드립니다.</Ment>
         
         <LoginSection>
           <FindPassword />

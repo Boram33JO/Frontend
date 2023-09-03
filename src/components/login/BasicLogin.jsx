@@ -121,13 +121,14 @@ const BasicLogin = () => {
 
     
       <Stbox2>
-      {/* <Stlink1
+      <Stlink1
           onClick={() => {
-            navigate("/password");
+            toast.success("이 기능은 개발 중 입니다!");
+           // navigate("/findemail");
           }}
         >
           로그인 정보를 잊으셨나요?
-        </Stlink1> */}
+        </Stlink1>
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox2>
     </InnerContainer>

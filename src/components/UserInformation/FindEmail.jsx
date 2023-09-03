@@ -63,8 +63,8 @@ const Email = () => {
   
 
   // 인중 발송중일 때 상태값.
-  const [emailButtonContent, setEmailButtonContent] = useState("이메일찾기");
-  const [mobileButtonContent, setmobileButtonContent] = useState("확인하기");
+  const [emailButtonContent, setEmailButtonContent] = useState("인증하기");
+  const [mobileButtonContent, setmobileButtonContent] = useState("발송하기");
 
  // 비밀번호 토글
 //   const [showPassword, setShowPassword] = useState(false);
@@ -145,54 +145,108 @@ const Email = () => {
     }
   };
 
+   // 모바일 인증
+   const MobilehandleCheckButton = async () => {
+    const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
+
+    if (!phoneNumberRegex.test(to)) {
+      toast.error("11자리 숫자만 입력해주세요.", {position: 'top-center'});
+      resetMobile(); // 입력 칸 비우기
+      return;
+    }
+    setmobileButtonContent("발송 중");
+    setIsMobileButtonDisabled(true);
+    setmobileVerificationTimer(300);
+    try {
+      // 버튼 내용 변경
+      const response = await mobileCheck(to);
+      setmobileButtonContent("재전송");
+      setIsMobileButtonDisabled(false);
+      console.log(response);
+      setShowMobileInput(true);
+      // 5분 타이머 시작
+      toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
+      //  const validPhoneNumber = to; // 유효한 핸드폰 번호로 설정
+      //  await onSignUpClickHandler(validPhoneNumber);
+    } catch (error) {
+      setmobileButtonContent("재전송");
+      toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
+      console.log(error);
+    }
+  };
+
+  // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
+  const MobileDoubleCheckhandleButton = async () => {
+    const response = await mobileDoubleCheck(smsConfirmNum, to);
+    console.log(response, "숫자 확인1");
+
+    if (response.data === true) {
+      //setIsMobileVerified(true);
+      toast.success("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
+      console.log(response);
+      setShowMobileInput(false);
+      setIsMobileButtonDisabled(true);
+      setmobileButtonContent("인증완료");
+
+      // console.log(response.data, "숫자 확인2");
+    } else if (response.data === false) {
+     // setIsMobileVerified(false);
+
+      setIsMobileButtonDisabled(false);
+      // console.log(response.data, "숫자 확인3");
+      toast.error("모바일 인증에 실패했습니다. 다시 시도해주세요.", {position: 'top-center'});
+      setmobileButtonContent("재전송");
+      resetMobile();
+      resetMobileCode();
+    }
+  };
+
 
   return (
     <>
 
     <InnerContainer>
       <Stbox>
-        <Stnickname>
+      <Stnickname>
           <Stname>
             <Stinput4
               type={"text"}
-              placeholder={"가입한 핸드폰 번호를 입력해주세요."}
-              value={email}
-              onChange={onChangeEmailHandler}
-              onFocus={() => setIsEmailFocused(true)}
-              onBlur={() => setIsEmailFocused(false)}
-              $isFocused={isEmailFocused}
+              placeholder={"핸드폰 번호"}
+              value={to}
+              onChange={onChangeMobileHandler}
+              onFocus={() => setIsMobileFocused(true)}
+              onBlur={() => setIsMobileFocused(false)}
+              $isFocused={isMobileFocused}
               $hasValue={email.length > 0}
-              
+             // disabled={isMobileVerified} // 여기서 disabled 속성을 설정
             />
             <Stbutton1
-              onClick={EmailhandleCheckButton}
-              disabled={isEmailButtonDisabled}
+              onClick={MobilehandleCheckButton}
+              disabled={isMobileButtonDisabled}
             >
-              {emailButtonContent}
+              {mobileButtonContent}
             </Stbutton1>
           </Stname>
         </Stnickname>
         
-          <Stnickname>
+        <Stnickname>
             <Stname>
               <Stinput4
                 type={"text"}
-                value={code}
-                placeholder={` (${formatTime(
-                  emailVerificationTimer
+                value={smsConfirmNum}
+                placeholder={`인증번호 입력 (${formatTime(
+                  mobileVerificationTimer
                 )})`}
-                onChange={onChangenumberHandler}
-                onFocus={() => setIsNumberFocused(true)}
-                onBlur={() => setIsNumberFocused(false)}
-                $isFocused={isNumberFocused}
+                onChange={onChangeMobileCodeHandler}
+                onFocus={() => setIsMobileNumberFocused(true)}
+                onBlur={() => setIsMobileNumberFocused(false)}
+                $isFocused={isMobileNumberFocused}
                 $hasValue={code.length > 0}
-                
               />
-             <Stbutton1 onClick={DoubleCheckhandleButton} disabled={isMobileButtonDisabled}>
-  {mobileButtonContent}
+              <Stbutton1 onClick={MobileDoubleCheckhandleButton}>
+                인증
               </Stbutton1>
             </Stname>
-      
           </Stnickname>
           </Stbox>
            </InnerContainer>

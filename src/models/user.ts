@@ -24,7 +24,7 @@ export type LoginUser = {
     nickname: string | null;
     userImage: string | null;
     introduce: string | null;
-    eamil: string | null;
+    // eamil: string | null;
 }
 
 export type SignupFormat = {
@@ -38,6 +38,12 @@ export type PwChangeFormat = {
     email: string;
     originPassword: string;
     changePassword: string;
+    
+}
+
+export type PwChangeFormat2 = {
+    email: string;
+    newPassword: string;
     
 }
 
