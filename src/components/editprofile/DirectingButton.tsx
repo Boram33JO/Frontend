@@ -11,7 +11,7 @@ const DirectingButton: React.FC = () => {
     const { userId } = useParams();
 
     const handlePwPageClick = () => {
-        toast.success("이 기능은 개발 중 입니다!");
+        //toast.success("이 기능은 개발 중 입니다!");
         navigate(`/profile/${userId}/changepw`);
       };
 
