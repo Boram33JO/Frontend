@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { useMutation } from "react-query";
-import { TempPassword, addUsers, emailCheckTofindPassword, mobileCheck, mobileDoubleCheck } from "../../api/user2";
+import { ChangePw2, TempPassword, addUsers, emailCheckTofindPassword, mobileCheck, mobileDoubleCheck } from "../../api/user2";
 import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
@@ -63,8 +63,10 @@ const Password = () => {
   
 
   // 인중 발송중일 때 상태값.
-  const [emailButtonContent, setEmailButtonContent] = useState("발급받기");
+  const [emailButtonContent, setEmailButtonContent] = useState("발송하기");
   const [mobileButtonContent, setmobileButtonContent] = useState("확인하기");
+
+  const codeRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
 
  // 비밀번호 토글
 //   const [showPassword, setShowPassword] = useState(false);
@@ -105,8 +107,10 @@ const Password = () => {
       const response = await emailCheckTofindPassword(email);
       toast.success(`${response.data}`, {position: 'top-center'});
       // setShowCodeInput(true);
+      
     } catch (error) {
       toast.error(('서버 에러가 발생했습니다.'), {position: 'top-center'});
+      console.log(error)
     } finally {
       // 응답 처리 후 버튼 활성화 및 로딩 해제
       setIsEmailButtonDisabled(false);
@@ -144,6 +148,50 @@ const Password = () => {
       resetNumber();
     }
   };
+  const handlePasswordChange = async () => {
+   
+    // 새 비밀번호 유효성 검사
+    if (code !== password) {
+     toast.error("새 비밀번호가 일치하지 않습니다.");
+     return;
+   }
+    if (!code || !codeRegex.test(password)) {
+     toast.error("새 비밀번호 필수 요건을 지켜주세요.");
+     return;
+   }
+  
+
+   // 두 번째 새 비밀번호 입력 필드와 비교하여 동일한지 확인
+   
+     
+   try {
+     const result = await ChangePw2({
+       email: email,
+       newPassword: password,
+     },);
+     if (result.success){
+       toast.success('비밀번호가 바뀌었습니다. 다시 로그인 해주세요.', { position: 'top-center' });
+        navigate("/login");
+        //store.dispatch(logout());
+       //console.log(result.success);
+     }
+    if (result.error)
+    {
+     toast.error(`${result.error}`);
+    }
+     
+    
+   } catch (error) {
+     // 오류 처리 로직
+     toast.error(`${error}`);
+     //console.error('비밀번호 변경 오류:', error);
+     if (error.response && error.response.data) {
+       toast.error(`${error.response.data}`, { position: 'top-center' });
+     } else {
+       toast.error("서버 에러가 발생했습니다.", { position: 'top-center' });
+     }
+   }
+ };
 
 
   return (
