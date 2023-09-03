@@ -55,7 +55,7 @@ const Mypicture = ({ follow, userInfo }: Props) => {
             </MyProfile2>
             {LoginUser.userId ? ( // 사용자가 로그인되어 있는지 확인
             isMyProfile ? (
-              <Bt onClick={EditMyProfileHandler}>프로필 수정</Bt>
+              <Bt onClick={EditMyProfileHandler}>프로필 관리</Bt>
             ) : (
               <Bt
                 $follow={follow}

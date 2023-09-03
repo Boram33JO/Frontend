@@ -5,6 +5,7 @@ export enum SortType {
   Newest = "Newest",
   Oldest = "Oldest",
   wishlistCount = "wishlistCount",
+  viewCount = "viewCount",
 
 }
 
