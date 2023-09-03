@@ -33,7 +33,8 @@ export const getMyPostLists = async (
         ? "createdAt,asc"
         : sort === SortType.wishlistCount
         ? "wishlistCount,desc" // 좋아요순은 likeCount를 기준으로 내림차순 정렬
-        : "",
+        :sort === SortType.viewCount
+        ? "viewCount,desc":""
     },
   });
   return response;
@@ -51,7 +52,8 @@ export const getFavLists = async (userId: string | undefined, page: number, sort
         ? "createdAt,desc"
         : sort === SortType.Oldest
         ? "createdAt,asc"
-        : "wishlistCount,desc", // 좋아요순은 likeCount를 기준으로 내림차순 정렬
+        : "wishlistCount,desc",
+         // 좋아요순은 likeCount를 기준으로 내림차순 정렬
     },
   });
   return response;
@@ -66,7 +68,7 @@ export const getFollowLists = async (
   return response.data;
 };
 
-// 팔로워 조회 (댓글 조회)
+// 팔로워 조회 
 // export const getFollowLists = async (
 //   userId: string | undefined,
 //   page: number,
