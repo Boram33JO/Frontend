@@ -80,6 +80,7 @@ const SignUp = styled.div`
   flex-direction: row; /* 요소들을 가로로 배치 */
   font-size: 16px;
   padding-top: 70px;
+  padding-bottom: 50px;
 `;
 
 const Stlink2 = styled.a`
