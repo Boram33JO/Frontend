@@ -12,7 +12,7 @@ const EmailPage = () => {
     <Container>
       <InnerContainer>
         <H3>가입하신 이메일 잊으셨나요?</H3>
-        <Ment>가입하신 핸드폰 번호를 입력하시면, <br />이메일 정보를 발송해 드립니다.</Ment>
+        <Ment>가입하신 핸드폰 번호를 입력하시면, <br />인증코드를 발송해 드립니다.</Ment>
         
         <LoginSection>
           <FindEmail />

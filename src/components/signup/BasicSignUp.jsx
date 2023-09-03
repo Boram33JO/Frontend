@@ -244,7 +244,7 @@ const BasicSignUp = () => {
       const response = await mobileCheck(to);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-      console.log(response);
+    //  console.log(response);
       setShowMobileInput(true);
       // 5분 타이머 시작
       toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
@@ -253,14 +253,14 @@ const BasicSignUp = () => {
     } catch (error) {
       setmobileButtonContent("재전송");
       toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
-      console.log(error);
+     // console.log(error);
     }
   };
 
   // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
   const MobileDoubleCheckhandleButton = async () => {
     const response = await mobileDoubleCheck(smsConfirmNum, to);
-    console.log(response, "숫자 확인1");
+   // console.log(response, "숫자 확인1");
 
     if (response.data === true) {
       setIsMobileVerified(true);

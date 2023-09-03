@@ -3,6 +3,7 @@ import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { logIn2, setUserInfo } from "../../redux/modules/userSlice";
+import { toast } from "react-hot-toast";
 
 const RedirectKakao: React.FC = () => {
     const location = useLocation();
@@ -18,7 +19,7 @@ const RedirectKakao: React.FC = () => {
             localStorage.setItem("RefreshToken", response.headers.refreshtoken);
             dispatch(logIn2());
             dispatch(setUserInfo({ ...response.data }));
-            alert("로그인되었습니다.");
+            toast.success("로그인되었습니다.", {position: 'top-center'});
             navigate("/");
         });
     });
