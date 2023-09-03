@@ -10,18 +10,14 @@ const ChangePwPage = () => {
     <Container>
       <InnerContainer>
         <H3>비밀번호를 바꾸시겠어요?</H3>
-        <Ment>비밀번호 변경을 위해<br />기존 비빌번호와 새로운 비밀번호를 적어주세요.</Ment>
-        
         <LoginSection>
           <ChangePassword />
         </LoginSection>
-
           <SignUp>
           <div>피플 메인페이지로</div>
           &nbsp;
           <Stlink2 onClick={() => { navigate('/') }}>돌아가기</Stlink2>
         </SignUp>
-
       </InnerContainer>
     </Container>
     </>
@@ -54,7 +50,7 @@ const InnerContainer = styled.div`
 const H3 = styled.h3`
   font-size: 22px;
   color: #e7e6f0;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 24px;
   padding-left: 20px;
   /* margin-top: 20px; */
@@ -83,7 +79,8 @@ const SignUp = styled.div`
   justify-content: center; /* 요소들을 수평으로 가운데 정렬 */
   flex-direction: row; /* 요소들을 가로로 배치 */
   font-size: 16px;
-  padding-top: 200px;
+  padding-top: 70px;
+  padding-bottom: 50px;
 `;
 
 const Stlink2 = styled.a`

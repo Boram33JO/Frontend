@@ -161,7 +161,7 @@ const ChangePassword = () => {
           </Stnickname>
       
           <Stnumber>대문자, 소문자, 숫자, 특수문자 각 1개 이상 포함</Stnumber>
-          <Stnickname>
+          <Stnickname4>
             <Stname>
             <Stinput2Container>
               <Stinput4
@@ -181,8 +181,8 @@ const ChangePassword = () => {
               
               
             </Stname>
-            <Stbutton2 onClick={handlePasswordChange}> 비밀번호 변경하기</Stbutton2>
-          </Stnickname>
+            <Stbutton2 onClick={handlePasswordChange}>변경하기</Stbutton2>
+          </Stnickname4>
 
           </Stbox>
            </InnerContainer>
@@ -240,7 +240,11 @@ const StEmail = styled.div`
  font-size: 16px;
   color: #e7e6f0;
   font-weight: 500;
-  padding-bottom: 20px;
+  padding-bottom: 44px;
+  width: 300px;
+  margin-left: -46px;
+  display: flex; /* flex 컨테이너 설정 */
+  align-items: flex-start; 
 `
 
 const Stinput2 = styled.input`
@@ -282,6 +286,13 @@ const Stnickname = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const Stnickname4 = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 16px;
 `;
 
 const H3 = styled.h3`
@@ -350,10 +361,10 @@ const Stbutton2 = styled.button`
   border: none;
   border-radius: 6px;
   font-size: 17px;
-  font-weight: 500;
+  font-weight: 600;
 
   cursor: pointer;
-  margin-top: 60px;
+  margin-top: 90px;
 `;
 
 const Stnumber = styled.div`

@@ -89,6 +89,9 @@ const StyledPwSVG = styled(PwSVG)`
 `;
 const ArrowWrapper = styled.div`
   padding-left: 10px;
+  color: #E7E6F0;
+  font-size: 16px;
+  font-weight: 500;
 `;
 
 const WithD = styled.div`
