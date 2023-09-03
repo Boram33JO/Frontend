@@ -25,6 +25,7 @@ const BasicLogin = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+//엔터 누르면 작동
   const handlePasswordKeyDown = (event) => {
     if (event.key === "Enter") {
       loginClickHandler(); // 로그인 버튼 클릭 시뮬레이션

@@ -194,11 +194,11 @@ const BasicSignUp = () => {
       const response = await emailCheck(email);
       toast.success(`${response.data}`, {position: 'top-center'});
       setShowCodeInput(true);
-      console.log(response);
+     // console.log(response);
     } catch (error) {
       
-      console.log(isAxiosError,"2")
-      toast.error(('이상있음.'), {position: 'top-center'});
+     // console.log(isAxiosError,"2")
+      toast.error(('중복된 이메일입니다.'), {position: 'top-center'});
     } finally {
       // 응답 처리 후 버튼 활성화 및 로딩 해제
       setIsEmailButtonDisabled(false);
