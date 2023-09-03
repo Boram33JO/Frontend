@@ -22,6 +22,7 @@ import { Toaster } from 'react-hot-toast'
 import WithdrawalPage from "./pages/WithdrawalpPage";
 import SearchPage from "./pages/SearchPage";
 import EmailPage from "./pages/Emailpage";
+import ChangePwPage from "./pages/ChangePwPage";
 
 function App() {
   return (
@@ -36,8 +37,8 @@ function App() {
           <Route path="/edit/:postId" element={<EditPage />} />
           <Route path="/list" element={<ListPage />} />
           <Route path="/detail/:id" element={<DetailPage />} />
-          <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
           <Route path="search" element={<SearchPage />} />
+          <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
           {/* 내 정보 수정하기 */}
           <Route path="/profile/:userId" element={<ProfilePage />} />
           {/* 프로필 전체 보기 */}
@@ -55,8 +56,10 @@ function App() {
            {/* 비번찾기 페이지 */}
           <Route path="/findemail" element={<EmailPage />} />
            {/* 이메일 찾기 페이지 */}
-          <Route path="/withdrawal" element={<WithdrawalPage />} />
+          <Route path="/profile/:userId/withdrawal" element={<WithdrawalPage />} />
           {/* 탈퇴 페이지 */}
+          <Route path="/profile/:userId/changepw" element={<ChangePwPage />} />
+          {/* 비번변경 */}
           <Route path="/map" element={<MapPage />} />
           <Route path="/*" element={<NotFoundPage />} />
         </Route>

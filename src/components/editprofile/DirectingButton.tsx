@@ -2,23 +2,22 @@ import React from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg";
 import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
 const DirectingButton: React.FC = () => {
 
     const navigate = useNavigate();
+    const { userId } = useParams();
 
     const handlePwPageClick = () => {
-        // 여기에 이동할 경로를 지정해주세요.
-        toast.success("이 기능은 개발 중 입니다!");
-        //navigate("/");
+        //toast.success("이 기능은 개발 중 입니다!");
+        navigate(`/profile/${userId}/changepw`);
       };
 
       const handleWdPageClick = () => {
-        // 여기에 이동할 경로를 지정해주세요.
         toast.success("이 기능은 개발 중 입니다!");
-        //navigate("/");
+        //navigate("/withdrawal");
         
       };
       return (

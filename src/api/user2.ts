@@ -1,5 +1,6 @@
 import instance from "./common";
-import { LoginFormat, SignupFormat } from "../models/user";
+import { LoginFormat, SignupFormat, PwChangeFormat } from "../models/user";
+
 
 // 회원가입
 export const addUsers = async (newUser: SignupFormat) => {
@@ -14,6 +15,30 @@ export const login = async (loginFormat: LoginFormat) => {
     // console.log("로그인", response);
     return response.data;
 };
+
+//비번변경
+// export const ChangePw = async (ChangePw: PwChangeFormat, userId: string | undefined,) => {
+//     const response = await instance.put(`/${userId}/password`, ChangePw);
+//     console.log("비번 변경완료", response)
+//     return response.data;
+// };
+
+export const ChangePw = async (ChangePw: PwChangeFormat, userId: string | undefined,) => {
+    const response = await instance.put(`user/${userId}/password`, ChangePw);
+    //console.log("비번 변경완료", response)
+    return response.data;
+};
+
+// export async function ChangePw(PwChangeFormat, userId) {
+//     try {
+//       const response = await instance.put(`/${userId}/password`, PwChangeFormat);
+//       console.log("비밀번호 변경 완료", response);
+//       return response.data;
+//     } catch (error) {
+//       // 오류 처리 로직 추가
+//       throw error;
+//     }
+//   }
 
 // 로그아웃
 export const logout2 = async () => {
