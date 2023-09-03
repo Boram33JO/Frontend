@@ -403,7 +403,7 @@ const BasicSignUp = () => {
            </Stinput2Container>
       </Stbox>
       <Stbox>
-        <Stnumber>대/소문자, 숫자, 특수문자 각 1개 이상 포함</Stnumber>
+        <Stnumber>대문자, 소문자, 숫자, 특수문자 각 1개 이상 포함</Stnumber>
         
         <Stinput2Container>
         <Stinput3
