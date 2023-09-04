@@ -1,5 +1,5 @@
 import instance from "./common";
-import { LoginFormat, SignupFormat, PwChangeFormat, PwChangeFormat2 } from "../models/user";
+import { LoginFormat, SignupFormat, PwChangeFormat, PwChangeFormat2, DeleteUserFormat } from "../models/user";
 
 
 // 회원가입
@@ -23,7 +23,7 @@ export const login = async (loginFormat: LoginFormat) => {
 //     return response.data;
 // };
 
-//단순 비번변경
+// 단순 비번변경
 export const ChangePw = async (ChangePw: PwChangeFormat, userId: string | undefined,) => {
     const response = await instance.put(`user/${userId}/password`, ChangePw);
     //console.log("비번 변경완료", response)
@@ -36,7 +36,6 @@ export const ChangePw2 = async (ChangePw2: PwChangeFormat2) => {
     //console.log("비번 변경완료", response)
     return response.data;
 };
-
 
 
 // export async function ChangePw(PwChangeFormat, userId) {
@@ -62,6 +61,9 @@ export const emailCheck = async (email: string) => {
     const response = await instance.post(`/auth/email`, { email });
     return response;
 };
+// 리퀘스트 바디에 타입을 이번 요청은 찾기용 이메일 인증, 구분해서 보내기로했다.
+// 그때 바디로 타입을 둔다.
+// 리퀘스트 파람, 리퀘스트 바디에
 
 // 이메일 인증 번호 검증
 export const emailDoubleCheck = async (email: string, code: string) => {
@@ -100,8 +102,8 @@ export const TempPassword = async (email: string, code: string) => {
 // };
 
 // 회원탈퇴
-export const  deleteUser = async (loginFormat: LoginFormat) => {
-    const response = await instance.delete(`/user/login`);
+export const  deleteUser = async (loginFormat: DeleteUserFormat, userId: string) => {
+    const response = await instance.delete(`/user/${userId}/delete`);
     // console.log("로그인", response);
     return response.data;
 };

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import FindEmail from "../components/UserInformation/FindEmail";
 import FindNav from "../components/UserInformation/FindNav";
+import DeleteUser from "../components/UserInformation/DeleteUser";
 
 
 const EmailPage = () => {
@@ -11,11 +11,13 @@ const EmailPage = () => {
 
     <Container>
       <InnerContainer>
-        <H3>피플을 떠나시나요...?</H3>
-        <Ment>회원정보와 작성하신 모든 포스팅과 댓글이 삭제됩니다. <br />또한 복구되지 않습니다.</Ment>
+        <H3> 정말 피플을 떠나시나요...?</H3>
+        <Ment>1. 탈퇴 시, 작성하신 게시물 및 댓글은 영구 삭제됩니다. <br />또한 복구되지 않습니다.</Ment>
+        <Ment>2. 탈퇴 시, 팔로우 한 팔로워 정보는 영구 삭제됩니다. <br />또한 복구되지 않습니다.</Ment>
+        <Ment>3. 탈퇴 시, 개인 정보는 모두 삭제됩니다. </Ment>
         
         <LoginSection>
-          <FindEmail />
+          <DeleteUser />
         </LoginSection>
 
           <SignUp>
@@ -68,7 +70,7 @@ const Ment = styled.div`
   font-weight: 500;
   line-height: 24px;
   padding-left: 20px;
-  padding-top: 30px;
+  padding-top: 20px;
 `;
 
 const LoginSection = styled.div`

@@ -44,10 +44,14 @@ export type PwChangeFormat = {
 export type PwChangeFormat2 = {
     email: string;
     newPassword: string;
-    
 }
 
 export type LoginFormat = {
+    email: string;
+    password: string;
+}
+
+export type DeleteUserFormat = {
     email: string;
     password: string;
 }

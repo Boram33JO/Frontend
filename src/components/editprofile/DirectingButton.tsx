@@ -4,20 +4,35 @@ import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profil
 import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/config/configStore';
 
 const DirectingButton: React.FC = () => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  const LoginUser = useSelector((state: RootState) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
 
-    const navigate = useNavigate();
-    const { userId } = useParams();
+
 
     const handlePwPageClick = () => {
         //toast.success("이 기능은 개발 중 입니다!");
+        if (Number(userId) !== LoginUser.userId) {
+          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          navigate("/*");
+          return;
+        }
         navigate(`/profile/${userId}/changepw`);
       };
 
       const handleWdPageClick = () => {
+        if (Number(userId) !== LoginUser.userId) {
+          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          navigate("/*");
+          return;
+        }
         toast.success("이 기능은 개발 중 입니다!");
-        //navigate("/withdrawal");
+        navigate(`/profile/${userId}/withdrawal`);
         
       };
       return (

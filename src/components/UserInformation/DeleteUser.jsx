@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useInput from "../../hooks/useInput";
-import { useMutation } from "react-query";
-import { TempPassword, addUsers, emailCheckTofindPassword, mobileCheck, mobileDoubleCheck } from "../../api/user2";
+import { useMutation, useQueryClient } from "react-query";
+import { TempPassword, addUsers, deleteUser, emailCheckTofindPassword, mobileCheck, mobileDoubleCheck } from "../../api/user2";
 import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';
+import store from "../../redux/config/configStore";
+import { logout } from "../../redux/modules/userSlice";
+import { useSelector } from "react-redux";
+import { Redirect } from "react-router-dom";
+
 
 
 
 const DeleteUser = () => {
   const navigate = useNavigate();
+  const { userId } = useParams();
+  const queryClient = useQueryClient();
+  const LoginUser = useSelector((state) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
 
+  
   const [email, onChangeEmailHandler, resetEmail] = useInput();
   const [code, onChangenumberHandler, resetNumber] = useInput();
 
-  const [to, onChangeMobileHandler, resetMobile] = useInput();
-  const [smsConfirmNum, onChangeMobileCodeHandler, resetMobileCode] =
-    useInput();
 
   const [password, onChangePasswordHandler, resetPassword] = useInput();
   const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] =
@@ -76,76 +83,53 @@ const DeleteUser = () => {
 
 
   // 이메일 검사
-  const EmailhandleCheckButton = async () => {
-    // 이메일 형식 유효성 검사
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("올바른 이메일 형식이 아닙니다.", {position: 'top-center'});
-      return;
-    }
-    // 비활성화 상태로 변경하고 로딩 표시
-    setIsEmailButtonDisabled(true);
-    setEmailButtonContent("발송 중");
-    //setShowCodeInput(false); // 일단 입력 창을 숨김
-    setEmailVerificationTimer(300); // 5분 타이머 시작
-    
-    const timerInterval = setInterval(() => {
-      setEmailVerificationTimer((prevTimer) => {
-        if (prevTimer === 0) {
-          clearInterval(timerInterval);
-          setIsEmailButtonDisabled(false);
-          setEmailButtonContent("재발송"); // 5분이 지나면 버튼 다시 활성화
-          return 0;
-        }
-        return prevTimer - 1;
-      });
-    }, 1000);
 
-    try {
-      const response = await emailCheckTofindPassword(email);
-      toast.success(`${response.data}`, {position: 'top-center'});
-      // setShowCodeInput(true);
-    } catch (error) {
-      toast.error(('서버 에러가 발생했습니다.'), {position: 'top-center'});
-    } finally {
-      // 응답 처리 후 버튼 활성화 및 로딩 해제
-      setIsEmailButtonDisabled(false);
-      setEmailButtonContent("재발송");//보내고 비번 인증전에 메일 바꿔도 또 보내기 가능
-    }
-  };
-
-  // 임시비번 검증 숫자 검사 (유효기간 5분)
-  const DoubleCheckhandleButton = async () => {
-    const response = await TempPassword(email, code);
-
-    if (response.data === true) {
-      
-      setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
-      setIsMobileButtonDisabled(true);
-      toast.success( <div>
-        임시 비밀번호 발급이 완료되었습니다.
-        <br />
-        로그인 해주세요!
-      </div>, {position: 'top-center'});
-      setEmailButtonContent("완료");
-      setmobileButtonContent("발급완료")
-    
+  const handleUserDeleteChange = async () => {
+   
+    // 새 비밀번호 유효성 검사
+  //   if (code) {
+  //    toast.error('로그인 정보가 일치하지 않습니다.');
+  //    return;
+  //  }
+   try {
+     const result = await deleteUser({
+       // email: `${LoginUser.email}`,
+       eamil: email,
+       password: code,
+     }, userId);
      
-    } else if (response.data === false) {
-    
-      setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
-      toast.error(
-      <div>
-      이메일 인증에 실패했습니다.
-      <br />
-      다시 시도해주세요.
-    </div>, {position: 'top-center'});
-      resetEmail();
-      resetNumber();
+     if (result.success){
+       toast.success('탈퇴가 완료되었습니다. 감사합니다.', { position: 'top-center' });
+        // navigate("/login");
+        store.dispatch(logout());
+       //console.log(result.success);
+     }
+    if (result.error)
+    {
+     toast.error(`${result.error}`);
     }
-  };
+     
+    
+   } catch (error) {
+     // 오류 처리 로직
+     toast.error(`${error}`);
+     //console.error('탈퇴오류:', error);
+     if (error.response && error.response.data) {
+       toast.error(`${error.response.data}`, { position: 'top-center' });
+     } else {
+       toast.error("서버 에러가 발생했습니다.", { position: 'top-center' });
+     }
+   }
+
+   if (!isMyProfile) {
+    // 사용자의 프로필이 아닌 경우, 404 페이지로 리디렉션합니다.
+    return navigate(`/*`);
+  }
+ };
 
 
+
+ 
   return (
     <>
 
@@ -162,14 +146,8 @@ const DeleteUser = () => {
               onBlur={() => setIsEmailFocused(false)}
               $isFocused={isEmailFocused}
               $hasValue={email.length > 0}
-              
             />
-            <Stbutton1
-              onClick={EmailhandleCheckButton}
-              disabled={isEmailButtonDisabled}
-            >
-              {emailButtonContent}
-            </Stbutton1>
+            
           </Stname>
         </Stnickname>
         
@@ -178,24 +156,19 @@ const DeleteUser = () => {
               <Stinput4
                 type={"text"}
                 value={code}
-                placeholder={`비밀번호를 입력해 주세요 (${formatTime(
-                  emailVerificationTimer
-                )})`}
+                placeholder={`비밀번호를 입력해 주세요`}
                 onChange={onChangenumberHandler}
                 onFocus={() => setIsNumberFocused(true)}
                 onBlur={() => setIsNumberFocused(false)}
                 $isFocused={isNumberFocused}
                 $hasValue={code.length > 0}
-                
               />
-            
             </Stname>
-      
+            <Stbutton2 onClick={handleUserDeleteChange}>탈퇴하기</Stbutton2>
           </Stnickname>
-          
           </Stbox>
-           </InnerContainer>
-           </>
+        </InnerContainer>
+      </>
     
   );
 };
@@ -302,10 +275,9 @@ const Stname = styled.div`
   padding-bottom: 8px;
 `;
 const Stinput4 = styled.input`
-  width: 229px;
+   width: 329px;
   height: 24px;
   padding: 10px;
-
   font-size: 16px;
   font-weight: 500;
   color: ${(props) =>
@@ -330,8 +302,7 @@ const Stbutton1 = styled.button`
   &:hover {
     color: ${(props) => (props.disabled ? "#6c6a71" : "#141414")};
   }
-//#6c6a71
-// #f1f1f1
+
   border: none;
   border-radius: 6px;
   font-size: 16px;

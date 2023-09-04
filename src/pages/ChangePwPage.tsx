@@ -1,10 +1,22 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import ChangePassword from "../components/UserInformation/ChangePw";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 
 const ChangePwPage = () => {
   const navigate = useNavigate();
+  const { userId } = useParams();
+  const LoginUser = useSelector((state: RootState) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
+
+if (Number(userId) !== LoginUser.userId) {
+  navigate("/*");
+  return null;
+}
+
+
   return (
     <>
     <Container>
