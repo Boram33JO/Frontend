@@ -20,89 +20,22 @@ import { Redirect } from "react-router-dom";
 const DeleteUser = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
-  const queryClient = useQueryClient();
   const LoginUser = useSelector((state) => state.user);
   const isMyProfile = Number(userId) === LoginUser.userId;
 
-  
-  const [email, onChangeEmailHandler, resetEmail] = useInput();
-  const [code, onChangenumberHandler, resetNumber] = useInput();
-
-
-  const [password, onChangePasswordHandler, resetPassword] = useInput();
-  const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] =
-    useInput();
-  const [nickname, onChangeNicknameHandler, resetNickname] = useInput();
-
-
-  // 포커스
-  const [isEmailFocused, setIsEmailFocused] = useState(false);
-  const [isNumberFocused, setIsNumberFocused] = useState(false);
-
-  const [isMobileFocused, setIsMobileFocused] = useState(false);
-  const [isMobileNumberFocused, setIsMobileNumberFocused] = useState(false);
-
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-  const [isPasswordCheckFocused, setIsPasswordCheckFocused] = useState(false);
-
-  const [isNicknameFocused, setIsNicknameFocused] = useState(false);
-
-  // 인증 번호 입력 창을 보여주는 상태 변수.
-  const [showCodeInput, setShowCodeInput] = useState(false); // 상태 추가
-  const [showMobileInput, setShowMobileInput] = useState(false);
-
-  // 중복확인 버튼 비활성화 여부 상태 변수
-  const [isEmailButtonDisabled, setIsEmailButtonDisabled] = useState(false);
-  const [isMobileButtonDisabled, setIsMobileButtonDisabled] = useState(false);
-
-  // 타이머 상태 변수
-  const [emailVerificationTimer, setEmailVerificationTimer] = useState(0);
-  const [mobileVerificationTimer, setmobileVerificationTimer] = useState(0);
-
-  // 타이머 5분 계산 함수
-  const formatTime = (seconds) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-    const formattedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-    return `${formattedMinutes}:${formattedSeconds}`;
-  };
-  
-
-  // 인중 발송중일 때 상태값.
-  const [emailButtonContent, setEmailButtonContent] = useState("이메일찾기");
-  const [mobileButtonContent, setmobileButtonContent] = useState("확인하기");
-
- // 비밀번호 토글
-//   const [showPassword, setShowPassword] = useState(false);
-//  const [showPasswordCheck, setShowPasswordCheck] = useState(false);
-
-  // const togglePasswordVisibility_1 = () => {
-  //   setShowPassword((prevShowPassword) => !prevShowPassword);
-  // };
-
-
-  // 이메일 검사
+  const navigateTomain = async () => {
+  navigate('/');
+  }
 
   const handleUserDeleteChange = async () => {
-   
-    // 새 비밀번호 유효성 검사
-  //   if (code) {
-  //    toast.error('로그인 정보가 일치하지 않습니다.');
-  //    return;
-  //  }
    try {
-     const result = await deleteUser({
-       // email: `${LoginUser.email}`,
-       eamil: email,
-       password: code,
-     }, userId);
-     
+     const result = await deleteUser();
      if (result.success){
+      console.log(result)
        toast.success('탈퇴가 완료되었습니다. 감사합니다.', { position: 'top-center' });
-        // navigate("/login");
+        navigate("/");
         store.dispatch(logout());
-       //console.log(result.success);
+        //console.log(result.success);
      }
     if (result.error)
     {
@@ -113,7 +46,7 @@ const DeleteUser = () => {
    } catch (error) {
      // 오류 처리 로직
      toast.error(`${error}`);
-     //console.error('탈퇴오류:', error);
+     console.error('탈퇴오류:', error);
      if (error.response && error.response.data) {
        toast.error(`${error.response.data}`, { position: 'top-center' });
      } else {
@@ -126,46 +59,14 @@ const DeleteUser = () => {
     return navigate(`/*`);
   }
  };
-
-
-
- 
   return (
     <>
 
     <InnerContainer>
+   
       <Stbox>
-        <Stnickname>
-          <Stname>
-            <Stinput4
-              type={"text"}
-              placeholder={"이메일을 입력해 주세요."}
-              value={email}
-              onChange={onChangeEmailHandler}
-              onFocus={() => setIsEmailFocused(true)}
-              onBlur={() => setIsEmailFocused(false)}
-              $isFocused={isEmailFocused}
-              $hasValue={email.length > 0}
-            />
-            
-          </Stname>
-        </Stnickname>
-        
-          <Stnickname>
-            <Stname>
-              <Stinput4
-                type={"text"}
-                value={code}
-                placeholder={`비밀번호를 입력해 주세요`}
-                onChange={onChangenumberHandler}
-                onFocus={() => setIsNumberFocused(true)}
-                onBlur={() => setIsNumberFocused(false)}
-                $isFocused={isNumberFocused}
-                $hasValue={code.length > 0}
-              />
-            </Stname>
-            <Stbutton2 onClick={handleUserDeleteChange}>탈퇴하기</Stbutton2>
-          </Stnickname>
+            <Stbutton2 onClick={navigateTomain}>뒤로</Stbutton2>
+            <Stbutton2 onClick={handleUserDeleteChange}>계정삭제</Stbutton2>
           </Stbox>
         </InnerContainer>
       </>
@@ -175,158 +76,42 @@ const DeleteUser = () => {
 
 export default DeleteUser;
 
-const Stinput2Container = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
 
-const PasswordToggle = styled.button`
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  position: absolute;
-  right: 10px;
-`;
-
-
-const Eye = styled(EyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
-  height: 24px; /* 원하는 크기로 조정 */
-`;
-
-const ClosedEye = styled(ClosedEyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
-  height: 24px; /* 원하는 크기로 조정 */
-`;
 
 const InnerContainer = styled.div`
   width: 100%;
+  display: flex;
+   align-items: center;
+   padding: 0 20px;
+   padding-top: 275px;
 `;
 
+const StBox2 = styled.div`
 
-const ErrorMessage = styled.div`
-  color: #e7e6f0;
-  margin-top: 10px;
-  font-size: 14px;
 `;
 
 const Stbox = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+  gap: 14px;
 `;
 
-const Stinput2 = styled.input`
-  width: 329px;
-  height: 24px;
-  padding: 10px;
-
-  font-size: 16px;
-  font-weight: 500;
-  color: #85848b;
-
-  background-color: #252628;
-  border: none;
-  border-radius: 6px;
-  outline: none;
-  margin-bottom: 5px;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
-`;
-
-
-const Stinput3 = styled.input`
-  width: 329px;
-  height: 24px;
-  padding: 10px;
-
-  font-size: 16px;
-  font-weight: 500;
-
-  background-color: #252628;
-  border: none;
-  border-radius: 6px;
-  outline: none;
-  margin-bottom: 10px;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
-`;
-const Stnickname = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const H3 = styled.h3`
-  font-size: 18px;
-  color: #e7e6f0;
-  line-height: 24px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  padding-left: 20px;
-  padding-top: 44px;
-`;
-const Stname = styled.div`
-  display: flex; /* 가로 정렬을 위해 추가 */
-  justify-content: center; /*요소들을 수평 가운데 정렬하기 위해 변경  */
-  align-items: center; /* 세로 중앙 정렬을 위해 추가 */
-  padding-bottom: 8px;
-`;
-const Stinput4 = styled.input`
-   width: 329px;
-  height: 24px;
-  padding: 10px;
-  font-size: 16px;
-  font-weight: 500;
-  color: ${(props) =>
-    props.$isFocused || props.$hasValue ? "#d9d9d9" : "#85848b"};
-
-  background-color: #252628;
-
-  border: none;
-  border-radius: 6px;
-  outline: none;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
-  //color: ${(props) => (props.$hasValue ? ": #d9d9d9" : "#85848b")};
-`;
-const Stbutton1 = styled.button`
-  width: 90px;
-  height: 45px;
-  margin-left: 10px;
-  background: ${(props) =>
-    props.disabled ? "#45424e" : "#45424e"};
-  color: ${(props) => (props.disabled ? "#6c6a71" : "#e7e6f0")};
-
-  &:hover {
-    color: ${(props) => (props.disabled ? "#6c6a71" : "#141414")};
-  }
-
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: ${(props) => (props.disabled ? "default" : "pointer")};
-`;
 
 const Stbutton2 = styled.button`
-  width: 350px;
-  height: 45px;
-  padding: 10px;
-  background: linear-gradient(135deg, #8084f4, #c48fed);
+  width: 168px;
+  height: 44px;
+  background: #45424E;
   color: #e7e6f0;
   &:hover {
     color: #141414;
   }
-
   border: none;
   border-radius: 6px;
   font-size: 17px;
   font-weight: 500;
-
+  align-items: center;
   cursor: pointer;
-  margin-top: 60px;
 `;
 
 // 비번찾기 일 경우

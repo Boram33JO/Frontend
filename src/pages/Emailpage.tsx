@@ -44,7 +44,7 @@ const Container = styled.div`
 `
 
 const InnerContainer = styled.div`
-  padding-top: 40px;
+   padding-top: 28px;
   display: flex;
   flex-direction: column;
   /* justify-content: space-between; */

@@ -25,20 +25,15 @@ const Password = () => {
   const [password, onChangePasswordHandler, resetPassword] = useInput();
   const [passwordCheck, onChangePasswordCheckHandler, resetPasswordCheck] =
     useInput();
-  const [nickname, onChangeNicknameHandler, resetNickname] = useInput();
 
 
   // 포커스
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isNumberFocused, setIsNumberFocused] = useState(false);
 
-  const [isMobileFocused, setIsMobileFocused] = useState(false);
-  const [isMobileNumberFocused, setIsMobileNumberFocused] = useState(false);
-
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isPasswordCheckFocused, setIsPasswordCheckFocused] = useState(false);
 
-  const [isNicknameFocused, setIsNicknameFocused] = useState(false);
 
   // 인증 번호 입력 창을 보여주는 상태 변수.
   const [showCodeInput, setShowCodeInput] = useState(false); // 상태 추가
@@ -63,7 +58,7 @@ const Password = () => {
   
 
   // 인중 발송중일 때 상태값.
-  const [emailButtonContent, setEmailButtonContent] = useState("발송하기");
+  const [emailButtonContent, setEmailButtonContent] = useState("인증코드");
   const [mobileButtonContent, setmobileButtonContent] = useState("확인하기");
 
   const codeRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
@@ -220,7 +215,7 @@ const Password = () => {
             </Stbutton1>
           </Stname>
         </Stnickname>
-        
+       
           <Stnickname>
             <Stname>
               <Stinput4
@@ -240,9 +235,47 @@ const Password = () => {
   {mobileButtonContent}
               </Stbutton1>
             </Stname>
-      
+           
           </Stnickname>
           </Stbox>
+          <H3>비밀번호를 재설정해주세요.</H3>
+          <Stbox>
+          <Stnickname>
+          <Stname>
+            <Stinput5
+              type={"password"}
+              placeholder={"새 비밀번호"}
+              value={email}
+              onChange={onChangeEmailHandler}
+              onFocus={() => setIsPasswordFocused(true)}
+              onBlur={() => setIsPasswordFocused(false)}
+              $isFocused={isPasswordFocused}
+              $hasValue={password.length > 0}
+            />
+          </Stname>
+        </Stnickname>
+
+
+        <Stnickname>
+          <Stname>
+            <Stinput5
+              type={"password"}
+              placeholder={"새 비밀번호 확인"}
+              value={passwordCheck}
+              onChange={onChangeEmailHandler}
+              onFocus={() => setIsPasswordCheckFocused(true)}
+              onBlur={() => setIsPasswordCheckFocused(false)}
+              $isFocused={isPasswordCheckFocused}
+              $hasValue={passwordCheck.length > 0}
+              
+            />
+           
+         \
+          </Stname>
+        </Stnickname>
+          <Stbutton2 >로그인하기</Stbutton2>
+          </Stbox>
+          
            </InnerContainer>
            </>
     
@@ -336,13 +369,13 @@ const Stnickname = styled.div`
 `;
 
 const H3 = styled.h3`
-  font-size: 18px;
+  font-size: 20px;
   color: #e7e6f0;
   line-height: 24px;
   font-weight: 600;
   margin-bottom: 10px;
   padding-left: 20px;
-  padding-top: 44px;
+  padding-top: 40px;
 `;
 const Stname = styled.div`
   display: flex; /* 가로 정렬을 위해 추가 */
@@ -368,6 +401,26 @@ const Stinput4 = styled.input`
   border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
   //color: ${(props) => (props.$hasValue ? ": #d9d9d9" : "#85848b")};
 `;
+
+const Stinput5 = styled.input`
+  width: 329px;
+  height: 24px;
+  padding: 10px;
+
+  font-size: 16px;
+  font-weight: 500;
+  color: ${(props) =>
+    props.$isFocused || props.$hasValue ? "#d9d9d9" : "#85848b"};
+
+  background-color: #252628;
+
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  //color: ${(props) => (props.$hasValue ? ": #d9d9d9" : "#85848b")};
+`;
+
 const Stbutton1 = styled.button`
   width: 90px;
   height: 45px;
@@ -404,6 +457,6 @@ const Stbutton2 = styled.button`
   font-weight: 500;
 
   cursor: pointer;
-  margin-top: 60px;
+  margin-top: 40px;
 `;
 

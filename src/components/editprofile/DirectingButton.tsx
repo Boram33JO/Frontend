@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg";
 import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
@@ -13,9 +13,26 @@ const DirectingButton: React.FC = () => {
   const LoginUser = useSelector((state: RootState) => state.user);
   const isMyProfile = Number(userId) === LoginUser.userId;
 
+  const [kakaoId, setKakaoId] = useState<number | null>(null);
 
+  useEffect(() => {
+    // Retrieve the kakaoId from local storage and set it to the state
+    const storedKakaoId = localStorage.getItem('kakaoId');
+    if (storedKakaoId) {
+      setKakaoId(Number(storedKakaoId));
+    }
+  }, []);
+
+  //"kakaoId\":2955447335
+  // {LoginUser.kakaoId}
+  // {"user":"{\"isLogin\":true,\"userId\":74,\"nickname\":\"체리\",\"userImage\":null,\"introduce\":\"안녕\",\"email\":\"jshok822@naver.com\",\"kakaoId\":2955447335}","_persist":"{\"version\":-1,\"rehydrated\":true}"}
 
     const handlePwPageClick = () => {
+
+      // if (kakaoId) {
+      //   // kakaoId가 있는 경우 아무 작업도 하지 않고 함수를 종료합니다.
+      //   return;
+      // }
         //toast.success("이 기능은 개발 중 입니다!");
         if (Number(userId) !== LoginUser.userId) {
           // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
@@ -32,12 +49,14 @@ const DirectingButton: React.FC = () => {
           return;
         }
         toast.success("이 기능은 개발 중 입니다!");
-        navigate(`/profile/${userId}/withdrawal`);
+       // navigate(`/profile/${userId}/withdrawal`);
         
       };
       return (
         <>
           <StInfoContainer>
+            {/* {LoginUser.kakaoId} */}
+            {!kakaoId && (
             <Container onClick={handlePwPageClick}>
               <PwChange>
               <Wrapper>
@@ -48,6 +67,7 @@ const DirectingButton: React.FC = () => {
                
               </PwChange>
             </Container>
+             )}
             <WithD onClick={handleWdPageClick}>P.PLE을 탈퇴하시겠어요?</WithD>
           </StInfoContainer>
         </>

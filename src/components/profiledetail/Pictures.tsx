@@ -278,4 +278,5 @@ const Produce = styled.div`
   -webkit-box-orient: vertical;
   overflow: hidden;
   box-sizing: border-box;
+  word-break: break-all;
 `;
