@@ -66,7 +66,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
             });
 
             const overlayContent = `
-        <a href="/detail/${positions[i].postId}">
+        <a href="/detail/${positions[i].key}">
             <div class="container">
                 <div class="overlay-top">
                     <div class="profile-section">
@@ -92,7 +92,7 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
 
             const customOverlay = new window.kakao.maps.CustomOverlay({
                 position: positions[i].latlng,
-                clickable: false,
+                clickable: true,
                 content: overlayContent,
                 yAnchor: 1.5,
             });
