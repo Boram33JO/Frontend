@@ -33,7 +33,6 @@ const CategoryList = styled.div`
     gap: 10px;
     box-sizing: border-box;
     overflow-x: scroll;
-    /* padding-bottom: 10px; */
     
     &::-webkit-scrollbar {
         display: none;

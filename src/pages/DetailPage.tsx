@@ -4,13 +4,13 @@ import CommentList from '../components/detail/CommentList'
 import CommentForm from '../components/detail/CommentForm'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { deletePost, getDetailPost } from '../api/post'
+import { deletePost, getDetailedPost } from '../api/post'
 import { styled } from 'styled-components'
 import { useSelector } from "react-redux"
 import { RootState } from '../redux/config/configStore'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import DeleteModal from '../components/common/DeleteModal'
+import Modal from '../components/common/Modal'
 import NotFoundPage from './NotFoundPage'
 import DetailSkeleton from '../components/detail/DetailSkeleton'
 
@@ -40,7 +40,7 @@ const DetailPage = () => {
 
     const { data, isLoading, isError } = useQuery(["post", id],
         async () => {
-            const response = await getDetailPost(id);
+            const response = await getDetailedPost(id);
             // console.log(response.data)
             return response.data;
         }
@@ -73,11 +73,12 @@ const DetailPage = () => {
             <CommentList />
             <CommentForm />
             {(deleteToggle) &&
-                <DeleteModal
+                <Modal
                     first="정말 해당 게시글을 삭제하시겠어요?"
                     second="삭제된 게시글은 다시 복구할 수 없습니다."
-                    deleteToggle={setDeleteToggle}
-                    deleteButton={handleDeleteButton} />}
+                    buttonName="삭제"
+                    setToggle={setDeleteToggle}
+                    clickButton={handleDeleteButton} />}
         </>
     )
 }

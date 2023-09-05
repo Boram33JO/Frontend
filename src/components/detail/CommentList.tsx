@@ -14,7 +14,7 @@ import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
 import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 import { ReactComponent as Empty } from "../../assets/images/comment_empty.svg"
 import toast from 'react-hot-toast'
-import DeleteModal from "../common/DeleteModal"
+import Modal from "../common/Modal"
 
 interface Comments {
     content: Comment[];
@@ -160,11 +160,12 @@ const CommentList = () => {
             }
             {
                 (deleteToggle) && (
-                    <DeleteModal
+                    <Modal
                         first="정말 해당 댓글을 삭제하시겠어요?"
                         second="삭제된 댓글은 다시 복구할 수 없습니다."
-                        deleteToggle={setDeleteToggle}
-                        deleteButton={() => CommentDeleteButtonHandler(updateTarget)}
+                        buttonName="삭제"
+                        setToggle={setDeleteToggle}
+                        clickButton={() => CommentDeleteButtonHandler(updateTarget)}
                     />)
             }
         </CommentListContainer>

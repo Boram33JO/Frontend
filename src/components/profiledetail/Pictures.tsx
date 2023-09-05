@@ -5,7 +5,7 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getFollowLists } from "../../api/profile";
 import { followUser } from "../../api/post";
 import { getProfileImage } from "../../utils/common";
-import DeleteModal from "../common/DeleteModal";
+import Modal from "../common/Modal";
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 import { toast } from 'react-hot-toast';
 import { RootState } from "../../redux/config/configStore";
@@ -140,10 +140,11 @@ const Pictures = () => {
         ))
       )}
       {isDeleteModalOpen && (
-        <DeleteModal
+        <Modal
           first="피플러를 삭제하시겠습니까?"
-          deleteToggle={setDeleteModalOpen}
-          deleteButton={() => deleteCommentAsync(selectedCommentId!)}
+          buttonName="삭제"
+          setToggle={setDeleteModalOpen}
+          clickButton={() => deleteCommentAsync(selectedCommentId!)}
         />
       )}
     </InnerContainer>

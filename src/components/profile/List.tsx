@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Post } from '../../models/post';
-import MyListItem from '../common/MyListItem';
+import ListItem from '../common/ListItem';
 import { UserInfo } from '../../models/user';
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 
@@ -42,7 +42,7 @@ null
                     </Pple>
         ) : (
           postList.map((post) => (
-            <MyListItem key={post.postId} post={post} />
+            <ListItem key={post.postId} post={post} />
           ))
         )}
       </InnerContainer>

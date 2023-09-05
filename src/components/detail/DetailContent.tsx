@@ -10,7 +10,7 @@ import { useSelector } from "react-redux"
 import { RootState } from "../../redux/config/configStore"
 import { useEffect, useRef, useState } from "react"
 import { toast } from "react-hot-toast"
-import CommonModal from "../common/CommonModal"
+import Modal from "../common/Modal"
 
 type PostProps = {
     post: Post
@@ -22,7 +22,7 @@ const DetailContent = ({ post }: PostProps) => {
     const { id } = useParams();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
-    const LoginUser = useSelector((state: RootState) => state.user);
+    const loginUser = useSelector((state: RootState) => state.user);
     const containerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
     const [fold, setFold] = useState<boolean>(true);
@@ -41,7 +41,7 @@ const DetailContent = ({ post }: PostProps) => {
         }
     }
 
-    const LikeMutation = useMutation(likePost, {
+    const likeMutation = useMutation(likePost, {
         onSuccess: (response) => {
             queryClient.invalidateQueries(["post"]);
             toast.success(response.data.message);
@@ -52,8 +52,8 @@ const DetailContent = ({ post }: PostProps) => {
     })
 
     const likeButtonHandler = debounce(() => {
-        if (LoginUser.isLogin) {
-            LikeMutation.mutate(id);
+        if (loginUser.isLogin) {
+            likeMutation.mutate(id);
         } else {
             setTarget("좋아요");
             setModalToggle(true);
@@ -72,7 +72,7 @@ const DetailContent = ({ post }: PostProps) => {
     })
 
     const followButtonHandler = debounce((userId: number) => {
-        if (LoginUser.isLogin) {
+        if (loginUser.isLogin) {
             FollowMutation.mutate(userId);
         } else {
             setTarget("팔로우");
@@ -97,7 +97,7 @@ const DetailContent = ({ post }: PostProps) => {
                     </ProfileInfo>
                 </ProfileArea>
                 {
-                    (LoginUser.nickname !== post.nickname) && (
+                    (loginUser.nickname !== post.nickname) && (
                         <FollowBtn $yours={post.follow} onClick={() => followButtonHandler(post.userId)}>
                             {(post.follow) ? "언팔로우" : "팔로우"}
                         </FollowBtn>
@@ -156,10 +156,10 @@ const DetailContent = ({ post }: PostProps) => {
                 </LocationInfo>
             </LocationSection>
             {modalToggle &&
-                <CommonModal
+                <Modal
                     first={`로그인 후 ${target} 하실 수 있습니다.`}
                     second={`로그인 하시겠습니까?`}
-                    name={"확인"}
+                    buttonName={"확인"}
                     setToggle={setModalToggle}
                     clickButton={() => navigate('/login')}
                 />}
