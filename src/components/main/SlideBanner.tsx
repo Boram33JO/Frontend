@@ -80,22 +80,21 @@ const SlideBanner = () => {
     return (
         <Container>
             <SlideContainer ref={slideRef}>
-                <Banner>
-                    {
-                        banners.map(item => {
-                            return (
-                                <BannerImage key={item.id} $url={item.image} $position={item.position}>
-                                    <BannerComment>
-                                        <P $size="22px">{item.comment1}</P>
-                                        <P>{item.comment2}</P>
-                                    </BannerComment>
-                                </BannerImage>
-                            )
-                        })
-                    }
-                </Banner>
+                {
+                    banners.map(item => {
+                        return (
+                            <Banner key={item.id} $url={item.image} $position={item.position}>
+                                <BannerImage data={item.image} aria-label="onboard" />
+                                <BannerComment>
+                                    <P $size="22px">{item.comment1}</P>
+                                    <P>{item.comment2}</P>
+                                </BannerComment>
+                            </Banner>
+                        )
+                    })
+                }
             </SlideContainer>
-            <Pagination>
+            <Navigation>
                 <NavigationButton onClick={handlePrevSlideButton} type="button" aria-label="slideLeft">
                     <Left />
                 </NavigationButton>
@@ -120,7 +119,7 @@ const SlideBanner = () => {
                 <NavigationButton onClick={handleNextSlideButton} type="button" aria-label="slideRight">
                     <Right />
                 </NavigationButton>
-            </Pagination>
+            </Navigation>
         </Container>
     )
 }
@@ -134,27 +133,28 @@ const Container = styled.div`
 `
 
 const SlideContainer = styled.div`
-    width: 100%;
-    display: flex;
-`
-
-const Banner = styled.div`
     position: relative;
     width: 100%;
     height: 0;
     padding-bottom: calc(100% * 2 / 3);
 `
 
-const BannerImage = styled.div<{ $url: string, $position: string }>`
+const Banner = styled.div<{ $url: string, $position: string }>`
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
     left: ${(props) => props.$position};
-    background: url(${(props) => props.$url});
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: top;
+`
+
+const BannerImage = styled.object`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    pointer-events: none;
 `
 
 const BannerComment = styled.div`
@@ -183,11 +183,10 @@ const Navigation = styled.div`
     position: absolute;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    box-sizing: border-box;
+    justify-content: flex-end;
+    height: 18px;
+    right: 20px;
+    bottom: 26px;
 `
 
 const NavigationButton = styled.button`
@@ -201,16 +200,6 @@ const NavigationButton = styled.button`
     &:hover{
         opacity: 0.7;
     }
-`
-
-const Pagination = styled.div`
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    height: 18px;
-    right: 20px;
-    bottom: 26px;
 `
 
 const BulletButton = styled.div`

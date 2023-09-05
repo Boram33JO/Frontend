@@ -7,6 +7,7 @@ import { ReactComponent as Post } from '../../assets/images/side/04_post.svg'
 import { ReactComponent as PP } from '../../assets/images/side/05_pp.svg'
 import { ReactComponent as Edit } from '../../assets/images/floating_post.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
+import logo_text from '../../assets/images/logo_text.svg'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/config/configStore'
@@ -61,7 +62,9 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                 <SideMiddle>
                     <SideMiddleTop>
                         <LogoSection>
-                            <P $size={"38px"} $weight={"700"} onClick={() => handleMenuClick("/")}>P.Ple</P>
+                            <LogoContainer onClick={() => handleMenuClick("/")}>
+                                <Logo data={logo_text} aria-label="logo" />
+                            </LogoContainer>
                         </LogoSection>
                         {
                             (LoginUser.isLogin) ? (
@@ -192,7 +195,20 @@ const SideMiddleBottom = styled.div`
 `
 
 const LogoSection = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+const LogoContainer = styled.div`
+    display: flex;
+    align-items: center;
     cursor: pointer;
+`
+
+const Logo = styled.object` 
+    height: 32px;
+    object-fit: cover;
+    pointer-events: none;
 `
 
 const ProfileSection = styled.div`
@@ -208,6 +224,7 @@ const ProfileImage = styled.img`
     border: none;
     background-color: #ECECEC;
     border-radius: 50%;
+    object-fit: cover;
 `
 
 const StLogin = styled(Login)`
