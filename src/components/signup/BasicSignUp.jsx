@@ -198,7 +198,7 @@ const BasicSignUp = () => {
     } catch (error) {
       
      // console.log(isAxiosError,"2")
-      toast.error(('중복된 이메일입니다.'), {position: 'top-center'});
+      toast.error(('이미 가입하신 이메일입니다.'), {position: 'top-center'});
     } finally {
       // 응답 처리 후 버튼 활성화 및 로딩 해제
       setIsEmailButtonDisabled(false);
@@ -237,7 +237,7 @@ const BasicSignUp = () => {
       return;
     }
     setmobileButtonContent("발송 중");
-    setIsMobileButtonDisabled(true);
+    // setIsMobileButtonDisabled(true);
     setmobileVerificationTimer(300);
     try {
       // 버튼 내용 변경

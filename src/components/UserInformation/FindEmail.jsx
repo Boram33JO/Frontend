@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { useMutation } from "react-query";
-import { TempPassword, addUsers, emailCheckTofindPassword, mobileCheck, mobileDoubleCheck } from "../../api/user2";
+import { TempPassword, addUsers, emailCheckTofindPassword, findmobileCheck, mobileCheck, mobileDoubleCheck } from "../../api/user2";
 import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
@@ -155,19 +155,17 @@ const Email = () => {
       return;
     }
     setmobileButtonContent("발송 중");
-    setIsMobileButtonDisabled(true);
+    // setIsMobileButtonDisabled(true);
     setmobileVerificationTimer(300);
     try {
       // 버튼 내용 변경
-      const response = await mobileCheck(to);
+      const response = await findmobileCheck(to, "find");
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
       console.log(response);
-      setShowMobileInput(true);
+      //setShowMobileInput(true);
       // 5분 타이머 시작
       toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
-      //  const validPhoneNumber = to; // 유효한 핸드폰 번호로 설정
-      //  await onSignUpClickHandler(validPhoneNumber);
     } catch (error) {
       setmobileButtonContent("재전송");
       toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});

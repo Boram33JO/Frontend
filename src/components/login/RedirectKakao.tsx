@@ -13,7 +13,7 @@ const RedirectKakao: React.FC = () => {
     useEffect(() => {
         const KAKAO_CODE = location.search.split("=")[1];
 
-        axios.post(`https://api.pple.today/oauth/token?code=${KAKAO_CODE}`).then((response) => {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/oauth/token?code=${KAKAO_CODE}`).then((response) => {
             // console.log("kakao", response);
             localStorage.setItem("AccessToken", response.headers.accesstoken);
             localStorage.setItem("RefreshToken", response.headers.refreshtoken);
