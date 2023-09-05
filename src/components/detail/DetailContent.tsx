@@ -202,6 +202,7 @@ const ProfileImage = styled.img`
     height: 30px;
     border-radius: 50%;
     background-color: #ECECEC;
+    object-fit: cover;
 `
 
 const ProfileInfo = styled.div`
@@ -330,11 +331,12 @@ const ContentSection = styled.div`
 const ContentContainer = styled.div`
     min-height: 154px; // 최소 높이 설정
     height: 154px; // 접기, 더보기 상태에 따라 변경될 높이
-    white-space: pre-wrap;
     overflow: hidden; 
 `
 
-const ContainerText = styled.div`    
+const ContainerText = styled.div`
+    white-space: pre-wrap;
+    word-break: break-all;
 `
 
 const ContentFoldToggle = styled.p`

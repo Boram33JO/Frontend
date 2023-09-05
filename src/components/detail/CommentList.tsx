@@ -226,6 +226,7 @@ const P = styled.p< { $size?: string, $color?: string } >`
     font-size: ${(props) => props.$size ? props.$size : "16px"};
     line-height: calc(100% + 6px);
     white-space: pre-wrap;
+    word-break: break-all;
 `
 
 const CommentP = styled.p`

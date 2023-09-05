@@ -2,6 +2,7 @@ import { styled } from "styled-components"
 import { ReactComponent as Menu } from '../../assets/images/menu.svg'
 import { ReactComponent as Search } from '../../assets/images/search.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
+import logo_text from '../../assets/images/logo_text.svg'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/config/configStore";
@@ -31,7 +32,7 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
                 <Menu />
             </HeaderLeft>
             <HeaderCenter onClick={handleLogoClick}>
-                P.Ple
+                <Logo data={logo_text} aria-label="logo" />
             </HeaderCenter>
             <HeaderRight>
                 {/* <StSearch /> */}
@@ -86,15 +87,19 @@ const HeaderLeft = styled.div`
 `
 
 const HeaderCenter = styled.div`
+    display: flex;
+    align-items: center;
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    
-    color: #FAFAFA;
-    font-size: 28px;
-    font-weight: 600;
 
     cursor: pointer;
+`
+
+const Logo = styled.object` 
+    height: 26px;
+    object-fit: cover;
+    pointer-events: none;
 `
 
 const HeaderRight = styled.div`
