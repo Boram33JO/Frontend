@@ -10,7 +10,6 @@ import { Post } from '../../models/post'
 import { displayedAt, getProfileImage } from '../../utils/common'
 import { cardBackground } from '../../utils/cardBackground'
 import Preview from './Preview'
-
 interface Props {
     post: Post;
 }
@@ -36,15 +35,25 @@ const ListItem = ({ post }: Props) => {
             <ListItemBackground $src={cardBackground(post.category, post.postId)} onClick={() => navigate(`/detail/${post.postId}`)}>
                 <ListItemTop>
                     <ProfileArea>
-                        <ProfileThumbnail $src={getProfileImage(post.userImage)} />
-                        <ProfileInfo>
-                            <StP $color="#FFFFFF" $size={"14px"}>
-                                {post.nickname}
-                            </StP>
-                            <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
-                                {displayedAt(post.createdAt)}
-                            </StP>
-                        </ProfileInfo>
+                        {!!post.nickname ? (
+                            <>
+                                <ProfileThumbnail $src={getProfileImage(post.userImage)} />
+                                <ProfileInfo>
+                                    <StP $color="#FFFFFF" $size={"14px"}>
+                                        {post.nickname}
+                                    </StP>
+                                    <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
+                                        {displayedAt(post.createdAt)}
+                                    </StP>
+                                </ProfileInfo>
+                            </>
+                        ) : (
+                            <ProfileInfo>
+                                <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
+                                    {displayedAt(post.createdAt)}
+                                </StP>
+                            </ProfileInfo>
+                        )}
                     </ProfileArea>
                     <TitleArea>
                         <StP style={{ textAlign: "right" }} $color="#FFFFFF" $size={"16px"}>

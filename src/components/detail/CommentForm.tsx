@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/config/configStore';
-import CommonModal from '../common/CommonModal';
+import Modal from '../common/Modal';
 import { toast } from 'react-hot-toast';
 
 interface Comment {
@@ -117,10 +117,10 @@ const CommentForm: React.FC<Comment> = ({ setTarget, setIsEdit, commentId, comme
                 </CommentButtonArea>
             </CommentContent>
             {toggle &&
-                <CommonModal
+                <Modal
                     first={`로그인 후 댓글을 작성할 수 있습니다.`}
                     second={`로그인 하시겠습니까?`}
-                    name={"확인"}
+                    buttonName={"확인"}
                     setToggle={setToggle}
                     clickButton={handleClickOKButton}
                 />

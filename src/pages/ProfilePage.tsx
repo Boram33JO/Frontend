@@ -29,18 +29,13 @@ const ProfilePage = () => {
       return response.data;
     }
   )
-// 로그인 하지 않으면 삭제되었다고하기.
-  if (!LoginUser.userId) {
-    return <NotFoundPage />;
-  }
-
 
   if (isLoading) {
     return <div>< Loading /></div>
   }
 
   if (isError) {
-    return <NotFoundPage/>
+    return <NotFoundPage />
   }
 
   return (
