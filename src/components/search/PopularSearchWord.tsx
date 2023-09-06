@@ -3,16 +3,16 @@ import styled from "styled-components";
 import { ReactComponent as DownIcon } from "../../assets/images/down.svg";
 
 interface SearchProps {
-    searchKeyword: any;
+    popularList: any;
     onClick: () => void;
 }
 
-const PopularSearchWord: React.FC<SearchProps> = ({ searchKeyword, onClick }) => {
+const PopularSearchWord: React.FC<SearchProps> = ({ popularList, onClick }) => {
     return (
         <StSearchWordContainer>
             <div>
                 <StNumber>1</StNumber>
-                <StPopularSearchWord>{searchKeyword[0]}</StPopularSearchWord>
+                <StPopularSearchWord>{popularList && popularList[0]}</StPopularSearchWord>
             </div>
             <DownIcon onClick={onClick} />
         </StSearchWordContainer>

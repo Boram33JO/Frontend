@@ -59,7 +59,7 @@ const CategoryListItem = styled.div<{ $active: boolean }>`
     color: ${(props) => (props.$active === true ? "#FAFAFA" : "#63616B")};
     border-radius: 30px;
     white-space: nowrap;
-    padding: 8px 16px;
+    padding: 4px 16px;
     text-align: center;
     font-weight: 600;
 

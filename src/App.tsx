@@ -22,10 +22,6 @@ import { Toaster } from 'react-hot-toast'
 import WithdrawalPage from "./pages/WithdrawalpPage";
 import SearchPage from "./pages/SearchPage";
 import SearchListPage from "./pages/SearchListPage";
-import AllSearchResultPage from "./pages/AllSearchResultPage";
-import RecommendedPlacePage from "./pages/RecommendedPlacePage";
-import RecommendedSongsPage from "./pages/RecommendedSongsPage";
-import RecommendedPplerPage from "./pages/RecommendedPplerPage";
 import EmailPage from "./pages/Emailpage";
 import ChangePwPage from "./pages/ChangePwPage";
 
@@ -45,11 +41,7 @@ function App() {
           <Route path="/detail/:id" element={<DetailPage />} />
           <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
           <Route path="/search" element={<SearchPage />} />
-          <Route path="/search/result" element={<SearchListPage />} />
-          <Route path="/search/result/all" element={<AllSearchResultPage />} />
-          <Route path="/search/posting" element={<RecommendedPlacePage />} />
-          <Route path="/search/songs" element={<RecommendedSongsPage />} />
-          <Route path="/search/ppler" element={<RecommendedPplerPage />} />
+          <Route path="/search/:keyword" element={<SearchListPage />} />
           <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
 
           {/* 내 정보 수정하기 */}
