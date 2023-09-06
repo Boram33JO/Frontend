@@ -4,7 +4,7 @@ import { ReactComponent as Close } from '../../assets/images/side/01_close.svg'
 import { ReactComponent as Arrow } from '../../assets/images/side/02_arrow.svg'
 import { ReactComponent as Map } from '../../assets/images/side/03_map.svg'
 import { ReactComponent as Post } from '../../assets/images/side/04_post.svg'
-import { ReactComponent as PP } from '../../assets/images/side/05_pp.svg'
+import { ReactComponent as Notify } from '../../assets/images/side/05_notify.svg'
 import { ReactComponent as Edit } from '../../assets/images/floating_post.svg'
 import { ReactComponent as Login } from '../../assets/images/login.svg'
 import logo_text from '../../assets/images/logo_text.svg'
@@ -29,7 +29,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
     const menuList = [
         { id: 1, name: "피플 맵핑", icon: Map, path: "/map" },
         { id: 2, name: "피플 포스팅", icon: Post, path: "/list" },
-        // { id: 3, name: "피플러", icon: PP, path: "/" },
+        { id: 3, name: "알림", icon: Notify, path: "/notify" },
     ]
 
     const handleMenuClick = (path: string) => {
