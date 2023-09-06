@@ -20,6 +20,7 @@ import ProfileEditPage from "./pages/ProfileEditPage ";
 import IntroPage from "./pages/IntroPage";
 import { Toaster } from 'react-hot-toast'
 import WithdrawalPage from "./pages/WithdrawalpPage";
+import NotifyPage from "./pages/NotifyPage";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/intro" element={<IntroPage />} />
         <Route element={<Layout />}>
+          <Route path="/notify" element={<NotifyPage />} />
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
