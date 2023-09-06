@@ -8,29 +8,6 @@ interface SearchProps {
 }
 
 const RecommendSong: React.FC<SearchProps> = ({ topSongs, categoryNum }) => {
-    console.log("ddd", topSongs);
-
-    // const filteredData = response.topSongs.filter((item: any) => item.category === categoryNum);
-
-    //     return (
-    //         <StSongList>
-    //             {topSongs.filter.map((item:any) => (
-    //  <StSongListLeft>
-    //  <img
-    //      src="https://images.unsplash.com/photo-1690585433335-66d64209a38e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDR8UzRNS0xBc0JCNzR8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
-    //      alt="imagedd"
-    //  />
-    //  <StSongListInfo>
-    //      <h3>제목vkwlfkv weln kvnklfnvkwjjkjvhvkhvkh</h3>
-    //      <p>가수이름clas kv lk nkvnkanfksnvknkanlnkk</p>
-    //  </StSongListInfo>
-    // </StSongListLeft>
-    // <Spotify style={{ width: "24px" }} />
-    //                 ))}
-
-    //         </StSongList>
-    //     );
-
     return (
         <>
             {topSongs &&
@@ -39,7 +16,7 @@ const RecommendSong: React.FC<SearchProps> = ({ topSongs, categoryNum }) => {
                     .filter((item: any) => item.category === categoryNum + 1)
                     .map((item: any) =>
                         item.songResponseDtos.map((song: any, index: number) => (
-                            <StSongList>
+                            <StSongList key={index}>
                                 <StSongListLeft>
                                     <img
                                         src={song.thumbnail}
