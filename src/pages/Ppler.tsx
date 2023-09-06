@@ -1,12 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Profile } from "../assets/images/default_profile.svg";
+import { followUser } from "../api/post";
+import { toast } from "react-hot-toast";
 
 interface PplerProps {
     popularPpler: any;
 }
 
 const Ppler: React.FC<PplerProps> = ({ popularPpler }) => {
+    const [follow, setFollow] = useState<boolean>(false);
+    const [userId, setUserId] = useState<number | undefined>();
+
+    // const getSearch = async () => {
+    //     const keyword = searchKeyword;
+    //     if (keyword.length !== 0) {
+    //         try {
+    //             const response = await getSearchKeyword(keyword);
+    //             setIsData(response?.data);
+    //             setPopularPosts(response?.data.data.posts);
+    //             setPopularSongs(response?.data.data.songs);
+    //             setPopularPlace(response?.data.data.locations);
+    //             setPopularPpler(response?.data.data.users);
+    //         } catch (error) {
+    //             console.log(error);
+    //         }
+    //     }
+    // };
+
+    const followHandler = async () => {
+        try {
+            const userIds = popularPpler.map((item: { userId: number }) => item.userId);
+            setUserId(userIds);
+            const response = await followUser(userIds);
+            if (response.data.message === "팔로우 성공") {
+                setFollow(true);
+                toast.success("팔로우 성공", { position: "top-center" });
+            } else {
+                setFollow(false);
+                toast.success("언팔로우 성공", { position: "top-center" });
+            }
+            console.log("sss", response.data.message);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <StContainer>
             {popularPpler &&
@@ -26,7 +65,7 @@ const Ppler: React.FC<PplerProps> = ({ popularPpler }) => {
                             <h3>{item.nickname}</h3>
                             <p>{item.introduce}</p>
                         </StUserInfo>
-                        <StButton>팔로우</StButton>
+                        <StButton onClick={followHandler}>{follow === true ? "언팔로우" : "팔로우"}</StButton>
                     </>
                 ))}
         </StContainer>
@@ -52,7 +91,7 @@ const StUserImage = styled.div`
     }
 `;
 const StUserInfo = styled.div`
-    width: 67%;
+    width: 65%;
     h3 {
         width: 80%;
         color: #fafafa;
