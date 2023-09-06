@@ -13,7 +13,12 @@ import { ReactComponent as CulturePlaceIcon } from "../../assets/images/category
 import { ReactComponent as LeisureIcon } from "../../assets/images/category/03_cafe.svg";
 import { ReactComponent as EtcIcon } from "../../assets/images/category/03_cafe.svg";
 
-const PopularPlace = () => {
+interface SearchProps {
+    searchPlace: any;
+    setSearchPlace: any;
+}
+
+const PopularPlace: React.FC<SearchProps> = ({ searchPlace, setSearchPlace }) => {
     const IconLists = [
         CafeIcon,
         RestaurantIcon,
@@ -30,13 +35,18 @@ const PopularPlace = () => {
     ];
 
     return (
-        <StPlacelogo>
-            <CafeIcon
-                width={16}
-                height={16}
-            />
-            <span>placename</span>
-        </StPlacelogo>
+        <>
+            {searchPlace &&
+                searchPlace.slice(0, 6).map((item: any, index: number) => (
+                    <StPlacelogo key={index}>
+                        <CafeIcon
+                            width={16}
+                            height={16}
+                        />
+                        <span>{item}</span>
+                    </StPlacelogo>
+                ))}
+        </>
     );
 };
 

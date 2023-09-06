@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as LikeIcon } from "../../assets/images/icon_like.svg";
 import { ReactComponent as MusicIcon } from "../../assets/images/music_icon.svg";
@@ -8,47 +8,42 @@ import { ReactComponent as Profile } from "../../assets/images/default_profile.s
 interface SearchProps {
     topPost: any;
     setTopPost: any;
+    randomColorChange: any;
 }
 
-const RecommendedPosting: React.FC<SearchProps> = ({ topPost, setTopPost }) => {
-    const categories = [
-        "카페",
-        "식당",
-        "대중교통",
-        "학교",
-        "운동",
-        "공원",
-        "물가",
-        "바다",
-        "도서관",
-        "문화공간",
-        "레저",
-        "기타"
-      ];
-      const colors = [
-        "#7178BA", 
-        "#7197BA", 
-        "#776BC0", 
-        "#C57E56", 
-        "#87B499", 
-        "#D38D8D", 
-        "#2E4491", 
-        "#33837E", 
-        "#DC7D94", 
-        "#D57070", 
-        "#5292A7"
-      ];
-    
-      const getRandomColor = () => {
-        const randomIndex = Math.floor(Math.random() * colors.length);
-        return colors[randomIndex];
-      };
+const RecommendedPosting: React.FC<SearchProps> = ({ topPost, setTopPost, randomColorChange }) => {
+    const [randomColors, setRandomColors] = useState<string[]>([]);
+
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
+
+    useEffect(() => {
+        const colors = [
+            "#7178BA",
+            "#7197BA",
+            "#776BC0",
+            "#C57E56",
+            "#87B499",
+            "#D38D8D",
+            "#2E4491",
+            "#33837E",
+            "#DC7D94",
+            "#D57070",
+            "#5292A7",
+        ];
+        const getRandomColor = () => {
+            const randomIndex = Math.floor(Math.random() * colors.length);
+            return colors[randomIndex];
+        };
+
+        setRandomColors(topPost.slice(0, 3).map(() => getRandomColor()));
+    }, [randomColorChange]);
+
     return (
         <>
-            {topPost.slice(0,3).map((item: any) => (
+            {topPost.slice(0, 3).map((item: any, index: number) => (
                 <StPostingContainer
                     key={item.postId}
-                    style={{ background: getRandomColor() }}
+                    style={{ background: randomColors[index] }}
                 >
                     <StProfileContainer>
                         <StProfile>

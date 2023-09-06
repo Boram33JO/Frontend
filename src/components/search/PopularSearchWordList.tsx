@@ -1,53 +1,23 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as UpIcon } from "../../assets/images/up.svg";
+interface SearchProps {
+    searchKeyword: any;
+    onClick: () => void;
+}
 
-const PopularSearchWordList = () => {
+const PopularSearchWordList: React.FC<SearchProps> = ({ searchKeyword, onClick }) => {
     return (
         <StSearchWordContainer>
             <ListContainer>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
+                {searchKeyword.map((item: any, index: number) => (
+                    <StLanking>
+                        <StNumber>{index + 1}</StNumber>
+                        <StPopularSearchWord>{item}</StPopularSearchWord>
+                    </StLanking>
+                ))}
             </ListContainer>
-            <UpIcon />
+            <UpIcon onClick={onClick} />
         </StSearchWordContainer>
     );
 };
