@@ -142,7 +142,7 @@ const SearchSong: React.FC<SearchSongProps> = ({ chooseSongList, setChooseSongLi
                 <StPopularContainer>
                     <StTopTen>
                         <h2>이 노래는 어때요?</h2>
-                        <span>피플 top10</span>
+                        <span>피플 TOP10</span>
                     </StTopTen>
                     <StSongListContainer>
                         {popularSongList.map((item) => (
@@ -216,7 +216,7 @@ const Container = styled.div`
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-    gap: 20px;
+    gap: 12px;
     padding: 10px;
 `;
 
@@ -324,15 +324,16 @@ const StContainer = styled.div`
 `;
 
 const StSongListContainer = styled.div`
-    height: 280px;
+    height: 260px;
     display: flex;
     flex-direction: column;
     gap: 10px;
     box-sizing: border-box;
     /* padding-top: 20px; */
-    padding: 20px 10px 0 0;
+    padding: 0 10px 0 0;
     overflow-y: scroll;
     overflow-x: hidden;
+    margin-top: 24px;
 
     &::-webkit-scrollbar {
         width: 4px;
