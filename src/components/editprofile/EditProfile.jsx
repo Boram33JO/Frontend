@@ -81,15 +81,16 @@ const EditProfile = () => {
   const handleCheckButton = async () => {
     try {
       const response = await nicknameCheck(nickname);
-     // console.log(response);
+     console.log(response);
       if (response.data.message){
         toast.success(`${response.data.message}`);
         setIsCheck(true);
+        console.log(response.data.message);
       } else {
         toast.error(`${response.data.error}`);
-      // console.log(response.data.error)
+       console.log(response.data.error)
+       console.log(response);
         setIsCheck(false);
-  
       }
     } catch (error) {
       toast.error("오류가 발생했습니다. 재시도 해주세요.");
@@ -171,7 +172,7 @@ const EditProfile = () => {
           <Stname>
             <Stinput4
               type={"text"}
-              placeholder={"2~8자 입력"} // 이 부분도 로컬스토리지나 서버에서 받아와서 기본 값이 담겨 있어야함.
+              placeholder={"2~12자 입력"} // 이 부분도 로컬스토리지나 서버에서 받아와서 기본 값이 담겨 있어야함.
               value={nickname} // Display nickname value
               onChange={handleNicknameChange}
               onFocus={() => setNicknameFocused(true)}

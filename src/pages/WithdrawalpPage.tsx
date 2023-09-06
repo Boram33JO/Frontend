@@ -17,6 +17,20 @@ const EmailPage = () => {
         <PwChange>
          
               <Wrapper>
+           
+                <ArrowWrapper>  1. 작성하신 게시물과 댓글은 영구 삭제됩니다.</ArrowWrapper>
+                
+                <ArrowWrapper>   2. 팔로워 정보가 영구 삭제됩니다.</ArrowWrapper>
+             
+              
+                <ArrowWrapper>   3. 가입 시의 개인 정보는 영구 삭제됩니다.</ArrowWrapper>
+            
+                </Wrapper>
+              </PwChange>
+
+              {/*<PwChange>
+         
+               <Wrapper>
                 <Stbox3>
                 <ArrowWrapper>  <Bullet/>작성하신 게시물과 댓글은 영구 삭제됩니다.</ArrowWrapper>
                 </Stbox3>
@@ -27,7 +41,7 @@ const EmailPage = () => {
                 <ArrowWrapper>   <Bullet/>작성하신 게시물과 댓글은 영구 삭제됩니다.</ArrowWrapper>
                 </Stbox3>
                 </Wrapper>
-              </PwChange>
+              </PwChange> */}
             
         </StBox2>
         
@@ -85,6 +99,7 @@ border-radius: 8px;
 background-color: #252427;
 height: 124px;
 margin: 20px;
+padding: 16px;
 `;
 
 
@@ -141,9 +156,8 @@ const PwChange = styled.div`
 `;
 const Wrapper = styled.div`
   display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
-  align-items: center;
+  align-items: left;
   flex-direction: column;
-  
 `;
 
 // const Container = styled.div`
