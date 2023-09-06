@@ -14,17 +14,17 @@ const SearchPage = () => {
     const [categoryNum, setCategoryNum] = useState<any>(0);
     const [searchData, setSearchData] = useState<any>();
     const [searchPlace, setSearchPlace] = useState<any>();
-    const [searchSongs, setSearchSongs] = useState<any>();
     const [topPost, setTopPost] = useState<any>([]);
     const [topSongs, setTopSongs] = useState<any>();
     const [isPopularSearchWord, setIsPopularSearchWord] = useState<boolean>(true);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
     const [randomColorChange, setRandomColorChange] = useState(false);
+    const [popularList, setPopularList] = useState<any>();
 
     useEffect(() => {
         getSearch();
     }, []);
-
+    console.log(searchKeyword);
     const popularSearchWordHandler = () => {
         setIsPopularSearchWord(!isPopularSearchWord);
     };
@@ -35,7 +35,7 @@ const SearchPage = () => {
             setSearchData(response);
             setTopPost(response.topPosts);
             setSearchPlace(response.topLocations);
-            setSearchKeyword(response.topSearchKeywords);
+            setPopularList(response.topSearchKeywords);
             setRandomColorChange(!randomColorChange);
             setTopSongs(response.topSongs);
         } catch (error) {
@@ -96,12 +96,12 @@ const SearchPage = () => {
                 </StTitle>
                 {isPopularSearchWord === true ? (
                     <PopularSearchWord
-                        searchKeyword={searchKeyword}
+                        popularList={popularList}
                         onClick={popularSearchWordHandler}
                     />
                 ) : (
                     <PopularSearchWordList
-                        searchKeyword={searchKeyword}
+                        popularList={popularList}
                         onClick={popularSearchWordHandler}
                     />
                 )}

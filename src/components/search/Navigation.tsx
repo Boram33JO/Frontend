@@ -34,7 +34,6 @@ export default Navigation;
 const StNavigationContainer = styled.div`
     display: flex;
     flex-direction: row;
-    /* justify-content: flex-start; */
 `;
 
 const StNavigation = styled.div<{ $active: boolean }>`
