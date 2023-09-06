@@ -5,9 +5,13 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import { getFollowLists } from "../../api/profile";
 import { followUser } from "../../api/post";
 import { getProfileImage } from "../../utils/common";
-import DeleteModal from "../common/DeleteModal";
+import Modal from "../common/Modal";
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 import { toast } from 'react-hot-toast';
+import { RootState } from "../../redux/config/configStore";
+import { useSelector } from "react-redux";
+import Loading from "../map/Loading";
+
 
 
 
@@ -15,51 +19,53 @@ const Pictures = () => {
   const navigate = useNavigate();
   const { userId } = useParams();
   const queryClient = useQueryClient();
-  const pageSize = 10; // 한 번에 가져올 데이터의 개수
+  const LoginUser = useSelector((state: RootState) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
+  //const pageSize = 10; // 한 번에 가져올 데이터의 개수
 
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null
   );
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const [page, setPage] = useState<number>(0);
-  const [isFetching, setFetching] = useState(false);
+  // const [page, setPage] = useState<number>(0);
+  // const [isFetching, setFetching] = useState(false);
 
   const {
     data: followerData,
     isLoading,
     isError,
   } = useQuery(
-    ["Follow", userId, page],
+    ["Follow", userId],
     () => (userId ? getFollowLists(userId) : Promise.resolve([])),
     { enabled: !!userId, keepPreviousData: true }
   );
 
-  const fetchMoreData = () => {
-    if (!followerData) return;
-    if (followerData.followList.content.length < pageSize) {
-      // 현재 페이지에 남은 데이터가 pageSize 미만이면 중복 요청 방지
-      return;
-    }
+  // const fetchMoreData = () => {
+  //   if (!followerData) return;
+  //   if (followerData.followList.content.length < pageSize) {
+  //     // 현재 페이지에 남은 데이터가 pageSize 미만이면 중복 요청 방지
+  //     return;
+  //   }
     //setPage((prevPage) => prevPage + 1);
     // setFetching(true);
-  };
+  //};
 
-  useEffect(() => {
-    // 스크롤 이벤트 핸들러와 임계값(threshold) 추가
-    const handleScroll = () => {
-      const threshold = window.innerHeight * 0.8;
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - threshold) {
-        fetchMoreData();
-      }
-    };
+  // useEffect(() => {
+  //   // 스크롤 이벤트 핸들러와 임계값(threshold) 추가
+  //   const handleScroll = () => {
+  //     const threshold = window.innerHeight * 0.8;
+  //     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - threshold) {
+  //       fetchMoreData();
+  //     }
+  //   };
 
-    window.addEventListener("scroll", handleScroll);
+  //   window.addEventListener("scroll", handleScroll);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
 
 
   //console.log(followerData); // 데이터 구조를 확인
@@ -93,7 +99,7 @@ const Pictures = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>< Loading /></div>
   }
 
   if (isError) {
@@ -118,7 +124,7 @@ const Pictures = () => {
         followerData.followList.content.map((follower: any) => (
           <MyProfile key={follower.userId}>
             <MyThumb
-              src={getProfileImage(follower.userImage)} style={{minWidth:"62px", minHeight:"62px"}}
+              src={getProfileImage(follower.userImage)} style={{minWidth:"62px", minHeight:"62px", objectFit: "cover"}}
               onClick={() => navigate(`/profile/${follower.userId}`)}
             />
             <MyProfile1>
@@ -126,16 +132,19 @@ const Pictures = () => {
                 <Nickname>{follower.nickname}</Nickname>
                 <Produce>{follower.introduce}</Produce>
               </MyProfile2>
+              {isMyProfile && (
                 <Bt onClick={() => handleDelete(follower.userId)}>삭제</Bt>
+                )}
             </MyProfile1>
           </MyProfile>
         ))
       )}
       {isDeleteModalOpen && (
-        <DeleteModal
+        <Modal
           first="피플러를 삭제하시겠습니까?"
-          deleteToggle={setDeleteModalOpen}
-          deleteButton={() => deleteCommentAsync(selectedCommentId!)}
+          buttonName="삭제"
+          setToggle={setDeleteModalOpen}
+          clickButton={() => deleteCommentAsync(selectedCommentId!)}
         />
       )}
     </InnerContainer>
@@ -235,6 +244,8 @@ const MyThumb = styled.img`
   border-radius: 50%;
   background-color: #e7e6f0;
   background-position: center;
+  object-fit: cover;
+  cursor: pointer;
   img {
     width: 100%;
     height: 100%;
@@ -251,6 +262,8 @@ const Nickname = styled.div`
   font-size: 16px;
   font-weight: 600;
   color: #e7e6f0;
+  max-width: 210px;
+  max-height: 40px;
 `;
 
 const Produce = styled.div`
@@ -258,6 +271,13 @@ const Produce = styled.div`
   padding-top: 5px;
   color: #626262;
   font-weight: 500; 
-  max-width: 200px;
-  max-height: 46px;
+  max-width: 230px;
+  max-height: 40px; /* 3줄로 제한하려면 3줄 높이에 맞게 설정 */
+  line-height: 1.2; /* 줄 간격 조절 */
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 2줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  box-sizing: border-box;
+  word-break: break-all;
 `;

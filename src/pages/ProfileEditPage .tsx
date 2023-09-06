@@ -1,12 +1,14 @@
 import React from "react";
 import EditProfile from "../components/editprofile/EditProfile";
 import { styled } from "styled-components";
+import DirectingButton from "../components/editprofile/DirectingButton";
 
 const ProfileEditPage = () => {
   return (
     <>
      <Container>
       <EditProfile />
+      <DirectingButton />
       </Container>
     </>
   );
@@ -22,6 +24,4 @@ const Container = styled.div`
     width: 390px;
     min-height: 80vh;
     margin: auto;
-    background-color: #141414;
-    padding-top: 35px;
 `

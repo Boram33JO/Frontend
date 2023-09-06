@@ -53,12 +53,18 @@ const Mypicture = ({ follow, userInfo }: Props) => {
               <Produce>{userInfo.introduce}</Produce>
             )}
             </MyProfile2>
-            {isMyProfile
-              ? (<Bt onClick={EditMyProfileHandler}>프로필 수정</Bt>)
-              : (<Bt $follow={follow} onClick={() => followButtonHandler(userInfo.userId)}>
+            {LoginUser.userId ? ( // 사용자가 로그인되어 있는지 확인
+            isMyProfile ? (
+              <Bt onClick={EditMyProfileHandler}>프로필 관리</Bt>
+            ) : (
+              <Bt
+                $follow={follow}
+                onClick={() => followButtonHandler(userInfo.userId)}
+              >
                 {follow ? "언팔로우" : "팔로우"}
-              </Bt>)
-            }
+              </Bt>
+            )
+          ) : null}
           </MyProfile1>
         </MyProfile>
       </InnerContainer>
@@ -151,18 +157,19 @@ const Nickname = styled.div`
   color: #e7e6f0;
 `;
 const Produce = styled.div`
-  /* max-width: 200px; */
+  max-width: 220px;
+
   font-size: 14px;
   font-weight: 400;
   line-height: 1.3;
   padding-top: 5px;
   color: #a6a3af;
-
-  @media (max-width: 768px) {
-    /* Adjust styles for smaller screens */
-    max-width: 100%; /* Take up full width on smaller screens */
-    font-size: 12px;
-  }
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* 3줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  box-sizing: border-box;
+  word-break: break-all;
 `;
 
 const StLine = styled.div`

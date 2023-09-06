@@ -25,6 +25,7 @@ const BasicLogin = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
+//엔터 누르면 작동
   const handlePasswordKeyDown = (event) => {
     if (event.key === "Enter") {
       loginClickHandler(); // 로그인 버튼 클릭 시뮬레이션
@@ -57,12 +58,17 @@ const BasicLogin = () => {
     },
     onError: (error) => {
       // 에러 발생 시 에러 메시지 표시
-      //console.log("Error response from server:", error?.response?.data);
-      //console.log(error.response);
-      toast.error('로그인 정보를 찾을 수 없습니다.', {position: 'top-center'});
+      // console.log("Error response from server:", error?.response?.data);
+      // console.log(error.response.status);
+      if (error.response.status===401){
+        toast.error('로그인 정보를 찾을 수 없습니다.', {position: 'top-center'});
+      }
+      else
+      toast.error('에러가 발생했습니다. 다시 시도해 주세요.', {position: 'top-center'});
      // setErrorMessage(".");
     },
   });
+
 
   const loginClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -83,7 +89,7 @@ const BasicLogin = () => {
 
   return (
     <InnerContainer>
-      <Stbox>
+      <Stbox1>
         <Stinput1
           type={"text"}
           placeholder={"이메일 계정"}
@@ -111,13 +117,20 @@ const BasicLogin = () => {
           </PasswordToggle>
         </Stinput2Container>
        
-      </Stbox>
+      </Stbox1>
 
     
-      <Stbox>
-     
+      <Stbox2>
+      <Stlink1
+          onClick={() => {
+            toast.success("이 기능은 개발 중 입니다!");
+           // navigate("/findemail");
+          }}
+        >
+          로그인 정보를 잊으셨나요?
+        </Stlink1>
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
-      </Stbox>
+      </Stbox2>
     </InnerContainer>
 
     
@@ -144,7 +157,7 @@ const PasswordToggle = styled.button`
 
 
 const Eye = styled(EyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
+  width: 24px; /* 원하는 크기로 조정 */
   height: 24px; /* 원하는 크기로 조정 */
 `;
 
@@ -155,28 +168,24 @@ width: 24px; /* 원하는 크기로 조정 */
 
 const InnerContainer = styled.div`
   width: 100%;
+
 `;
 
 // 에러
-const ErrorMessage = styled.div`
-  color: #e7e6f0;
-  margin-top: 10px;
-  font-size: 14px;
-`;
 
-const Stbox = styled.div`
+const Stbox1 = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: -158px;
 `;
-
 const Stbox2 = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
-  margin-right: 23px;
-`; 
+  align-items: center;
+  
+`;
+
 
 const Stinput1 = styled.input`
   width: 329px;
@@ -218,12 +227,13 @@ const Stlink1 = styled.a`
   font-weight: 500;
   cursor: pointer;
   color: #b2b2b2;
+  padding-left: 190px;
 `;
 
 const Stbutton = styled.button`
-  width: 350px;
-  height: 45px;
-  padding: 10px;
+  min-width: 350px;
+  min-height: 45px;
+  /* padding: 10px; */
   background: linear-gradient(135deg, #8084f4, #c48fed);
   color: #e7e6f0;
   border: none;
@@ -236,4 +246,5 @@ const Stbutton = styled.button`
   &:hover {
     color: #141414;
   }
+
 `;

@@ -17,16 +17,18 @@ const MapPage = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [loading, setLoading] = useState<boolean>(false);
     const [startPage, setStartPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
     const pageLimit = 5; // 한 번에 보여줄 페이지 번호 수
     const perPage = 10; // 한 페이지에 보여줄 아이템 수
     const totalPage = Math.ceil(postList.length / perPage);
 
     useEffect(() => {
         setLoading(true);
+        setCurrentPage(1);
 
         const timer = setTimeout(() => {
             setLoading(false);
-        }, 4000);
+        }, 3000);
 
         return () => clearTimeout(timer);
     }, []);
@@ -55,6 +57,12 @@ const MapPage = () => {
     const LastClickHandler = () => {
         const lastPageIndex = Math.ceil(postList.length / perPage);
         setCurrentPage(lastPageIndex);
+        setLastPage(lastPageIndex);
+
+        const remainder = lastPageIndex % pageLimit;
+        const startPageIndex = remainder === 0 ? lastPageIndex - pageLimit + 1 : lastPageIndex - remainder + 1;
+
+        setStartPage(startPageIndex);
     };
 
     const CurrentClickHandler = (pageNumber: number) => {
@@ -81,7 +89,7 @@ const MapPage = () => {
             </StMapContainer>
             <StLine />
             <StListContainer>
-                <h1>{currentPosts.length}개의 포스팅</h1>
+                <h1>{postList.length}개의 포스팅</h1>
                 {currentPosts.length === 0 ? (
                     <div>“검색어"에 관련된 포스팅이 없습니다.</div>
                 ) : (

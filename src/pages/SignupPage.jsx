@@ -31,7 +31,6 @@ const Container = styled.div`
     min-height: 80vh;
     margin: auto;
     background-color: #141414;
-    padding-top: 35px;
 `
 
 const InnerContainer = styled.div`

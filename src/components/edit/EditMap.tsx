@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { ReactComponent as SearchIcon } from "../../assets/images/search.svg";
-import Category from "./Category";
+import Category from "../../components/common/Category";
 import pinIcon from "../../assets/images/icon_pin_3x.png";
 
 import { ReactComponent as Pin } from "../../assets/images/icon_pin_map.svg";
@@ -13,13 +13,6 @@ declare global {
     interface Window {
         kakao: any;
     }
-}
-
-interface Place {
-    x: string;
-    y: string;
-    place_name: string;
-    address_name: string;
 }
 
 interface EditMapProps {
@@ -59,7 +52,6 @@ const EditMap: React.FC<EditMapProps> = ({
     const [searchLocation, setSearchLocation] = useState<string>("");
     const [searchLocationList, setSearchLocationList] = useState<any>([]);
     const [modal, setModal] = useState(false);
-    const [selectedLocation, setSelectedLocation] = useState<any>(null);
 
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
@@ -156,7 +148,6 @@ const EditMap: React.FC<EditMapProps> = ({
         };
         ps.keywordSearch(searchLocation, placesSearchCB);
     };
-
     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
         setSearchLocation(newValue);
@@ -206,11 +197,11 @@ const EditMap: React.FC<EditMapProps> = ({
                 <SearchModal
                     setModal={setModal}
                     searchLocationList={searchLocationList}
+                    address={address}
                     setAddress={setAddress}
                     setPlaceName={setPlaceName}
                     setLatitude={setLatitude}
                     setLongitude={setLongitude}
-                    setSelectedLocation={setSelectedLocation}
                 />
             )}
             <StCategory>
@@ -228,7 +219,7 @@ const EditMap: React.FC<EditMapProps> = ({
                     <Pin style={{ marginRight: "8px" }} />
                     {placeName}
                 </div>
-                <button>{categories[categoryNum]}</button>
+                <div>{categories[categoryNum]}</div>
             </StLocation>
         </StMapContainer>
     );

@@ -3,7 +3,7 @@ import instance from "./common";
 // 인기 리스트
 export const getPopularSongsList = async () => {
     try {
-        const response = await instance.get(`/song/top4`);
+        const response = await instance.get(`/song/top10`);
         return response.data;
     } catch (error) {
         console.log(error);

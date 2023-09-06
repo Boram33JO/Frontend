@@ -9,6 +9,8 @@ import { ReactComponent as Post } from '../../assets/images/floating_post.svg'
 import { ReactComponent as Top } from '../../assets/images/floating_top.svg'
 import { useSelector } from 'react-redux'
 import { RootState } from '../../redux/config/configStore'
+import logo from '../../assets/images/logo_text.svg'
+import background from '../../assets/images/background.svg'
 
 // Context API를 통해 MiddleRef를 전역으로 사용
 const MiddleRefContext = createContext<React.RefObject<HTMLDivElement> | undefined>(undefined);
@@ -19,7 +21,7 @@ export const useMiddleRef = () => {
 
 const Layout = () => {
     const [sideOpen, setSideOpen] = useState<boolean>(false);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const innerRef = useRef<HTMLDivElement>(null);
     const progressRef = useRef<HTMLDivElement>(null);
     const middleRef = useRef<HTMLDivElement>(null);
     const outletRef = useRef<HTMLDivElement>(null);
@@ -35,16 +37,16 @@ const Layout = () => {
     }
 
     const sideRender = () => {
-        if (window.location.href.includes("edit")) return true;
-        if (window.location.href.includes("login")) return true;
-        if (window.location.href.includes("signup")) return true;
+        let path = ["edit", "login", "signup"]
+        const isInclude = path.some(i => window.location.href.includes(i));
+        return isInclude;
     }
 
     // Progress 바
     useEffect(() => {
         if (progressRef.current) progressRef.current.style.width = `0%`;
         const handleScroll = throttle(() => {
-            if (middleRef.current && outletRef.current && progressRef.current && containerRef.current) {
+            if (middleRef.current && outletRef.current && progressRef.current && innerRef.current) {
                 const scrollTop = middleRef.current.scrollTop;
                 const progress = (scrollTop / (outletRef.current.scrollHeight - middleRef.current.clientHeight)) * 100;
                 progressRef.current.style.width = `${progress}%`;
@@ -72,7 +74,16 @@ const Layout = () => {
 
     return (
         <Container>
-            <InnerContainer ref={containerRef}>
+            <Background>
+                <BackgroundTop>
+                    <LogoObject data={logo} aria-label="logo" />
+                    <BackgroundContent>
+                        오늘은 어디서 어떤 음악을 들었나요?<br />우리 같이 들을까요?
+                    </BackgroundContent>
+                </BackgroundTop>
+                <BackgroundImage data={background} aria-label="bg-object" />
+            </Background>
+            <InnerContainer ref={innerRef}>
                 <Header setSideOpen={setSideOpen} handleScrollTop={handleScrollTop} />
                 <ProgressBar ref={progressRef}></ProgressBar>
                 <MiddleRefContext.Provider value={middleRef}>
@@ -107,14 +118,59 @@ export default Layout;
 const Container = styled.div`
     position: relative;
     width: 100%;
-    max-width: 1920px;
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     overflow: hidden;    
     box-sizing: border-box;
-`;
+    padding: 0px 260px;
+    background: linear-gradient(288deg, #8285F4 -0.46%, #C28FEE 97.39%);
+
+    @media (max-width: 1000px) {
+        padding: 0;    
+        justify-content: center;
+    }
+`
+
+const Background = styled.div`
+    position: absolute;
+    left: 200px;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 900px;
+    height: 100%;
+
+    box-sizing: border-box;
+    padding-top: 200px;
+    user-select: none;
+    @media (max-width: 1300px) { opacity: 0; }
+`
+
+const BackgroundTop = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+`
+
+const BackgroundContent = styled.div`
+    color: #FAFAFA;
+    font-size: 24px;
+    font-weight: 600;
+`
+
+const LogoObject = styled.object`
+    height: 80px;
+`
+
+const BackgroundImage = styled.object`
+    pointer-events: none;
+`
 
 const InnerContainer = styled.div`
     position: relative;

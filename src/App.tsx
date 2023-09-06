@@ -21,6 +21,14 @@ import IntroPage from "./pages/IntroPage";
 import { Toaster } from 'react-hot-toast'
 import WithdrawalPage from "./pages/WithdrawalpPage";
 import NotifyPage from "./pages/NotifyPage";
+import SearchPage from "./pages/SearchPage";
+import SearchListPage from "./pages/SearchListPage";
+import AllSearchResultPage from "./pages/AllSearchResultPage";
+import RecommendedPlacePage from "./pages/RecommendedPlacePage";
+import RecommendedSongsPage from "./pages/RecommendedSongsPage";
+import RecommendedPplerPage from "./pages/RecommendedPplerPage";
+import EmailPage from "./pages/Emailpage";
+import ChangePwPage from "./pages/ChangePwPage";
 
 function App() {
   return (
@@ -28,14 +36,21 @@ function App() {
       <Routes>
         <Route path="/intro" element={<IntroPage />} />
         <Route element={<Layout />}>
-          <Route path="/notify" element={<NotifyPage />} />
           <Route path="/" element={<MainPage />} />
+          <Route path="/notify" element={<NotifyPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/edit" element={<EditPage />} />
           <Route path="/edit/:postId" element={<EditPage />} />
           <Route path="/list" element={<ListPage />} />
           <Route path="/detail/:id" element={<DetailPage />} />
+          <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/result" element={<SearchListPage />} />
+          <Route path="/search/result/all" element={<AllSearchResultPage />} />
+          <Route path="/search/posting" element={<RecommendedPlacePage />} />
+          <Route path="/search/songs" element={<RecommendedSongsPage />} />
+          <Route path="/search/ppler" element={<RecommendedPplerPage />} />
           <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
           {/* 내 정보 수정하기 */}
           <Route path="/profile/:userId" element={<ProfilePage />} />
@@ -50,10 +65,14 @@ function App() {
           {/* 내가 댓글 단 게시물만 보기 */}
           <Route path="/profile/:userId/wishlist" element={<WishlistPage />} />
           {/* 내가 좋아요한 게시물만 보기 */}
-          <Route path="/password" element={<PasswordPage />} />
-          {/* 비번찾기 페이지 */}
-          <Route path="/withdrawal" element={<WithdrawalPage />} />
+          <Route path="/findpassword" element={<PasswordPage />} />
+           {/* 비번찾기 페이지 */}
+          <Route path="/findemail" element={<EmailPage />} />
+           {/* 이메일 찾기 페이지 */}
+          <Route path="/profile/:userId/withdrawal" element={<WithdrawalPage />} />
           {/* 탈퇴 페이지 */}
+          <Route path="/profile/:userId/changepw" element={<ChangePwPage />} />
+          {/* 비번변경 */}
           <Route path="/map" element={<MapPage />} />
           <Route path="/*" element={<NotFoundPage />} />
         </Route>

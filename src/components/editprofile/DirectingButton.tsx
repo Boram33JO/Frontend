@@ -1,46 +1,138 @@
-// import React from 'react'
-// import { styled } from 'styled-components';
-// import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg"; 
+import React, { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
+import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg";
+import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/config/configStore';
 
-// const DirectingButton: React.FC=()=> {
-//   return (
-//     <>
-//     <StInfoContainer>
-//         <Container>
-//             <PwSVG/>
-// <PwChange>
-//     비밀번호 변경
-// </PwChange>
-// </Container>
+const DirectingButton: React.FC = () => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  const LoginUser = useSelector((state: RootState) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
 
-// <WithD>
-// P.PLE을 탈퇴하시겠어요?
-// </WithD>
-//     </StInfoContainer>
+  const [kakaoId, setKakaoId] = useState<number | null>(null);
 
-// </>
-// )}
+  useEffect(() => {
+    // Retrieve the kakaoId from local storage and set it to the state
+    const storedKakaoId = localStorage.getItem('kakaoId');
+    if (storedKakaoId) {
+      setKakaoId(Number(storedKakaoId));
+    }
+  }, []);
 
-// export default DirectingButton;
+  //"kakaoId\":2955447335
+  // {LoginUser.kakaoId}
+  // {"user":"{\"isLogin\":true,\"userId\":74,\"nickname\":\"체리\",\"userImage\":null,\"introduce\":\"안녕\",\"email\":\"jshok822@naver.com\",\"kakaoId\":2955447335}","_persist":"{\"version\":-1,\"rehydrated\":true}"}
 
-// const StInfoContainer = styled.div`
-// width: auto;
+    const handlePwPageClick = () => {
 
-// `;
+      // if (kakaoId) {
+      //   // kakaoId가 있는 경우 아무 작업도 하지 않고 함수를 종료합니다.
+      //   return;
+      // }
+        //toast.success("이 기능은 개발 중 입니다!");
+        if (Number(userId) !== LoginUser.userId) {
+          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          navigate("/*");
+          return;
+        }
+        navigate(`/profile/${userId}/changepw`);
+      };
 
+      const handleWdPageClick = () => {
+        if (Number(userId) !== LoginUser.userId) {
+          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          navigate("/*");
+          return;
+        }
+        toast.success("이 기능은 개발 중 입니다!");
+       // navigate(`/profile/${userId}/withdrawal`);
+        
+      };
+      return (
+        <>
+          <StInfoContainer>
+            {/* {LoginUser.kakaoId} */}
+            {!kakaoId && (
+            <Container onClick={handlePwPageClick}>
+              <PwChange>
+              <Wrapper>
+                <StyledPwSVG />
+                <ArrowWrapper>비밀번호 변경</ArrowWrapper>
+                </Wrapper>
+                <ArrowSVG />
+               
+              </PwChange>
+            </Container>
+             )}
+            <WithD onClick={handleWdPageClick}>P.PLE을 탈퇴하시겠어요?</WithD>
+          </StInfoContainer>
+        </>
+      );
+};
 
-// const PwChange = styled.div`
+export default DirectingButton;
+
+const StInfoContainer = styled.div`
+   position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 390px;
+    margin: auto;
+    background-color: #141414;
+    /* padding-top: 38px; */
+    padding: 38px 20px;
+    box-sizing: border-box; // 중요하다...!
     
-
-// `;
-// const Container = styled.div`
-
-// `;
-// const PwSVG = styled.svg(PwSVG);
-// ``;
-
-// const WithD = styled.div`
     
+`;
 
-// `;
-export{}
+const PwChange = styled.div`
+  color: #E7E6F0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; 
+  
+`;
+const Wrapper = styled.div`
+  display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  align-items: center;
+`;
+
+const Container = styled.div`
+  cursor: pointer;
+  display: flex; /* Make the container a flex container */
+  align-items: center; /* Center align its children vertically */
+ 
+`;
+
+const StyledPwSVG = styled(PwSVG)`
+  color: #E7E6F0;
+  width: 16px;
+  height: 18px;
+  cursor: pointer;
+ 
+`;
+const ArrowWrapper = styled.div`
+  padding-left: 10px;
+  color: #E7E6F0;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const WithD = styled.div`
+  padding-top: 46px;
+  color: #8E8D92;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+`;

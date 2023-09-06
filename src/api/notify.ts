@@ -12,4 +12,3 @@ export const deleteNotification = async (id: number) => {
     const response = await instance.patch(`/notifications/${id}`);
     // console.log("알림 삭제", response)
     return response.data;
-};

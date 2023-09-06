@@ -7,7 +7,7 @@ import { getDateNotation } from "../../utils/common";
 import { ReactComponent as IconComDel } from "../../assets/images/login_signup_profile/icon_com_del.svg";
 import { deleteComment } from "../../api/comment";
 import { ReactComponent as TitleSVG } from "../../assets/images/login_signup_profile/icon_title.svg";
-import DeleteModal from "../common/DeleteModal";
+import Modal from "../common/Modal";
 import { ReactComponent as Start } from "../../assets/images/page_start.svg"
 import { ReactComponent as End } from "../../assets/images/page_end.svg"
 import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
@@ -15,6 +15,7 @@ import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 import SortButton2 from "./SortButton2";
 import { SortType } from "./SortButton";
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
+import Loading from "../map/Loading";
 
 
 type myComment = {
@@ -100,7 +101,7 @@ const AllCommentsList = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>< Loading /></div>
   }
 
   if (isError) {
@@ -156,11 +157,12 @@ const AllCommentsList = () => {
           ))
         )}
         {isDeleteModalOpen && (
-          <DeleteModal
+          <Modal
             first="정말 해당 댓글을 삭제하시겠어요?"
             second="삭제된 댓글은 다시 복구할 수 없습니다."
-            deleteToggle={setDeleteModalOpen}
-            deleteButton={() => deleteCommentAsync(selectedCommentId!.toString())}
+            buttonName="삭제"
+            setToggle={setDeleteModalOpen}
+            clickButton={() => deleteCommentAsync(selectedCommentId!.toString())}
           />
         )}
       </InnerContainer>
