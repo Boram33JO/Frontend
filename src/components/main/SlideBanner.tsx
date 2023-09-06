@@ -7,24 +7,23 @@ import { ReactComponent as Right } from '../../assets/images/onboard/04_right.sv
 import onboard1 from '../../assets/images/onboard/05_onboard_01.svg'
 import onboard2 from '../../assets/images/onboard/06_onboard_02.svg'
 import onboard3 from '../../assets/images/onboard/07_onboard_03.svg'
-
-export interface BannerItem {
-    id: number;
-    image: string;
-    position: string;
-    comment1: string;
-    comment2: string;
-}
+import { BannerItem } from '../../models/common';
+import { useNavigate } from 'react-router-dom';
 
 const SlideBanner = () => {
+    const navigate = useNavigate();
     const [play, setPlay] = useState<boolean>(true);
     const [slideNum, setSlideNum] = useState<number>(0);
+    const [startX, setStartX] = useState(0);
+    const [endX, setEndX] = useState(0);
     const [currentTimerId, setCurrentTimerId] = useState<NodeJS.Timeout | null>(null);
     const slideRef = useRef<HTMLDivElement>(null);
+
     const banners: BannerItem[] = [
         {
             id: 0,
             image: onboard1,
+            path: "/list",
             position: "0%",
             comment1: "언제 어디서든 모두들\nP.Ple 하는 중",
             comment2: "피플에서 함께 나누는 피플러들의 감성"
@@ -32,6 +31,7 @@ const SlideBanner = () => {
         {
             id: 1,
             image: onboard2,
+            path: "/map",
             position: "100%",
             comment1: "감성이 가득한 장소들을\nP.Ple에 모아모아",
             comment2: "그 때 그 감성 피플에서 함께 공유해 주세요!"
@@ -40,6 +40,7 @@ const SlideBanner = () => {
             id: 2,
             image: onboard3,
             position: "200%",
+            path: "/",
             comment1: "스포티파이와 함께하는\nP.Ple의 감성 플리",
             comment2: "다양한 음악들을 감상해 보세요!"
         },
@@ -66,6 +67,43 @@ const SlideBanner = () => {
         if (currentTimerId) clearTimeout(currentTimerId);
     }
 
+    // 드래그 동작
+    const onMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        setStartX(e.nativeEvent.offsetX);
+        // console.log("클릭 시작 X:", e.nativeEvent.offsetX);
+    };
+    const onMouseUp = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        setEndX(e.nativeEvent.offsetX);
+        // console.log("클릭 끝　 X:", e.nativeEvent.offsetX);
+    };
+    const onTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        setStartX(e.changedTouches[0].pageX);
+        // console.log("터치 시작 X:", e.changedTouches[0].pageX);
+    }
+    const onTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+        setEndX(e.changedTouches[0].pageX);
+        // console.log("터치 끝　 X:", e.changedTouches[0].pageX);
+    }
+
+    // 슬라이드 클릭
+    const handleClickSlide = (path: string | undefined) => {
+        const dragSpaceX = Math.abs(startX - endX);
+        if (dragSpaceX <= 70) {
+            navigate(`${path}`);
+        }
+    }
+
+    useEffect(() => {
+        const dragSpaceX = Math.abs(startX - endX);
+        if (startX !== 0 && dragSpaceX > 70) {
+            if (endX < startX) {
+                handleNextSlideButton();
+            } else if (endX > startX) {
+                handlePrevSlideButton();
+            }
+        }
+    }, [endX])
+
     useEffect(() => {
         if (play) {
             const timer = setTimeout(() => handleNextSlideButton(), 3000);
@@ -79,11 +117,11 @@ const SlideBanner = () => {
 
     return (
         <Container>
-            <SlideContainer ref={slideRef}>
+            <SlideContainer ref={slideRef} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                 {
                     banners.map(item => {
                         return (
-                            <Banner key={item.id} $url={item.image} $position={item.position}>
+                            <Banner key={item.id} $url={item.image} $position={item.position} onClick={() => handleClickSlide(item.path)}>
                                 <BannerImage data={item.image} aria-label="onboard" />
                                 <BannerComment>
                                     <P $size="22px">{item.comment1}</P>
@@ -137,6 +175,7 @@ const SlideContainer = styled.div`
     width: 100%;
     height: 0;
     padding-bottom: calc(100% * 2 / 3);
+    cursor: pointer;
 `
 
 const Banner = styled.div<{ $url: string, $position: string }>`
@@ -168,6 +207,7 @@ const BannerComment = styled.div`
     box-sizing: border-box;
     padding: 26px 20px;
     gap: 10px;
+    user-select: none;
 `
 
 const P = styled.p< { $size?: string, $color?: string } >`
