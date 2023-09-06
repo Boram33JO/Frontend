@@ -10,7 +10,6 @@ import { Post } from '../../models/post'
 import { displayedAt, getProfileImage } from '../../utils/common'
 import { cardBackground } from '../../utils/cardBackground'
 import Preview from './Preview'
-
 interface Props {
     post: Post;
 }
@@ -36,18 +35,28 @@ const ListItem = ({ post }: Props) => {
             <ListItemBackground $src={cardBackground(post.category, post.postId)} onClick={() => navigate(`/detail/${post.postId}`)}>
                 <ListItemTop>
                     <ProfileArea>
-                        <ProfileThumbnail $src={getProfileImage(post.userImage)} />
-                        <ProfileInfo>
-                            <StP $color="#FFFFFF" $size={"14px"}>
-                                {post.nickname}
-                            </StP>
-                            <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
-                                {displayedAt(post.createdAt)}
-                            </StP>
-                        </ProfileInfo>
+                        {!!post.nickname ? (
+                            <>
+                                <ProfileThumbnail $src={getProfileImage(post.userImage)} />
+                                <ProfileInfo>
+                                    <StP $color="#FFFFFF" $size={"14px"}>
+                                        {post.nickname}
+                                    </StP>
+                                    <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
+                                        {displayedAt(post.createdAt)}
+                                    </StP>
+                                </ProfileInfo>
+                            </>
+                        ) : (
+                            <ProfileInfo>
+                                <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
+                                    {displayedAt(post.createdAt)}
+                                </StP>
+                            </ProfileInfo>
+                        )}
                     </ProfileArea>
                     <TitleArea>
-                        <StP $color="#FFFFFF" $size={"16px"}>
+                        <StP style={{ textAlign: "right" }} $color="#FFFFFF" $size={"16px"}>
                             {post.postTitle}
                         </StP>
                         <TitleSubArea>
@@ -56,6 +65,10 @@ const ListItem = ({ post }: Props) => {
                             </SvgIcon>
                             <StP $color="#FFFFFF" $size={"14px"}>
                                 {post.wishlistCount}
+                            </StP>
+                            <Divider />
+                            <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>
+                                조회수 {post.viewCount}
                             </StP>
                             <Divider />
                             <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>

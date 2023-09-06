@@ -5,6 +5,7 @@ export enum SortType {
   Newest = "Newest",
   Oldest = "Oldest",
   wishlistCount = "wishlistCount",
+  viewCount = "viewCount",
 }
 
 interface SortButtonProps {
@@ -25,6 +26,10 @@ const SortButton: React.FC<SortButtonProps> = ({ activeSort, onSortChange }) => 
     {
       id: SortType.wishlistCount,
       sort: "좋아요순",
+    },
+    {
+      id: SortType.viewCount,
+      sort: "조회순",
     },
   ];
 
@@ -59,8 +64,7 @@ const SortListItem = styled.div<{ $active: boolean }>`
       : "#3B3A40"};
   color: ${(props) => (props.$active ? "#FAFAFA" : "#85838D")};
   border-radius: 30px;
-
-  padding: 8px 16px;
+  padding: 8px 14px;
   text-align: center;
   font-weight: 600;
   box-sizing: border-box;

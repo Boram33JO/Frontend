@@ -1,87 +1,138 @@
-// import React from 'react';
-// import { styled } from 'styled-components';
-// import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg";
-// import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
-// import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { styled } from 'styled-components';
+import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg";
+import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
+import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/config/configStore';
 
-// const DirectingButton: React.FC = () => {
+const DirectingButton: React.FC = () => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  const LoginUser = useSelector((state: RootState) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
 
-//     const navigate = useNavigate();
+  const [kakaoId, setKakaoId] = useState<number | null>(null);
 
-//     const handlePwPageClick = () => {
-//         // 여기에 이동할 경로를 지정해주세요.
-//         navigate("/password");
-//       };
-//       return (
-//         <>
-//           <StInfoContainer>
-//             <Container onClick={handlePwPageClick}>
-//               <PwChange>
-//                 <StyledPwSVG />
-//                 <ArrowWrapper>비밀번호 변경</ArrowWrapper>
-//                 <Wrapper>
-//                 <ArrowSVG />
-//                 </Wrapper>
-//               </PwChange>
-//             </Container>
-//             <WithD>P.PLE을 탈퇴하시겠어요?</WithD>
-//           </StInfoContainer>
-//         </>
-//       );
-// };
+  useEffect(() => {
+    // Retrieve the kakaoId from local storage and set it to the state
+    const storedKakaoId = localStorage.getItem('kakaoId');
+    if (storedKakaoId) {
+      setKakaoId(Number(storedKakaoId));
+    }
+  }, []);
 
-// export default DirectingButton;
+  //"kakaoId\":2955447335
+  // {LoginUser.kakaoId}
+  // {"user":"{\"isLogin\":true,\"userId\":74,\"nickname\":\"체리\",\"userImage\":null,\"introduce\":\"안녕\",\"email\":\"jshok822@naver.com\",\"kakaoId\":2955447335}","_persist":"{\"version\":-1,\"rehydrated\":true}"}
 
-// const StInfoContainer = styled.div`
-//    position: relative;
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     width: 390px;
-//     margin: auto;
-//     background-color: #141414;
-//     padding-top: 38px;
-//     padding-left: 20px;
+    const handlePwPageClick = () => {
+
+      // if (kakaoId) {
+      //   // kakaoId가 있는 경우 아무 작업도 하지 않고 함수를 종료합니다.
+      //   return;
+      // }
+        //toast.success("이 기능은 개발 중 입니다!");
+        if (Number(userId) !== LoginUser.userId) {
+          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          navigate("/*");
+          return;
+        }
+        navigate(`/profile/${userId}/changepw`);
+      };
+
+      const handleWdPageClick = () => {
+        if (Number(userId) !== LoginUser.userId) {
+          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          navigate("/*");
+          return;
+        }
+        toast.success("이 기능은 개발 중 입니다!");
+       // navigate(`/profile/${userId}/withdrawal`);
+        
+      };
+      return (
+        <>
+          <StInfoContainer>
+            {/* {LoginUser.kakaoId} */}
+            {!kakaoId && (
+            <Container onClick={handlePwPageClick}>
+              <PwChange>
+              <Wrapper>
+                <StyledPwSVG />
+                <ArrowWrapper>비밀번호 변경</ArrowWrapper>
+                </Wrapper>
+                <ArrowSVG />
+               
+              </PwChange>
+            </Container>
+             )}
+            <WithD onClick={handleWdPageClick}>P.PLE을 탈퇴하시겠어요?</WithD>
+          </StInfoContainer>
+        </>
+      );
+};
+
+export default DirectingButton;
+
+const StInfoContainer = styled.div`
+   position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 390px;
+    margin: auto;
+    background-color: #141414;
+    /* padding-top: 38px; */
+    padding: 38px 20px;
+    box-sizing: border-box; // 중요하다...!
     
-// `;
+    
+`;
 
-// const PwChange = styled.div`
-//   color: #E7E6F0;
-//   display: flex;
-//   align-items: center;
-//   /* padding-right: px;  */
+const PwChange = styled.div`
+  color: #E7E6F0;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
   
-// `;
-// const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; 
   
-// `;
-// const Wrapper2 = styled.div`
-// padding-left: 10px;
-// align-items: center;
-// `;
+`;
+const Wrapper = styled.div`
+  display: flex; // 요소들을 수평으로 나란히 정렬하기 위해 추가
+  align-items: center;
+`;
 
-// const Container = styled.div`
-//   cursor: pointer;
-//   display: flex; /* Make the container a flex container */
-//   align-items: center; /* Center align its children vertically */
-// `;
-
-// const StyledPwSVG = styled(PwSVG)`
-//   color: #E7E6F0;
-//   width: 16px;
-//   height: 18px;
-//   cursor: pointer;
+const Container = styled.div`
+  cursor: pointer;
+  display: flex; /* Make the container a flex container */
+  align-items: center; /* Center align its children vertically */
  
-// `;
-// const ArrowWrapper = styled.div`
-//   padding-right: 228px; /* Add spacing between text and ArrowSVG */
-//   padding-left: 10px;
-// `;
+`;
 
-// const WithD = styled.div`
-//   padding-top: 46px;
-//   color: #8E8D92;
-//   font-size: 14px;
-//   font-weight: 500;
-// `;
-export {}
+const StyledPwSVG = styled(PwSVG)`
+  color: #E7E6F0;
+  width: 16px;
+  height: 18px;
+  cursor: pointer;
+ 
+`;
+const ArrowWrapper = styled.div`
+  padding-left: 10px;
+  color: #E7E6F0;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const WithD = styled.div`
+  padding-top: 46px;
+  color: #8E8D92;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+`;

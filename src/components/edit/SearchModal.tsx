@@ -10,11 +10,9 @@ interface SearchModalProps {
     setPlaceName: any;
     setLatitude: any;
     setLongitude: any;
-    setSelectedLocation: any;
 }
 
 const SearchModal: React.FC<SearchModalProps> = ({
-    // selectedLocation,
     setModal,
     searchLocationList,
     address,
@@ -22,13 +20,12 @@ const SearchModal: React.FC<SearchModalProps> = ({
     setPlaceName,
     setLatitude,
     setLongitude,
-    setSelectedLocation,
 }) => {
     const modalRef = useRef<HTMLDivElement>(null);
 
     const chooseLocationHandler = (index: number) => {
         const selectedItem = searchLocationList[index];
-        setSelectedLocation(selectedItem); // 선택한 항목 정보 저장
+        // setSelectedLocation(selectedItem); // 선택한 항목 정보 저장
         setAddress(selectedItem.address_name);
         setPlaceName(selectedItem.place_name);
         setLatitude(selectedItem.y);

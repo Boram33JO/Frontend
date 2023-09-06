@@ -8,6 +8,7 @@ export type User2 = {
     id?: number;
     nickname?: string;
     userImage?: string;
+    followCount: number;
 }
 
 export type UserInfo = {
@@ -23,15 +24,34 @@ export type LoginUser = {
     nickname: string | null;
     userImage: string | null;
     introduce: string | null;
+    // eamil: string | null;
 }
 
 export type SignupFormat = {
     email: string;
     password: string;
     nickname: string;
+    to: string;
+}
+
+export type PwChangeFormat = {
+    email: string;
+    originPassword: string;
+    changePassword: string;
+    
+}
+
+export type PwChangeFormat2 = {
+    email: string;
+    newPassword: string;
 }
 
 export type LoginFormat = {
+    email: string;
+    password: string;
+}
+
+export type DeleteUserFormat = {
     email: string;
     password: string;
 }

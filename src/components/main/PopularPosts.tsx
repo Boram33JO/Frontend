@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import { displayedAt, getProfileImage } from '../../utils/common'
+import { displayedAt, getProfileImage, showCount } from '../../utils/common'
 import { useQuery } from 'react-query'
 import { getPopularPosts } from '../../api/post'
 import { ReactComponent as Like } from '../../assets/images/like.svg'
@@ -7,10 +7,12 @@ import { useNavigate } from 'react-router-dom'
 import { Post } from '../../models/post'
 import PopularPostsSkeleton from './PopularPostsSkeleton'
 import { miniCardBackground } from '../../utils/cardBackground'
+import { useState } from 'react'
 
 const PopularPosts = () => {
-    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
     const navigate = useNavigate();
+    const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
+    const [toggle, setToggle] = useState<string>("wishlistTopPosts");
 
     const { data, isLoading, isError } = useQuery(["popular"],
         async () => {
@@ -31,21 +33,40 @@ const PopularPosts = () => {
     return (
         <InnerContainer>
             <TitleSection>
-                <H3> 오늘의 인기 포스팅 </H3>
+                <H3>오늘의 인기 포스팅</H3>
+                <TitleSectionSub>
+                    <SubButton $select={toggle === "wishlistTopPosts"} onClick={() => setToggle("wishlistTopPosts")}>좋아요</SubButton>
+                    <Divider $height='12px' $color='#A19FAB' />
+                    <SubButton $select={toggle === "viewCountTopPosts"} onClick={() => setToggle("viewCountTopPosts")}>조회수</SubButton>
+                </TitleSectionSub>
             </TitleSection>
             <CardList>
                 {
-                    data?.map((post: Post) => {
+                    data[toggle]?.map((post: Post) => {
                         return (
                             <CardListItem key={post.postId} onClick={() => navigate(`/detail/${post.postId}`)}>
                                 <Card>
                                     <CardBackground $src={miniCardBackground(post.category, post.postId)} />
-                                    <ItemCategory>{categories[Number(post.category) - 1]}</ItemCategory>
+                                    <CardTop>
+                                        <ItemCategory>{categories[Number(post.category) - 1]}</ItemCategory>
+                                        <InfoRight>
+                                            <SvgIcon>
+                                                <StLike />
+                                            </SvgIcon>
+                                            <StP $color={"#E7E6F0"} $size={"14px"} $weight={"600"}>
+                                                {showCount(post.wishlistCount)}
+                                            </StP>
+                                            <Divider />
+                                            <StP $color={"#E7E6F0"} $size={"14px"} $weight={"600"}>
+                                                조회수 {showCount(post.viewCount)}
+                                            </StP>
+                                        </InfoRight>
+                                    </CardTop>
                                 </Card>
                                 <PostInfo>
                                     <InfoTop>
                                         <InfoLeft>
-                                            <ProfileThumnail src={getProfileImage(post.userImage)} alt="userImage" />
+                                            <ProfileThumnail $src={getProfileImage(post.userImage)} />
                                             <ProfileInfo>
                                                 <StP $color={"#FAFAFA"} $size={"14px"}>
                                                     {post.nickname}
@@ -55,14 +76,6 @@ const PopularPosts = () => {
                                                 </StP>
                                             </ProfileInfo>
                                         </InfoLeft>
-                                        <InfoRight>
-                                            <SvgIcon>
-                                                <StLike />
-                                            </SvgIcon>
-                                            <StP $color={"#E7E6F0"} $size={"16px"} >
-                                                {post.wishlistCount}
-                                            </StP>
-                                        </InfoRight>
                                     </InfoTop>
                                     <InfoBottom>
                                         {post.postTitle}
@@ -97,8 +110,24 @@ const TitleSection = styled.div`
 
 const H3 = styled.h3`
     font-size: 20px;
-    line-height: calc(100% + 6px);
+    line-height: calc(150%);
     font-weight: 600;
+`
+
+const TitleSectionSub = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
+
+const SubButton = styled.div<{ $select?: boolean }>`
+    color: ${({ $select }) => $select ? "#FAFAFA" : "#A19FAB"};
+    font-size: 14px;
+    line-height: calc(150%);
+    font-weight: 600;
+    box-sizing: border-box;
+    padding: 0px 4px;
+    cursor: pointer;
 `
 
 const CardList = styled.div`
@@ -157,14 +186,26 @@ const CardBackground = styled.div<{ $src?: string }>`
     box-sizing: border-box;
 `
 
+const CardTop = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    box-sizing: border-box;
+    padding: 10px;
+`
+
 const ItemCategory = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
 
-    position: absolute;
-    top: 10px;
-    left: 10px;
     height: 30px;
     background-color: #383549;
 
@@ -173,7 +214,8 @@ const ItemCategory = styled.div`
     
     color: #EFEDFF;
     font-size: 14px;
-    line-height: 16px;
+    line-height: calc(150%);
+    font-weight: 600;
 
     box-sizing: border-box;
     padding: 10px;
@@ -187,13 +229,12 @@ const PostInfo = styled.div`
     justify-content: center;
     
     width: 258px;
-    height: 90px;
     background-color: #373737;
 
     border-radius: 8px;
     
     box-sizing: border-box;
-    padding: 10px;
+    padding: 10px 14px;
     gap: 10px;
 `
 
@@ -209,10 +250,14 @@ const InfoLeft = styled.div`
     gap: 10px;
 `
 
-const ProfileThumnail = styled.img`
-    width: 38px;
-    height: 38px;
+const ProfileThumnail = styled.div<{ $src?: string }>`
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
+    background: url(${({ $src }) => $src});
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     background-color: #ECECEC;
 `
 
@@ -234,6 +279,8 @@ const SvgIcon = styled.span`
 `
 
 const StLike = styled(Like)`
+    width: 18px;
+    height: 18px;
     path{
         fill: #E7E6F0;
     }
@@ -249,13 +296,14 @@ const InfoBottom = styled.p`
     color: #FFFFFF;
     font-size: 16px;
     font-weight: 600;
-    line-height: 20px;
+    line-height: calc(150%);
 `
 
-const StP = styled.p<{ $color: string, $size: string }>`
-    color: ${(props) => props.$color};
-    font-size: ${(props) => props.$size};
-    line-height: calc(100% + 4px);
+const StP = styled.p<{ $color: string, $size: string, $weight?: string }>`
+    color: ${({ $color }) => $color};
+    font-size: ${({ $size }) => $size};
+    line-height: calc(150%);
+    font-weight: ${({ $weight }) => $weight || "500"};
 
     & {
         display: -webkit-box;
@@ -263,4 +311,13 @@ const StP = styled.p<{ $color: string, $size: string }>`
         -webkit-line-clamp: 1;
         overflow: hidden;
     }
+`
+
+const Divider = styled.div<{ $height?: string, $color?: string }>`
+    height: ${({ $height }) => $height || "10px"};
+    width: 1.5px;
+    border-radius: 1.5px;
+    background-color: ${({ $color }) => $color || "#FFFFFF"};
+    padding: 0;
+    margin: 0px 4px;
 `

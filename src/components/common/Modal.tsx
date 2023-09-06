@@ -1,32 +1,34 @@
 import React from 'react'
 import { styled } from 'styled-components'
+import { ReactComponent as Alert } from '../../assets/images/alert.svg'
 import { ReactComponent as Trash } from '../../assets/images/trash.svg'
 
 interface Props {
     first: string;
     second?: string;
-    deleteToggle: React.Dispatch<React.SetStateAction<boolean>>;
-    deleteButton: () => void;
+    buttonName: string;
+    setToggle: React.Dispatch<React.SetStateAction<boolean>>;
+    clickButton: () => void;
 }
 
-const DeleteModal = ({ first, second, deleteToggle, deleteButton }: Props) => {
+const Modal = ({ first, second, buttonName, setToggle, clickButton }: Props) => {
     return (
         <>
-            <ModalBackground onClick={() => deleteToggle(false)} />
+            <ModalBackground onClick={() => setToggle(false)} />
             <ModalContainer>
                 <IconArea>
-                    <StTrash />
+                    {buttonName === "삭제" ? <StTrash /> : <StAlert />}
                 </IconArea>
                 <MessageArea>
                     <P $size={"18px"}>{first}</P>
                     <P $size={"14px"} $color={"#A6A3AF"}>{second}</P>
                 </MessageArea>
                 <DeleteButtonArea>
-                    <DeleteModalButton onClick={() => deleteToggle(false)}>
+                    <DeleteModalButton onClick={() => setToggle(false)}>
                         취소
                     </DeleteModalButton>
-                    <DeleteModalButton $delete={true} onClick={deleteButton}>
-                        삭제
+                    <DeleteModalButton $delete={true} onClick={clickButton}>
+                        {buttonName}
                     </DeleteModalButton>
                 </DeleteButtonArea>
             </ModalContainer>
@@ -34,7 +36,7 @@ const DeleteModal = ({ first, second, deleteToggle, deleteButton }: Props) => {
     )
 }
 
-export default DeleteModal
+export default Modal
 
 const ModalBackground = styled.div`
     position: fixed;
@@ -83,6 +85,11 @@ const StTrash = styled(Trash)`
     height: 30px;
 `
 
+const StAlert = styled(Alert)`
+    width: 30px;
+    height: 30px;
+`
+
 const MessageArea = styled.div`
     display: flex;
     flex-direction: column;
@@ -110,7 +117,7 @@ const DeleteModalButton = styled.div<{ $delete?: boolean }>`
     align-items: center;
     
     flex: 1 0 0;
-    background: ${(props) => props.$delete ? "linear-gradient(135deg, #8084F4, #C48FED)" : "#45424E"};
+    background: ${(props) => props.$delete ? "#A08DEC" : "#45424E"};
     
     font-size: 16px;
     line-height: 22px;
