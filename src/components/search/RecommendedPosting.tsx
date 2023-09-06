@@ -4,6 +4,7 @@ import { ReactComponent as LikeIcon } from "../../assets/images/icon_like.svg";
 import { ReactComponent as MusicIcon } from "../../assets/images/music_icon.svg";
 import { ReactComponent as Icon } from "../../assets/images/I.svg";
 import { ReactComponent as Profile } from "../../assets/images/default_profile.svg";
+import { useNavigate } from "react-router-dom";
 
 interface SearchProps {
     topPost: any;
@@ -13,6 +14,7 @@ interface SearchProps {
 
 const RecommendedPosting: React.FC<SearchProps> = ({ topPost, setTopPost, randomColorChange }) => {
     const [randomColors, setRandomColors] = useState<string[]>([]);
+    const navigate = useNavigate();
 
     const categories = ["카페", "식당", "대중교통", "학교", "운동", "공원", "물가", "바다", "도서관", "문화공간", "레저", "기타"];
 
@@ -44,6 +46,7 @@ const RecommendedPosting: React.FC<SearchProps> = ({ topPost, setTopPost, random
                 <StPostingContainer
                     key={item.postId}
                     style={{ background: randomColors[index] }}
+                    onClick={() => navigate(`/detail/${item.postId}`)}
                 >
                     <StProfileContainer>
                         <StProfile>
@@ -91,6 +94,7 @@ const StPostingContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    cursor: pointer;
 `;
 
 const StProfileContainer = styled.div`

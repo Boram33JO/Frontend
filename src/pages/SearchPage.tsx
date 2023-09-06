@@ -43,6 +43,7 @@ const SearchPage = () => {
         }
     };
 
+    console.log(topPost);
     return (
         <StSearchContainer>
             <SearchInput
@@ -64,7 +65,6 @@ const SearchPage = () => {
             <StSection>
                 <StTitle>
                     <h2>피플러 인기 플레이스</h2>
-                    {/* <span>더보기</span> */}
                 </StTitle>
                 <StPopularPlace>
                     <PopularPlace
@@ -76,7 +76,6 @@ const SearchPage = () => {
             <StSection>
                 <StTitle>
                     <h2>피플러들이 선택한 곡</h2>
-                    {/* <span>더보기</span> */}
                 </StTitle>
                 <StCategory>
                     <Category
@@ -92,7 +91,6 @@ const SearchPage = () => {
             <StSection>
                 <StTitle>
                     <h2>피플 인기 검색어</h2>
-                    {/* <span>더보기</span> */}
                 </StTitle>
                 {isPopularSearchWord === true ? (
                     <PopularSearchWord
