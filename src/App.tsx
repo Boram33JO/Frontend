@@ -20,6 +20,7 @@ import ProfileEditPage from "./pages/ProfileEditPage ";
 import IntroPage from "./pages/IntroPage";
 import { Toaster } from 'react-hot-toast'
 import WithdrawalPage from "./pages/WithdrawalpPage";
+import NotifyPage from "./pages/NotifyPage";
 import SearchPage from "./pages/SearchPage";
 import SearchListPage from "./pages/SearchListPage";
 import AllSearchResultPage from "./pages/AllSearchResultPage";
@@ -29,7 +30,6 @@ import RecommendedPplerPage from "./pages/RecommendedPplerPage";
 import EmailPage from "./pages/Emailpage";
 import ChangePwPage from "./pages/ChangePwPage";
 
-
 function App() {
   return (
     <>
@@ -37,6 +37,7 @@ function App() {
         <Route path="/intro" element={<IntroPage />} />
         <Route element={<Layout />}>
           <Route path="/" element={<MainPage />} />
+          <Route path="/notify" element={<NotifyPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/edit" element={<EditPage />} />
@@ -51,7 +52,6 @@ function App() {
           <Route path="/search/songs" element={<RecommendedSongsPage />} />
           <Route path="/search/ppler" element={<RecommendedPplerPage />} />
           <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
-
           {/* 내 정보 수정하기 */}
           <Route path="/profile/:userId" element={<ProfilePage />} />
           {/* 프로필 전체 보기 */}

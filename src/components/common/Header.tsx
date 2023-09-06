@@ -8,6 +8,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/config/configStore";
 import { getProfileImage } from '../../utils/common'
 import { useEffect } from "react";
+import { toast } from "react-hot-toast";
+import { EventSourcePolyfill } from "event-source-polyfill";
+import { useQueryClient } from "react-query";
 
 interface Props {
     setSideOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,8 +21,64 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
     const navigate = useNavigate();
     const userInfo = useSelector((state: RootState) => state.user);
     const persist = localStorage.getItem("persist:root");
-
+    const loginUser = useSelector((state: RootState) => state.user);
+    const queryClient = useQueryClient();
     useEffect(() => { }, [persist])
+
+    useEffect(() => {
+        if (loginUser.isLogin) {
+            const eventSourceInitDict: any = {
+                headers: { accessToken: localStorage.getItem("AccessToken") }
+            };
+
+            const sseConnect = new EventSourcePolyfill(
+                `${process.env.REACT_APP_SERVER_URL}/notifications/connect`,
+                eventSourceInitDict
+            );
+
+            // console.log(sseConnect);
+            // sseConnect.addEventListener("sse", function (event: any) {
+            //     const eventData = event.data;
+            //     console.log(event);
+            //     // console.log(eventData);
+            // })
+
+            sseConnect.onopen = (event) => {
+                // console.log("sse 연결 완료", event);
+            }
+
+            sseConnect.onerror = (err) => {
+                // console.log("sse 에러 발생", err);
+            }
+
+            sseConnect.addEventListener("comment", (event: any) => {
+                queryClient.invalidateQueries("notifications");
+                // const eventData = JSON.parse(event.data);
+                // setComments((prevData: any) => [...prevData, eventData]);
+                toast.success("새로운 댓글이 작성되었어요")
+            });
+
+            sseConnect.addEventListener("wishlist", (event: any) => {
+                queryClient.invalidateQueries("notifications");
+                // const eventData = JSON.parse(event.data);
+                // setWishlists((prevData: any) => [...prevData, eventData]);
+                toast.success("작성한 게시물에 좋아요를 받았어요.")
+            });
+
+            sseConnect.addEventListener("follow", (event: any) => {
+                queryClient.invalidateQueries("notifications");
+                // const eventData = JSON.parse(event.data);
+                // setFollows((prevData: any) => [...prevData, eventData]);
+                toast.success("팔로우를 받았어요.")
+            });
+
+            return () => {
+                if (sseConnect) {
+                    sseConnect.close();
+                }
+            };
+        }
+    }, []);
 
     const handleLogoClick = () => {
         handleScrollTop();
