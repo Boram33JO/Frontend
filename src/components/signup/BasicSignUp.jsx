@@ -9,7 +9,7 @@ import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';
-import { isAxiosError } from "axios";
+
 
 
 
@@ -170,7 +170,7 @@ const BasicSignUp = () => {
       email: email,
       password: password,
       nickname: nickname,
-      phonenumber: to,
+      phoneNumber : to,
     };
     addNewUserMutation.mutate(newUser);
   };
@@ -229,9 +229,9 @@ const BasicSignUp = () => {
 
   // 모바일 인증
   const MobilehandleCheckButton = async () => {
-    const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
+    const toRegex = /^(010|011)[0-9]{8}$/;
 
-    if (!phoneNumberRegex.test(to)) {
+    if (!toRegex.test(to)) {
       toast.error("11자리 숫자만 입력해주세요.", {position: 'top-center'});
       resetMobile(); // 입력 칸 비우기
       return;
@@ -353,7 +353,7 @@ const BasicSignUp = () => {
               onFocus={() => setIsMobileFocused(true)}
               onBlur={() => setIsMobileFocused(false)}
               $isFocused={isMobileFocused}
-              $hasValue={email.length > 0}
+              $hasValue={to.length > 0}
               disabled={isMobileVerified} // 여기서 disabled 속성을 설정
             />
             <Stbutton1
@@ -378,7 +378,7 @@ const BasicSignUp = () => {
                 onFocus={() => setIsMobileNumberFocused(true)}
                 onBlur={() => setIsMobileNumberFocused(false)}
                 $isFocused={isMobileNumberFocused}
-                $hasValue={code.length > 0}
+                $hasValue={smsConfirmNum.length > 0}
               />
               <Stbutton1 onClick={MobileDoubleCheckhandleButton}>
                 인증

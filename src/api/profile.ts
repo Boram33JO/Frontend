@@ -67,14 +67,10 @@ export const getFollowLists = async (
 };
 
 // 팔로워 조회 
-// export const getFollowLists = async (
-//   userId: string | undefined,
-//   page: number,
-
-// ) => {
+// export const getFollowLists = async ( userId: string | undefined, page: number,) => {
 //   const response = await instance.get(`/user/${userId}/comments`, {
-//     params: { page, size: 20},
-//   });
+//      params: { page, size: 20}});
+//      console.log(response);
 //   return response;
 // };
 

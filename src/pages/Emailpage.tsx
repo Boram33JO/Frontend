@@ -18,11 +18,11 @@ const EmailPage = () => {
           <FindEmail />
         </LoginSection>
 
-          <SignUp>
+          {/* <SignUp>
           <div>이메일을 찾으셨나요?</div>
           &nbsp;
           <Stlink2 onClick={() => { navigate('/login') }}>로그인</Stlink2>
-        </SignUp>
+        </SignUp> */}
 
       </InnerContainer>
     </Container>

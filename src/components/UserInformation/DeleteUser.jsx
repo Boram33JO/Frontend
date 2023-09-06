@@ -12,8 +12,6 @@ import { toast } from 'react-hot-toast';
 import store from "../../redux/config/configStore";
 import { logout } from "../../redux/modules/userSlice";
 import { useSelector } from "react-redux";
-import { Redirect } from "react-router-dom";
-
 
 
 
@@ -24,14 +22,14 @@ const DeleteUser = () => {
   const isMyProfile = Number(userId) === LoginUser.userId;
 
   const navigateTomain = async () => {
-  navigate('/');
+  navigate(-1);
   }
 
   const handleUserDeleteChange = async () => {
    try {
      const result = await deleteUser();
      if (result.success){
-      console.log(result)
+      //console.log(result)
        toast.success('탈퇴가 완료되었습니다. 감사합니다.', { position: 'top-center' });
         navigate("/");
         store.dispatch(logout());
@@ -46,7 +44,7 @@ const DeleteUser = () => {
    } catch (error) {
      // 오류 처리 로직
      toast.error(`${error}`);
-     console.error('탈퇴오류:', error);
+     //console.error('탈퇴오류:', error);
      if (error.response && error.response.data) {
        toast.error(`${error.response.data}`, { position: 'top-center' });
      } else {
@@ -54,10 +52,10 @@ const DeleteUser = () => {
      }
    }
 
-   if (!isMyProfile) {
-    // 사용자의 프로필이 아닌 경우, 404 페이지로 리디렉션합니다.
-    return navigate(`/*`);
-  }
+  //  if (!isMyProfile) {
+  //   // 사용자의 프로필이 아닌 경우, 404 페이지로 리디렉션합니다.
+  //   return navigate(`/*`);
+  // }
  };
   return (
     <>

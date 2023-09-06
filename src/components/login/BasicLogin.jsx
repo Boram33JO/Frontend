@@ -123,7 +123,7 @@ const BasicLogin = () => {
       <Stbox2>
       <Stlink1
           onClick={() => {
-            toast.success("이 기능은 개발 중 입니다!");
+            // toast.success("이 기능은 개발 중 입니다!");
            // navigate("/findemail");
           }}
         >

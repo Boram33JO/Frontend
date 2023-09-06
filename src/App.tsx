@@ -56,7 +56,7 @@ function App() {
            {/* 비번찾기 페이지 */}
           <Route path="/findemail" element={<EmailPage />} />
            {/* 이메일 찾기 페이지 */}
-          <Route path="/profile/:userId/withdrawal" element={<WithdrawalPage />} />
+          <Route path="/profile/withdrawal" element={<WithdrawalPage />} />
           {/* 탈퇴 페이지 */}
           <Route path="/profile/:userId/changepw" element={<ChangePwPage />} />
           {/* 비번변경 */}
