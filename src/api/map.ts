@@ -4,7 +4,7 @@ import instance from "./common";
 export const postCategoryData = async (latlng: any) => {
     try {
         const response = await instance.post(`/posts/map`, latlng, {
-            params: { page: 0, size: 100 },
+            params: { page: 0, size: 200 },
         });
         return response;
     } catch (error) {
