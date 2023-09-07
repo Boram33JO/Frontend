@@ -22,8 +22,6 @@ export const getSearchKeyword = async (keyword: string) => {
                 sortBy: "wishlist",
             },
         });
-        console.log("response", response.data);
-
         return response;
     } catch (error) {
         console.log(error);

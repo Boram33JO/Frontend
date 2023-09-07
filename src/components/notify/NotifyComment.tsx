@@ -1,6 +1,7 @@
 import React from 'react'
 import { styled } from 'styled-components'
 import NotifyItem from './NotifyItem'
+import NotifyEmpty from './NotifyEmpty';
 
 interface Props {
     data: any;
@@ -19,12 +20,12 @@ const NotifyComment = ({ data }: Props) => {
                 </P>
             </TitleSection>
             <NotifyList>
-                {
+                {(data === undefined || data?.length === 0) ? <NotifyEmpty type="댓글" /> : (
                     data?.map((item: any) => {
                         return (
                             <NotifyItem
                                 key={item.id}
-                                type="comment"                                
+                                type="comment"
                                 notifyId={item.id}
                                 userId={item.userId}
                                 postId={item.postId}
@@ -36,7 +37,7 @@ const NotifyComment = ({ data }: Props) => {
                             />
                         )
                     })
-                }
+                )}
             </NotifyList>
         </Container>
     )

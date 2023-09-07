@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SearchInput from "../components/search/SearchInput";
 import Navigation from "../components/search/Navigation";
 import NoResult from "../components/search/NoResult";
 import { Post } from "../models/post";
 import { getSearchKeyword } from "../api/search";
 import ListItem from "../components/common/ListItem";
-import RecommendSong from "../components/search/RecommendSong";
 import SearchSongs from "../components/search/SearchSongs";
 import Ppler from "./Ppler";
 import RecommendedPosts from "../components/search/RecommendedPosts";
@@ -47,19 +46,19 @@ const SearchListPage = () => {
     };
 
     const handleShowPosts = () => {
-        setList(1); // 1은 추천 포스트 목록을 나타내는 값입니다.
+        setList(1);
     };
 
     const handleShowPlaces = () => {
-        setList(2); // 2는 추천 장소 목록을 나타내는 값입니다.
+        setList(2);
     };
 
     const handleShowSongs = () => {
-        setList(3); // 3은 추천 곡 목록을 나타내는 값입니다.
+        setList(3);
     };
 
     const handleShowPplers = () => {
-        setList(4); // 4는 추천 피플러 목록을 나타내는 값입니다.
+        setList(4);
     };
 
     return (
