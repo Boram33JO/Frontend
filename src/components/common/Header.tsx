@@ -94,7 +94,7 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
                 />
             </HeaderCenter>
             <HeaderRight>
-                {/* <StSearch /> */}
+                <StSearch onClick={() => navigate(`/search`)} />
                 {userInfo.isLogin ? (
                     <ProfileImage
                         onClick={() => navigate(`/profile/${userInfo.userId}`)}
