@@ -1,22 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { EventSourcePolyfill } from "event-source-polyfill";
+import { useEffect, useState } from 'react'
 import { getNotification } from '../api/notify';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery } from 'react-query';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/config/configStore';
 import NotifyWishlist from '../components/notify/NotifyWishlist';
 import NotifyNavbar from '../components/notify/NotifyNavbar';
 import NotifyComment from '../components/notify/NotifyComment';
 import NotifyFollow from '../components/notify/NotifyFollow';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 
-
 const NotifyPage = () => {
+    const navigate = useNavigate();
     const [page, setPage] = useState<number>(0);
     const loginUser = useSelector((state: RootState) => state.user);
     const [comments, setComments] = useState<any>();
     const [wishlists, setWishlists] = useState<any>();
     const [follows, setFollows] = useState<any>();
+
+    useEffect(() => {
+        if (!!!loginUser.isLogin) {
+            toast("잘못된 접근입니다.")
+            navigate('/')
+        }
+    }, [])
+    
     const { data, isLoading, isError, } = useQuery(["notify"], getNotification,
         {
             refetchOnWindowFocus: false,
