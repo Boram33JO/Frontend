@@ -19,7 +19,7 @@ import PasswordPage from "./pages/PasswordPage";
 import ProfileEditPage from "./pages/ProfileEditPage ";
 import IntroPage from "./pages/IntroPage";
 import { Toaster } from 'react-hot-toast'
-import WithdrawalPage from "./pages/WithdrawalpPage";
+import WithdrawalPage from "./pages/WithdrawalPage";
 import NotifyPage from "./pages/NotifyPage";
 import SearchPage from "./pages/SearchPage";
 import SearchListPage from "./pages/SearchListPage";
