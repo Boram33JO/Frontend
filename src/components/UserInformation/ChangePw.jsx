@@ -81,24 +81,27 @@ const ChangePassword = () => {
         originPassword: email,
         changePassword: password,
       }, userId);
+      //console.log(result)
       if (result.success){
         toast.success('비밀번호가 바뀌었습니다. 다시 로그인 해주세요.', { position: 'top-center' });
          navigate("/login");
          store.dispatch(logout());
-        //console.log(result.success);
+       //  console.log(result.success);
       }
-     if (result.error)
+     if (result.success===false)
      {
-      toast.error(`${result.error}`);
+     // console.log(result);
+      toast.error(`${result}`);
      }
       
      
     } catch (error) {
       // 오류 처리 로직
-      toast.error(`${error}`);
+     //toast.error(`${error}`);
       //console.error('비밀번호 변경 오류:', error);
-      if (error.response && error.response.data) {
-        toast.error(`${error.response.data}`, { position: 'top-center' });
+      if (error.response || error.response.error) {
+        toast.error(`${error.response.data.error}`, { position: 'top-center' });
+      //  console.log(error)
       } else {
         toast.error("서버 에러가 발생했습니다.", { position: 'top-center' });
       }

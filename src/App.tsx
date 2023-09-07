@@ -40,7 +40,6 @@ function App() {
           <Route path="/edit/:postId" element={<EditPage />} />
           <Route path="/list" element={<ListPage />} />
           <Route path="/detail/:id" element={<DetailPage />} />
-          <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/search/:keyword" element={<SearchListPage />} />
           <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
