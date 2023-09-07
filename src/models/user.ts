@@ -24,30 +24,39 @@ export type LoginUser = {
     nickname: string | null;
     userImage: string | null;
     introduce: string | null;
-    // eamil: string | null;
+    kakaoId: string | null;
 }
 
 export type SignupFormat = {
     email: string;
     password: string;
     nickname: string;
-    to: string;
+    phoneNumber: string;
 }
 
 export type PwChangeFormat = {
     email: string;
     originPassword: string;
     changePassword: string;
-    
 }
 
 export type PwChangeFormat2 = {
     email: string;
     newPassword: string;
-    
+    code: string;
 }
 
 export type LoginFormat = {
     email: string;
     password: string;
+}
+
+export type DeleteUserFormat = {
+    email: string;
+    password: string;
+}
+
+export type FindEmail = {
+    smsConfirmNum: string;
+    phoneNumber: string;
 }

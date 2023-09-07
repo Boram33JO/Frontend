@@ -64,6 +64,7 @@ const ListPage = () => {
         setNextPage(true);
         setPosts([]);
         setPage(0);
+        console.log("정렬 기준", sortBy, direction);
     }, [categoryId, sortBy, direction])
 
     return (

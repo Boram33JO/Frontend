@@ -79,6 +79,7 @@ const LeftSection = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    user-select: none;
 `
 
 const RightSection = styled.div`

@@ -2,21 +2,43 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as Spotify } from "../../assets/images/spotify/Spotify_Icon_RGB_White.svg";
 
-const RecommendSong = () => {
+interface SearchProps {
+    topSongs: any;
+    categoryNum: any;
+}
+
+const RecommendSong: React.FC<SearchProps> = ({ topSongs, categoryNum }) => {
+    const onClickExternalLink = (externalUrl: string) => {
+        window.location.href = externalUrl;
+    };
+
     return (
-        <StSongList>
-            <StSongListLeft>
-                <img
-                    src="https://images.unsplash.com/photo-1690585433335-66d64209a38e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHx0b3BpYy1mZWVkfDR8UzRNS0xBc0JCNzR8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
-                    alt="imagedd"
-                />
-                <StSongListInfo>
-                    <h3>제목vkwlfkv weln kvnklfnvkw</h3>
-                    <p>가수이름clas kv lk nkvnkanfksnvknkanlnkk</p>
-                </StSongListInfo>
-            </StSongListLeft>
-            <Spotify style={{ width: "24px" }} />
-        </StSongList>
+        <>
+            {topSongs &&
+                topSongs.length > 0 &&
+                topSongs
+                    .filter((item: any) => item.category === categoryNum + 1)
+                    .map((item: any) =>
+                        item.songResponseDtos.map((song: any, index: number) => (
+                            <StSongList
+                                key={index}
+                                onClick={() => onClickExternalLink(song.externalUrl)}
+                            >
+                                <StSongListLeft>
+                                    <img
+                                        src={song.thumbnail}
+                                        alt="imagedd"
+                                    />
+                                    <StSongListInfo>
+                                        <h3>{song.songTitle}</h3>
+                                        <div>{song.artistName}</div>
+                                    </StSongListInfo>
+                                </StSongListLeft>
+                                <Spotify style={{ width: "24px" }} />
+                            </StSongList>
+                        ))
+                    )}
+        </>
     );
 };
 
@@ -30,9 +52,10 @@ const StSongList = styled.div`
     width: 100%;
     color: #fafafa;
     margin-bottom: 14px;
+    cursor: pointer;
 
     h3 {
-        width: 130px;
+        width: 100%;
         font-size: 16px;
         font-weight: 500;
         line-height: 120%;
@@ -42,11 +65,12 @@ const StSongList = styled.div`
         text-overflow: ellipsis;
         word-break: break-all;
     }
-    p {
+    div {
+        width: 100%;
         font-size: 14px;
+        text-align: start;
         color: #a6a3af;
         font-weight: 500;
-        line-height: 120%;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -61,6 +85,7 @@ const StSongList = styled.div`
 `;
 
 const StSongListLeft = styled.div`
+    width: 70%;
     display: flex;
     flex-direction: row;
     align-items: center;

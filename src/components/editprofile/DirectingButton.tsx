@@ -1,38 +1,68 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg";
 import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/config/configStore';
 
 const DirectingButton: React.FC = () => {
-
-    const navigate = useNavigate();
-    const { userId } = useParams();
+  const navigate = useNavigate();
+  const { userId } = useParams();
+  const LoginUser = useSelector((state: RootState) => state.user);
+  const isMyProfile = Number(userId) === LoginUser.userId;
+//console.log(LoginUser.kakaoId)
+  //"kakaoId\":2955447335
+  // {LoginUser.kakaoId}
+  // {"user":"{\"isLogin\":true,\"userId\":74,\"nickname\":\"체리\",\"userImage\":null,\"introduce\":\"안녕\",\"email\":\"jshok822@naver.com\",\"kakaoId\":2955447335}","_persist":"{\"version\":-1,\"rehydrated\":true}"}
 
     const handlePwPageClick = () => {
+
+      if (LoginUser.kakaoId===`${null}`) {
+        console.log(LoginUser.kakaoId)
+        // kakaoId가 있는 경우 아무 작업도 하지 않고 함수를 종료.
+        return;
+      }
         //toast.success("이 기능은 개발 중 입니다!");
+        if (Number(userId) !== LoginUser.userId) {
+          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          navigate("/*");
+          return;
+        }
         navigate(`/profile/${userId}/changepw`);
       };
 
       const handleWdPageClick = () => {
-        toast.success("이 기능은 개발 중 입니다!");
-        //navigate("/withdrawal");
+        if (Number(userId) !== LoginUser.userId) {
+          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          navigate("/*");
+          return;
+        }
+        //toast.success("이 기능은 개발 중 입니다!");
+        navigate(`/profile/withdrawal`);
         
       };
       return (
         <>
           <StInfoContainer>
-            <Container onClick={handlePwPageClick}>
-              <PwChange>
-              <Wrapper>
-                <StyledPwSVG />
+            {/* {LoginUser.kakaoId} */}
+            
+            <Container>
+            {LoginUser.kakaoId===null && (
+              <PwChange >
+              
+              <Wrapper  onClick={handlePwPageClick}>
+                <StyledPwSVG   onClick={handlePwPageClick}/>
                 <ArrowWrapper>비밀번호 변경</ArrowWrapper>
                 </Wrapper>
+               
                 <ArrowSVG />
                
               </PwChange>
+             )}
             </Container>
+            
             <WithD onClick={handleWdPageClick}>P.PLE을 탈퇴하시겠어요?</WithD>
           </StInfoContainer>
         </>
@@ -77,6 +107,7 @@ const Container = styled.div`
   cursor: pointer;
   display: flex; /* Make the container a flex container */
   align-items: center; /* Center align its children vertically */
+  
  
 `;
 

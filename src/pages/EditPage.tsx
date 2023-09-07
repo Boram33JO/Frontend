@@ -1,14 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
-import styled from "styled-components";
-
+import styled from "styled-components"; 
 import SearchSong from "../components/edit/SearchSong";
 import EditMap from "../components/edit/EditMap";
-import ButtonComponent from "../components/edit/ButtonComponent";
 import FormArea from "../components/edit/FormArea";
 import { postData, putData } from "../api/edit";
-import { getDetailPost } from "../api/post";
+import { getDetailedPost } from "../api/post";
 import { toast } from "react-hot-toast";
 
 interface InputForm {
@@ -86,7 +83,7 @@ const EditPage = () => {
     useEffect(() => {
         const fixPostData = async () => {
             try {
-                const response = await getDetailPost(postId);
+                const response = await getDetailedPost(postId);
                 setIsData(response.data);
             } catch (error) {
                 console.error(error);
@@ -137,26 +134,39 @@ const EditPage = () => {
     };
 
     const onClickPost = async () => {
-        if (data.songs?.length !== 0) {
-            if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
-                if (inputForm.content.length <= 500) {
-                    try {
-                        const response = await postData(data);
-                        toast.success("게시물이 등록되었습니다", { position: "top-center" });
-                        const postId = response;
-                        navigate(`/detail/${postId}`);
-                    } catch (error) {
-                        toast.error("게시물 등록에 실패하였습니다", { position: "top-center" });
-                        navigate(`/`);
-                    }
-                } else {
-                    toast.error("내용은 500자 이하여야 합니다.", { position: "top-center" });
-                }
-            } else {
-                toast.error("제목과 내용은 필수입니다.", { position: "top-center" });
-            }
-        } else {
+        if (data.songs?.length === 0) {
             toast.error("노래를 선택해주세요.", { position: "top-center" });
+            return
+        }
+
+        if (inputForm.postTitle.length === 0) {
+            toast.error("제목은 필수입니다.", { position: "top-center" });
+            return
+        }
+
+        if (inputForm.content.length === 0) {
+            toast.error("내용은 필수입니다.", { position: "top-center" });
+            return
+        }
+
+        if (inputForm.postTitle.length > 20) {
+            toast.error("제목은 20자 이하여야 합니다.", { position: "top-center" });
+            return
+        }
+
+        if (inputForm.content.length > 500) {
+            toast.error("내용은 500자 이하여야 합니다.", { position: "top-center" });
+            return
+        }
+
+        try {
+            const response = await postData(data);
+            toast.success("게시물이 등록되었습니다", { position: "top-center" });
+            const postId = response;
+            navigate(`/detail/${postId}`);
+        } catch (error) {
+            toast.error("게시물 등록에 실패하였습니다", { position: "top-center" });
+            navigate(`/`);
         }
     };
 
@@ -238,27 +248,14 @@ const EditPage = () => {
                     </StSlides>
                 </StSlideContainer>
             </StInnerContainer>
-            <StButtons>
-                <ButtonComponent
-                    style={{
-                        color: "#7D778A",
-                        background: "#45424E",
-                    }}
-                    onClick={BeforeButtonHandler}
-                    // disabled={slideIndex === 0}
-                >
+            <StButtonContainer>
+                <StButton $next={false} onClick={BeforeButtonHandler}>
                     이전
-                </ButtonComponent>
-                <ButtonComponent
-                    style={{
-                        color: "#FAFAFA",
-                        background: "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)",
-                    }}
-                    onClick={slideIndex === 2 ? (!isData ? onClickPost : onClickPut) : NextButtonHandler}
-                >
+                </StButton>
+                <StButton $next={true} onClick={slideIndex === 2 ? (!isData ? onClickPost : onClickPut) : NextButtonHandler}>
                     {slideIndex === 2 ? "완료" : "다음"}
-                </ButtonComponent>
-            </StButtons>
+                </StButton>
+            </StButtonContainer>
         </StContainer>
     );
 };
@@ -308,9 +305,21 @@ const StSlide = styled.div<{ $position: string }>`
     }
 `;
 
-const StButtons = styled.div`
+const StButtonContainer = styled.div`
     display: flex;
     flex-direction: row;
     gap: 14px;
     padding: 0 10px;
+`;
+
+const StButton = styled.button<{ $next: boolean }>`
+    width: 100%;
+    height: 44px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    color: ${({$next}) => $next ? "#FAFAFA" : "#7D778A"};
+    background: ${({$next}) => $next ? "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)" : "#45424E"};
 `;

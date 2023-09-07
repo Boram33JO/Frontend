@@ -20,7 +20,9 @@ import ProfileEditPage from "./pages/ProfileEditPage ";
 import IntroPage from "./pages/IntroPage";
 import { Toaster } from 'react-hot-toast'
 import WithdrawalPage from "./pages/WithdrawalpPage";
+import NotifyPage from "./pages/NotifyPage";
 import SearchPage from "./pages/SearchPage";
+import SearchListPage from "./pages/SearchListPage";
 import EmailPage from "./pages/Emailpage";
 import ChangePwPage from "./pages/ChangePwPage";
 
@@ -31,13 +33,16 @@ function App() {
         <Route path="/intro" element={<IntroPage />} />
         <Route element={<Layout />}>
           <Route path="/" element={<MainPage />} />
+          <Route path="/notify" element={<NotifyPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/edit" element={<EditPage />} />
           <Route path="/edit/:postId" element={<EditPage />} />
           <Route path="/list" element={<ListPage />} />
           <Route path="/detail/:id" element={<DetailPage />} />
-          <Route path="search" element={<SearchPage />} />
+          <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/search/:keyword" element={<SearchListPage />} />
           <Route path="/profile/edit/:userId" element={<ProfileEditPage />} />
           {/* 내 정보 수정하기 */}
           <Route path="/profile/:userId" element={<ProfilePage />} />
@@ -56,7 +61,7 @@ function App() {
            {/* 비번찾기 페이지 */}
           <Route path="/findemail" element={<EmailPage />} />
            {/* 이메일 찾기 페이지 */}
-          <Route path="/profile/:userId/withdrawal" element={<WithdrawalPage />} />
+          <Route path="/profile/withdrawal" element={<WithdrawalPage />} />
           {/* 탈퇴 페이지 */}
           <Route path="/profile/:userId/changepw" element={<ChangePwPage />} />
           {/* 비번변경 */}

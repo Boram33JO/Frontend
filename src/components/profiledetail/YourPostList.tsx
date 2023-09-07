@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { useParams } from "react-router-dom";
 import { Post } from "../../models/post";
-import MyListItem from "../common/MyListItem";
+import ListItem from "../common/ListItem";
 import { useQuery } from "react-query";
 import { getMyPostLists } from "../../api/profile";
 import { ReactComponent as Start } from "../../assets/images/page_start.svg";
@@ -10,21 +10,19 @@ import { ReactComponent as Prev } from "../../assets/images/page_prev.svg";
 import { ReactComponent as Next } from "../../assets/images/page_next.svg";
 import { useState } from "react";
 import SortButton from "./SortButton";
-import { SortType } from "./SortButton"; 
+import { SortType } from "./SortButton";
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 import Loading from "../map/Loading";
 
 const YourPostList = () => {
   const { userId } = useParams();
   const [nickname, setNickname] = useState<string>("");
-
   const [page, setPage] = useState<number>(0);
-  const [total, setTotal] = useState<number>(0);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [pageButton, setPageButton] = useState<number[]>([]);
 
   const [activeSort, setActiveSort] = useState<SortType>(SortType.Newest);
- 
+
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPage) {
@@ -41,10 +39,8 @@ const YourPostList = () => {
     ["posts", page, totalPage, activeSort],
     async () => {
       const response = await getMyPostLists(userId, page, activeSort);
-     // console.log(" 내가쓴 포스팅 response:", response);
+      console.log(" 내가쓴 포스팅 response:", response);
       setNickname(response.data?.nickname);
-
-      setTotal(response.data.postList.totalElements);
       setTotalPage(response.data.postList.totalPages);
       if (page === totalPage && page > 0) {
         setPage(page - 1);
@@ -60,7 +56,7 @@ const YourPostList = () => {
         { length: pageRange },
         (_, i) => startPage + i + 1
       );
-     // console.log(array);
+      // console.log(array);
       setPageButton(array);
 
       return response.data.postList.content;
@@ -77,23 +73,23 @@ const YourPostList = () => {
 
   return (
     <>
-    
+
       <InnerContainer>
         <TitleSection>
-          <H3>포스팅</H3>
+          <H3>{nickname}님의 포스팅</H3>
         </TitleSection>
 
         {data.length > 0 && (
-        <SortButton activeSort={activeSort} onSortChange={handleSortChange} />)}
+          <SortButton activeSort={activeSort} onSortChange={handleSortChange} />)}
         {data && data.length === 0 ? (
           <Pple>
-          <StNodata/>
-          <NoDataMessage>아직 포스팅 작성 전이군요!</NoDataMessage>
-                    </Pple>
-          
+            <StNodata />
+            <NoDataMessage>아직 포스팅 작성 전이군요!</NoDataMessage>
+          </Pple>
+
         ) : (
           data.map((post: Post) => (
-            <MyListItem key={post.postId} post={post}></MyListItem>
+            <ListItem key={post.postId} post={post}></ListItem>
           ))
         )}
       </InnerContainer>

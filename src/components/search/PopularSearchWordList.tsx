@@ -1,53 +1,24 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as UpIcon } from "../../assets/images/up.svg";
+interface SearchProps {
+    popularList: any;
+    onClick: () => void;
+}
 
-const PopularSearchWordList = () => {
+const PopularSearchWordList: React.FC<SearchProps> = ({ popularList, onClick }) => {
     return (
         <StSearchWordContainer>
             <ListContainer>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
-                <StLanking>
-                    <StNumber>1</StNumber>
-                    <StPopularSearchWord>dkdkdk</StPopularSearchWord>
-                </StLanking>
+                {popularList &&
+                    popularList.map((item: any, index: number) => (
+                        <StLanking>
+                            <StNumber>{index + 1}</StNumber>
+                            <StPopularSearchWord>{item}</StPopularSearchWord>
+                        </StLanking>
+                    ))}
             </ListContainer>
-            <UpIcon />
+            <UpIcon onClick={onClick} />
         </StSearchWordContainer>
     );
 };
@@ -63,7 +34,7 @@ const StSearchWordContainer = styled.div`
     justify-content: space-between;
     align-items: flex-start;
     border-radius: 8px;
-    padding: 20px 14px;
+    padding: 20px 18.5px;
     border: 1px solid #7462e2;
     color: #fafafa;
     font-size: 16px;
@@ -79,7 +50,7 @@ const ListContainer = styled.div`
 
 const StLanking = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     margin-bottom: 14px;
 `;
 

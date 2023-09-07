@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchInput from "../components/search/SearchInput";
 import RecommendedPosting from "../components/search/RecommendedPosting";
@@ -8,40 +8,74 @@ import RecommendSong from "../components/search/RecommendSong";
 import PopularSearchWord from "../components/search/PopularSearchWord";
 import PopularSearchWordList from "../components/search/PopularSearchWordList";
 
-const SearchPage = () => {
-    const [categoryNum, setCategoryNum] = useState<any>();
-    const mappingCategoryHandler = () => {};
+import { getSearchList } from "../api/search";
 
-    console.log(categoryNum);
+const SearchPage = () => {
+    const [categoryNum, setCategoryNum] = useState<any>(0);
+    const [searchData, setSearchData] = useState<any>();
+    const [searchPlace, setSearchPlace] = useState<any>();
+    const [topPost, setTopPost] = useState<any>([]);
+    const [topSongs, setTopSongs] = useState<any>();
+    const [isPopularSearchWord, setIsPopularSearchWord] = useState<boolean>(true);
+    const [searchKeyword, setSearchKeyword] = useState<string>("");
+    const [randomColorChange, setRandomColorChange] = useState(false);
+    const [popularList, setPopularList] = useState<any>();
+
+    useEffect(() => {
+        getSearch();
+    }, []);
+    console.log(searchKeyword);
+    const popularSearchWordHandler = () => {
+        setIsPopularSearchWord(!isPopularSearchWord);
+    };
+
+    const getSearch = async () => {
+        try {
+            const response = await getSearchList();
+            setSearchData(response);
+            setTopPost(response.topPosts);
+            setSearchPlace(response.topLocations);
+            setPopularList(response.topSearchKeywords);
+            setRandomColorChange(!randomColorChange);
+            setTopSongs(response.topSongs);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    console.log(topPost);
     return (
         <StSearchContainer>
-            <SearchInput />
+            <SearchInput
+                searchKeyword={searchKeyword}
+                setSearchKeyword={setSearchKeyword}
+                getSearch={getSearch}
+            />
             <StSection>
                 <StTitle>
                     <h2>추천포스팅</h2>
-                    <span>더보기</span>
+                    {/* <span>더보기</span> */}
                 </StTitle>
-                <RecommendedPosting />
-                <RecommendedPosting />
-                <RecommendedPosting />
+                <RecommendedPosting
+                    topPost={topPost}
+                    setTopPost={setTopPost}
+                    randomColorChange={randomColorChange}
+                />
             </StSection>
             <StSection>
                 <StTitle>
                     <h2>피플러 인기 플레이스</h2>
-                    <span>더보기</span>
                 </StTitle>
                 <StPopularPlace>
-                    <PopularPlace />
-                    <PopularPlace />
-                    <PopularPlace />
-                    <PopularPlace />
-                    <PopularPlace />
+                    <PopularPlace
+                        searchPlace={searchPlace}
+                        setSearchPlace={setSearchPlace}
+                    />
                 </StPopularPlace>
             </StSection>
             <StSection>
                 <StTitle>
                     <h2>피플러들이 선택한 곡</h2>
-                    <span>더보기</span>
                 </StTitle>
                 <StCategory>
                     <Category
@@ -49,18 +83,27 @@ const SearchPage = () => {
                         setCategoryNum={setCategoryNum}
                     />
                 </StCategory>
-                <RecommendSong />
-                <RecommendSong />
-                <RecommendSong />
-                <RecommendSong />
+                <RecommendSong
+                    topSongs={topSongs}
+                    categoryNum={categoryNum}
+                />
             </StSection>
             <StSection>
                 <StTitle>
                     <h2>피플 인기 검색어</h2>
-                    <span>더보기</span>
                 </StTitle>
-                <PopularSearchWord />
-                <PopularSearchWordList />
+                {isPopularSearchWord === true ? (
+                    <PopularSearchWord
+                        popularList={popularList}
+                        onClick={popularSearchWordHandler}
+                    />
+                ) : (
+                    <PopularSearchWordList
+                        popularList={popularList}
+                        onClick={popularSearchWordHandler}
+                    />
+                )}
+
                 <p>실시간 업데이트 기준</p>
             </StSection>
         </StSearchContainer>

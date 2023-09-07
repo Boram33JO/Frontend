@@ -338,7 +338,6 @@ const KakaoMap: React.FC<KakaoProps> = ({ postList, setPostList, isData, setIsDa
                         setPlaceName={setPlaceName}
                         setLatitude={setLatitude}
                         setLongitude={setLongitude}
-                        setSelectedLocation={setSelectedLocation}
                     />
                 )}
                 <StCategory>

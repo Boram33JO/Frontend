@@ -3,22 +3,26 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { useMutation } from "react-query";
-import { TempPassword, addUsers, emailCheckTofindPassword, mobileCheck, mobileDoubleCheck } from "../../api/user2";
+import { TempPassword, addUsers, emailCheckTofindPassword, findEmail, findmobileCheck, mobileCheck, mobileDoubleCheck } from "../../api/user2";
 import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';
+import { useSelector } from "react-redux";
+import NotFoundPage from "../../pages/NotFoundPage";
+
 
 
 
 const Email = () => {
   const navigate = useNavigate();
+  const LoginUser = useSelector((state) => state.user);
 
   const [email, onChangeEmailHandler, resetEmail] = useInput();
   const [code, onChangenumberHandler, resetNumber] = useInput();
 
-  const [to, onChangeMobileHandler, resetMobile] = useInput();
+  const [phoneNumber, onChangeMobileHandler, resetMobile] = useInput();
   const [smsConfirmNum, onChangeMobileCodeHandler, resetMobileCode] =
     useInput();
 
@@ -66,6 +70,9 @@ const Email = () => {
   const [emailButtonContent, setEmailButtonContent] = useState("인증하기");
   const [mobileButtonContent, setmobileButtonContent] = useState("발송하기");
 
+
+  const [responseData, setResponseData] = useState(null);
+
  // 비밀번호 토글
 //   const [showPassword, setShowPassword] = useState(false);
 //  const [showPasswordCheck, setShowPasswordCheck] = useState(false);
@@ -76,120 +83,123 @@ const Email = () => {
 
 
   // 이메일 검사
-  const EmailhandleCheckButton = async () => {
-    // 이메일 형식 유효성 검사
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.error("올바른 이메일 형식이 아닙니다.", {position: 'top-center'});
-      return;
-    }
-    // 비활성화 상태로 변경하고 로딩 표시
-    setIsEmailButtonDisabled(true);
-    setEmailButtonContent("발송 중");
-    //setShowCodeInput(false); // 일단 입력 창을 숨김
-    setEmailVerificationTimer(300); // 5분 타이머 시작
+  // const EmailhandleCheckButton = async () => {
+  //   // 이메일 형식 유효성 검사
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   if (!emailRegex.test(email)) {
+  //     toast.error("올바른 이메일 형식이 아닙니다.", {position: 'top-center'});
+  //     return;
+  //   }
+  //   // 비활성화 상태로 변경하고 로딩 표시
+  //   setIsEmailButtonDisabled(true);
+  //   setEmailButtonContent("발송 중");
+  //   //setShowCodeInput(false); // 일단 입력 창을 숨김
+  //   setEmailVerificationTimer(300); // 5분 타이머 시작
     
-    const timerInterval = setInterval(() => {
-      setEmailVerificationTimer((prevTimer) => {
-        if (prevTimer === 0) {
-          clearInterval(timerInterval);
-          setIsEmailButtonDisabled(false);
-          setEmailButtonContent("재발송"); // 5분이 지나면 버튼 다시 활성화
-          return 0;
-        }
-        return prevTimer - 1;
-      });
-    }, 1000);
+  //   const timerInterval = setInterval(() => {
+  //     setEmailVerificationTimer((prevTimer) => {
+  //       if (prevTimer === 0) {
+  //         clearInterval(timerInterval);
+  //         setIsEmailButtonDisabled(false);
+  //         setEmailButtonContent("재발송"); // 5분이 지나면 버튼 다시 활성화
+  //         return 0;
+  //       }
+  //       return prevTimer - 1;
+  //     });
+  //   }, 1000);
 
-    try {
-      const response = await emailCheckTofindPassword(email);
-      toast.success(`${response.data}`, {position: 'top-center'});
-      // setShowCodeInput(true);
-    } catch (error) {
-      toast.error(('서버 에러가 발생했습니다.'), {position: 'top-center'});
-    } finally {
-      // 응답 처리 후 버튼 활성화 및 로딩 해제
-      setIsEmailButtonDisabled(false);
-      setEmailButtonContent("재발송");//보내고 비번 인증전에 메일 바꿔도 또 보내기 가능
-    }
-  };
+  //   try {
+  //     const response = await emailCheckTofindPassword(email);
+  //     toast.success(`${response.data}`, {position: 'top-center'});
+  //     // setShowCodeInput(true);
+  //   } catch (error) {
+  //     toast.error(('서버 에러가 발생했습니다.'), {position: 'top-center'});
+  //   } finally {
+  //     // 응답 처리 후 버튼 활성화 및 로딩 해제
+  //     setIsEmailButtonDisabled(false);
+  //     setEmailButtonContent("재발송");//보내고 비번 인증전에 메일 바꿔도 또 보내기 가능
+  //   }
+  // };
 
   // 임시비번 검증 숫자 검사 (유효기간 5분)
-  const DoubleCheckhandleButton = async () => {
-    const response = await TempPassword(email, code);
+  // const DoubleCheckhandleButton = async () => {
+  //   const response = await TempPassword(email, code);
 
-    if (response.data === true) {
+  //   if (response.data === true) {
       
-      setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
-      setIsMobileButtonDisabled(true);
-      toast.success( <div>
-        임시 비밀번호 발급이 완료되었습니다.
-        <br />
-        로그인 해주세요!
-      </div>, {position: 'top-center'});
-      setEmailButtonContent("완료");
-      setmobileButtonContent("발급완료")
+  //     setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
+  //     setIsMobileButtonDisabled(true);
+  //     toast.success( <div>
+  //       임시 비밀번호 발급이 완료되었습니다.
+  //       <br />
+  //       로그인 해주세요!
+  //     </div>, {position: 'top-center'});
+  //     setEmailButtonContent("완료");
+  //     setmobileButtonContent("발급완료")
     
      
-    } else if (response.data === false) {
+  //   } else if (response.data === false) {
     
-      setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
-      toast.error(
-      <div>
-      이메일 인증에 실패했습니다.
-      <br />
-      다시 시도해주세요.
-    </div>, {position: 'top-center'});
-      resetEmail();
-      resetNumber();
-    }
-  };
+  //     setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
+  //     toast.error(
+  //     <div>
+  //     이메일 인증에 실패했습니다.
+  //     <br />
+  //     다시 시도해주세요.
+  //   </div>, {position: 'top-center'});
+  //     resetEmail();
+  //     resetNumber();
+  //   }
+  // };
 
    // 모바일 인증
    const MobilehandleCheckButton = async () => {
     const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
 
-    if (!phoneNumberRegex.test(to)) {
+    if (!phoneNumberRegex.test(phoneNumber)) {
       toast.error("11자리 숫자만 입력해주세요.", {position: 'top-center'});
       resetMobile(); // 입력 칸 비우기
       return;
     }
     setmobileButtonContent("발송 중");
-    setIsMobileButtonDisabled(true);
-    setmobileVerificationTimer(300);
+    // setIsMobileButtonDisabled(true);
+    // setmobileVerificationTimer(300);
     try {
       // 버튼 내용 변경
-      const response = await mobileCheck(to);
+      const response = await findmobileCheck(phoneNumber);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-      console.log(response);
-      setShowMobileInput(true);
+     // console.log(response);
+      //setShowMobileInput(true);
       // 5분 타이머 시작
       toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
-      //  const validPhoneNumber = to; // 유효한 핸드폰 번호로 설정
-      //  await onSignUpClickHandler(validPhoneNumber);
     } catch (error) {
       setmobileButtonContent("재전송");
       toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
-      console.log(error);
+     // console.log(error);
     }
   };
 
+
   // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
   const MobileDoubleCheckhandleButton = async () => {
-    const response = await mobileDoubleCheck(smsConfirmNum, to);
-    console.log(response, "숫자 확인1");
+    const response = await findEmail(phoneNumber, smsConfirmNum)
+   // console.log(response, "숫자 확인1");
 
-    if (response.data === true) {
+    if (response.data.success === true) {
       //setIsMobileVerified(true);
-      toast.success("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
-      console.log(response);
-      setShowMobileInput(false);
+      toast.success("인증이 완료되었습니다. 아래의 이메일을 확인하세요.", {position: 'top-center'});
+     // console.log(response);
+      // setShowMobileInput(false);
+      setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
       setIsMobileButtonDisabled(true);
-      setmobileButtonContent("인증완료");
+      setmobileButtonContent("완료");
+      setEmailButtonContent("완료")
+     //  console.log(response.data.data, "숫자 확인2");
+     //  console.log(response)
+       setResponseData(response.data.data);
 
-      // console.log(response.data, "숫자 확인2");
-    } else if (response.data === false) {
+    } else if (response.data.success === false) {
      // setIsMobileVerified(false);
 
       setIsMobileButtonDisabled(false);
@@ -200,7 +210,7 @@ const Email = () => {
       resetMobileCode();
     }
   };
-
+  
 
   return (
     <>
@@ -212,12 +222,12 @@ const Email = () => {
             <Stinput4
               type={"text"}
               placeholder={"핸드폰 번호"}
-              value={to}
+              value={phoneNumber}
               onChange={onChangeMobileHandler}
               onFocus={() => setIsMobileFocused(true)}
               onBlur={() => setIsMobileFocused(false)}
               $isFocused={isMobileFocused}
-              $hasValue={email.length > 0}
+              $hasValue={phoneNumber.length > 0}
              // disabled={isMobileVerified} // 여기서 disabled 속성을 설정
             />
             <Stbutton1
@@ -228,26 +238,45 @@ const Email = () => {
             </Stbutton1>
           </Stname>
         </Stnickname>
-        
+        </Stbox>
         <Stnickname>
             <Stname>
               <Stinput4
                 type={"text"}
                 value={smsConfirmNum}
-                placeholder={`인증번호 입력 (${formatTime(
-                  mobileVerificationTimer
-                )})`}
+                placeholder={`인증번호 입력`}
                 onChange={onChangeMobileCodeHandler}
                 onFocus={() => setIsMobileNumberFocused(true)}
                 onBlur={() => setIsMobileNumberFocused(false)}
                 $isFocused={isMobileNumberFocused}
                 $hasValue={code.length > 0}
               />
-              <Stbutton1 onClick={MobileDoubleCheckhandleButton}>
-                인증
+              <Stbutton1 onClick={MobileDoubleCheckhandleButton}
+              
+              disabled= {isEmailButtonDisabled} >
+              {emailButtonContent}
               </Stbutton1>
             </Stname>
           </Stnickname>
+         
+          <H3>가입한 이메일 계정</H3>
+          <Stbox>
+          <Stnickname>
+          <Stname>
+            <Stinput5
+              // type={"text"}
+              placeholder={responseData === null ? "" : `${responseData}`}
+              // value={email}
+              // onChange={onChangeEmailHandler}
+              // onFocus={() => setIsPasswordFocused(true)}
+              // onBlur={() => setIsPasswordFocused(false)}
+              // $isFocused={isPasswordFocused}
+              // $hasValue={password.length > 0}
+             
+            />
+           </Stname>
+        </Stnickname>
+          <Stbutton2 >로그인하기</Stbutton2>
           </Stbox>
            </InnerContainer>
            </>
@@ -257,41 +286,9 @@ const Email = () => {
 
 export default Email;
 
-const Stinput2Container = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-`;
-
-const PasswordToggle = styled.button`
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  outline: none;
-  position: absolute;
-  right: 10px;
-`;
-
-
-const Eye = styled(EyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
-  height: 24px; /* 원하는 크기로 조정 */
-`;
-
-const ClosedEye = styled(ClosedEyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
-  height: 24px; /* 원하는 크기로 조정 */
-`;
 
 const InnerContainer = styled.div`
   width: 100%;
-`;
-
-
-const ErrorMessage = styled.div`
-  color: #e7e6f0;
-  margin-top: 10px;
-  font-size: 14px;
 `;
 
 const Stbox = styled.div`
@@ -300,41 +297,6 @@ const Stbox = styled.div`
   align-items: center;
 `;
 
-const Stinput2 = styled.input`
-  width: 329px;
-  height: 24px;
-  padding: 10px;
-
-  font-size: 16px;
-  font-weight: 500;
-  color: #85848b;
-
-  background-color: #252628;
-  border: none;
-  border-radius: 6px;
-  outline: none;
-  margin-bottom: 5px;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
-`;
-
-
-const Stinput3 = styled.input`
-  width: 329px;
-  height: 24px;
-  padding: 10px;
-
-  font-size: 16px;
-  font-weight: 500;
-
-  background-color: #252628;
-  border: none;
-  border-radius: 6px;
-  outline: none;
-  margin-bottom: 10px;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
-  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
-`;
 const Stnickname = styled.div`
   display: flex;
   flex-direction: column;
@@ -342,14 +304,15 @@ const Stnickname = styled.div`
 `;
 
 const H3 = styled.h3`
-  font-size: 18px;
+  font-size: 20px;
   color: #e7e6f0;
   line-height: 24px;
   font-weight: 600;
   margin-bottom: 10px;
   padding-left: 20px;
-  padding-top: 44px;
+  padding-top: 40px;
 `;
+
 const Stname = styled.div`
   display: flex; /* 가로 정렬을 위해 추가 */
   justify-content: center; /*요소들을 수평 가운데 정렬하기 위해 변경  */
@@ -385,8 +348,7 @@ const Stbutton1 = styled.button`
   &:hover {
     color: ${(props) => (props.disabled ? "#6c6a71" : "#141414")};
   }
-//#6c6a71
-// #f1f1f1
+
   border: none;
   border-radius: 6px;
   font-size: 16px;
@@ -410,6 +372,26 @@ const Stbutton2 = styled.button`
   font-weight: 500;
 
   cursor: pointer;
-  margin-top: 60px;
+  margin-top: 40px;
 `;
 
+
+
+const Stinput5 = styled.input`
+  width: 329px;
+  height: 24px;
+  padding: 10px;
+
+  font-size: 16px;
+  font-weight: 500;
+  color: ${(props) =>
+    props.$isFocused || props.$hasValue ? "#d9d9d9" : "#85848b"};
+
+  background-color: #252628;
+
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  //color: ${(props) => (props.$hasValue ? ": #d9d9d9" : "#85848b")};
+`;

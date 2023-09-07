@@ -1,24 +1,97 @@
-import React from "react";
+// import React, { useState } from "react";
+// import styled from "styled-components";
+// import { ReactComponent as Search } from "../../assets/images/search.svg";
+// import { ReactComponent as PrevButton } from "../../assets/images/page_prev.svg";
+// import { useNavigate } from "react-router-dom";
+
+// interface SearchProps {
+//     searchKeyword: string;
+//     setSearchKeyword: React.Dispatch<React.SetStateAction<string>>;
+//     getSearch: () => void;
+// }
+
+// const SearchInput: React.FC<SearchProps> = ({ searchKeyword, setSearchKeyword, getSearch }) => {
+//     const navigate = useNavigate();
+
+//     const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+//         setSearchKeyword(event.target.value);
+//     };
+
+//     const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+//         event.preventDefault();
+//         getSearch();
+//         navigate(`/search/${searchKeyword}`);
+//     };
+
+//     const onclickPrev = () => {
+//         navigate(`/search`);
+//     };
+
+//     return (
+//         <StSearchInputContainer>
+//             <StPrevButton>
+//                 <PrevButton onClick={onclickPrev} />
+//             </StPrevButton>
+//             <StSearchForm onSubmit={onSubmitHandler}>
+//                 <div>
+//                     <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
+//                 </div>
+//                 <input
+//                     placeholder="장소, 음악, 피플러를 검색해 보세요."
+//                     onChange={changeInputHandler}
+//                     value={searchKeyword}
+//                 />
+//             </StSearchForm>
+//         </StSearchInputContainer>
+//     );
+// };
+
+// export default SearchInput;
+
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as Search } from "../../assets/images/search.svg";
 import { ReactComponent as PrevButton } from "../../assets/images/page_prev.svg";
+import { useNavigate } from "react-router-dom";
 
-const SearchInput = () => {
+interface SearchProps {
+    searchKeyword: string;
+    setSearchKeyword: React.Dispatch<React.SetStateAction<string>>;
+    getSearch: () => void;
+}
+
+const SearchInput: React.FC<SearchProps> = ({ searchKeyword, setSearchKeyword, getSearch }) => {
+    const navigate = useNavigate();
+    const [inputValue, setInputValue] = useState<string>("");
+
+    const changeInputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(event.target.value);
+    };
+
+    const onSubmitHandler = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        setSearchKeyword(inputValue); // 검색어를 설정
+        getSearch();
+        navigate(`/search/${inputValue}`);
+    };
+
+    const onclickPrev = () => {
+        navigate(`/search`);
+    };
+
     return (
         <StSearchInputContainer>
             <StPrevButton>
-                <PrevButton />
+                <PrevButton onClick={onclickPrev} />
             </StPrevButton>
-            <StSearchForm
-            //  onSubmit={getSearchSongHandler}
-            >
+            <StSearchForm onSubmit={onSubmitHandler}>
                 <div>
                     <Search style={{ width: "16px", height: "16px", marginLeft: "16px", marginRight: "12px" }} />
                 </div>
                 <input
                     placeholder="장소, 음악, 피플러를 검색해 보세요."
-                    // onChange={changeInputHandler}
-                    // value={searchSong}
+                    onChange={changeInputHandler}
+                    value={inputValue} // inputValue 값을 표시
                 />
             </StSearchForm>
         </StSearchInputContainer>
@@ -66,4 +139,5 @@ const StPrevButton = styled.div`
     justify-content: center;
     align-items: center;
     margin-right: 12px;
+    cursor: pointer;
 `;

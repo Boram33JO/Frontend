@@ -2,10 +2,21 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import FindPassword from "../components/UserInformation/FindPassword";
 import FindNav from "../components/UserInformation/FindNav";
+import NotFoundPage from "./NotFoundPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 
 const PasswordPage = () => {
   const navigate = useNavigate();
+  const LoginUser = useSelector((state: RootState) => state.user);
+
+
+  if (LoginUser.isLogin === true) {
+    return <NotFoundPage />;
+  }
+
+
   return (
     <>
      <FindNav/>
@@ -19,9 +30,10 @@ const PasswordPage = () => {
         </LoginSection>
 
           <SignUp>
-          <div>비밀번호가 기억나셨나요?</div>
-          &nbsp;
-          <Stlink2 onClick={() => { navigate('/login') }}>로그인</Stlink2>
+          {/* <div>비밀번호가 기억나셨나요?</div>
+          &nbsp; */}
+          {/* 이거 만들다가 기절 */}
+          {/* <Stlink2 onClick={() => { navigate('/login') }}>로그인</Stlink2> */}
         </SignUp>
 
       </InnerContainer>
@@ -45,7 +57,7 @@ const Container = styled.div`
 
 const InnerContainer = styled.div`
   /* padding-top: 30px; */
-  padding-top: 40px;
+  padding-top: 28px;
   display: flex;
   flex-direction: column;
   /* justify-content: space-between; */

@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
-import { BannerItem } from '../components/main/SlideBanner'
 import { useNavigate } from 'react-router-dom'
 import onboard1 from '../assets/images/onboard/08_intro_onboard_01.svg'
 import onboard2 from '../assets/images/onboard/09_intro_onboard_02.svg'
+import logo from '../assets/images/logo_text.svg'
+import background from '../assets/images/background.svg'
+import { BannerItem } from '../models/common'
 
 const IntroPage = () => {
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -90,6 +92,15 @@ const IntroPage = () => {
 
     return (
         <Container>
+            <Background>
+                <BackgroundTop>
+                    <LogoObject data={logo} aria-label="logo" />
+                    <BackgroundContent>
+                        오늘은 어디서 어떤 음악을 들었나요?<br />우리 같이 들을까요?
+                    </BackgroundContent>
+                </BackgroundTop>
+                <BackgroundImage data={background} aria-label="bg-object" />
+            </Background>
             <InnerContainer ref={containerRef} $opacity={opacity} onMouseDown={onMouseDown} onMouseUp={onMouseUp} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                 <SlideContainer ref={slideRef}>
                     <Banner>
@@ -128,15 +139,60 @@ export default IntroPage
 const Container = styled.div`
     position: relative;
     width: 100%;
-    max-width: 1920px;
     height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    overflow: hidden;
+    justify-content: flex-end;
+    overflow: hidden;    
+    box-sizing: border-box;
+    padding: 0px 260px;
+    background: linear-gradient(288deg, #8285F4 -0.46%, #C28FEE 97.39%);
     & > * {
         user-select: none;
     }
+    @media (max-width: 1000px) {
+        padding: 0;    
+        justify-content: center;
+    }
+`
+
+const Background = styled.div`
+    position: absolute;
+    left: 200px;
+    bottom: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    min-height: 900px;
+    height: 100%;
+
+    box-sizing: border-box;
+    padding-top: 200px;
+    user-select: none;
+    @media (max-width: 1300px) { opacity: 0; }
+`
+
+const BackgroundTop = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+`
+
+const BackgroundContent = styled.div`
+    color: #FAFAFA;
+    font-size: 24px;
+    font-weight: 600;
+`
+
+const LogoObject = styled.object`
+    height: 80px;
+`
+
+const BackgroundImage = styled.object`
+    pointer-events: none;
 `
 
 const InnerContainer = styled.div<{ $opacity?: boolean }>`

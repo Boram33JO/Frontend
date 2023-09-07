@@ -13,13 +13,13 @@ const RedirectKakao: React.FC = () => {
     useEffect(() => {
         const KAKAO_CODE = location.search.split("=")[1];
 
-        axios.post(`https://api.pple.today/oauth/token?code=${KAKAO_CODE}`).then((response) => {
+        axios.post(`${process.env.REACT_APP_SERVER_URL}/oauth/token?code=${KAKAO_CODE}`).then((response) => {
             // console.log("kakao", response);
             localStorage.setItem("AccessToken", response.headers.accesstoken);
             localStorage.setItem("RefreshToken", response.headers.refreshtoken);
             dispatch(logIn2());
             dispatch(setUserInfo({ ...response.data }));
-            toast.success("로그인되었습니다.", {position: 'top-center'});
+            toast.success("카카오로 로그인 되었습니다!", {position: 'top-center'});
             navigate("/");
         });
     });
