@@ -2,10 +2,21 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import FindPassword from "../components/UserInformation/FindPassword";
 import FindNav from "../components/UserInformation/FindNav";
+import NotFoundPage from "./NotFoundPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 
 const PasswordPage = () => {
   const navigate = useNavigate();
+  const LoginUser = useSelector((state: RootState) => state.user);
+
+
+  if (LoginUser.isLogin === true) {
+    return <NotFoundPage />;
+  }
+
+
   return (
     <>
      <FindNav/>

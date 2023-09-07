@@ -59,13 +59,18 @@ const Password = () => {
 
   const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
 
- // 비밀번호 토글
-//   const [showPassword, setShowPassword] = useState(false);
-//  const [showPasswordCheck, setShowPasswordCheck] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordCheck, setShowPasswordCheck] = useState(false);
+ 
 
-  // const togglePasswordVisibility_1 = () => {
-  //   setShowPassword((prevShowPassword) => !prevShowPassword);
-  // };
+ //비밀번호 토글
+ const togglePasswordVisibility_1 = () => {
+  setShowPassword((prevShowPassword) => !prevShowPassword);
+};
+
+  const togglePasswordVisibility_2 = () => {
+  setShowPasswordCheck((prevShowPasswordCheck) => !prevShowPasswordCheck);
+};
 
 
   // 이메일 검사
@@ -95,12 +100,12 @@ const Password = () => {
     }, 1000);
 
     try {
-      const response = await emailCheckTofindPassword(email);
-      toast.success(`${response.data}`, {position: 'top-center'});
+      const data = await emailCheckTofindPassword(email);
+      toast.success(`${data.data.message}`, {position: 'top-center'});
       // setShowCodeInput(true);
-      
+      console.log(data)
     } catch (error) {
-      toast.error(('서버 에러가 발생했습니다.'), {position: 'top-center'});
+      toast.error('가입되지 않은 이메일입니다.', {position: 'top-center'});
       console.log(error)
     } finally {
       // 응답 처리 후 버튼 활성화 및 로딩 해제
@@ -111,9 +116,9 @@ const Password = () => {
 
   // 임시비번 검증 숫자 검사 (유효기간 5분)
   const DoubleCheckhandleButton = async () => {
-    const response = await TempPassword(email, code);
+    const data = await TempPassword(email, code);
 
-    if (response.data === true) {
+    if (data.data.message) {
       
       setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
       setIsMobileButtonDisabled(true);
@@ -126,7 +131,7 @@ const Password = () => {
       setmobileButtonContent("완료")
     
      
-    } else if (response.data === false) {
+    } else if (data.data.error) {
     
       setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
       toast.error(
@@ -161,7 +166,7 @@ const Password = () => {
        toast.success('비밀번호가 바뀌었습니다. 다시 로그인 해주세요.', { position: 'top-center' });
         navigate("/login");
         //store.dispatch(logout());
-       console.log(result.success);
+       //console.log(result.success);
      }
     if (result.error)
     {
@@ -235,9 +240,10 @@ const Password = () => {
           <Stbox>
           <Stnickname>
           <Stname>
+          <Stinput2Container>
             <Stinput5
-              type={"text"}
-              placeholder={"새 비밀번호"}
+               type={showPassword ? "text" : "password"}
+              placeholder={"새 비밀번호 (8~15자 이내)"}
               value={password}
               onChange={onChangePasswordHandler}
               onFocus={() => setIsPasswordFocused(true)}
@@ -245,14 +251,19 @@ const Password = () => {
               $isFocused={isPasswordFocused}
               $hasValue={password.length > 0}
             />
+             <PasswordToggle onClick={togglePasswordVisibility_1}>
+            {showPassword ? <Eye />: <ClosedEye />}
+          </PasswordToggle>
+           </Stinput2Container>
           </Stname>
         </Stnickname>
 
-
+        <Stnumber>대문자, 소문자, 숫자, 특수문자 각 1개 이상 포함</Stnumber>
         <Stnickname>
           <Stname>
+          <Stinput2Container>
             <Stinput5
-              type={"text"}
+              type={showPasswordCheck ? "text" : "password"}
               placeholder={"새 비밀번호 확인"}
               value={passwordCheck}
               onChange={onChangePasswordCheckHandler}
@@ -262,7 +273,11 @@ const Password = () => {
               $hasValue={passwordCheck.length > 0}
               
             />
-           
+            <PasswordToggle onClick={togglePasswordVisibility_2}>
+            {showPasswordCheck ? <Eye />: <ClosedEye />}
+          </PasswordToggle>
+           </Stinput2Container>
+
           </Stname>
         </Stnickname>
           <Stbutton2 onClick={handlePasswordChange}>로그인하기</Stbutton2>
@@ -275,6 +290,33 @@ const Password = () => {
 };
 
 export default Password;
+
+
+const Stinput2Container = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+const PasswordToggle = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  position: absolute;
+  right: 12px;
+`;
+
+
+const Eye = styled(EyeSVG)`
+width: 23px; /* 원하는 크기로 조정 */
+  height: 23px; /* 원하는 크기로 조정 */
+`;
+
+const ClosedEye = styled(ClosedEyeSVG)`
+width: 23px; /* 원하는 크기로 조정 */
+  height: 23px; /* 원하는 크기로 조정 */
+`;
 
 const InnerContainer = styled.div`
   width: 100%;
@@ -382,6 +424,19 @@ const Stbutton2 = styled.button`
 
   cursor: pointer;
   margin-top: 40px;
+`;
+
+const Stnumber = styled.div`
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  /* margin-top: 5px; */
+  color: #d9d9d9;
+  width: 300px;
+  margin-left: -40px;
+  margin-bottom: 5px;
+  display: flex; /* flex 컨테이너 설정 */
+  align-items: flex-start; /* 요소를 왼쪽으로 정렬 */
 `;
 
 

@@ -3,10 +3,22 @@ import { useNavigate } from "react-router-dom";
 import KakaoLogin from "../components/login/KakaoLogin";
 import BasicLogin from "../components/login/BasicLogin";
 import { styled } from "styled-components";
+import NotFoundPage from "./NotFoundPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 
-const LoginPage = () => {
+const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const LoginUser = useSelector((state: RootState) => state.user);
+
+
+  if (LoginUser.isLogin === true) {
+    return <NotFoundPage />;
+  }
+
+
+
   return (
     <Container>
       <InnerContainer>

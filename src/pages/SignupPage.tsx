@@ -1,10 +1,21 @@
 import { styled } from "styled-components";
 import BasicSignUp from "../components/signup/BasicSignUp";
 import { useNavigate } from "react-router-dom";
+import NotFoundPage from "./NotFoundPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 
-const SignupPage = () => {
+const SignupPage: React.FC = () => {
   const navigate = useNavigate();
+  const LoginUser = useSelector((state: RootState) => state.user);
+
+
+  if (LoginUser.isLogin === true) {
+    return <NotFoundPage />;
+  }
+
+
   return (
     <Container>
       <InnerContainer>

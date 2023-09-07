@@ -12,14 +12,15 @@ const DirectingButton: React.FC = () => {
   const { userId } = useParams();
   const LoginUser = useSelector((state: RootState) => state.user);
   const isMyProfile = Number(userId) === LoginUser.userId;
-
+//console.log(LoginUser.kakaoId)
   //"kakaoId\":2955447335
   // {LoginUser.kakaoId}
   // {"user":"{\"isLogin\":true,\"userId\":74,\"nickname\":\"체리\",\"userImage\":null,\"introduce\":\"안녕\",\"email\":\"jshok822@naver.com\",\"kakaoId\":2955447335}","_persist":"{\"version\":-1,\"rehydrated\":true}"}
 
     const handlePwPageClick = () => {
 
-      if (LoginUser.kakaoId===null) {
+      if (LoginUser.kakaoId===`${null}`) {
+        console.log(LoginUser.kakaoId)
         // kakaoId가 있는 경우 아무 작업도 하지 않고 함수를 종료.
         return;
       }
