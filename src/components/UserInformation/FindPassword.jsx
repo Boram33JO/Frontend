@@ -218,9 +218,7 @@ const Password = () => {
               <Stinput4
                 type={"text"}
                 value={code}
-                placeholder={`인증코드 입력 (${formatTime(
-                  emailVerificationTimer
-                )})`}
+                placeholder={`인증코드 입력`}
                 onChange={onChangenumberHandler}
                 onFocus={() => setIsNumberFocused(true)}
                 onBlur={() => setIsNumberFocused(false)}
