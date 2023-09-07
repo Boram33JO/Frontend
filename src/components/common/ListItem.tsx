@@ -31,100 +31,102 @@ const ListItem = ({ post }: Props) => {
     }
 
     return (
-        <ListItemContainer>
-            <ListItemBackground $src={cardBackground(post.category, post.postId)} onClick={() => navigate(`/detail/${post.postId}`)}>
-                <ListItemTop>
-                    <ProfileArea>
-                        {!!post.nickname ? (
-                            <>
-                                <ProfileThumbnail $src={getProfileImage(post.userImage)} />
+        <>
+            <ListItemContainer>
+                <ListItemBackground $src={cardBackground(post.category, post.postId)} onClick={() => navigate(`/detail/${post.postId}`)}>
+                    <ListItemTop>
+                        <ProfileArea>
+                            {!!post.nickname ? (
+                                <>
+                                    <ProfileThumbnail $src={getProfileImage(post.userImage)} />
+                                    <ProfileInfo>
+                                        <StP $color="#FFFFFF" $size={"14px"}>
+                                            {post.nickname}
+                                        </StP>
+                                        <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
+                                            {displayedAt(post.createdAt)}
+                                        </StP>
+                                    </ProfileInfo>
+                                </>
+                            ) : (
                                 <ProfileInfo>
-                                    <StP $color="#FFFFFF" $size={"14px"}>
-                                        {post.nickname}
-                                    </StP>
                                     <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
                                         {displayedAt(post.createdAt)}
                                     </StP>
                                 </ProfileInfo>
-                            </>
-                        ) : (
-                            <ProfileInfo>
-                                <StP $color="#E6E6E6" $size={"14px"} $weight={"500"}>
-                                    {displayedAt(post.createdAt)}
+                            )}
+                        </ProfileArea>
+                        <TitleArea>
+                            <StP style={{ textAlign: "right" }} $color="#FFFFFF" $size={"16px"}>
+                                {post.postTitle}
+                            </StP>
+                            <TitleSubArea>
+                                <SvgIcon style={{ marginRight: "4px" }}>
+                                    <StLike />
+                                </SvgIcon>
+                                <StP $color="#FFFFFF" $size={"14px"}>
+                                    {post.wishlistCount}
                                 </StP>
-                            </ProfileInfo>
-                        )}
-                    </ProfileArea>
-                    <TitleArea>
-                        <StP style={{ textAlign: "right" }} $color="#FFFFFF" $size={"16px"}>
-                            {post.postTitle}
-                        </StP>
-                        <TitleSubArea>
-                            <SvgIcon style={{ marginRight: "4px" }}>
-                                <StLike />
+                                <Divider />
+                                <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>
+                                    조회수 {post.viewCount}
+                                </StP>
+                                <Divider />
+                                <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>
+                                    {categories[Number(post.category) - 1]}
+                                </StP>
+                            </TitleSubArea>
+                        </TitleArea>
+                    </ListItemTop>
+                    <DropdownToggle onClick={(e) => toggleDropdown(e)}>
+                        <PlaylistLeft>
+                            <MusicInfo>
+                                <StP $color={"#222222"} $size={"16px"}>
+                                    {post.songs[0].songTitle}
+                                </StP>
+                                <StP $color={"#A6A3AF"} $size={"14px"}>
+                                    {post.songs[0].artistName}
+                                </StP>
+                            </MusicInfo>
+                        </PlaylistLeft>
+                        <PlaylistRight>
+                            <SvgIcon>
+                                <Quaver />
+                                {`+${post.songs.length}`}
                             </SvgIcon>
-                            <StP $color="#FFFFFF" $size={"14px"}>
-                                {post.wishlistCount}
-                            </StP>
-                            <Divider />
-                            <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>
-                                조회수 {post.viewCount}
-                            </StP>
-                            <Divider />
-                            <StP $color="#FFFFFF" $size={"14px"} $weight={"500"}>
-                                {categories[Number(post.category) - 1]}
-                            </StP>
-                        </TitleSubArea>
-                    </TitleArea>
-                </ListItemTop>
-                <DropdownToggle onClick={(e) => toggleDropdown(e)}>
-                    <PlaylistLeft>
-                        <MusicInfo>
-                            <StP $color={"#222222"} $size={"16px"}>
-                                {post.songs[0].songTitle}
-                            </StP>
-                            <StP $color={"#A6A3AF"} $size={"14px"}>
-                                {post.songs[0].artistName}
-                            </StP>
-                        </MusicInfo>
-                    </PlaylistLeft>
-                    <PlaylistRight>
-                        <SvgIcon>
-                            <Quaver />
-                            {`+${post.songs.length}`}
-                        </SvgIcon>
-                        <SvgIcon>
-                            {
-                                (!isOpen) ? <Expand /> : <Contract />
-                            }
-                        </SvgIcon>
-                    </PlaylistRight>
-                    {isOpen && (
-                        <DropdownList>
-                            {post.songs.map((song, index) => {
-                                return (
-                                    <DropdownItem key={song.id} onClick={(e) => { handleClickListItem(e, index) }}>
-                                        <PlaylistLeft>
-                                            <MusicThumbnail src={song.thumbnail} />
-                                            <MusicInfo>
-                                                <StP $color={"#222222"} $size={"16px"}>
-                                                    {song.songTitle}
-                                                </StP>
-                                                <StP $color={"#A6A3AF"} $size={"14px"}>
-                                                    {song.artistName}
-                                                </StP>
-                                            </MusicInfo>
-                                        </PlaylistLeft>
-                                        <SpotifyIcon src={spotify} />
-                                    </DropdownItem>
-                                )
-                            })}
-                        </DropdownList>
-                    )}
-                </DropdownToggle>
-            </ListItemBackground>
+                            <SvgIcon>
+                                {
+                                    (!isOpen) ? <Expand /> : <Contract />
+                                }
+                            </SvgIcon>
+                        </PlaylistRight>
+                        {isOpen && (
+                            <DropdownList>
+                                {post.songs.map((song, index) => {
+                                    return (
+                                        <DropdownItem key={song.id} onClick={(e) => { handleClickListItem(e, index) }}>
+                                            <PlaylistLeft>
+                                                <MusicThumbnail src={song.thumbnail} />
+                                                <MusicInfo>
+                                                    <StP $color={"#222222"} $size={"16px"}>
+                                                        {song.songTitle}
+                                                    </StP>
+                                                    <StP $color={"#A6A3AF"} $size={"14px"}>
+                                                        {song.artistName}
+                                                    </StP>
+                                                </MusicInfo>
+                                            </PlaylistLeft>
+                                            <SpotifyIcon src={spotify} />
+                                        </DropdownItem>
+                                    )
+                                })}
+                            </DropdownList>
+                        )}
+                    </DropdownToggle>
+                </ListItemBackground>
+            </ListItemContainer>
             {preview && <Preview url={post.songs[songIndex].audioUrl} song={post.songs[songIndex]} setPreview={setPreview} />}
-        </ListItemContainer>
+        </>
     )
 }
 

@@ -39,7 +39,7 @@ const Modal = ({ first, second, buttonName, setToggle, clickButton }: Props) => 
 export default Modal
 
 const ModalBackground = styled.div`
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -55,12 +55,12 @@ const ModalContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
+    width: 320px;
     transform: translateX(-50%) translateY(-50%);
     z-index: 5;
-    width: 320px;
     background-color: #2A282C;
     color: #FAFAFA;
     border-radius: 10px;

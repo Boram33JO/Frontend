@@ -76,8 +76,8 @@ const TitleArea = styled.div`
 `
 
 const ProfileThumnail = styled.div`
-    width: 34px;
-    height: 34px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     position: relative;
     overflow: hidden;

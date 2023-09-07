@@ -69,7 +69,7 @@ const SortListItem = styled.div<{ $active: boolean }>`
     font-weight: 600;
     border-radius: 30px;
 
-    padding: 8px 16px;
+    padding: 4px 16px;
     text-align: center;
 
     box-sizing: border-box;

@@ -58,7 +58,7 @@ const SortListItem = styled.div<{ $active: boolean }>`
   color: ${(props) => (props.$active ? "#FAFAFA" : "#85838D")};
   border-radius: 30px;
 
-  padding: 8px 14px;
+  padding: 4px 14px;
   text-align: center;
   font-weight: 600;
   box-sizing: border-box;

@@ -49,13 +49,13 @@ const Preview = ({ url, song, setPreview }: Props) => {
 export default Preview
 
 const ModalBackground = styled.div`
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
     z-index: 9;
-    width: 100vh;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background-color: black;
     opacity: 0.7;
 `
@@ -65,7 +65,7 @@ const ModalContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     width: 340px;

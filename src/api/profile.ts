@@ -70,7 +70,7 @@ export const getFavLists = async (userId: string | undefined, page: number, sort
 export const getFollowLists = async ( userId: string | undefined, page: number,) => {
   const response = await instance.get(`/user/${userId}/follow`, {
      params: { page, size: 20}});
-     console.log(response);
+    //  console.log(response);
   return response;
 };
 
