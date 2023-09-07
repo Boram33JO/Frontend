@@ -9,6 +9,8 @@ import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';
+import { logout } from "../../redux/modules/userSlice";
+import store from "../../redux/config/configStore";
 
 
 
@@ -71,7 +73,7 @@ const Password = () => {
   const togglePasswordVisibility_2 = () => {
   setShowPasswordCheck((prevShowPasswordCheck) => !prevShowPasswordCheck);
 };
-
+const [isEmailChecked, setIsEmailChecked] = useState(false);
 
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
@@ -102,6 +104,8 @@ const Password = () => {
     try {
       const data = await emailCheckTofindPassword(email);
       toast.success(`${data.data.message}`, {position: 'top-center'});
+      setIsEmailChecked(true);
+      
       // setShowCodeInput(true);
      // console.log(data)
     } catch (error) {
@@ -116,12 +120,25 @@ const Password = () => {
 
   // 임시비번 검증 숫자 검사 (유효기간 5분)
   const DoubleCheckhandleButton = async () => {
-    const data = await TempPassword(email, code);
 
+    if (!isEmailChecked) {
+      toast.error("이메일을 먼저 확인해주세요.", { position: 'top-center' });
+      return;
+    }
+
+
+    const data = await TempPassword(email, code);
+    if (email===`` && code===``)
+    {
+      resetEmail();
+      resetNumber();
+      toast.error(`계정과 코드를 입력하세요.`,{position: 'top-center'});
+     return;
+    }
     if (data.data.message) {
-      
       setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
       setIsMobileButtonDisabled(true);
+      console.log(data.data.message)
       toast.success( <div>
         이메일 인증이 완료되었습니다.
         <br />
@@ -129,10 +146,11 @@ const Password = () => {
       </div>, {position: 'top-center'});
       setEmailButtonContent("완료");
       setmobileButtonContent("완료")
-    
-     
-    } else if (data.data.error) {
-    
+      return;
+    } 
+   
+
+    else if (data.data.error) {
       setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
       toast.error(
       <div>
@@ -164,8 +182,9 @@ const Password = () => {
      },);
      if (result.success){
        toast.success('비밀번호가 바뀌었습니다. 다시 로그인 해주세요.', { position: 'top-center' });
-        navigate("/login");
-        //store.dispatch(logout());
+       store.dispatch(logout());
+       navigate("/login");
+       
        //console.log(result.success);
      }
     if (result.error)
