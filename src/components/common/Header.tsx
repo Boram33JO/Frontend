@@ -1,8 +1,8 @@
-import { styled } from "styled-components"
-import { ReactComponent as Menu } from '../../assets/images/menu.svg'
-import { ReactComponent as Search } from '../../assets/images/search.svg'
-import { ReactComponent as Login } from '../../assets/images/login.svg'
-import logo_text from '../../assets/images/logo_text.svg'
+import { styled } from "styled-components";
+import { ReactComponent as Menu } from "../../assets/images/menu.svg";
+import { ReactComponent as Search } from "../../assets/images/search.svg";
+import { ReactComponent as Login } from "../../assets/images/login.svg";
+import logo_text from "../../assets/images/logo_text.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/config/configStore";
@@ -24,16 +24,16 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
     const [connect, setConnect] = useState<boolean>(false);
     const [sse, setSse] = useState<EventSourcePolyfill>();
     const queryClient = useQueryClient();
-
-    useEffect(() => { }, [persist])
+  
+    useEffect(() => {}, [persist]);
 
     useEffect(() => {
         if (!connect && loginUser.isLogin) {
             // console.log("SSE 연결");
             const eventSourceInitDict: any = {
-                headers: { accessToken: localStorage.getItem("AccessToken") }
+                headers: { accessToken: localStorage.getItem("AccessToken") },
             };
-
+          
             const connectedSse = new EventSourcePolyfill(
                 `${process.env.REACT_APP_SERVER_URL}/notifications/connect`,
                 eventSourceInitDict
@@ -80,8 +80,8 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
 
     const handleLogoClick = () => {
         handleScrollTop();
-        navigate('/')
-    }
+        navigate("/");
+    };
 
     return (
         <HeaderContainer>
@@ -89,10 +89,13 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
                 <Menu />
             </HeaderLeft>
             <HeaderCenter onClick={handleLogoClick}>
-                <Logo data={logo_text} aria-label="logo" />
+                <Logo
+                    data={logo_text}
+                    aria-label="logo"
+                />
             </HeaderCenter>
             <HeaderRight>
-                {/* <StSearch /> */}
+                <StSearch onClick={() => navigate(`/search`)} />
                 {
                     (loginUser.isLogin) ? (
                         <ProfileImage
@@ -106,10 +109,10 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
                 }
             </HeaderRight>
         </HeaderContainer>
-    )
-}
+    );
+};
 
-export default Header
+export default Header;
 
 const HeaderContainer = styled.div`
     display: flex;
@@ -119,12 +122,12 @@ const HeaderContainer = styled.div`
     position: sticky;
     top: 0;
     z-index: 2;
-    
+
     min-width: 390px;
     width: 100%;
     height: 60px;
     background-color: #141414;
-    
+
     box-sizing: border-box;
     padding-right: 20px;
 
@@ -133,7 +136,7 @@ const HeaderContainer = styled.div`
         left: 50%;
         transform: translateX(-50%);
     }
-`
+`;
 
 const HeaderLeft = styled.div`
     display: flex;
@@ -141,7 +144,7 @@ const HeaderLeft = styled.div`
     margin-left: 20px;
 
     cursor: pointer;
-`
+`;
 
 const HeaderCenter = styled.div`
     display: flex;
@@ -151,32 +154,32 @@ const HeaderCenter = styled.div`
     transform: translateX(-50%);
 
     cursor: pointer;
-`
+`;
 
-const Logo = styled.object` 
+const Logo = styled.object`
     height: 26px;
     object-fit: cover;
     pointer-events: none;
-`
+`;
 
 const HeaderRight = styled.div`
     display: flex;
     gap: 22px;
-`
+`;
 
 const ProfileImage = styled.img`
     width: 28px;
     height: 28px;
-    background-color: #ECECEC;
+    background-color: #ececec;
     border-radius: 50%;
     cursor: pointer;
     object-fit: cover;
-`
+`;
 
 const StSearch = styled(Search)`
     cursor: pointer;
-`
+`;
 
 const StLogin = styled(Login)`
     cursor: pointer;
-`
+`;

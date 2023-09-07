@@ -21,7 +21,7 @@ const Pictures = () => {
   const queryClient = useQueryClient();
   const LoginUser = useSelector((state: RootState) => state.user);
   const isMyProfile = Number(userId) === LoginUser.userId;
-  //const pageSize = 10; // 한 번에 가져올 데이터의 개수
+
 
   const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
     null
@@ -32,40 +32,13 @@ const Pictures = () => {
   // const [isFetching, setFetching] = useState(false);
 
   const {
-    data: followerData,
-    isLoading,
-    isError,
-  } = useQuery(
+    data: followerData, isLoading, isError,} = useQuery(
     ["Follow", userId],
     () => (userId ? getFollowLists(userId) : Promise.resolve([])),
     { enabled: !!userId, keepPreviousData: true }
   );
 
-  // const fetchMoreData = () => {
-  //   if (!followerData) return;
-  //   if (followerData.followList.content.length < pageSize) {
-  //     // 현재 페이지에 남은 데이터가 pageSize 미만이면 중복 요청 방지
-  //     return;
-  //   }
-    //setPage((prevPage) => prevPage + 1);
-    // setFetching(true);
-  //};
-
-  // useEffect(() => {
-  //   // 스크롤 이벤트 핸들러와 임계값(threshold) 추가
-  //   const handleScroll = () => {
-  //     const threshold = window.innerHeight * 0.8;
-  //     if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - threshold) {
-  //       fetchMoreData();
-  //     }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
+  
 
 
   //console.log(followerData); // 데이터 구조를 확인

@@ -9,7 +9,7 @@ import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';
-import { isAxiosError } from "axios";
+
 
 
 
@@ -170,7 +170,7 @@ const BasicSignUp = () => {
       email: email,
       password: password,
       nickname: nickname,
-      phonenumber: to,
+      phoneNumber : to,
     };
     addNewUserMutation.mutate(newUser);
   };
@@ -191,10 +191,11 @@ const BasicSignUp = () => {
     setEmailVerificationTimer(300); // 5분 타이머 시작
 
     try {
-      const response = await emailCheck(email);
-      toast.success(`${response.data}`, {position: 'top-center'});
+      const data = await emailCheck(email);
+      toast.success(`${data.data.message}`, {position: 'top-center'});
+     // toast.success(`인증메일을 발송했습니다.`,{position: 'top-center'});
       setShowCodeInput(true);
-     // console.log(response);
+      console.log(data);
     } catch (error) {
       
      // console.log(isAxiosError,"2")
@@ -208,17 +209,17 @@ const BasicSignUp = () => {
 
   // 이메일 6자리 검증 숫자 검사 (유효기간 5분)
   const DoubleCheckhandleButton = async () => {
-    const response = await emailDoubleCheck(email, code);
-
-    if (response.data === true) {
+    const data = await emailDoubleCheck(email, code);
+console.log(data)
+    if (data.data.message) {
       setIsEmailVerified(true);
       setIsEmailButtonDisabled(true); // 중복확인 버튼 비활성화
       toast.success("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
      // setShowCodeInput(true);
       setShowCodeInput(false);
       setEmailButtonContent("인증완료");
-
-    } else if (response.data === false) {
+      console.log(data)
+    } else if (data.data.error) {
       setIsEmailVerified(false);
       setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
       toast.error("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.", {position: 'top-center'});
@@ -229,9 +230,9 @@ const BasicSignUp = () => {
 
   // 모바일 인증
   const MobilehandleCheckButton = async () => {
-    const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
+    const toRegex = /^(010|011)[0-9]{8}$/;
 
-    if (!phoneNumberRegex.test(to)) {
+    if (!toRegex.test(to)) {
       toast.error("11자리 숫자만 입력해주세요.", {position: 'top-center'});
       resetMobile(); // 입력 칸 비우기
       return;
@@ -241,37 +242,36 @@ const BasicSignUp = () => {
     setmobileVerificationTimer(300);
     try {
       // 버튼 내용 변경
-      const response = await mobileCheck(to);
+      const data = await mobileCheck(to);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-    //  console.log(response);
+    //  console.log(data);
       setShowMobileInput(true);
       // 5분 타이머 시작
       toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
-      //  const validPhoneNumber = to; // 유효한 핸드폰 번호로 설정
-      //  await onSignUpClickHandler(validPhoneNumber);
     } catch (error) {
       setmobileButtonContent("재전송");
-      toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
-     // console.log(error);
+      toast.error("이미 등록된 전화번호입니다.", {position: 'top-center'});
+      console.log(error);
     }
   };
 
   // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
   const MobileDoubleCheckhandleButton = async () => {
-    const response = await mobileDoubleCheck(smsConfirmNum, to);
+    const data = await mobileDoubleCheck(smsConfirmNum, to);
    // console.log(response, "숫자 확인1");
 
-    if (response.data === true) {
+    if (data.data.message) {
       setIsMobileVerified(true);
+      //toast.success(`${data.data.message}`, {position: 'top-center'});
       toast.success("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
-      console.log(response);
+      console.log(data);
       setShowMobileInput(false);
       setIsMobileButtonDisabled(true);
       setmobileButtonContent("인증완료");
 
       // console.log(response.data, "숫자 확인2");
-    } else if (response.data === false) {
+    } else if (data.data.error) {
       setIsMobileVerified(false);
 
       setIsMobileButtonDisabled(false);
@@ -286,15 +286,17 @@ const BasicSignUp = () => {
   // 닉네임 검사
   const handleCheckButton = async () => {
     const response = await nicknameCheck(nickname);
-    // console.log(response);
+   // console.log(response);
 
     if (response.data.message) {
       toast.success(`${response.data.message}`, {position: 'top-center'});
       setIsNicknameVerified(true);
+     // console.log(response);
     } else {
       // setNicknameServerError(response.data.error);
       toast.error(`${response.data.error}`, {position: 'top-center'});
       setIsNicknameVerified(false);
+      //console.log(response);
     }
   };
 
@@ -353,7 +355,7 @@ const BasicSignUp = () => {
               onFocus={() => setIsMobileFocused(true)}
               onBlur={() => setIsMobileFocused(false)}
               $isFocused={isMobileFocused}
-              $hasValue={email.length > 0}
+              $hasValue={to.length > 0}
               disabled={isMobileVerified} // 여기서 disabled 속성을 설정
             />
             <Stbutton1
@@ -378,7 +380,7 @@ const BasicSignUp = () => {
                 onFocus={() => setIsMobileNumberFocused(true)}
                 onBlur={() => setIsMobileNumberFocused(false)}
                 $isFocused={isMobileNumberFocused}
-                $hasValue={code.length > 0}
+                $hasValue={smsConfirmNum.length > 0}
               />
               <Stbutton1 onClick={MobileDoubleCheckhandleButton}>
                 인증

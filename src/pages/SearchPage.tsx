@@ -14,17 +14,16 @@ const SearchPage = () => {
     const [categoryNum, setCategoryNum] = useState<any>(0);
     const [searchData, setSearchData] = useState<any>();
     const [searchPlace, setSearchPlace] = useState<any>();
-    const [searchSongs, setSearchSongs] = useState<any>();
     const [topPost, setTopPost] = useState<any>([]);
     const [topSongs, setTopSongs] = useState<any>();
     const [isPopularSearchWord, setIsPopularSearchWord] = useState<boolean>(true);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
     const [randomColorChange, setRandomColorChange] = useState(false);
+    const [popularList, setPopularList] = useState<any>();
 
     useEffect(() => {
         getSearch();
     }, []);
-
     const popularSearchWordHandler = () => {
         setIsPopularSearchWord(!isPopularSearchWord);
     };
@@ -35,7 +34,7 @@ const SearchPage = () => {
             setSearchData(response);
             setTopPost(response.topPosts);
             setSearchPlace(response.topLocations);
-            setSearchKeyword(response.topSearchKeywords);
+            setPopularList(response.topSearchKeywords);
             setRandomColorChange(!randomColorChange);
             setTopSongs(response.topSongs);
         } catch (error) {
@@ -43,6 +42,7 @@ const SearchPage = () => {
         }
     };
 
+    console.log(topPost);
     return (
         <StSearchContainer>
             <SearchInput
@@ -64,7 +64,6 @@ const SearchPage = () => {
             <StSection>
                 <StTitle>
                     <h2>피플러 인기 플레이스</h2>
-                    {/* <span>더보기</span> */}
                 </StTitle>
                 <StPopularPlace>
                     <PopularPlace
@@ -76,7 +75,6 @@ const SearchPage = () => {
             <StSection>
                 <StTitle>
                     <h2>피플러들이 선택한 곡</h2>
-                    {/* <span>더보기</span> */}
                 </StTitle>
                 <StCategory>
                     <Category
@@ -92,20 +90,18 @@ const SearchPage = () => {
             <StSection>
                 <StTitle>
                     <h2>피플 인기 검색어</h2>
-                    {/* <span>더보기</span> */}
                 </StTitle>
                 {isPopularSearchWord === true ? (
                     <PopularSearchWord
-                        searchKeyword={searchKeyword}
+                        popularList={popularList}
                         onClick={popularSearchWordHandler}
                     />
                 ) : (
                     <PopularSearchWordList
-                        searchKeyword={searchKeyword}
+                        popularList={popularList}
                         onClick={popularSearchWordHandler}
                     />
                 )}
-
                 <p>실시간 업데이트 기준</p>
             </StSection>
         </StSearchContainer>
@@ -162,12 +158,3 @@ const StPopularPlace = styled.div`
     gap: 8px;
     flex-wrap: wrap;
 `;
-
-// const StRecommendedPosting = styled.div`
-//     width: 100%;
-
-//     display: flex;
-//     flex-direction: column;
-
-//     margin: 14px 0;
-// `;

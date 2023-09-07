@@ -1,17 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { ReactComponent as CafeIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as RestaurantIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as PublicTransportIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as SchoolIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as ExerciseIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as ParkIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as WaterIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as OceanIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as LibraryIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as CulturePlaceIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as LeisureIcon } from "../../assets/images/category/03_cafe.svg";
-import { ReactComponent as EtcIcon } from "../../assets/images/category/03_cafe.svg";
 
 interface SearchProps {
     searchPlace: any;
@@ -19,30 +7,11 @@ interface SearchProps {
 }
 
 const PopularPlace: React.FC<SearchProps> = ({ searchPlace, setSearchPlace }) => {
-    const IconLists = [
-        CafeIcon,
-        RestaurantIcon,
-        PublicTransportIcon,
-        SchoolIcon,
-        ExerciseIcon,
-        ParkIcon,
-        WaterIcon,
-        OceanIcon,
-        LibraryIcon,
-        CulturePlaceIcon,
-        LeisureIcon,
-        EtcIcon,
-    ];
-
     return (
         <>
             {searchPlace &&
-                searchPlace.slice(0, 6).map((item: any, index: number) => (
+                searchPlace.slice(0, 8).map((item: any, index: number) => (
                     <StPlacelogo key={index}>
-                        <CafeIcon
-                            width={16}
-                            height={16}
-                        />
                         <span>{item}</span>
                     </StPlacelogo>
                 ))}
@@ -54,7 +23,7 @@ export default PopularPlace;
 
 const StPlacelogo = styled.div`
     box-sizing: border-box;
-    padding: 10px 14px;
+    padding: 4px 14px;
     text-align: start;
 
     border-radius: 25px;

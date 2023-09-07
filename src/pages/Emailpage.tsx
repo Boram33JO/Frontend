@@ -2,10 +2,20 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import FindEmail from "../components/UserInformation/FindEmail";
 import FindNav from "../components/UserInformation/FindNav";
+import NotFoundPage from "./NotFoundPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 
 const EmailPage = () => {
   const navigate = useNavigate();
+  const LoginUser = useSelector((state: RootState) => state.user);
+
+
+  if (LoginUser.isLogin === true) {
+    return <NotFoundPage />;
+  }
+
   return (
     <>
      <FindNav/>
@@ -18,11 +28,11 @@ const EmailPage = () => {
           <FindEmail />
         </LoginSection>
 
-          <SignUp>
+          {/* <SignUp>
           <div>이메일을 찾으셨나요?</div>
           &nbsp;
           <Stlink2 onClick={() => { navigate('/login') }}>로그인</Stlink2>
-        </SignUp>
+        </SignUp> */}
 
       </InnerContainer>
     </Container>

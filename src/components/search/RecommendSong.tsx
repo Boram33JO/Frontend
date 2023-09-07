@@ -8,6 +8,10 @@ interface SearchProps {
 }
 
 const RecommendSong: React.FC<SearchProps> = ({ topSongs, categoryNum }) => {
+    const onClickExternalLink = (externalUrl: string) => {
+        window.location.href = externalUrl;
+    };
+
     return (
         <>
             {topSongs &&
@@ -16,7 +20,10 @@ const RecommendSong: React.FC<SearchProps> = ({ topSongs, categoryNum }) => {
                     .filter((item: any) => item.category === categoryNum + 1)
                     .map((item: any) =>
                         item.songResponseDtos.map((song: any, index: number) => (
-                            <StSongList key={index}>
+                            <StSongList
+                                key={index}
+                                onClick={() => onClickExternalLink(song.externalUrl)}
+                            >
                                 <StSongListLeft>
                                     <img
                                         src={song.thumbnail}
@@ -24,7 +31,7 @@ const RecommendSong: React.FC<SearchProps> = ({ topSongs, categoryNum }) => {
                                     />
                                     <StSongListInfo>
                                         <h3>{song.songTitle}</h3>
-                                        <p>{song.artistName}</p>
+                                        <div>{song.artistName}</div>
                                     </StSongListInfo>
                                 </StSongListLeft>
                                 <Spotify style={{ width: "24px" }} />
@@ -45,9 +52,10 @@ const StSongList = styled.div`
     width: 100%;
     color: #fafafa;
     margin-bottom: 14px;
+    cursor: pointer;
 
     h3 {
-        width: 150%;
+        width: 100%;
         font-size: 16px;
         font-weight: 500;
         line-height: 120%;
@@ -57,8 +65,8 @@ const StSongList = styled.div`
         text-overflow: ellipsis;
         word-break: break-all;
     }
-    p {
-        width: 150%;
+    div {
+        width: 100%;
         font-size: 14px;
         text-align: start;
         color: #a6a3af;
@@ -77,6 +85,7 @@ const StSongList = styled.div`
 `;
 
 const StSongListLeft = styled.div`
+    width: 70%;
     display: flex;
     flex-direction: row;
     align-items: center;

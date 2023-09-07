@@ -19,7 +19,7 @@ const RedirectKakao: React.FC = () => {
             localStorage.setItem("RefreshToken", response.headers.refreshtoken);
             dispatch(logIn2());
             dispatch(setUserInfo({ ...response.data }));
-            toast.success("로그인되었습니다.", {position: 'top-center'});
+            toast.success("카카오로 로그인 되었습니다!", {position: 'top-center'});
             navigate("/");
         });
     });
