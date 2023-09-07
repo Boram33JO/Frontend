@@ -62,7 +62,7 @@ const CategoryListItem = styled.div<{ $active: boolean }>`
     font-weight: 600;
 
     box-sizing: border-box;
-    padding: 8px 16px;
+    padding: 4px 16px;
 
     cursor: pointer;
 `;

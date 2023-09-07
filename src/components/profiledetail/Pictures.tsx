@@ -81,7 +81,7 @@ const Pictures = () => {
   {
     onSuccess: () => {
       // 삭제 후 데이터를 다시 불러오기 위해 팔로워 정보 캐시를 무효화합니다.
-      queryClient.invalidateQueries(["Follow"]);
+      queryClient.invalidateQueries(["follow"]);
       toast.success("해당 피플러를 삭제했습니다.", {position: 'top-center'});
      // console.log(response);
     },
