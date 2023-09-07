@@ -6,6 +6,7 @@ import { styled } from "styled-components";
 import NotFoundPage from "./NotFoundPage";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/config/configStore";
+import Loading from "../components/map/Loading";
 
 
 const LoginPage: React.FC = () => {
@@ -14,7 +15,7 @@ const LoginPage: React.FC = () => {
 
 
   if (LoginUser.isLogin === true) {
-    return <NotFoundPage />;
+    return <Loading />;
   }
 
 

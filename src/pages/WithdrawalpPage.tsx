@@ -23,6 +23,7 @@ const EmailPage = () => {
         <H3> 정말 P.Ple을 <br />떠나실 건가요...?</H3>
         <H4> 피플을 떠나시기 전에 아래 사항을 확인해 주세요.</H4>
         <StBox2>
+          
         <PwChange>
          
               <Wrapper>

@@ -16,6 +16,7 @@ import SortButton2 from "./SortButton2";
 import { SortType } from "./SortButton";
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";
 import Loading from "../map/Loading";
+import { toast } from "react-hot-toast";
 
 
 type myComment = {
@@ -82,7 +83,12 @@ const AllCommentsList = () => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(["comments"]);
-      }
+        toast.success("해당 댓글을 삭제했습니다.", {position: 'top-center'});
+      },
+      onError: (error) => {
+        // console.error("피플러 삭제 오류:", error);
+         toast.error("댓글을 삭제하는 중에 오류가 발생했습니다.", { position: 'top-center' });
+       },
     }
   );
 

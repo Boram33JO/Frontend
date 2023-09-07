@@ -19,7 +19,7 @@ import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 
 
 type follower = {
-  id: number;
+  userId: number;
   content: string;
   createdAt: string;
   postId: number;
@@ -77,10 +77,11 @@ const Pictures = () => {
 
 
   // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
-  const mutation = useMutation(followUser, {
+  const mutation = useMutation((userId: number)=>followUser(userId),
+  {
     onSuccess: () => {
       // 삭제 후 데이터를 다시 불러오기 위해 팔로워 정보 캐시를 무효화합니다.
-      queryClient.invalidateQueries(["Follow", userId]);
+      queryClient.invalidateQueries(["Follow"]);
       toast.success("해당 피플러를 삭제했습니다.", {position: 'top-center'});
      // console.log(response);
     },
@@ -88,7 +89,8 @@ const Pictures = () => {
      // console.error("피플러 삭제 오류:", error);
       toast.error("피플러를 삭제하는 중에 오류가 발생했습니다.", { position: 'top-center' });
     },
-  });
+  }
+);
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPage) {
@@ -96,13 +98,13 @@ const Pictures = () => {
     }
   };
 
-  const handleDelete = (followerId: number) => {
-    setSelectedCommentId(followerId);
+  const handleDelete = (userId: number) => {
+    setSelectedCommentId(userId);
     setDeleteModalOpen(true);
   };
-  const deleteCommentAsync = async (followerId: number) => {
+  const deleteCommentAsync = async (userId: number) => {
     try {
-      await mutation.mutateAsync(followerId);
+      await mutation.mutateAsync(userId);
     } catch (error) {
       toast.error("피플러를 삭제하는 중에 오류가 발생했습니다.", {position: 'top-center'});
     }
@@ -117,7 +119,6 @@ const Pictures = () => {
     return <div>Error...</div>;
   }
 
-  // followerData를 활용하여 팔로워 정보 렌더링
   return (
     <>
     <InnerContainer>
@@ -126,7 +127,7 @@ const Pictures = () => {
       <Nums>{`${data.followList.totalElements}명`}</Nums>
       </Follower1>
 
-      {data.followList > 0 ? (
+      {data && data.followList.content.length === 0 ? (
         <Pple>
           <StNodata />
           <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
@@ -134,10 +135,10 @@ const Pictures = () => {
 
       ) : (
         data.followList.content.map((item: follower) => (
-          <MyProfile key={item.id}>
+          <MyProfile key={item.userId}>
             <MyThumb
               src={getProfileImage(item.userImage)} style={{minWidth:"62px", minHeight:"62px", objectFit: "cover"}}
-              onClick={() => navigate(`/profile/${data.Id}`)}
+              onClick={() => navigate(`/profile/${item.userId}`)}
             />
             <MyProfile1>
               <MyProfile2>
@@ -145,7 +146,7 @@ const Pictures = () => {
                 <Produce>{item.introduce}</Produce>
               </MyProfile2>
               {isMyProfile && (
-                <Bt onClick={() => handleDelete(data.Id)}>삭제</Bt>
+                <Bt onClick={() => handleDelete(item.userId)}>삭제</Bt>
                 )}
             </MyProfile1>
           </MyProfile>
