@@ -58,21 +58,21 @@ export const getFavLists = async (userId: string | undefined, page: number, sort
 };
 
 //팔로워 조회
-export const getFollowLists = async (
-  userId: string,
-): Promise<any> => {
-  const response = await instance.get(`/user/${userId}/follow`, {
-  });
-  return response.data;
-};
-
-// 팔로워 조회 
-// export const getFollowLists = async ( userId: string | undefined, page: number,) => {
-//   const response = await instance.get(`/user/${userId}/comments`, {
-//      params: { page, size: 20}});
-//      console.log(response);
-//   return response;
+// export const getFollowLists = async (
+//   userId: string,
+// ): Promise<any> => {
+//   const response = await instance.get(`/user/${userId}/follow`, {
+//   });
+//   return response.data;
 // };
+
+//팔로워 조회 
+export const getFollowLists = async ( userId: string | undefined, page: number,) => {
+  const response = await instance.get(`/user/${userId}/follow`, {
+     params: { page, size: 20}});
+     console.log(response);
+  return response;
+};
 
 
 // 내가 댓글 단 포스팅 조회 (댓글 조회)

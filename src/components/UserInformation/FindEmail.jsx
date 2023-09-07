@@ -67,8 +67,8 @@ const Email = () => {
   
 
   // 인중 발송중일 때 상태값.
-  const [emailButtonContent, setEmailButtonContent] = useState("인증하기");
-  const [mobileButtonContent, setmobileButtonContent] = useState("발송하기");
+  const [emailButtonContent, setEmailButtonContent] = useState("확인하기");
+  const [mobileButtonContent, setmobileButtonContent] = useState("인증코드");
 
 
   const [responseData, setResponseData] = useState(null);
@@ -244,7 +244,7 @@ const Email = () => {
               <Stinput4
                 type={"text"}
                 value={smsConfirmNum}
-                placeholder={`인증번호 입력`}
+                placeholder={`인증코드 입력`}
                 onChange={onChangeMobileCodeHandler}
                 onFocus={() => setIsMobileNumberFocused(true)}
                 onBlur={() => setIsMobileNumberFocused(false)}
@@ -372,7 +372,7 @@ const Stbutton2 = styled.button`
   font-weight: 500;
 
   cursor: pointer;
-  margin-top: 40px;
+  margin-top: 115px;
 `;
 
 
