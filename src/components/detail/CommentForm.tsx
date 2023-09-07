@@ -47,7 +47,7 @@ const CommentForm: React.FC<Comment> = ({ setTarget, setIsEdit, commentId, comme
             toast.success('댓글 작성 완료');
         },
         onError: () => {
-            toast.success('댓글 작성 실패');
+            toast.error('댓글 작성 실패');
         }
     });
 

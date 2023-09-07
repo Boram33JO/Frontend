@@ -29,7 +29,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
     const menuList = [
         { id: 1, name: "피플 맵핑", icon: Map, path: "/map" },
         { id: 2, name: "피플 포스팅", icon: Post, path: "/list" },
-        { id: 3, name: "알림", icon: Notify, path: "/notify" },
+        // { id: 3, name: "알림", icon: Notify, path: "/notify" },
     ]
 
     const handleMenuClick = (path: string) => {
@@ -81,7 +81,7 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                         }
                     </SideMiddleTop>
                     <Hr />
-                    <SideMiddleBottom>
+                    <SideMiddleSection>
                         {
                             menuList.map(menu => {
                                 return (
@@ -95,11 +95,18 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                                 )
                             })
                         }
-                    </SideMiddleBottom>
-                    {
-                        (LoginUser.isLogin) && (
-                            <>
-                                <Hr />
+                    </SideMiddleSection>
+                    {(LoginUser.isLogin) && (
+                        <>
+                            <Hr />
+                            <SideMiddleSection>
+                                <MenuItem onClick={() => handleMenuClick("/notify")}>
+                                    <MenuItemName>
+                                        <Notify />
+                                        <P $size={"18px"} $weight={"600"}>알림</P>
+                                    </MenuItemName>
+                                    <Arrow />
+                                </MenuItem>
                                 <MenuItem onClick={() => handleMenuClick("/edit")}>
                                     <MenuItemName>
                                         <StEdit />
@@ -107,9 +114,9 @@ const Side = ({ sideOpen, setSideOpen }: Props) => {
                                     </MenuItemName>
                                     <Arrow />
                                 </MenuItem>
-                            </>
-                        )
-                    }
+                            </SideMiddleSection>
+                        </>
+                    )}
                 </SideMiddle>
             </SideTop>
             <SideBottom>
@@ -188,7 +195,7 @@ const SideMiddleTop = styled.div`
     gap: 40px;   
 `
 
-const SideMiddleBottom = styled.div`
+const SideMiddleSection = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;   

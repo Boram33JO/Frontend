@@ -6,8 +6,8 @@ import logo_text from "../../assets/images/logo_text.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/config/configStore";
-import { getProfileImage } from "../../utils/common";
-import { useEffect } from "react";
+import { getProfileImage } from '../../utils/common'
+import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import { EventSourcePolyfill } from "event-source-polyfill";
 import { useQueryClient } from "react-query";
@@ -19,63 +19,64 @@ interface Props {
 
 const Header = ({ setSideOpen, handleScrollTop }: Props) => {
     const navigate = useNavigate();
-    const userInfo = useSelector((state: RootState) => state.user);
     const persist = localStorage.getItem("persist:root");
     const loginUser = useSelector((state: RootState) => state.user);
+    const [connect, setConnect] = useState<boolean>(false);
+    const [sse, setSse] = useState<EventSourcePolyfill>();
     const queryClient = useQueryClient();
+  
     useEffect(() => {}, [persist]);
 
     useEffect(() => {
-        if (loginUser.isLogin) {
+        if (!connect && loginUser.isLogin) {
+            // console.log("SSE 연결");
             const eventSourceInitDict: any = {
                 headers: { accessToken: localStorage.getItem("AccessToken") },
             };
+          
+            const connectedSse = new EventSourcePolyfill(
+                `${process.env.REACT_APP_SERVER_URL}/notifications/connect`,
+                eventSourceInitDict
+            );
 
-            const sseConnect = new EventSourcePolyfill(`${process.env.REACT_APP_SERVER_URL}/notifications/connect`, eventSourceInitDict);
+            const notifyToast = (type: string) => {
+                toast(<span style={{ cursor: "pointer" }} onClick={() => navigate('/notify')}>새로운 {type} 알림</span>, { icon: "🔔", position: "top-center" })
+            }
 
-            // console.log(sseConnect);
-            // sseConnect.addEventListener("sse", function (event: any) {
-            //     const eventData = event.data;
-            //     console.log(event);
-            //     // console.log(eventData);
-            // })
-
-            sseConnect.onopen = (event) => {
-                // console.log("sse 연결 완료", event);
-            };
-
-            sseConnect.onerror = (err) => {
-                // console.log("sse 에러 발생", err);
-            };
-
-            sseConnect.addEventListener("comment", (event: any) => {
-                queryClient.invalidateQueries("notifications");
+            connectedSse.addEventListener("comment", (event: any) => {
+                queryClient.invalidateQueries("notify");
                 // const eventData = JSON.parse(event.data);
                 // setComments((prevData: any) => [...prevData, eventData]);
-                toast.success("새로운 댓글이 작성되었어요");
+                // toast(`새로운 댓글 알림`, { icon: "🔔" })
+                notifyToast("댓글")
             });
 
-            sseConnect.addEventListener("wishlist", (event: any) => {
-                queryClient.invalidateQueries("notifications");
+            connectedSse.addEventListener("wishlist", (event: any) => {
+                queryClient.invalidateQueries("notify");
                 // const eventData = JSON.parse(event.data);
                 // setWishlists((prevData: any) => [...prevData, eventData]);
-                toast.success("작성한 게시물에 좋아요를 받았어요.");
+                // toast(<><span>새로운 좋아요 알림</span><span onClick={() => navigate('/notify')}>확인</span></>, { icon: "🔔" })
+                notifyToast("좋아요")
             });
 
-            sseConnect.addEventListener("follow", (event: any) => {
-                queryClient.invalidateQueries("notifications");
+            connectedSse.addEventListener("follow", (event: any) => {
+                queryClient.invalidateQueries("notify");
                 // const eventData = JSON.parse(event.data);
                 // setFollows((prevData: any) => [...prevData, eventData]);
-                toast.success("팔로우를 받았어요.");
+                // toast(`새로운 팔로우 알림`, { icon: "🔔" })
+                notifyToast("팔로우")
             });
 
-            return () => {
-                if (sseConnect) {
-                    sseConnect.close();
-                }
-            };
+            setConnect(true);
+            setSse(connectedSse);
         }
-    }, []);
+
+        if (sse && !loginUser.isLogin) {
+            // console.log("SSE 종료");
+            sse.close();
+            setConnect(false);
+        }
+    }, [loginUser]);
 
     const handleLogoClick = () => {
         handleScrollTop();
@@ -95,15 +96,17 @@ const Header = ({ setSideOpen, handleScrollTop }: Props) => {
             </HeaderCenter>
             <HeaderRight>
                 <StSearch onClick={() => navigate(`/search`)} />
-                {userInfo.isLogin ? (
-                    <ProfileImage
-                        onClick={() => navigate(`/profile/${userInfo.userId}`)}
-                        src={getProfileImage(userInfo.userImage)}
-                        alt="userImage"
-                    />
-                ) : (
-                    <StLogin onClick={() => navigate("/login")} />
-                )}
+                {
+                    (loginUser.isLogin) ? (
+                        <ProfileImage
+                            onClick={() => navigate(`/profile/${loginUser.userId}`)}
+                            src={getProfileImage(loginUser.userImage)}
+                            alt="userImage"
+                        />
+                    ) : (
+                        <StLogin onClick={() => navigate('/login')} />
+                    )
+                }
             </HeaderRight>
         </HeaderContainer>
     );
