@@ -16,29 +16,32 @@ const Playlist: React.FC<Songs> = ({ songs }) => {
         setPreview(true);
     }
     return (
-        <PlaylistContainer>
-            <PlaylistSection>
-                {songs.map((song, index) => {
-                    return (
-                        <PlaylistItem key={song.id} onClick={() => { handleClickListItem(index) }}>
-                            <PlaylistLeft>
-                                <MusicThumbnail src={song.thumbnail} />
-                                <MusicInfo>
-                                    <StP $color={"#FAFAFA"} $size={"16px"}>
-                                        {song.songTitle}
-                                    </StP>
-                                    <StP $color={"#A6A3AF"} $size={"14px"}>
-                                        {song.artistName}
-                                    </StP>
-                                </MusicInfo>
-                            </PlaylistLeft>
-                            <SpotifyIcon src={spotify} />
-                        </PlaylistItem>
-                    )
-                })}
-                {preview && <Preview url={songs[songIndex].audioUrl} song={songs[songIndex]} setPreview={setPreview} />}
-            </PlaylistSection>
-        </PlaylistContainer>
+        <>
+            <PlaylistContainer>
+                <PlaylistSection>
+                    {songs.map((song, index) => {
+                        return (
+                            <PlaylistItem key={song.id} onClick={() => { handleClickListItem(index) }}>
+                                <PlaylistLeft>
+                                    <MusicThumbnail src={song.thumbnail} />
+                                    <MusicInfo>
+                                        <StP $color={"#FAFAFA"} $size={"16px"}>
+                                            {song.songTitle}
+                                        </StP>
+                                        <StP $color={"#A6A3AF"} $size={"14px"}>
+                                            {song.artistName}
+                                        </StP>
+                                    </MusicInfo>
+                                </PlaylistLeft>
+                                <SpotifyIcon src={spotify} />
+                            </PlaylistItem>
+                        )
+                    })}
+
+                </PlaylistSection>
+            </PlaylistContainer>
+            {preview && <Preview url={songs[songIndex].audioUrl} song={songs[songIndex]} setPreview={setPreview} />}
+        </>
     )
 }
 

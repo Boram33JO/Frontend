@@ -39,7 +39,7 @@ const YourPostList = () => {
     ["posts", page, totalPage, activeSort],
     async () => {
       const response = await getMyPostLists(userId, page, activeSort);
-      console.log(" 내가쓴 포스팅 response:", response);
+      // console.log(" 내가쓴 포스팅 response:", response);
       setNickname(response.data?.nickname);
       setTotalPage(response.data.postList.totalPages);
       if (page === totalPage && page > 0) {
