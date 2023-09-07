@@ -12,14 +12,12 @@ import { toast } from 'react-hot-toast';
 
 
 const NotifyPage = () => {
-    const queryClient = useQueryClient();
-    const sse = useRef<EventSourcePolyfill | null>(null);
     const [page, setPage] = useState<number>(0);
     const loginUser = useSelector((state: RootState) => state.user);
     const [comments, setComments] = useState<any>();
     const [wishlists, setWishlists] = useState<any>();
     const [follows, setFollows] = useState<any>();
-    const { data, isLoading, isError, } = useQuery("notifications", getNotification,
+    const { data, isLoading, isError, } = useQuery(["notify"], getNotification,
         {
             refetchOnWindowFocus: false,
             enabled: loginUser.isLogin,

@@ -66,9 +66,9 @@ function App() {
           <Route path="/profile/:userId/wishlist" element={<WishlistPage />} />
           {/* 내가 좋아요한 게시물만 보기 */}
           <Route path="/findpassword" element={<PasswordPage />} />
-           {/* 비번찾기 페이지 */}
+          {/* 비번찾기 페이지 */}
           <Route path="/findemail" element={<EmailPage />} />
-           {/* 이메일 찾기 페이지 */}
+          {/* 이메일 찾기 페이지 */}
           <Route path="/profile/:userId/withdrawal" element={<WithdrawalPage />} />
           {/* 탈퇴 페이지 */}
           <Route path="/profile/:userId/changepw" element={<ChangePwPage />} />
@@ -87,6 +87,7 @@ function App() {
             background: '#2C2A30',
             padding: '7px 10px 7px 18px',
             color: '#EAE9F4',
+            border: '1.5px solid #7462E2',
             boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.4)',
             borderRadius: '999px'
           },

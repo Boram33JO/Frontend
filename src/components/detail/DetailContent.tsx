@@ -67,7 +67,7 @@ const DetailContent = ({ post }: PostProps) => {
             toast.success(response.data.message);
         },
         onError: () => {
-            toast.error("좋아요 실패")
+            toast.error("팔로우 실패")
         }
     })
 

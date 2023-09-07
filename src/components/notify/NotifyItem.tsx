@@ -23,7 +23,7 @@ const NotifyItem = ({ type, userId, postId, notifyId, nickname, userImage, creat
     const queryClient = useQueryClient();
     const navigate = useNavigate();
     const clickListItem = () => {
-        navigate(`/detail/${postId}`);
+        type === "follow" ? navigate(`/profile/${userId}`) : navigate(`/detail/${postId}`);
     }
 
     const clickCheckButton = () => {
@@ -32,7 +32,7 @@ const NotifyItem = ({ type, userId, postId, notifyId, nickname, userImage, creat
 
     const commentMutation = useMutation(() => deleteNotification(notifyId), {
         onSuccess: () => {
-            queryClient.invalidateQueries("notifications");
+            queryClient.invalidateQueries("notify");
             toast.success('알림 확인 완료');
         },
         onError: () => {
@@ -55,7 +55,7 @@ const NotifyItem = ({ type, userId, postId, notifyId, nickname, userImage, creat
                                 <Divider />
                             </>
                         )}
-                        {type === "like" && (
+                        {type === "wishlist" && (
                             <>
                                 <TitleSVG />
                                 <StP $color="#A19FAB">{postTitle}</StP>

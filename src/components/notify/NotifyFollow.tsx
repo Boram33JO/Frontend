@@ -24,6 +24,7 @@ const NotifyFollow = ({ data }: Props) => {
                         return (
                             <NotifyItem
                                 key={item.id}
+                                type="follow"
                                 notifyId={item.id}
                                 userId={item.userId}
                                 postId={item.postId}

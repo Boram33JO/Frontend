@@ -24,7 +24,7 @@ const NotifyWishlist = ({ data }: Props) => {
                         return (
                             <NotifyItem
                                 key={item.id}
-                                type="like"
+                                type="wishlist"
                                 notifyId={item.id}
                                 userId={item.userId}
                                 postId={item.postId}
