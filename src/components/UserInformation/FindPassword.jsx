@@ -103,10 +103,10 @@ const Password = () => {
       const data = await emailCheckTofindPassword(email);
       toast.success(`${data.data.message}`, {position: 'top-center'});
       // setShowCodeInput(true);
-      console.log(data)
+     // console.log(data)
     } catch (error) {
       toast.error('가입되지 않은 이메일입니다.', {position: 'top-center'});
-      console.log(error)
+     // console.log(error)
     } finally {
       // 응답 처리 후 버튼 활성화 및 로딩 해제
       setIsEmailButtonDisabled(false);

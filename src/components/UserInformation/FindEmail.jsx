@@ -169,14 +169,14 @@ const Email = () => {
       const response = await findmobileCheck(phoneNumber);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-      console.log(response);
+     // console.log(response);
       //setShowMobileInput(true);
       // 5분 타이머 시작
       toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
     } catch (error) {
       setmobileButtonContent("재전송");
       toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
-      console.log(error);
+     // console.log(error);
     }
   };
 
@@ -189,7 +189,7 @@ const Email = () => {
     if (response.data.success === true) {
       //setIsMobileVerified(true);
       toast.success("인증이 완료되었습니다. 아래의 이메일을 확인하세요.", {position: 'top-center'});
-      console.log(response);
+     // console.log(response);
       // setShowMobileInput(false);
       setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
       setIsMobileButtonDisabled(true);
