@@ -3,9 +3,18 @@ import { styled } from "styled-components";
 import FindNav from "../components/UserInformation/FindNav";
 import DeleteUser from "../components/UserInformation/DeleteUser";
 import { ReactComponent as Bullet } from "../assets/images/login_signup_profile/bullet.svg";
+import NotFoundPage from "./NotFoundPage";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 const EmailPage = () => {
   const navigate = useNavigate();
+  const LoginUser = useSelector((state: RootState) => state.user);
+
+
+  if (LoginUser.isLogin === false) {
+    return <NotFoundPage />;
+  }
   return (
     <>
 

@@ -9,12 +9,15 @@ import { emailCheck, emailDoubleCheck } from "../../api/user2";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';
+import { useSelector } from "react-redux";
+import NotFoundPage from "../../pages/NotFoundPage";
 
 
 
 
 const Email = () => {
   const navigate = useNavigate();
+  const LoginUser = useSelector((state) => state.user);
 
   const [email, onChangeEmailHandler, resetEmail] = useInput();
   const [code, onChangenumberHandler, resetNumber] = useInput();
@@ -66,6 +69,9 @@ const Email = () => {
   // 인중 발송중일 때 상태값.
   const [emailButtonContent, setEmailButtonContent] = useState("인증하기");
   const [mobileButtonContent, setmobileButtonContent] = useState("발송하기");
+
+
+  const [responseData, setResponseData] = useState(null);
 
  // 비밀번호 토글
 //   const [showPassword, setShowPassword] = useState(false);
@@ -178,33 +184,22 @@ const Email = () => {
   // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
   const MobileDoubleCheckhandleButton = async () => {
     const response = await findEmail(phoneNumber, smsConfirmNum)
-    console.log(response, "숫자 확인1");
+   // console.log(response, "숫자 확인1");
 
-    if (response.data === true) {
+    if (response.data.success === true) {
       //setIsMobileVerified(true);
       toast.success("인증이 완료되었습니다. 아래의 이메일을 확인하세요.", {position: 'top-center'});
       console.log(response);
-      setShowMobileInput(false);
+      // setShowMobileInput(false);
+      setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
       setIsMobileButtonDisabled(true);
-      setmobileButtonContent("인증완료");
+      setmobileButtonContent("완료");
       setEmailButtonContent("완료")
-       console.log(response.data, "숫자 확인2");
-     console.log(response)
-    
+     //  console.log(response.data.data, "숫자 확인2");
+     //  console.log(response)
+       setResponseData(response.data.data);
 
-        //  const result = await findEmail(phoneNumber, smsConfirmNum) ;
-        //    toast.success('아래의 이메일을 확인하세요.', { position: 'top-center' });
-        //    console.log(result);
-        //    console.log(response);
-        //    return;
-         
-        // if (result.error)
-        // {
-        //  toast.error(`${result.error}`);
-        // }
-        
-
-    } else if (response.data === false) {
+    } else if (response.data.success === false) {
      // setIsMobileVerified(false);
 
       setIsMobileButtonDisabled(false);
@@ -215,7 +210,7 @@ const Email = () => {
       resetMobileCode();
     }
   };
-
+  
 
   return (
     <>
@@ -256,7 +251,9 @@ const Email = () => {
                 $isFocused={isMobileNumberFocused}
                 $hasValue={code.length > 0}
               />
-              <Stbutton1 onClick={MobileDoubleCheckhandleButton}>
+              <Stbutton1 onClick={MobileDoubleCheckhandleButton}
+              
+              disabled= {isEmailButtonDisabled} >
               {emailButtonContent}
               </Stbutton1>
             </Stname>
@@ -267,14 +264,15 @@ const Email = () => {
           <Stnickname>
           <Stname>
             <Stinput5
-              type={"text"}
-              placeholder={"이메일"}
-              value={email}
-              onChange={onChangeEmailHandler}
-              onFocus={() => setIsPasswordFocused(true)}
-              onBlur={() => setIsPasswordFocused(false)}
-              $isFocused={isPasswordFocused}
-              $hasValue={password.length > 0}
+              // type={"text"}
+              placeholder={responseData === null ? "" : `${responseData}`}
+              // value={email}
+              // onChange={onChangeEmailHandler}
+              // onFocus={() => setIsPasswordFocused(true)}
+              // onBlur={() => setIsPasswordFocused(false)}
+              // $isFocused={isPasswordFocused}
+              // $hasValue={password.length > 0}
+             
             />
            </Stname>
         </Stnickname>
