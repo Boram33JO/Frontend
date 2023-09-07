@@ -152,6 +152,13 @@ const Email = () => {
   //   }
   // };
 
+  const handleLonginClick=() => {
+    navigate(`/login`);
+    return;
+  };
+
+
+
    // 모바일 인증
    const MobilehandleCheckButton = async () => {
     const phoneNumberRegex = /^(010|011)[0-9]{8}$/;
@@ -169,16 +176,21 @@ const Email = () => {
       const response = await findmobileCheck(phoneNumber);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-     // console.log(response);
+       console.log(response);
       //setShowMobileInput(true);
       // 5분 타이머 시작
       toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
     } catch (error) {
-      setmobileButtonContent("재전송");
-      toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
-     // console.log(error);
-    }
-  };
+      if (error.response || error.response.data || error.response.data.message) {
+        // 서버에서 반환한 에러 메시지를 사용자에게 표시
+        // toast.error(error.response.data.error, { position: 'top-center' });
+        toast.error(`가입되지 않은 이메일입니다.`, { position: 'top-center' });
+      } else {
+        // 기타 에러 처리
+        toast.error("서버 오류가 발생했습니다.", { position: 'top-center' });
+      }
+      console.log(error);
+    }}
 
 
   // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
@@ -276,7 +288,7 @@ const Email = () => {
             />
            </Stname>
         </Stnickname>
-          <Stbutton2 >로그인하기</Stbutton2>
+          <Stbutton2 onClick={handleLonginClick} >로그인하기</Stbutton2>
           </Stbox>
            </InnerContainer>
            </>
