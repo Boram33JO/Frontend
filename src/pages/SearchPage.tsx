@@ -24,7 +24,6 @@ const SearchPage = () => {
     useEffect(() => {
         getSearch();
     }, []);
-    console.log(searchKeyword);
     const popularSearchWordHandler = () => {
         setIsPopularSearchWord(!isPopularSearchWord);
     };
@@ -103,7 +102,6 @@ const SearchPage = () => {
                         onClick={popularSearchWordHandler}
                     />
                 )}
-
                 <p>실시간 업데이트 기준</p>
             </StSection>
         </StSearchContainer>
@@ -160,12 +158,3 @@ const StPopularPlace = styled.div`
     gap: 8px;
     flex-wrap: wrap;
 `;
-
-// const StRecommendedPosting = styled.div`
-//     width: 100%;
-
-//     display: flex;
-//     flex-direction: column;
-
-//     margin: 14px 0;
-// `;
