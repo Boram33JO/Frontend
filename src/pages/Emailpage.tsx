@@ -22,8 +22,8 @@ const EmailPage = () => {
     <Container>
       <InnerContainer>
         <H3>가입하신 이메일 잊으셨나요?</H3>
-        <Ment>가입하신 핸드폰 번호를 입력하시면, <br />인증코드를 발송해 드립니다.</Ment>
-        
+        <Ment> 발송된 인증 코드 확인 후에 <br />가입 한 이메일 계정을 알려드립니다. </Ment>
+      
         <LoginSection>
           <FindEmail />
         </LoginSection>

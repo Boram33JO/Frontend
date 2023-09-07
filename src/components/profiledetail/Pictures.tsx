@@ -11,6 +11,12 @@ import { toast } from 'react-hot-toast';
 import { RootState } from "../../redux/config/configStore";
 import { useSelector } from "react-redux";
 import Loading from "../map/Loading";
+import { ReactComponent as Start } from "../../assets/images/page_start.svg"
+import { ReactComponent as End } from "../../assets/images/page_end.svg"
+import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
+import { ReactComponent as Next } from "../../assets/images/page_next.svg"
+
+
 
 type follower = {
   id: number;
@@ -53,8 +59,8 @@ const Pictures = () => {
   const { data, isLoading, isError } = useQuery(["follow", page, totalPage], async () => {
     const response = await getFollowLists(userId, page);
     //console.log(response.data);
-    setTotal(response.data.totalElements);
-    setTotalPage(response.data.totalPages);
+    //setTotal(response.data.totalElements);
+    setTotalPage(response.data.followList.totalPages);
     if (page === totalPage && page > 0) {
       setPage(page - 1);
     }
@@ -69,10 +75,6 @@ const Pictures = () => {
     return response.data;
   });
 
-  
-
-
-  console.log(data); // 데이터 구조를 확인
 
   // 팔로워 삭제를 위한 useMutation 훅을 사용합니다.
   const mutation = useMutation(followUser, {
@@ -87,6 +89,12 @@ const Pictures = () => {
       toast.error("피플러를 삭제하는 중에 오류가 발생했습니다.", { position: 'top-center' });
     },
   });
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage >= 0 && newPage < totalPage) {
+      setPage(newPage);
+    }
+  };
 
   const handleDelete = (followerId: number) => {
     setSelectedCommentId(followerId);
@@ -111,13 +119,14 @@ const Pictures = () => {
 
   // followerData를 활용하여 팔로워 정보 렌더링
   return (
+    <>
     <InnerContainer>
       <Follower1>
         <H3>{`${data.nickname}님의 피플러`}</H3>
       <Nums>{`${data.followList.totalElements}명`}</Nums>
       </Follower1>
 
-      {data.followList === 0 ? (
+      {data.followList > 0 ? (
         <Pple>
           <StNodata />
           <NoDataMessage>아직 팔로우한 피플러가 없네요!</NoDataMessage>
@@ -151,6 +160,27 @@ const Pictures = () => {
         />
       )}
     </InnerContainer>
+
+    {data.followList.content.length> 0 && (
+      <CommentListPagination>
+        <SvgIcon onClick={() => handlePageChange(0)}><Start /></SvgIcon>
+        <SvgIcon onClick={() => handlePageChange(page - 1)}><Prev /></SvgIcon>
+        <Pagination>
+          {
+            pageButton.map((item) => {
+              return (
+                <PageButton key={item} $click={item === page + 1} onClick={() => { handlePageChange(item - 1) }}>
+                  {item}
+                </PageButton>
+              )
+            })
+          }
+        </Pagination>
+        <SvgIcon onClick={() => handlePageChange(page + 1)}><Next /></SvgIcon>
+        <SvgIcon onClick={() => handlePageChange(totalPage - 1)}><End /></SvgIcon>
+      </CommentListPagination>
+    )}
+    </>
 
     
   );
@@ -286,3 +316,39 @@ const Produce = styled.div`
   box-sizing: border-box;
   word-break: break-all;
 `;
+
+const CommentListPagination = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+    margin: 40px 0px 10px;
+    gap: 10px;
+`
+
+const SvgIcon = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+`
+
+const Pagination = styled.div`
+    display:flex;
+`
+
+const PageButton = styled.div < { $click: boolean }> `
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: ${(props) => props.$click ? "#7462E2" : "transparent"};
+    color: ${(props) => props.$click ? "#FAFAFA" : "#535258"};
+    cursor: pointer;
+`
+
