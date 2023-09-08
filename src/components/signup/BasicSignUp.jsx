@@ -195,7 +195,7 @@ const BasicSignUp = () => {
       toast.success(`${data.data.message}`, {position: 'top-center'});
      // toast.success(`인증메일을 발송했습니다.`,{position: 'top-center'});
       setShowCodeInput(true);
-      console.log(data);
+     // console.log(data);
     } catch (error) {
       
      // console.log(isAxiosError,"2")
@@ -210,16 +210,17 @@ const BasicSignUp = () => {
   // 이메일 6자리 검증 숫자 검사 (유효기간 5분)
   const DoubleCheckhandleButton = async () => {
     const data = await emailDoubleCheck(email, code);
-console.log(data)
-    if (data.data.message) {
+    console.log(data)
+    if (data.data.data===true) {
+      console.log(data)
       setIsEmailVerified(true);
       setIsEmailButtonDisabled(true); // 중복확인 버튼 비활성화
       toast.success("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
      // setShowCodeInput(true);
       setShowCodeInput(false);
       setEmailButtonContent("인증완료");
-      console.log(data)
-    } else if (data.data.error) {
+     // console.log(data)
+    } else if (data.data.error || data.data.data===false){
       setIsEmailVerified(false);
       setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
       toast.error("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.", {position: 'top-center'});
@@ -252,7 +253,7 @@ console.log(data)
     } catch (error) {
       setmobileButtonContent("재전송");
       toast.error("이미 등록된 전화번호입니다.", {position: 'top-center'});
-      console.log(error);
+     // console.log(error);
     }
   };
 
@@ -261,17 +262,17 @@ console.log(data)
     const data = await mobileDoubleCheck(smsConfirmNum, to);
    // console.log(response, "숫자 확인1");
 
-    if (data.data.message) {
+    if (data.data.data===true) {
       setIsMobileVerified(true);
       //toast.success(`${data.data.message}`, {position: 'top-center'});
       toast.success("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
-      console.log(data);
+     // console.log(data);
       setShowMobileInput(false);
       setIsMobileButtonDisabled(true);
       setmobileButtonContent("인증완료");
 
       // console.log(response.data, "숫자 확인2");
-    } else if (data.data.error) {
+    } else if ((data.data.error) || (data.data.data==false)) {
       setIsMobileVerified(false);
 
       setIsMobileButtonDisabled(false);
