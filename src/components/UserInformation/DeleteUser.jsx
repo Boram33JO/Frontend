@@ -81,7 +81,8 @@ const InnerContainer = styled.div`
   display: flex;
    align-items: center;
    padding: 0 20px;
-   padding-top: 275px;
+   padding-top: 250px;
+   box-sizing: border-box;
 `;
 
 const StBox2 = styled.div`
