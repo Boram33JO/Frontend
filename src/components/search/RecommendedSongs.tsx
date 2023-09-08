@@ -8,6 +8,7 @@ interface RecommendedProps {
 }
 
 const RecommendedSongs: React.FC<RecommendedProps> = ({ popularSongs, searchKeyword }) => {
+    console.log(popularSongs);
     return (
         <div>
             {popularSongs?.length === 0 ? (

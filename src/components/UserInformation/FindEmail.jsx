@@ -176,7 +176,7 @@ const Email = () => {
       const response = await findmobileCheck(phoneNumber);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-       console.log(response);
+      // console.log(response);
       //setShowMobileInput(true);
       // 5분 타이머 시작
       toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
@@ -189,7 +189,7 @@ const Email = () => {
         // 기타 에러 처리
         toast.error("서버 오류가 발생했습니다.", { position: 'top-center' });
       }
-      console.log(error);
+     // console.log(error);
     }}
 
 

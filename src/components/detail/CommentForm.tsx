@@ -44,20 +44,20 @@ const CommentForm: React.FC<Comment> = ({ setTarget, setIsEdit, commentId, comme
     const commentMutation = useMutation((postId: string) => postComment(postId, { content: content }), {
         onSuccess: () => {
             queryClient.invalidateQueries("comment");
-            toast.success('댓글 작성 완료');
+            toast.success('댓글 작성 완료', { position: "bottom-center" });
         },
         onError: () => {
-            toast.error('댓글 작성 실패');
+            toast.error('댓글 작성 실패', { position: "bottom-center" });
         }
     });
 
     const updateMutation = useMutation((commentId: string) => updateComment(commentId, { content: content }), {
         onSuccess: () => {
             queryClient.invalidateQueries("comment");
-            toast.success('댓글 수정 완료');
+            toast.success('댓글 수정 완료', { position: "bottom-center" });
         },
         onError: () => {
-            toast.error('댓글 수정 실패');
+            toast.error('댓글 수정 실패', { position: "bottom-center" });
         }
     });
 
@@ -67,7 +67,7 @@ const CommentForm: React.FC<Comment> = ({ setTarget, setIsEdit, commentId, comme
                 commentMutation.mutate(id);
                 setContent("");
             } else {
-                toast.error('댓글 내용을 입력하세요');
+                toast.error('댓글 내용을 입력하세요', { position: "bottom-center" });
                 return
             }
         } else {
@@ -85,7 +85,7 @@ const CommentForm: React.FC<Comment> = ({ setTarget, setIsEdit, commentId, comme
             setTarget("");
             setIsEdit(false);
         } else {
-            toast.error('댓글 내용을 입력하세요');
+            toast.error('댓글 내용을 입력하세요', { position: "bottom-center" });
             return
         }
     }

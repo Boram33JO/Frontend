@@ -69,7 +69,7 @@ function App() {
         </Route>
         <Route path="/oauth/token" element={<RedirectKakao />} />
       </Routes>
-      <Toaster position="bottom-center"
+      <Toaster position="top-center"
         toastOptions={{
           // Define default options
           className: '',

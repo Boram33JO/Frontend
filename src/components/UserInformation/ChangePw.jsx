@@ -81,17 +81,16 @@ const ChangePassword = () => {
         originPassword: email,
         changePassword: password,
       }, userId);
-      //console.log(result)
-      if (result.success){
+       // console.log(result)
+      if (result.success===true){
         toast.success('비밀번호가 바뀌었습니다. 다시 로그인 해주세요.', { position: 'top-center' });
-         navigate("/");
+        navigate("/");
          store.dispatch(logout());
        //  console.log(result.success);
       }
      if (result.success===false)
      {
-     // console.log(result);
-      toast.error(`${result}`);
+      toast.success('기존 비밀번호를 잘못 입력했습니다.', { position: 'top-center' });
      }
       
      

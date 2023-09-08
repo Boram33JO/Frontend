@@ -5,6 +5,7 @@ import { ReactComponent as MusicIcon } from "../../assets/images/music_icon.svg"
 import { ReactComponent as Icon } from "../../assets/images/I.svg";
 import { ReactComponent as Profile } from "../../assets/images/default_profile.svg";
 import { useNavigate } from "react-router-dom";
+import { displayedAt } from "../../utils/common";
 
 interface SearchProps {
     topPost: any;
@@ -60,7 +61,7 @@ const RecommendedPosting: React.FC<SearchProps> = ({ topPost, setTopPost, random
                             )}
                             <StUserInfo>
                                 <div>{item.nickname}</div>
-                                <span>{item.createdAt}</span>
+                                <span>{displayedAt(item.createdAt)}</span>
                             </StUserInfo>
                         </StProfile>
                         <StCategory>{categories[item.category - 1]}</StCategory>

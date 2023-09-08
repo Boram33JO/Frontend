@@ -17,7 +17,7 @@ const DirectingButton: React.FC = () => {
     const handlePwPageClick = () => {
 
       if (LoginUser.kakaoId===`${null}`) {
-        console.log(LoginUser.kakaoId)
+       // console.log(LoginUser.kakaoId)
         // kakaoId가 있는 경우 아무 작업도 하지 않고 함수를 종료.
         return;
       }
