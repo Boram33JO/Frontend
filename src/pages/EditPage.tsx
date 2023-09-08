@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import styled from "styled-components"; 
+import styled from "styled-components";
 import SearchSong from "../components/edit/SearchSong";
 import EditMap from "../components/edit/EditMap";
 import FormArea from "../components/edit/FormArea";
 import { postData, putData } from "../api/edit";
 import { getDetailedPost } from "../api/post";
 import { toast } from "react-hot-toast";
+import { useMutation } from "react-query";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/config/configStore";
 
 interface InputForm {
     postTitle: string;
@@ -53,6 +56,7 @@ const EditPage = () => {
     const [latitude, setLatitude] = useState("37.566826");
     const [longitude, setLongitude] = useState("126.9786567");
     const [categoryNum, setCategoryNum] = useState<any>();
+    const loginUser = useSelector((state: RootState) => state.user);
     const { postId } = useParams<{ postId: string }>();
 
     const [isData, setIsData] = useState<IsData | null>(null);
@@ -82,12 +86,12 @@ const EditPage = () => {
 
     useEffect(() => {
         const fixPostData = async () => {
-            try {
-                const response = await getDetailedPost(postId);
-                setIsData(response.data);
-            } catch (error) {
-                console.error(error);
+            const response = await getDetailedPost(postId);
+            if (response.data.userId !== loginUser.userId) {
+                navigate("/");
+                return toast.error("잘못된 접근입니다.");
             }
+            setIsData(response.data);
         };
 
         if (postId) {
@@ -114,7 +118,7 @@ const EditPage = () => {
         const errorMessage = getErrorMessage();
 
         if (errorMessage) {
-            toast.error(errorMessage, { position: "top-center" });
+            toast.error(errorMessage);
         } else {
             if (slideIndex === 2) {
                 scrollToTop();
@@ -133,63 +137,37 @@ const EditPage = () => {
         goToSlide(slideIndex - 1);
     };
 
-    const onClickPost = async () => {
-        if (data.songs?.length === 0) {
-            toast.error("노래를 선택해주세요.", { position: "top-center" });
-            return
-        }
-
-        if (inputForm.postTitle.length === 0) {
-            toast.error("제목은 필수입니다.", { position: "top-center" });
-            return
-        }
-
-        if (inputForm.content.length === 0) {
-            toast.error("내용은 필수입니다.", { position: "top-center" });
-            return
-        }
-
-        if (inputForm.postTitle.length > 20) {
-            toast.error("제목은 20자 이하여야 합니다.", { position: "top-center" });
-            return
-        }
-
-        if (inputForm.content.length > 500) {
-            toast.error("내용은 500자 이하여야 합니다.", { position: "top-center" });
-            return
-        }
-
-        try {
-            const response = await postData(data);
-            toast.success("게시물이 등록되었습니다", { position: "top-center" });
-            const postId = response;
+    const postMutation = useMutation((data: any) => postData(data), {
+        onSuccess: (response) => {
+            const postId = response.data.data.postId;
+            toast.success("게시물이 등록되었습니다");
             navigate(`/detail/${postId}`);
-        } catch (error) {
-            toast.error("게시물 등록에 실패하였습니다", { position: "top-center" });
-            navigate(`/`);
-        }
-    };
+        },
+        onError: () => {
+            toast.error("게시물 등록에 실패하였습니다");
+        },
+    });
 
-    const onClickPut = async () => {
-        if (data.songs?.length !== 0) {
-            if (inputForm.postTitle.length !== 0 && inputForm.content.length !== 0) {
-                if (inputForm.content.length <= 500) {
-                    try {
-                        await putData(data, postId);
-                        toast.success("게시물 수정이 완료되었습니다.", { position: "top-center" });
+    const updateMutation = useMutation((data: any) => putData(data, postId), {
+        onSuccess: () => {
+            toast.success("게시물이 수정이 완료되었습니다");
+            navigate(`/detail/${postId}`);
+        },
+        onError: () => {
+            toast.error("게시물 수정에 실패하였습니다");
+        },
+    });
 
-                        navigate(`/detail/${postId}`);
-                    } catch (error) {
-                        toast.error("게시물 수정에 실패하였습니다.", { position: "top-center" });
-                    }
-                } else {
-                    toast.error("내용은 500자 이하여야 합니다.", { position: "top-center" });
-                }
-            } else {
-                toast.error("제목과 내용은 필수입니다.", { position: "top-center" });
-            }
+    const onClickPost = async () => {
+        if (data.songs?.length === 0) return toast.error("노래를 선택해주세요.");
+        if (inputForm.postTitle.length === 0) return toast.error("제목은 필수입니다.");
+        if (inputForm.content.length === 0) return toast.error("내용은 필수입니다.");
+        if (inputForm.postTitle.length > 20) return toast.error("제목은 20자 이하여야 합니다.");
+        if (inputForm.content.length > 500) return toast.error("내용은 500자 이하여야 합니다.");
+        if (!isData) {
+            postMutation.mutate(data);
         } else {
-            toast.error("노래를 선택해주세요.", { position: "top-center" });
+            updateMutation.mutate(data);
         }
     };
 
@@ -249,10 +227,16 @@ const EditPage = () => {
                 </StSlideContainer>
             </StInnerContainer>
             <StButtonContainer>
-                <StButton $next={false} onClick={BeforeButtonHandler}>
+                <StButton
+                    $next={false}
+                    onClick={BeforeButtonHandler}
+                >
                     이전
                 </StButton>
-                <StButton $next={true} onClick={slideIndex === 2 ? (!isData ? onClickPost : onClickPut) : NextButtonHandler}>
+                <StButton
+                    $next={true}
+                    onClick={slideIndex === 2 ? onClickPost : NextButtonHandler}
+                >
                     {slideIndex === 2 ? "완료" : "다음"}
                 </StButton>
             </StButtonContainer>
@@ -320,6 +304,6 @@ const StButton = styled.button<{ $next: boolean }>`
     border: none;
     font-size: 16px;
     cursor: pointer;
-    color: ${({$next}) => $next ? "#FAFAFA" : "#7D778A"};
-    background: ${({$next}) => $next ? "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)" : "#45424E"};
+    color: ${({ $next }) => ($next ? "#FAFAFA" : "#7D778A")};
+    background: ${({ $next }) => ($next ? "linear-gradient(135deg, #8084f3 0%, #c48fed 100%)" : "#45424E")};
 `;
