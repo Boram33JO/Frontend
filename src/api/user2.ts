@@ -83,7 +83,7 @@ export const emailCheckTofindPassword = async (email: string) => {
     return response;
 };
 
-// 임시비번 체크와 확인용
+// 비번찾기용 임시비번 체크와 확인용
 export const TempPassword = async (email: string, code: string) => {
     const response = await instance.post(`/auth/email/pw-check`, { email, code });
     return response;

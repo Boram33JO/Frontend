@@ -81,15 +81,15 @@ const EditProfile = () => {
   const handleCheckButton = async () => {
     try {
       const response = await nicknameCheck(nickname);
-     console.log(response);
+    // console.log(response);
       if (response.data.message){
         toast.success(`${response.data.message}`);
         setIsCheck(true);
-        console.log(response.data.message);
+      //  console.log(response.data.message);
       } else {
         toast.error(`${response.data.error}`);
-       console.log(response.data.error)
-       console.log(response);
+      // console.log(response.data.error)
+      // console.log(response);
         setIsCheck(false);
       }
     } catch (error) {

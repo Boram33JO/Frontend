@@ -135,10 +135,11 @@ const [isEmailChecked, setIsEmailChecked] = useState(false);
       toast.error(`계정과 코드를 입력하세요.`,{position: 'top-center'});
      return;
     }
-    if (data.data.message) {
+    if (data.data.data===true) {
       setIsEmailButtonDisabled(true); // 인증하기 버튼 비활성화
       setIsMobileButtonDisabled(true);
-      console.log(data.data.message)
+      //console.log(data.data)
+      //console.log(data.data.message)
       toast.success( <div>
         이메일 인증이 완료되었습니다.
         <br />
@@ -148,9 +149,8 @@ const [isEmailChecked, setIsEmailChecked] = useState(false);
       setmobileButtonContent("완료")
       return;
     } 
-   
 
-    else if (data.data.error) {
+    else if (data.data.error || data.data.data===false) {
       setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
       toast.error(
       <div>
