@@ -1,7 +1,5 @@
   <img src="https://file.notion.so/f/f/07023ed1-1f46-41e9-bb9a-4c2d8251cca4/6ce6c9ac-7c21-4c09-a3f2-8fecf97bed55/04.png?id=5a7b35ae-7602-42f6-8c1b-c2fa3b651084&table=block&spaceId=07023ed1-1f46-41e9-bb9a-4c2d8251cca4&expirationTimestamp=1694239200000&signature=_3pskICKYrPhQlVCmo7TGnorArOtlrFHGu9KTms2q5g&downloadName=04.png"/>
   
-  <br />
-  
 # [P.Ple](https://pple.today)
 
 <b>위치 기반 음악 공유 사이트</b>
@@ -17,9 +15,13 @@
 
 ### 🔗 **[P.Ple (피플) 보러가기](https://pple.today)**
 
-### 📆 프로젝트 기간
+<br />
+
+## 📆 프로젝트 기간
 
 -   2023.07.29 ~ 2023.09.08
+
+<br />
 
 ## 😎 Members
 
@@ -199,6 +201,8 @@
 </table>
 </details>
 
+<br />
+
 ## ⚙️ 서비스 아키텍쳐
 
 <img src="https://file.notion.so/f/f/07023ed1-1f46-41e9-bb9a-4c2d8251cca4/8dd8a975-6cbf-4686-b56c-0f39a18a830b/11111.png?id=de6c44b3-20d3-4dca-8adf-ce7e5d75a8e7&table=block&spaceId=07023ed1-1f46-41e9-bb9a-4c2d8251cca4&expirationTimestamp=1694232000000&signature=bsFTo5_veSeL8CCAuUCk4-ELV6FhhBQCuF1FflUvVdk&downloadName=11111.png">
@@ -233,10 +237,9 @@
 
 </details>
 
+<br />
 
 ## 🐰 기술
-
-
 
 #### Frontend
 
@@ -250,7 +253,6 @@
     <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" /> 
       <img src="https://img.shields.io/badge/React_Query-CA4245?style=for-the-badge&logo=reactquery-aws&logoColor=white" /> 
 </p>
-<br>
 
 #### Backend
 
@@ -261,7 +263,6 @@
 
  
 </p>
-<br>
 
 #### Infrastructure
 
@@ -271,7 +272,6 @@
   <img src="https://img.shields.io/badge/route53-F7A81B?style=for-the-badge&logo=route53&logoColor=white">
   
 </p>
-<br>
 
 #### Dev tools
 
@@ -280,7 +280,6 @@
   <img src="https://img.shields.io/badge/git-%23F05033.svg?style=for-the-badge&logo=git&logoColor=white">
   <img src="https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white">
 </p>
-<br>
 
 #### Design
 
@@ -289,5 +288,3 @@
   <img src="https://img.shields.io/badge/Adobe Illustrator-FF9A00?style=for-the-badge&logo=Adobe Illustrator&logoColor=white"/>
   <img src="https://img.shields.io/badge/Adobe Photoshop-31A8FF?style=for-the-badge&logo=Adobe Photoshop&logoColor=white"/>
 </p>
-<br>
-
