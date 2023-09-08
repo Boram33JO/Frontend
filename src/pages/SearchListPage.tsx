@@ -24,6 +24,8 @@ const SearchListPage = () => {
     const [popularPpler, setPopularPpler] = useState<any>();
     const { keyword } = useParams<{ keyword: string }>();
 
+    console.log(popularSongs);
+
     useEffect(() => {
         setSearchKeyword(keyword || "");
         getSearch();
@@ -207,8 +209,8 @@ const StAllSearchList = styled.div``;
 const StSection = styled.div`
     padding-bottom: 14px;
     p {
-        text-align: end;
-        color: #827e86;
+        text-align: left;
+        color: #fafafa;
         font-size: 14px;
         font-weight: 500;
         line-height: 100%;
@@ -238,23 +240,12 @@ const StTitle = styled.div`
     }
 `;
 
-const StCategory = styled.div`
-    margin-bottom: 20px;
-`;
-
 const StPopularPlace = styled.div`
     margin-bottom: 14px;
 `;
 
 const StPopularPosts = styled.div`
     margin-bottom: 14px;
-`;
-
-const StRecommendedPosting = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    margin: 14px 0;
 `;
 
 const StMargin = styled.div`
