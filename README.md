@@ -53,7 +53,7 @@
   </tr>
    <tr>
     <td align="center"><b><a href="https://github.com/hyunJuS2">유현주</a></b></td>
-    <td align="center"><b><a href="https://github.com/mabyoungg">김도영</a></b></td>
+    <td align="center"><b><a href="https://github.com/mabyoungg">최도영</a></b></td>
     <td align="center"><b><a href="https://github.com/REWELLGOM">이성목</a></b></td>
   </tr>
 </table>
@@ -63,7 +63,7 @@
 <table>
 
   <tr>
-    <td align="center"><a href="https://github.com/llama-ste"><img src="" width="100px" /></a></td>
+    <td align="center"><a href=""><img src="https://user-images.githubusercontent.com/90495580/169259379-a913dd30-fa7f-4309-af30-9bd94c9608a6.png" width="100px" /></a>
    
   </tr>
    <tr>
