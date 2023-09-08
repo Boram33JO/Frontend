@@ -29,7 +29,7 @@
 
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/Aurora-in-Wonderland"><img src="https://avatars.githubusercontent.com/u/99107568?v=4" width="100px" /></a></td>
+    <td align="center"><a href="https://github.com/Aurora-in-Wonderland"><img src="https://github.com/Aurora-in-Wonderland/shooting-game/assets/99107568/6957169b-5d2f-4090-bd22-f3d198bd4c3c" width="100px" /></a></td>
     <td align="center"><a href="https://github.com/ownage2"><img src="https://avatars.githubusercontent.com/u/121753617?v=4" 
     width="100px" /></a></td>
     <td align="center"><a href="https://github.com/heexohee"><img src="https://user-images.githubusercontent.com/90495580/169259379-a913dd30-fa7f-4309-af30-9bd94c9608a6.png" width="100px" /></a></td>
@@ -63,7 +63,7 @@
 <table>
 
   <tr>
-    <td align="center"><a href=""><img src="https://user-images.githubusercontent.com/90495580/169259379-a913dd30-fa7f-4309-af30-9bd94c9608a6.png" width="100px" /></a>
+    <td align="center"><a href=""><img src="https://github.com/Aurora-in-Wonderland/shooting-game/assets/99107568/8bb61043-621b-49b8-a031-44ac066b438e" width="100px" /></a>
    
   </tr>
    <tr>
