@@ -28,8 +28,9 @@ const DeleteUser = () => {
   const handleUserDeleteChange = async () => {
    try {
      const result = await deleteUser();
+     //console.log(result)
      if (result.success){
-      //console.log(result)
+       //console.log(result)
        toast.success('탈퇴가 완료되었습니다. 감사합니다.', { position: 'top-center' });
         navigate("/");
         store.dispatch(logout());

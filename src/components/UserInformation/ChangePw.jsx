@@ -84,7 +84,7 @@ const ChangePassword = () => {
       //console.log(result)
       if (result.success){
         toast.success('비밀번호가 바뀌었습니다. 다시 로그인 해주세요.', { position: 'top-center' });
-         navigate("/login");
+         navigate("/");
          store.dispatch(logout());
        //  console.log(result.success);
       }
