@@ -92,7 +92,7 @@ export const TempPassword = async (email: string, code: string) => {
 // 회원탈퇴
 export const deleteUser = async () => {
     const response = await instance.post(`/user/cancel`);
-    console.log("탈퇴", response);
+    //console.log("탈퇴", response);
     return response.data;
 };
 

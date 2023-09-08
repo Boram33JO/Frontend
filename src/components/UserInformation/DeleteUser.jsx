@@ -28,8 +28,9 @@ const DeleteUser = () => {
   const handleUserDeleteChange = async () => {
    try {
      const result = await deleteUser();
+     //console.log(result)
      if (result.success){
-      //console.log(result)
+       //console.log(result)
        toast.success('탈퇴가 완료되었습니다. 감사합니다.', { position: 'top-center' });
         navigate("/");
         store.dispatch(logout());
@@ -81,7 +82,8 @@ const InnerContainer = styled.div`
   display: flex;
    align-items: center;
    padding: 0 20px;
-   padding-top: 275px;
+   padding-top: 250px;
+   box-sizing: border-box;
 `;
 
 const StBox2 = styled.div`

@@ -12,10 +12,7 @@ const DirectingButton: React.FC = () => {
   const { userId } = useParams();
   const LoginUser = useSelector((state: RootState) => state.user);
   const isMyProfile = Number(userId) === LoginUser.userId;
-//console.log(LoginUser.kakaoId)
-  //"kakaoId\":2955447335
-  // {LoginUser.kakaoId}
-  // {"user":"{\"isLogin\":true,\"userId\":74,\"nickname\":\"체리\",\"userImage\":null,\"introduce\":\"안녕\",\"email\":\"jshok822@naver.com\",\"kakaoId\":2955447335}","_persist":"{\"version\":-1,\"rehydrated\":true}"}
+  // console.log(LoginUser.kakaoId)
 
     const handlePwPageClick = () => {
 
@@ -26,7 +23,7 @@ const DirectingButton: React.FC = () => {
       }
         //toast.success("이 기능은 개발 중 입니다!");
         if (Number(userId) !== LoginUser.userId) {
-          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          // userId가 일치하지 않으면 404 페이지로 리디렉션.
           navigate("/*");
           return;
         }
@@ -35,7 +32,7 @@ const DirectingButton: React.FC = () => {
 
       const handleWdPageClick = () => {
         if (Number(userId) !== LoginUser.userId) {
-          // userId가 일치하지 않으면 404 페이지로 리디렉션합니다.
+          // userId가 일치하지 않으면 404 페이지로 리디렉션
           navigate("/*");
           return;
         }
@@ -48,7 +45,7 @@ const DirectingButton: React.FC = () => {
           <StInfoContainer>
             {/* {LoginUser.kakaoId} */}
             
-            <Container>
+            <Container onClick={handlePwPageClick}>
             {LoginUser.kakaoId===null && (
               <PwChange >
               

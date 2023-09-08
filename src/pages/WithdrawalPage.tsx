@@ -234,6 +234,7 @@ const Container = styled.div`
     width: 390px;
     min-height: 80vh;
     margin: auto;
+    box-sizing: border-box;
     
 `
 
@@ -245,6 +246,7 @@ const InnerContainer = styled.div`
   /* justify-content: space-between; */
   width: 100%;
   height: 600px;
+  box-sizing: border-box;
 `
 
 const H3 = styled.h3`
