@@ -20,11 +20,11 @@ const NotifyPage = () => {
 
     useEffect(() => {
         if (!!!loginUser.isLogin) {
-            toast("잘못된 접근입니다.")
             navigate('/')
+            return () => { toast.error("잘못된 접근입니다."); }
         }
     }, [])
-    
+
     const { data, isLoading, isError, } = useQuery(["notify"], getNotification,
         {
             refetchOnWindowFocus: false,

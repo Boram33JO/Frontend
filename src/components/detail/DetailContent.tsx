@@ -44,10 +44,10 @@ const DetailContent = ({ post }: PostProps) => {
     const likeMutation = useMutation(likePost, {
         onSuccess: (response) => {
             queryClient.invalidateQueries(["post"]);
-            toast.success(response.data.message);
+            toast.success(response.data.message, { position: "bottom-center" });
         },
         onError: () => {
-            toast.error("좋아요 실패")
+            toast.error("좋아요 실패", { position: "bottom-center" })
         }
     })
 
@@ -64,10 +64,10 @@ const DetailContent = ({ post }: PostProps) => {
     const FollowMutation = useMutation(followUser, {
         onSuccess: (response) => {
             queryClient.invalidateQueries(["post"]);
-            toast.success(response.data.message);
+            toast.success(response.data.message, { position: "bottom-center" });
         },
         onError: () => {
-            toast.error("팔로우 실패")
+            toast.error("팔로우 실패", { position: "bottom-center" })
         }
     })
 

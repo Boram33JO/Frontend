@@ -37,10 +37,10 @@ const CommentList = () => {
     const deleteMutation = useMutation((commentId: string) => deleteComment(commentId), {
         onSuccess: () => {
             queryClient.invalidateQueries(["comment", page, totalPage]);
-            toast.success("댓글 삭제 완료");
+            toast.success("댓글 삭제 완료", { position: "bottom-center" });
         },
         onError: () => {
-            toast.error("댓글 삭제 실패");
+            toast.error("댓글 삭제 실패", { position: "bottom-center" });
         }
     });
 
