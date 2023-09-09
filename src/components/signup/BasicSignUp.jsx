@@ -133,7 +133,7 @@ const BasicSignUp = () => {
     },
 
     onError: (error) => {
-      if (error.response && error.response.data) {
+      if (error.response || error.response.data) {
        toast.error(`${error.response.data}`, {position: 'top-center'});
       } else {
         toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
