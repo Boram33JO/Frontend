@@ -3,9 +3,9 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { useMutation } from "react-query";
-import { addUsers, mobileCheck, mobileDoubleCheck } from "../../api/user2";
+import { addUsers, mobileCheck, mobileDoubleCheck } from "../../api/user";
 import { nicknameCheck } from "../../api/profile";
-import { emailCheck, emailDoubleCheck } from "../../api/user2";
+import { emailCheck, emailDoubleCheck } from "../../api/user";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';

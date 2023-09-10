@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useInput from "../../hooks/useInput";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { ChangePw, TempPassword, addUsers, emailCheckTofindPassword, mobileCheck, mobileDoubleCheck } from "../../api/user2";
-import { getProfileLists, nicknameCheck } from "../../api/profile";
-import { emailCheck, emailDoubleCheck } from "../../api/user2";
+import { useQueryClient } from "react-query";
+import { ChangePw} from "../../api/user";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';
 import { useSelector } from "react-redux";
-import store, { RootState } from "../../redux/config/configStore";
-import { logIn2, logout, setUserInfo } from "../../redux/modules/userSlice";
+import store from "../../redux/config/configStore";
+import { logout} from "../../redux/modules/userSlice";
 
 
 

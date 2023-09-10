@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import useInput from "../../hooks/useInput";
-import { login } from "../../api/user2";
-import { useEffect } from "react";
+import { login } from "../../api/user";
 import { logIn2, setUserInfo } from "../../redux/modules/userSlice";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분

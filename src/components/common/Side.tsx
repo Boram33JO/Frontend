@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../redux/config/configStore'
 import { getProfileImage } from '../../utils/common'
 import { logout } from '../../redux/modules/userSlice'
-import { logout2 } from '../../api/user2'
+import { logout2 } from '../../api/user'
 import { useMutation } from 'react-query'
 import { toast } from 'react-hot-toast'
 

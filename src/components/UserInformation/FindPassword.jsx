@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
-import { useMutation } from "react-query";
-import { ChangePw2, TempPassword, addUsers, emailCheckTofindPassword, mobileCheck, mobileDoubleCheck } from "../../api/user2";
-import { nicknameCheck } from "../../api/profile";
-import { emailCheck, emailDoubleCheck } from "../../api/user2";
+import { ChangePw2, TempPassword, emailCheckTofindPassword} from "../../api/user";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
 import { toast } from 'react-hot-toast';
