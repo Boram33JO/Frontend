@@ -8,6 +8,7 @@ const initialState: LoginUser = {
   userImage: null,
   introduce: null,
   kakaoId: null,
+  email: null,
 };
 
 const userSlice = createSlice({
