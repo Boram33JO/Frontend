@@ -16,8 +16,6 @@ import { ReactComponent as End } from "../../assets/images/page_end.svg"
 import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
 import { ReactComponent as Next } from "../../assets/images/page_next.svg"
 
-
-
 type follower = {
   userId: number;
   content: string;
@@ -48,14 +46,7 @@ const Pictures = () => {
   );
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
-
-  // const {
-  //   data: followerData, isLoading, isError,} = useQuery(
-  //   ["Follow", userId],
-  //   () => (userId ? getFollowLists(userId) : Promise.resolve([])),
-  //   { enabled: !!userId, keepPreviousData: true }
-  // );
-
+  
   const { data, isLoading, isError } = useQuery(["follow", page, totalPage], async () => {
     const response = await getFollowLists(userId, page);
     //console.log(response.data);
