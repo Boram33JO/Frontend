@@ -25,6 +25,7 @@ export type LoginUser = {
     userImage: string | null;
     introduce: string | null;
     kakaoId: string | null;
+    email: string | null,
 }
 
 export type SignupFormat = {
@@ -35,7 +36,7 @@ export type SignupFormat = {
 }
 
 export type PwChangeFormat = {
-    email: string;
+    // email: string;
     originPassword: string;
     changePassword: string;
 }
