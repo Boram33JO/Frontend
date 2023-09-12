@@ -6,8 +6,6 @@ import store from "../../redux/config/configStore";
 import { logout } from "../../redux/modules/userSlice";
 import { useSelector } from "react-redux";
 
-
-
 const DeleteUser = () => {
   const navigate = useNavigate();
   const { userId } = useParams();

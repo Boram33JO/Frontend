@@ -8,12 +8,9 @@ import { nicknameCheck } from "../../api/profile";
 import { emailCheck, emailDoubleCheck } from "../../api/user";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 
-
-
-
-const BasicSignUp = () => {
+const BasicSignUp: React.FC = () => {
   const navigate = useNavigate();
 
   const [email, onChangeEmailHandler, resetEmail] = useInput();
@@ -32,14 +29,6 @@ const BasicSignUp = () => {
   const [isMobileVerified, setIsMobileVerified] = useState(false);
 
   const [isNicknameVerified, setIsNicknameVerified] = useState(false); // 회원가입하기 버튼 전에 닉네임 인증여부로 막기
-
-  // 에러
-  // const [emailError, setEmailError] = useState("");
-  // const [passwordError, setPasswordError] = useState("");
-  // const [passwordCheckError, setPasswordCheckError] = useState("");
-  // const [nicknameError, setNicknameError] = useState("");
-
-  const [nicknameServerError, setNicknameServerError] = useState(""); // 에러 메시지 저장
 
   // 포커스
   const [isEmailFocused, setIsEmailFocused] = useState(false);
@@ -66,7 +55,7 @@ const BasicSignUp = () => {
   const [mobileVerificationTimer, setmobileVerificationTimer] = useState(0);
 
   // 타이머 5분 계산 함수
-  const formatTime = (seconds) => {
+  const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
@@ -76,91 +65,110 @@ const BasicSignUp = () => {
   const [emailButtonContent, setEmailButtonContent] = useState("메일인증");
   const [mobileButtonContent, setmobileButtonContent] = useState("번호인증");
 
- // 비밀번호 토글
+  // 비밀번호 토글
   const [showPassword, setShowPassword] = useState(false);
- const [showPasswordCheck, setShowPasswordCheck] = useState(false);
+  const [showPasswordCheck, setShowPasswordCheck] = useState(false);
 
- //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
- const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
- //const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
+  //const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // email: email 패턴 체크
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/; // password: 대소문자, 숫자, 특수문자 포함 8~15자 이내, 각 요소 1개이상 포함
+  //const nicknameRegex = /^[a-zA-Z0-9가-힣]{2,12}$/; // nickname: 알파벳소문자, 대문자, 한글 ,숫자로만 이루어지고, 2자 이상 12자 이하
 
   const togglePasswordVisibility_1 = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-    const togglePasswordVisibility_2 = () => {
+  const togglePasswordVisibility_2 = () => {
     setShowPasswordCheck((prevShowPasswordCheck) => !prevShowPasswordCheck);
   };
 
-
-
+  // 이메일 타이머
   useEffect(() => {
-    let interval;
+    let interval: NodeJS.Timeout | null = null; // Initialize interval
 
     if (emailVerificationTimer > 0) {
       interval = setInterval(() => {
         setEmailVerificationTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-    } else {
+    } else if (interval) {
+      // Check if interval is not null
       clearInterval(interval);
     }
 
     return () => {
-      clearInterval(interval);
+      if (interval) {
+        // Check if interval is not null
+        clearInterval(interval);
+      }
     };
   }, [emailVerificationTimer]);
 
+  // 모바일 타이머
   useEffect(() => {
-    let interval;
+    let interval: NodeJS.Timeout | null = null;
 
     if (mobileVerificationTimer > 0) {
       interval = setInterval(() => {
         setmobileVerificationTimer((prevTimer) => prevTimer - 1);
       }, 1000);
-    } else {
+    } else if (interval) {
+      // Check if interval is not null
       clearInterval(interval);
     }
 
     return () => {
-      clearInterval(interval);
+      if (interval) {
+        // Check if interval is not null
+        clearInterval(interval);
+      }
     };
   }, [mobileVerificationTimer]);
 
   const addNewUserMutation = useMutation(addUsers, {
     onSuccess: () => {
-      toast.success('회원가입 되었습니다!', {position: 'top-center'});
+      toast.success("회원가입 되었습니다!", { position: "top-center" });
       navigate("/login");
     },
 
-    onError: (error) => {
-      if (error.response || error.response.data) {
-       toast.error(`${error.response.data}`, {position: 'top-center'});
+    onError: (error: Error) => {
+      // error의 타입 주석을 추가합니다.
+      if (error instanceof Error && (error as any).response?.data) {
+        toast.error(`${(error as any).response?.data}`, {
+          position: "top-center",
+        });
       } else {
-        toast.error("서버 에러가 발생했습니다.", {position: 'top-center'});
+        toast.error("서버 에러가 발생했습니다.", { position: "top-center" });
       }
     },
   });
 
   const onSignUpClickHandler = () => {
     if (!isEmailVerified) {
-      toast.error("이메일 인증을 먼저 진행해 주세요.", {position: 'top-center'});
+      toast.error("이메일 인증을 먼저 진행해 주세요.", {
+        position: "top-center",
+      });
       return;
     }
     if (!isMobileVerified) {
-      toast.error("핸드폰 인증을 먼저 진행해 주세요.", {position: 'top-center'});
+      toast.error("핸드폰 인증을 먼저 진행해 주세요.", {
+        position: "top-center",
+      });
       return;
     }
-    if(password!==passwordCheck)
-    {
-      toast.error("비밀번호를 다시 확인해주세요.", {position: 'top-center'});
+    if (password !== passwordCheck) {
+      toast.error("비밀번호를 다시 확인해주세요.", { position: "top-center" });
       return;
     }
     if (!passwordRegex.test(password)) {
-      toast.error('비밀번호의 필수 요소를 확인해주세요.', {position: 'top-center'});
+      toast.error("비밀번호의 필수 요소를 확인해주세요.", {
+        position: "top-center",
+      });
       return;
     }
     if (!isNicknameVerified) {
-      toast.error("닉네임 인증을 먼저 진행해 주세요.", {position: 'top-center'});
+      toast.error("닉네임 인증을 먼저 진행해 주세요.", {
+        position: "top-center",
+      });
       return;
     }
     // const validPhoneNumber = to;
@@ -170,18 +178,17 @@ const BasicSignUp = () => {
       email: email,
       password: password,
       nickname: nickname,
-      phoneNumber : to,
+      phoneNumber: to,
     };
     addNewUserMutation.mutate(newUser);
   };
-
 
   // 이메일 검사
   const EmailhandleCheckButton = async () => {
     // 이메일 형식 유효성 검사
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      toast.error("올바른 이메일 형식이 아닙니다.", {position: 'top-center'});
+      toast.error("올바른 이메일 형식이 아닙니다.", { position: "top-center" });
       return;
     }
     // 비활성화 상태로 변경하고 로딩 표시
@@ -192,14 +199,13 @@ const BasicSignUp = () => {
 
     try {
       const data = await emailCheck(email);
-      toast.success(`${data.data.message}`, {position: 'top-center'});
-     // toast.success(`인증메일을 발송했습니다.`,{position: 'top-center'});
+      toast.success(`${data.data.message}`, { position: "top-center" });
+      // toast.success(`인증메일을 발송했습니다.`,{position: 'top-center'});
       setShowCodeInput(true);
-     // console.log(data);
+      // console.log(data);
     } catch (error) {
-      
-     // console.log(isAxiosError,"2")
-      toast.error(('이미 가입하신 이메일입니다.'), {position: 'top-center'});
+      // console.log(isAxiosError,"2")
+      toast.error("이미 가입하신 이메일입니다.", { position: "top-center" });
     } finally {
       // 응답 처리 후 버튼 활성화 및 로딩 해제
       setIsEmailButtonDisabled(false);
@@ -210,20 +216,25 @@ const BasicSignUp = () => {
   // 이메일 6자리 검증 숫자 검사 (유효기간 5분)
   const DoubleCheckhandleButton = async () => {
     const data = await emailDoubleCheck(email, code);
-    console.log(data)
-    if (data.data.data===true) {
-      console.log(data)
+    //console.log(data);
+    if (data.data.data === true) {
+      // console.log(data);
       setIsEmailVerified(true);
       setIsEmailButtonDisabled(true); // 중복확인 버튼 비활성화
-      toast.success("사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
-     // setShowCodeInput(true);
+      toast.success(
+        "사용할 수 있는 이메일입니다! 회원가입 절차를 계속 진행해주세요.",
+        { position: "top-center" }
+      );
+      // setShowCodeInput(true);
       setShowCodeInput(false);
       setEmailButtonContent("인증완료");
-     // console.log(data)
-    } else if (data.data.error || data.data.data===false){
+      // console.log(data)
+    } else if (data.data.error || data.data.data === false) {
       setIsEmailVerified(false);
       setIsEmailButtonDisabled(false); // 중복확인 버튼 다시 활성화
-      toast.error("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.", {position: 'top-center'});
+      toast.error("이메일 인증에 실패했습니다. 처음부터 다시 시도해주세요.", {
+        position: "top-center",
+      });
       resetEmail();
       resetNumber();
     }
@@ -234,7 +245,7 @@ const BasicSignUp = () => {
     const toRegex = /^(010|011)[0-9]{8}$/;
 
     if (!toRegex.test(to)) {
-      toast.error("11자리 숫자만 입력해주세요.", {position: 'top-center'});
+      toast.error("11자리 숫자만 입력해주세요.", { position: "top-center" });
       resetMobile(); // 입력 칸 비우기
       return;
     }
@@ -246,56 +257,63 @@ const BasicSignUp = () => {
       const data = await mobileCheck(to);
       setmobileButtonContent("재전송");
       setIsMobileButtonDisabled(false);
-    //  console.log(data);
+      //  console.log(data);
       setShowMobileInput(true);
       // 5분 타이머 시작
-      toast.success("모바일 인증 번호를 발송했습니다.", {position: 'top-center'});
+      toast.success("모바일 인증 번호를 발송했습니다.", {
+        position: "top-center",
+      });
     } catch (error) {
       setmobileButtonContent("재전송");
-      toast.error("이미 등록된 전화번호입니다.", {position: 'top-center'});
-     // console.log(error);
+      toast.error("이미 등록된 전화번호입니다.", { position: "top-center" });
+      // console.log(error);
     }
   };
 
   // 모바일 6자리 검증 숫자 검사 (유효기간 5분)
   const MobileDoubleCheckhandleButton = async () => {
     const data = await mobileDoubleCheck(smsConfirmNum, to);
-   // console.log(response, "숫자 확인1");
+    // console.log(response, "숫자 확인1");
 
-    if (data.data.data===true) {
+    if (data.data.data === true) {
       setIsMobileVerified(true);
       //toast.success(`${data.data.message}`, {position: 'top-center'});
-      toast.success("유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.", {position: 'top-center'});
-     // console.log(data);
+      toast.success(
+        "유효한 핸드폰 번호입니다. 회원가입 절차를 계속 진행해주세요.",
+        { position: "top-center" }
+      );
+      // console.log(data);
       setShowMobileInput(false);
       setIsMobileButtonDisabled(true);
       setmobileButtonContent("인증완료");
 
       // console.log(response.data, "숫자 확인2");
-    } else if ((data.data.error) || (data.data.data==false)) {
+    } else if (data.data.error || data.data.data == false) {
       setIsMobileVerified(false);
 
       setIsMobileButtonDisabled(false);
       // console.log(response.data, "숫자 확인3");
-      toast.error("모바일 인증에 실패했습니다. 다시 시도해주세요.", {position: 'top-center'});
+      toast.error("모바일 인증에 실패했습니다. 다시 시도해주세요.", {
+        position: "top-center",
+      });
       setmobileButtonContent("재전송");
       resetMobile();
       resetMobileCode();
     }
   };
-  
+
   // 닉네임 검사
   const handleCheckButton = async () => {
     const response = await nicknameCheck(nickname);
-   // console.log(response);
+    // console.log(response);
 
     if (response.data.message) {
-      toast.success(`${response.data.message}`, {position: 'top-center'});
+      toast.success(`${response.data.message}`, { position: "top-center" });
       setIsNicknameVerified(true);
-     // console.log(response);
+      // console.log(response);
     } else {
       // setNicknameServerError(response.data.error);
-      toast.error(`${response.data.error}`, {position: 'top-center'});
+      toast.error(`${response.data.error}`, { position: "top-center" });
       setIsNicknameVerified(false);
       //console.log(response);
     }
@@ -316,7 +334,6 @@ const BasicSignUp = () => {
               $isFocused={isEmailFocused}
               $hasValue={email.length > 0}
               disabled={isEmailVerified} // 여기서 disabled 속성을 설정
-             
             />
             <Stbutton1
               onClick={EmailhandleCheckButton}
@@ -389,49 +406,41 @@ const BasicSignUp = () => {
             </Stname>
           </Stnickname>
         )}
-<Stinput2Container>
-        <Stinput2
-           type={showPassword ? "text" : "password"}
-          placeholder={"비밀번호 입력(8~15자 이내)"}
-          value={password}
-          onChange={onChangePasswordHandler}
-          onFocus={() => setIsPasswordFocused(true)}
-          onBlur={() => setIsPasswordFocused(false)}
-          $isFocused={isPasswordFocused}
-          $hasValue={password.length > 0}
-        />
-         <PasswordToggle onClick={togglePasswordVisibility_1}>
-            {showPassword ? <Eye />: <ClosedEye />}
-          </PasswordToggle>
-           </Stinput2Container>
-      </Stbox>
-      <Stbox>
-        <Stnumber>대문자, 소문자, 숫자, 특수문자 각 1개 이상 포함</Stnumber>
-        
         <Stinput2Container>
-        <Stinput3
-          type={showPasswordCheck ? "text" : "password"}
-          placeholder={"비밀번호 확인"}
-          value={passwordCheck}
-          onChange={onChangePasswordCheckHandler}
-          onFocus={() => setIsPasswordCheckFocused(true)}
-          onBlur={() => setIsPasswordCheckFocused(false)}
-          $isFocused={isPasswordCheckFocused}
-          $hasValue={passwordCheck.length > 0}
-        />
-        <PasswordToggle onClick={togglePasswordVisibility_2}>
-            {showPasswordCheck ? <Eye />: <ClosedEye />}
+          <Stinput2
+            type={showPassword ? "text" : "password"}
+            placeholder={"비밀번호 입력(8~15자 이내)"}
+            value={password}
+            onChange={onChangePasswordHandler}
+            onFocus={() => setIsPasswordFocused(true)}
+            onBlur={() => setIsPasswordFocused(false)}
+            $isFocused={isPasswordFocused}
+            $hasValue={password.length > 0}
+          />
+          <PasswordToggle onClick={togglePasswordVisibility_1}>
+            {showPassword ? <Eye /> : <ClosedEye />}
           </PasswordToggle>
         </Stinput2Container>
       </Stbox>
+      <Stbox>
+        <Stnumber>대문자, 소문자, 숫자, 특수문자 각 1개 이상 포함</Stnumber>
 
-      {/* <ErrorMessageContainer>
-        {emailError && <ErrorMessage>{emailError}</ErrorMessage>}
-        {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
-        {passwordCheckError && (
-          <ErrorMessage>{passwordCheckError}</ErrorMessage>
-        )}
-      </ErrorMessageContainer> */}
+        <Stinput2Container>
+          <Stinput3
+            type={showPasswordCheck ? "text" : "password"}
+            placeholder={"비밀번호 확인"}
+            value={passwordCheck}
+            onChange={onChangePasswordCheckHandler}
+            onFocus={() => setIsPasswordCheckFocused(true)}
+            onBlur={() => setIsPasswordCheckFocused(false)}
+            $isFocused={isPasswordCheckFocused}
+            $hasValue={passwordCheck.length > 0}
+          />
+          <PasswordToggle onClick={togglePasswordVisibility_2}>
+            {showPasswordCheck ? <Eye /> : <ClosedEye />}
+          </PasswordToggle>
+        </Stinput2Container>
+      </Stbox>
 
       <H3>닉네임</H3>
       <Stbox>
@@ -448,10 +457,6 @@ const BasicSignUp = () => {
             />
             <Stbutton1 onClick={handleCheckButton}>중복확인</Stbutton1>
           </Stname>
-          {/* {nicknameServerError && (
-            <ErrorMessage>{nicknameServerError}</ErrorMessage>
-          )} */}
-          {/* {nicknameError && <ErrorMessage>{nicknameError}</ErrorMessage>} */}
         </Stnickname>
 
         <Stbutton2 onClick={onSignUpClickHandler}>회원가입하기</Stbutton2>
@@ -477,14 +482,13 @@ const PasswordToggle = styled.button`
   right: 12px;
 `;
 
-
 const Eye = styled(EyeSVG)`
-width: 23px; /* 원하는 크기로 조정 */
+  width: 23px; /* 원하는 크기로 조정 */
   height: 23px; /* 원하는 크기로 조정 */
 `;
 
 const ClosedEye = styled(ClosedEyeSVG)`
-width: 23px; /* 원하는 크기로 조정 */
+  width: 23px; /* 원하는 크기로 조정 */
   height: 23px; /* 원하는 크기로 조정 */
 `;
 
@@ -492,28 +496,13 @@ const InnerContainer = styled.div`
   width: 100%;
 `;
 
-// const ErrorMessageContainer = styled.div`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: left;
-//   padding-left: 48px;
-
-//   /* align-items: center; */
-// `;
-
-// const ErrorMessage = styled.div`
-//   color: #e7e6f0;
-//   margin-top: 10px;
-//   font-size: 14px;
-// `;
-
 const Stbox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const Stinput2 = styled.input`
+const Stinput2 = styled.input<{ $isFocused: boolean; $hasValue: boolean }>`
   width: 329px;
   height: 24px;
   padding: 10px;
@@ -527,7 +516,7 @@ const Stinput2 = styled.input`
   border-radius: 6px;
   outline: none;
   margin-bottom: 5px;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414")};
   color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
@@ -543,7 +532,7 @@ const Stnumber = styled.div`
   display: flex; /* flex 컨테이너 설정 */
   align-items: flex-start; /* 요소를 왼쪽으로 정렬 */
 `;
-const Stinput3 = styled.input`
+const Stinput3 = styled.input<{ $isFocused: boolean; $hasValue: boolean }>`
   width: 329px;
   height: 24px;
   padding: 10px;
@@ -580,30 +569,29 @@ const Stname = styled.div`
   align-items: center; /* 세로 중앙 정렬을 위해 추가 */
   padding-bottom: 8px;
 `;
-const Stinput4 = styled.input`
+const Stinput4 = styled.input<{ $isFocused: boolean; $hasValue: boolean }>`
   width: 229px;
   height: 24px;
   padding: 10px;
 
   font-size: 16px;
   font-weight: 500;
-  color: ${(props) =>
-    props.$isFocused || props.$hasValue ? "#d9d9d9" : "#85848b"};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414")};
+  color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 
   background-color: #252628;
 
   border: none;
   border-radius: 6px;
   outline: none;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+
   //color: ${(props) => (props.$hasValue ? ": #d9d9d9" : "#85848b")};
 `;
 const Stbutton1 = styled.button`
   width: 90px;
   height: 45px;
   margin-left: 10px;
-  background: ${(props) =>
-    props.disabled ? "#45424e" : "#45424e"};
+  background: ${(props) => (props.disabled ? "#45424e" : "#45424e")};
   color: ${(props) => (props.disabled ? "#6c6a71" : "#e7e6f0")};
 
   &:hover {
@@ -635,4 +623,3 @@ const Stbutton2 = styled.button`
   cursor: pointer;
   margin-top: 60px;
 `;
-

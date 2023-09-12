@@ -8,75 +8,63 @@ import { login } from "../../api/user";
 import { logIn2, setUserInfo } from "../../redux/modules/userSlice";
 import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
-import { toast } from 'react-hot-toast';
+import { toast } from "react-hot-toast";
 
-const BasicLogin = () => {
+const BasicLogin: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [errorMessage, setErrorMessage] = useState(""); // 추가: 에러 메시지 상태
-
+  const [email, onChangeEmailHandler,resetEmail] = useInput();
+  const [password, onChangePasswordHandler, resetNumber] = useInput();
   const [isEmailFocused, setIsEmailFocused] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-
   const [showPassword, setShowPassword] = useState(false);
+  const sanitizedEmail = email.trim();
+  const sanitizedPassword = password.trim();
 
+  // 비밀번호 토클
   const togglePasswordVisibility = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
-//엔터 누르면 작동
-  const handlePasswordKeyDown = (event) => {
+  //엔터 누르면 작동
+  const handlePasswordKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     if (event.key === "Enter") {
       loginClickHandler(); // 로그인 버튼 클릭 시뮬레이션
     }
   };
 
-
-  // 에러 메시지 표시 후 일정 시간이 지나면 초기화
-  // useEffect(() => {
-  //   if (errorMessage) {
-  //     const timeoutId = setTimeout(() => {
-  //       setErrorMessage("");
-  //     }, 5000); // 5초 후에 에러 메시지 초기화
-  //     return () => clearTimeout(timeoutId); // 컴포넌트 언마운트 시 타임아웃 클리어
-  //   }
-  // }, [errorMessage]);
-
-  const [email, onChangeEmailHandler] = useInput();
-  const [password, onChangePasswordHandler] = useInput();
-
-  const sanitizedEmail = email.trim();
-  const sanitizedPassword = password.trim();
-
+  // 로그인 뮤테이션
   const loginMutation = useMutation(login, {
     onSuccess: (response) => {
       dispatch(logIn2());
       dispatch(setUserInfo(response.data));
       navigate("/");
-      toast.success('로그인 되었습니다!', {position: 'top-center'});
+      toast.success("로그인 되었습니다!", { position: "top-center" });
     },
-    onError: (error) => {
-      // 에러 발생 시 에러 메시지 표시
+    onError: (error: { response?: { status?: number } }) => {
       // console.log("Error response from server:", error?.response?.data);
       // console.log(error.response.status);
-      if (error.response.status===401){
-        toast.error('로그인 정보를 찾을 수 없습니다.', {position: 'top-center'});
-      }
-      else
-      toast.error('에러가 발생했습니다. 다시 시도해 주세요.', {position: 'top-center'});
-     // setErrorMessage(".");
+      // resetEmail()
+      // resetNumber()
+      if (error.response && error.response.status === 401) {
+        toast.error("로그인 정보를 찾을 수 없습니다.", {
+          position: "top-center",
+        });
+      } else
+        toast.error("에러가 발생했습니다. 다시 시도해 주세요.", {
+          position: "top-center",
+        });
     },
   });
-
 
   const loginClickHandler = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(sanitizedEmail)) {
-     // setErrorMessage("이메일 형식이 아닙니다.");
-      toast.error('이메일 형식으로 입력해주세요.', {position: 'top-center'});
+      toast.error("이메일 형식으로 입력해주세요.", { position: "top-center" });
       return;
     }
-
 
     const loginInformation = {
       email: sanitizedEmail,
@@ -84,8 +72,6 @@ const BasicLogin = () => {
     };
     loginMutation.mutate(loginInformation);
   };
-
-
   return (
     <InnerContainer>
       <Stbox1>
@@ -112,17 +98,14 @@ const BasicLogin = () => {
             $hasValue={sanitizedPassword.length > 0}
           />
           <PasswordToggle onClick={togglePasswordVisibility}>
-            {showPassword ? <Eye />: <ClosedEye />}
+            {showPassword ? <Eye /> : <ClosedEye />}
           </PasswordToggle>
         </Stinput2Container>
-       
       </Stbox1>
 
-    
       <Stbox2>
-      <Stlink1
+        <Stlink1
           onClick={() => {
-           // toast.success("이 기능은 개발 중 입니다!");
             navigate("/findemail");
           }}
         >
@@ -131,13 +114,10 @@ const BasicLogin = () => {
         <Stbutton onClick={loginClickHandler}>로그인</Stbutton>
       </Stbox2>
     </InnerContainer>
-
-    
   );
 };
 
 export default BasicLogin;
-
 
 const Stinput2Container = styled.div`
   position: relative;
@@ -154,23 +134,19 @@ const PasswordToggle = styled.button`
   right: 10px;
 `;
 
-
 const Eye = styled(EyeSVG)`
   width: 24px; /* 원하는 크기로 조정 */
   height: 24px; /* 원하는 크기로 조정 */
 `;
 
 const ClosedEye = styled(ClosedEyeSVG)`
-width: 24px; /* 원하는 크기로 조정 */
+  width: 24px; /* 원하는 크기로 조정 */
   height: 24px; /* 원하는 크기로 조정 */
 `;
 
 const InnerContainer = styled.div`
   width: 100%;
-
 `;
-
-// 에러
 
 const Stbox1 = styled.div`
   display: flex;
@@ -182,11 +158,9 @@ const Stbox2 = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 `;
 
-
-const Stinput1 = styled.input`
+const Stinput1 = styled.input<{ $isFocused: boolean; $hasValue: boolean }>`
   width: 329px;
   height: 24px;
   padding: 10px;
@@ -200,11 +174,11 @@ const Stinput1 = styled.input`
   outline: none;
   margin-bottom: 10px;
 
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414")};
   color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
-const Stinput2 = styled.input`
+const Stinput2 = styled.input<{ $isFocused: boolean; $hasValue: boolean }>`
   width: 329px;
   height: 24px;
   padding: 10px;
@@ -215,7 +189,7 @@ const Stinput2 = styled.input`
   border: none;
   border-radius: 8px;
   outline: none;
-  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414;")};
+  border: 1px solid ${(props) => (props.$isFocused ? "#8084f4" : "#141414")};
   color: ${(props) => (props.$hasValue ? "#d9d9d9" : "#85848b")};
 `;
 
@@ -245,5 +219,4 @@ const Stbutton = styled.button`
   &:hover {
     color: #141414;
   }
-
 `;
