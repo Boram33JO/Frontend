@@ -256,21 +256,30 @@
 #### Backend
 
 <p>
-
-<img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=yellow">
-<img src="https://img.shields.io/badge/Spring-White?style=for-the-badge&logo=Spring&logoColor=yellow">
-
- 
+ <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=Spring Boot&logoColor=yellow">
+ <img src="https://img.shields.io/badge/spring security-009639?style=for-the-badge&logo=springsecurity&logoColor=white">
+ <img src="https://img.shields.io/badge/redis-CA4245?style=for-the-badge&logo=redis&logoColor=white">
+ <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+ <img src="https://img.shields.io/badge/spring boot jpa-009639?style=for-the-badge&logo=spring boot jpa&logoColor=white">
+ <img src="https://img.shields.io/badge/QueryDSL-31A8FF?style=for-the-badge&logoColor=white">
+ <img src="https://img.shields.io/badge/json web token-ff00ff?style=for-the-badge&logo=jsonwebtokens&logoColor=white">
+ <img src="https://img.shields.io/badge/swagger-85EA2?style=for-the-badge&logo=swagger&logoColor=white">
+ <img src="https://img.shields.io/badge/junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white">
 </p>
 
 #### Infrastructure
 
 <p>
+  <img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white" >
   <img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white" > 
+  <img src="https://img.shields.io/badge/amazon s3-569A31?style=for-the-badge&logo=amazons3&logoColor=white" > 
+  <img src="https://img.shields.io/badge/amazon rds-ff0000?style=for-the-badge&logo=amazonrds&logoColor=white">
+  <img src="https://img.shields.io/badge/amazon ec2-FF9A00?style=for-the-badge&logo=amazonec2&logoColor=white" > 
+  <img src="https://img.shields.io/badge/code deploy-569A31?style=for-the-badge&logoColor=white">
   <img src="https://img.shields.io/badge/Cloud Front-CA4245?style=for-the-badge&logoColor=white">
-  <img src="https://img.shields.io/badge/route53-F7A81B?style=for-the-badge&logo=route53&logoColor=white">
-  
+  <img src="https://img.shields.io/badge/github actions-2088FF?style=for-the-badge&logo=githubactions&logoColor=white">
 </p>
+
 
 #### Dev tools
 
