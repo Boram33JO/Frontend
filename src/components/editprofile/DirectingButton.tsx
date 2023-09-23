@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as PwSVG } from "../../assets/images/login_signup_profile/pw_ch.svg";
 import { ReactComponent as ArrowSVG } from "../../assets/images/login_signup_profile/icon_arrow_pw.svg";
 import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/config/configStore';
 

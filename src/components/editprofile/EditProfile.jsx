@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { css, styled } from "styled-components";
-import useInput from "../../hooks/useInput";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ReactComponent as CameraIcon } from "../../assets/images/profile_camera.svg"; // 프로필 카메라 SVG 아이콘 추가

@@ -8,7 +8,6 @@ import { ReactComponent as Start } from "../../assets/images/page_start.svg"
 import { ReactComponent as End } from "../../assets/images/page_end.svg"
 import { ReactComponent as Prev } from "../../assets/images/page_prev.svg"
 import { ReactComponent as Next } from "../../assets/images/page_next.svg"
-import { ReactComponent as Empty } from "../../assets/images/comment_empty.svg"
 import { useState } from "react";
 import SortButton2 from "./SortButton2";
 import { SortType } from "./SortButton"; 

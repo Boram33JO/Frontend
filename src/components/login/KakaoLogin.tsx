@@ -1,5 +1,3 @@
-import React from "react";
-
 import { styled } from "styled-components";
 import { ReactComponent as KakaoSVG } from "../../assets/images/login_signup_profile/kakao.svg"; // 변경된 부분
 
