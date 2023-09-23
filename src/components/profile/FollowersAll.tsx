@@ -1,6 +1,5 @@
 import { styled } from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { User, UserInfo } from '../../models/user';
 import { getProfileImage } from '../../utils/common';
 import { ReactComponent as Nodata } from "../../assets/images/login_signup_profile/icon_no_data.svg";

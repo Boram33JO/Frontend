@@ -2,13 +2,9 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
-import {
-  ChangePw2,
-  TempPassword,
-  emailCheckTofindPassword,
-} from "../../api/user";
-import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
-import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; // 변경된 부분
+import { ChangePw2, TempPassword, emailCheckTofindPassword } from "../../api/user";
+import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; 
+import { ReactComponent as ClosedEyeSVG } from "../../assets/images/login_signup_profile/icon_visibility_non.svg"; 
 import { toast } from "react-hot-toast";
 import { logout } from "../../redux/modules/userSlice";
 import store from "../../redux/config/configStore";

@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import useInput from "../../hooks/useInput";
 import { findEmail, findmobileCheck } from "../../api/user";
-import { ReactComponent as EyeSVG } from "../../assets/images/login_signup_profile/icon_visibility.svg"; // 변경된 부분
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/config/configStore";
